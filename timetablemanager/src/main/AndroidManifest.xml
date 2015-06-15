@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cz.anty.timetablemanager">
+
+    <application android:allowBackup="true">
+        <activity
+            android:name=".TimetableSelectActivity"
+            android:label="@string/timetable_select_label" />
+        <activity
+            android:name=".TimetableManageActivity"
+            android:label="@string/timetable_manage_label"
+            android:parentActivityName=".TimetableSelectActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cz.anty.timetablemanager.TimetableSelectActivity" />
+        </activity>
+    </application>
+
+</manifest>

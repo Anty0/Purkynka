@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cz.anty.sasmanager">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application android:allowBackup="true">
+        <activity
+            android:name=".SASLoginActivity"
+            android:label="@string/login_label" />
+        <activity
+            android:name=".SASManageActivity"
+            android:label="@string/sas_app_name" />
+
+        <service
+            android:name=".SASManagerService"
+            android:enabled="true"
+            android:exported="false"> <!-- android:process=":SASManagerService" -->
+        </service>
+
+        <receiver
+            android:name=".receiver.StartServiceReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".receiver.ScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+
+                <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".SASSplashActivity"
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/sas_app_name"
+            android:theme="@style/AppTheme_Splash" />
+    </application>
+
+</manifest>
