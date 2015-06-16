@@ -117,7 +117,7 @@ public class MarksManager {
         if (marks.length > 0) {
             builder.append(markToString(marks[0]));
             for (int i = 1; i < marks.length; i++) {
-                builder.append("\n").append(markToString(marks[i]));
+                builder.append("\n").append(markToString(marks[i]).replace("\n", "?"));
             }
         }
 
@@ -129,15 +129,15 @@ public class MarksManager {
     }
 
     private String markToString(Mark mark) {
-        return mark.getDateAsString() + SPLIT_VALUE
-                + mark.getShortLesson() + SPLIT_VALUE
-                + mark.getLongLesson() + SPLIT_VALUE
-                + mark.getValueToShow() + SPLIT_VALUE
+        return mark.getDateAsString().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getShortLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getLongLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getValueToShow().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getValue() + SPLIT_VALUE
-                + mark.getType() + SPLIT_VALUE
+                + mark.getType().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getWeight() + SPLIT_VALUE
-                + mark.getNote() + SPLIT_VALUE
-                + mark.getTeacher();
+                + mark.getNote().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getTeacher().replace(SPLIT_VALUE, "?????");
     }
 
     private Mark parseMark(String string) {

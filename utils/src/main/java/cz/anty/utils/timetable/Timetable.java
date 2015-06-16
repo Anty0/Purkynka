@@ -9,8 +9,8 @@ import android.content.Context;
  */
 public class Timetable {
 
-    public static final String PARSE_CONST_DAY = ":;|TD|;:";
-    public static final String PARSE_CONST_OBJECT = ":;|TO|;:";
+    public static final String PARSE_CONST_DAY = ":;TD;:";
+    public static final String PARSE_CONST_OBJECT = ":;TO;:";
     public static final String NAME_CONST = "TIMETABLE ";
     public static final String[] DAYS = new String[]{
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
@@ -40,7 +40,7 @@ public class Timetable {
     }
 
     static Timetable loadTimetable(Context context, String key) {
-        String[] days = context.getSharedPreferences(NAME_CONST + key, Context.MODE_PRIVATE).getString(key, "").split(PARSE_CONST_DAY);
+        String[] days = context.getSharedPreferences(Timetables.SETTINGS_NAME_CONST, Context.MODE_PRIVATE).getString(NAME_CONST + key, "").split(PARSE_CONST_DAY);
         Lesson[][] lessons = new Lesson[DAYS.length][MAX_LESSONS];
         for (int i = 0; i < days.length; i++) {
             lessons[i] = parseDay(days[i]);
@@ -90,22 +90,22 @@ public class Timetable {
     }
 
     private synchronized void apply(Context context) {
-        StringBuilder builder = new StringBuilder(dayToString(0));
+        StringBuilder builder = new StringBuilder(dayToString(0).replace(PARSE_CONST_DAY, "??????"));
         for (int i = 1; i < lessons.length; i++) {
-            builder.append(PARSE_CONST_DAY).append(dayToString(i));
+            builder.append(PARSE_CONST_DAY).append(dayToString(i).replace(PARSE_CONST_DAY, "??????"));
             //builder.append(Arrays.toString(lessons.get(i).toArray()));
         }
 
-        context.getSharedPreferences(NAME_CONST + name, Context.MODE_PRIVATE).edit()
-                .putString("TIMETABLE", builder.toString())
+        context.getSharedPreferences(Timetables.SETTINGS_NAME_CONST, Context.MODE_PRIVATE).edit()
+                .putString(NAME_CONST + name, builder.toString())
                 .apply();
     }
 
     private synchronized String dayToString(int day) {
         Lesson[] lessonsDay = lessons[day];
-        StringBuilder builder = new StringBuilder().append(lessonsDay[0] == null ? "null" : lessonsDay[0]);
+        StringBuilder builder = new StringBuilder().append(lessonsDay[0] == null ? "null" : lessonsDay[0].toString().replace(PARSE_CONST_OBJECT, "??????"));
         for (int i = 1; i < lessonsDay.length; i++) {
-            builder.append(PARSE_CONST_OBJECT).append(lessonsDay[i] == null ? "null" : lessonsDay[i]);
+            builder.append(PARSE_CONST_OBJECT).append(lessonsDay[i] == null ? "null" : lessonsDay[i].toString().replace(PARSE_CONST_OBJECT, "??????"));
         }
         return builder.toString();
     }

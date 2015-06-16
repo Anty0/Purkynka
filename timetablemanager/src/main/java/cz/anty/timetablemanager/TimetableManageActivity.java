@@ -2,6 +2,9 @@ package cz.anty.timetablemanager;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,12 +70,32 @@ public class TimetableManageActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                textView.setText(Timetable.DAYS[position]);
+                textView.setText(positionOffset < 0.5f ? Timetable.DAYS[position] : Timetable.DAYS[position + 1]);
+                if (Build.VERSION.SDK_INT >= 11) {
+                    float width;
+                    Display display = getWindowManager().getDefaultDisplay();
+                    if (Build.VERSION.SDK_INT >= 13) {
+                        Point size = new Point();
+                        display.getSize(size);
+                        width = size.x;
+                    } else {
+                        width = display.getWidth();
+                    }
+                    float newWidth = width + textView.getWidth();
+                    float offset = (float) positionOffsetPixels / width * newWidth;
+                    if (positionOffset < 0.5f) {
+                        textView.setTranslationX(-offset);
+                    } else {
+                        textView.setTranslationX(newWidth - offset);
+                    }
+                } else {
+                    textView.setTextColor(Color.argb((int) ((positionOffset < 0.5f ? Math.abs(1f - positionOffset) : positionOffset) * 255f), 255, 255, 255));
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
-                textView.setText(Timetable.DAYS[position]);
+                //textView.setText(Timetable.DAYS[position]);
             }
 
             @Override

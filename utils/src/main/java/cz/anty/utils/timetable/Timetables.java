@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
  */
 public class Timetables {
 
-    private static final String SETTINGS_NAME_CONST = "TIMETABLES";
+    public static final String SETTINGS_NAME_CONST = "TIMETABLES";
 
     synchronized static String[] getTimetablesNames(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(SETTINGS_NAME_CONST, Context.MODE_PRIVATE);
@@ -43,7 +43,7 @@ public class Timetables {
 
     static void removeTimetablesName(Context context, String name) {
         setTimetablesNames(context, cz.anty.utils.Arrays.remove(getTimetablesNames(context), name));
-        context.getSharedPreferences(Timetable.NAME_CONST + name, Context.MODE_PRIVATE)
-                .edit().clear().apply();
+        context.getSharedPreferences(SETTINGS_NAME_CONST, Context.MODE_PRIVATE)
+                .edit().remove(Timetable.NAME_CONST + name).apply();
     }
 }

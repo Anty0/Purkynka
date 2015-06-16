@@ -14,6 +14,9 @@ import cz.anty.utils.LoginDataManager;
 
 public class SASSplashActivity extends AppCompatActivity {
 
+    private static final int WAIT_TIME = 100;
+    private static final int MIN_LENGTH_TIME = 500;
+
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, final IBinder binder) {
@@ -21,7 +24,7 @@ public class SASSplashActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(WAIT_TIME);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -30,9 +33,9 @@ public class SASSplashActivity extends AppCompatActivity {
                     myBinder.refresh();
                     myBinder.waitToWorkerStop();
                     long timeNew = System.currentTimeMillis();
-                    if (timeNew - time < 1500)
+                    if (timeNew - time < MIN_LENGTH_TIME)
                         try {
-                            Thread.sleep(time - timeNew + 1500);
+                            Thread.sleep(time - timeNew + MIN_LENGTH_TIME);
                         } catch (InterruptedException e) {
                             //e.printStackTrace();
                         }

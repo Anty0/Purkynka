@@ -7,7 +7,7 @@ package cz.anty.utils.timetable;
  */
 public class Lesson {
 
-    private static final String PARSE_CHARS = ":;|L|;:";
+    private static final String PARSE_CHARS = ":;L;:";
     private final String name, shortName, classString, teacher;
 
     public Lesson(String name, String shortName, String classString, String teacher) {
@@ -62,10 +62,10 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return getName() + PARSE_CHARS
-                + getShortName() + PARSE_CHARS
-                + getClassString() + PARSE_CHARS
-                + getTeacher();
+        return getName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
+                + getShortName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
+                + getClassString().replace(PARSE_CHARS, "?????") + PARSE_CHARS
+                + getTeacher().replace(PARSE_CHARS, "?????");
     }
 
     public static class Builder {
