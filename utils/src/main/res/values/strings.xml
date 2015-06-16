@@ -21,7 +21,7 @@
     <string name="validate_exception_no_valid_wifi">For working validator you must by connected to ISSWF1. Continue anyway?</string>
     <string name="successfully_saved">LOGIN and PASSWORD are SUCCESSFULLY SAVED</string>
     <string name="successfully_validated">LOGIN and PASSWORD are VALID</string>
-    <string name="manage_null_exception_message">Null pointer EXCEPTION\nplease try refresh page</string>
+    <string name="manage_null_exception_message">EXCEPTION occured\nplease try refresh page</string>
     <string name="login_exception_title">Cannot login</string>
     <string name="login_exception_message">Username or password are wrong</string>
 
@@ -36,7 +36,6 @@
     <string name="but_log_out">Log out</string>
     <string name="but_cancel">Cancel</string>
     <string name="but_search">Search</string>
-    <string name="search_name">Name</string>
     <string name="logo">logo</string>
 
     <string name="check_box_auto_login">Auto login to ISSWF1</string>
@@ -64,7 +63,7 @@
     <string name="message_lesson_name">Lesson name</string>
     <string name="message_short_lesson_name">Short lesson name</string>
     <string name="message_class">Class</string>
-    <string name="message_teacher">Teacher</string>
+    <string name="message_teacher">Teacher (FULL NAME)</string>
     <string name="but_list_click_edit">Click to edit</string>
     <string name="title_timetable_still_exists">Cannot create TIMETABLE</string>
     <string name="message_timetable_still_exists">TIMETABLE with this name still exists</string>
@@ -77,5 +76,6 @@
     <string name="lesson">Lesson</string>
     <string name="message_what_to_do">What are you want to do?</string>
     <string name="but_rename">Rename</string>
+    <string name="check_box_attendance_text">Display a warning when it is likely to be a substitute teacher.</string>
 
 </resources>

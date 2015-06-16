@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -55,8 +56,14 @@ public class SearchActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onCheckBoxClick(View view) {
+        getSharedPreferences("AttendanceData", MODE_PRIVATE).edit()
+                .putBoolean("DISPLAY_WARNING", ((CheckBox) view).isChecked())
+                .apply();
+    }
+
     public void onUpdate(View view) {
-        final String toSearch = view == null ? "" : ((EditText) findViewById(R.id.editText)).getText().toString();//TODO add auto complete using timetable and marks lessons
+        final String toSearch = ((EditText) findViewById(R.id.editText)).getText().toString();//TODO add auto complete using timetable and marks lessons
         worker.startWorker(new Runnable() {
             @Override
             public void run() {

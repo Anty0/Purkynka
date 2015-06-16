@@ -28,6 +28,7 @@ public class WifiLogin {
                 Jsoup.connect(LOGIN_URL)
                         .data("buttonClicked", "4", "err_flag", "0", "err_msg", "", "info_flag", "0", "redirect_url", ""
                                 , LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
+                        .postDataCharset("Windows-1250")
                         .method(Connection.Method.POST)
                         .validateTLSCertificates(false)
                         .execute();

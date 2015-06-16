@@ -44,6 +44,7 @@ public class SASSplashActivity extends AppCompatActivity {
                         public void run() {
                             //sendBroadcast(new Intent(SASSplashActivity.this, StartActivityReceiver.class));
                             //new StartActivityReceiver().onReceive(SASSplashActivity.this, null);
+                            finish();
                             startDefaultActivity(SASSplashActivity.this);
                         }
                     });
@@ -60,9 +61,9 @@ public class SASSplashActivity extends AppCompatActivity {
     private static void startDefaultActivity(Context context) {
         Intent activity;
         if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, context)) {
-            activity = new Intent(context.getApplicationContext(), SASManageActivity.class);
+            activity = new Intent(context, SASManageActivity.class);
         } else {
-            activity = new Intent(context.getApplicationContext(), SASLoginActivity.class);
+            activity = new Intent(context, SASLoginActivity.class);
         }
         if (Build.VERSION.SDK_INT > 10)
             activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
