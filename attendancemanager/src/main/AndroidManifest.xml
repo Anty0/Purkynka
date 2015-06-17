@@ -2,10 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.anty.attendancemanager">
 
+    <uses-permission android:name="ANDROID.PERMISSION.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application android:allowBackup="true">
         <activity
             android:name=".SearchActivity"
             android:label="@string/attendance_search_label" />
+
+        <receiver
+            android:name=".AttendanceReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
+        <receiver
+            android:name=".ScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

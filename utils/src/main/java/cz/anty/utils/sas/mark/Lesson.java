@@ -64,6 +64,6 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return getShortName() + ": " + getMarks().length + " | " + getDiameter();
+        return getShortName() + ": " + getMarks().length + " | " + Double.toString(getDiameter()).substring(0, 5);
     }
 }

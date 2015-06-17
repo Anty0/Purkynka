@@ -69,4 +69,6 @@
     <string name="validate_exception_wrong_login_or_wifi">Špatné JMÉNO nebo HESLO, nebo je telefon připojený ke špatné wifi </string>
     <string name="validating">Ověřuji…</string>
     <string name="wifi_app_name">WIFI auto LOGIN</string>
+    <string name="notify_teacher_is_not_here">se nenachází v prostorách školy</string>
+    <string name="ntify_supplemetation_title">Suplování</string>
 </resources>

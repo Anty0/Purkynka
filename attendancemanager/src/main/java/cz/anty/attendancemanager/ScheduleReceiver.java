@@ -1,4 +1,4 @@
-package cz.anty.sasmanager.receiver;
+package cz.anty.attendancemanager;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,21 +12,23 @@ import java.util.Calendar;
 
 public class ScheduleReceiver extends BroadcastReceiver {
 
-    // restart service every 30 seconds
-    private static final long REPEAT_TIME = 1000 * 60 * 5;
+    private static final long REPEAT_TIME = 1000 * 60;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         AlarmManager service = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(context, StartServiceReceiver.class);
+        Intent i = new Intent(context, AttendanceReceiver.class);
         PendingIntent pending = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (activeNetInfo != null && activeNetInfo.isConnected()) {
+        if (context.getSharedPreferences("AttendanceData", Context.MODE_PRIVATE)
+                .getBoolean("DISPLAY_WARNING", false)
+                && activeNetInfo != null && activeNetInfo.isConnected()) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
             cal.add(Calendar.SECOND, 10);

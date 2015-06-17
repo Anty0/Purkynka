@@ -2,7 +2,6 @@ package cz.anty.utils.attendance;
 
 import android.os.Build;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -61,15 +60,21 @@ public class AttendanceConnector {
     private synchronized Elements getSupElements(int depth, IOException last, String search, int page) throws IOException {
         if (depth >= MAX_TRY) throw last;
         try {
+            //URLConnection url = new URL(DEFAULT_URL + "?" + SEARCH + "=" + search + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
+            //        + "&" + ATT_URL_ADD + "=" + ATT_URL_ADD_VALUE + "&" + PAGE + "=" + Integer.toString(page)).openConnection();
             Document doc = Jsoup
-                    .connect(DEFAULT_URL)
-                    .data(SEARCH, search, SEARCH_SUBMIT, SEARCH_SUBMIT_VALUE,
-                            ATT_URL_ADD, ATT_URL_ADD_VALUE, PAGE, Integer.toString(page))
-                    .method(Connection.Method.POST)
+                    .connect(DEFAULT_URL + "?" + SEARCH + "=" + search + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
+                            + "&" + ATT_URL_ADD + "=" + ATT_URL_ADD_VALUE + "&" + PAGE + "=" + Integer.toString(page))
+                            //.data(SEARCH, search, SEARCH_SUBMIT, SEARCH_SUBMIT_VALUE,
+                            //        ATT_URL_ADD, ATT_URL_ADD_VALUE, PAGE, Integer.toString(page))
+                            //.method(Connection.Method.POST)
+                            //.postDataCharset(Build.VERSION.SDK_INT >= 19 ? StandardCharsets.US_ASCII.name() : "US-ASCII")
                             //.cookies(loginCookies)
                     .get();
 
-            //System.out.println(doc);
+            //Document doc = Jsoup.parse(url.getInputStream(), StandardCharsets.US_ASCII.name(), DEFAULT_URL);
+
+            System.out.println(doc);
             //System.out.println("=============================");
 
             //elements.remove(0);

@@ -171,8 +171,8 @@ public class TimetableManageActivity extends AppCompatActivity {
             for (int i = 0; i < values.length; i++) {
                 Lesson lesson = lessons[i];
                 if (lesson != null)
-                    values[i] = (i + 1) + ". " + lesson.getShortName() + " " + context.getString(R.string.lesson_in) + " " + lesson.getClassString();
-                else values[i] = context.getString(R.string.but_list_click_edit);
+                    values[i] = i + ". " + lesson.getShortName() + " " + context.getString(R.string.lesson_in) + " " + lesson.getClassString();
+                else values[i] = i + ". " + context.getString(R.string.but_list_click_edit);
             }
 
             final ArrayList<String> list = new ArrayList<>();

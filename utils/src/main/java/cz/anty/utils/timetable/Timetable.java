@@ -14,7 +14,15 @@ public class Timetable {
     public static final String NAME_CONST = "TIMETABLE ";
     public static final String[] DAYS = new String[]{
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
-    public static final int MAX_LESSONS = 10;
+    /*public static final String[] START_TIMES = new String[]{
+            "7:10", "8:00", "8:55", "10:00", "10:55", "11:50",
+            "12:45", "13:40", "14:35", "15:30", "16:25"};*/
+    //public static final SimpleDateFormat START_TIMES_FORMAT = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    public static final int[] START_TIMES_HOURS = new int[]{
+            7, 8, 8, 10, 10, 11, 12, 13, 14, 15, 16};
+    public static final int[] START_TIMES_MINUTES = new int[]{
+            10, 0, 55, 0, 55, 50, 45, 40, 35, 30, 25};
+    public static final int MAX_LESSONS = 11;
 
     /*private static final int MONDAY = 0;
     private static final int TUESDAY = 1;
