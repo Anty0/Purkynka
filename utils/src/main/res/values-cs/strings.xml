@@ -33,7 +33,7 @@
     <string name="loading">Načítání…</string>
     <string name="logging_in">Přihlašování…</string>
     <string name="login_exception_message">Uživatelské jméno, nebo heslo není v pořádku</string>
-    <string name="login_exception_title">Nelze provést přihlášení</string>
+    <string name="login_exception_title">Nelze provést přihlášení jako</string>
     <string name="login_label">Přihlášení do iSAS</string>
     <string name="logo">logo</string>
     <string name="manage_null_exception_message">Došlok chybě\nzkuste obnovit stránku</string>

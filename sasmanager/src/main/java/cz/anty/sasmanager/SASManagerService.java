@@ -27,6 +27,8 @@ public class SASManagerService extends Service {
     private State state = State.STOPPED;
     private SASManager sasManager;
     private MarksManager marks;
+    private Runnable onMarksChange = null;
+    private Runnable onStateChangedListener = null;
     private final Runnable onLoginChange = new Runnable() {
         @Override
         public void run() {
@@ -34,73 +36,12 @@ public class SASManagerService extends Service {
             marks.clear(MarksManager.Semester.SECOND);
             marks.apply(MarksManager.Semester.FIRST);
             marks.apply(MarksManager.Semester.SECOND);
-            worker.startWorker(initialize);
-        }
-    };
-    private Runnable onMarksChange = null;
-    private Runnable onStateChangedListener = null;
-    private final Runnable refreshMarks = new Runnable() {
-        @Override
-        public void run() {
-            if (sasManager != null) {
-                try {
-                    if (!sasManager.isConnected()) {
-                        sasManager.connect();
-                        setState(State.CONNECTED);
-                        if (sasManager.isLoggedIn())
-                            setState(State.LOGGED_IN);
-                    }
-                    try {
-                        MarksManager.Semester semester = MarksManager.Semester.AUTO.getStableSemester();
-                        List<Mark> newMarks = sasManager.getMarks(semester);
-                        int numberOfNewMarks = newMarks.size() - marks.get(semester).length;
-                        //System.out.println("old: " + marks.get(semester).length + " new: " + newMarks.size());
-                        marks.clear(semester);
-                        marks.addAll(newMarks, semester);
-                        marks.apply(semester);
-                        if (numberOfNewMarks > 0) {
-                            onMarksChange(semester, numberOfNewMarks);
-                        }
-                        semester = semester.reverse();
-                        if (marks.get(semester).length == 0) {
-                            List<Mark> newMarks2 = sasManager.getMarks(semester);
-                            //int numberOfNewMarks2 = newMarks2.size() - marks.get(semester).length;
-                            marks.clear(semester);
-                            marks.addAll(newMarks2, semester);
-                            marks.apply(semester);
-                                /*if (numberOfNewMarks2 > 0) {
-                                    onMarksChange(semester, numberOfNewMarks2);
-                                }*/
-                        }
-                        setState(State.LOGGED_IN);
-                    } catch (WrongLoginDataException e) {
-                        e.printStackTrace();
-                        setState(State.LOG_IN_EXCEPTION);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    setState(State.CONNECT_EXCEPTION);
+            worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    initialize();
                 }
-            }
-        }
-    };
-    private final Runnable initialize = new Runnable() {
-        @Override
-        public void run() {
-            if (sasManager != null && sasManager.isConnected()) {
-                sasManager.disconnect();
-                setState(State.DISCONNECTED);
-            }
-
-            if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, SASManagerService.this)) {
-                sasManager = new SASManager(LoginDataManager.getUsername(LoginDataManager.Type.SAS, SASManagerService.this),
-                        LoginDataManager.getPassword(LoginDataManager.Type.SAS, SASManagerService.this));
-                refreshMarks.run();
-                //setState(State.CONNECTED);
-            } else {
-                sasManager = null;
-                setState(State.DISCONNECTED);
-            }
+            });
         }
     };
 
@@ -118,7 +59,29 @@ public class SASManagerService extends Service {
         if (marks == null)
             marks = new MarksManager(this);
         LoginDataManager.addOnChangeListener(LoginDataManager.Type.SAS, onLoginChange);
-        worker.startWorker(initialize);
+        worker.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                initialize();
+            }
+        });
+    }
+
+    private void initialize() {
+        if (sasManager != null && sasManager.isConnected()) {
+            sasManager.disconnect();
+            setState(State.DISCONNECTED);
+        }
+
+        if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, SASManagerService.this)) {
+            sasManager = new SASManager(LoginDataManager.getUsername(LoginDataManager.Type.SAS, SASManagerService.this),
+                    LoginDataManager.getPassword(LoginDataManager.Type.SAS, SASManagerService.this));
+            refreshMarks(true);
+            //setState(State.CONNECTED);
+        } else {
+            sasManager = null;
+            setState(State.DISCONNECTED);
+        }
     }
 
     @Override
@@ -130,9 +93,56 @@ public class SASManagerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        worker.startWorker(refreshMarks);
+        worker.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                refreshMarks(false);
+            }
+        });
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
+    }
+
+    private void refreshMarks(boolean deepRefresh) {
+        if (sasManager == null) return;
+        try {
+            if (!sasManager.isConnected()) {
+                sasManager.connect();
+                setState(State.CONNECTED);
+                if (sasManager.isLoggedIn())
+                    setState(State.LOGGED_IN);
+            }
+            try {
+                MarksManager.Semester semester = MarksManager.Semester.AUTO.getStableSemester();
+                List<Mark> newMarks = sasManager.getMarks(semester);
+                int numberOfNewMarks = newMarks.size() - marks.get(semester).length;
+                //System.out.println("old: " + marks.get(semester).length + " new: " + newMarks.size());
+                marks.clear(semester);
+                marks.addAll(newMarks, semester);
+                marks.apply(semester);
+                if (numberOfNewMarks > 0) {
+                    onMarksChange(semester, numberOfNewMarks);
+                }
+                semester = semester.reverse();
+                if (deepRefresh || marks.get(semester).length == 0) {
+                    List<Mark> newMarks2 = sasManager.getMarks(semester);
+                    //int numberOfNewMarks2 = newMarks2.size() - marks.get(semester).length;
+                    marks.clear(semester);
+                    marks.addAll(newMarks2, semester);
+                    marks.apply(semester);
+                                /*if (numberOfNewMarks2 > 0) {
+                                    onMarksChange(semester, numberOfNewMarks2);
+                                }*/
+                }
+                setState(State.LOGGED_IN);
+            } catch (WrongLoginDataException e) {
+                e.printStackTrace();
+                setState(State.LOG_IN_EXCEPTION);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            setState(State.CONNECT_EXCEPTION);
+        }
     }
 
     private void onMarksChange(MarksManager.Semester semester, int newMarks) {
@@ -172,7 +182,7 @@ public class SASManagerService extends Service {
                         .bigText(builderBig))
                 .build();
 
-        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(0, n);
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, n);
     }
 
     @Override
@@ -211,7 +221,12 @@ public class SASManagerService extends Service {
         }*/
 
         public void refresh() {
-            worker.startWorker(refreshMarks);
+            worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    refreshMarks(true);
+                }
+            });
         }
 
         /*public SASManagerService getService() {

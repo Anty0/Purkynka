@@ -2,6 +2,7 @@ package cz.anty.utils.sas.mark;
 
 import android.support.annotation.NonNull;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -14,6 +15,7 @@ public class Lesson {
 
     private final String fullName, shortName;
     private final List<Mark> marks = new CopyOnWriteArrayList<>();
+    private final DecimalFormat format = new DecimalFormat("#.###");
 
     public Lesson(@NonNull String fullName, @NonNull String shortName) {
         this.fullName = fullName;
@@ -49,6 +51,7 @@ public class Lesson {
         double tempMark = 0d;
         int tempWeight = 0;
         for (Mark mark : marks) {
+            if (mark.getValue() == 0d) continue;
             tempMark += mark.getValue() * (double) mark.getWeight();
             tempWeight += mark.getWeight();
         }
@@ -64,6 +67,6 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return getShortName() + ": " + getMarks().length + " | " + Double.toString(getDiameter()).substring(0, 5);
+        return getShortName() + ": " + getMarks().length + " | " + format.format(getDiameter());
     }
 }

@@ -34,6 +34,7 @@ public class SASManageActivity extends AppCompatActivity {
     private SASManagerService.MyBinder binder = null;
     private OnceRunThreadWithProgress refreshThread;
     private MarksShort marksShort = MarksShort.DATE;
+    private MarksManager.Semester semester = MarksManager.Semester.AUTO.getStableSemester();
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder binder) {
@@ -136,9 +137,19 @@ public class SASManageActivity extends AppCompatActivity {
         } else if (i == R.id.action_sort_date) {
             marksShort = MarksShort.DATE;
             onUpdate();
+            return true;
         } else if (i == R.id.action_sort_lesson) {
             marksShort = MarksShort.LESSONS;
             onUpdate();
+            return true;
+        } else if (i == R.id.action_semester_first) {
+            semester = MarksManager.Semester.FIRST;
+            onUpdate();
+            return true;
+        } else if (i == R.id.action_semester_second) {
+            semester = MarksManager.Semester.SECOND;
+            onUpdate();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -173,7 +184,7 @@ public class SASManageActivity extends AppCompatActivity {
                 if (binder != null) {
                     switch (marksShort) {
                         case LESSONS:
-                            final List<Lesson> lessons = Marks.toLessons(Arrays.asList(binder.getMarks(MarksManager.Semester.AUTO)));
+                            final List<Lesson> lessons = Marks.toLessons(Arrays.asList(binder.getMarks(semester)));
                             values = new String[lessons.size()];
                             for (int i = 0; i < values.length; i++) {
                                 values[i] = lessons.get(i).toString();
@@ -208,7 +219,7 @@ public class SASManageActivity extends AppCompatActivity {
                             break;
                         case DATE:
                         default:
-                            Mark[] marks = binder.getMarks(MarksManager.Semester.AUTO);
+                            Mark[] marks = binder.getMarks(semester);
                             values = new String[marks.length];
                             for (int i = 0; i < values.length; i++) {
                                 values[i] = marks[i].toString();
@@ -268,7 +279,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     private void logInException() {
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                .setTitle(R.string.login_exception_title)
+                .setTitle(getString(R.string.login_exception_title) + " " + LoginDataManager.getUsername(LoginDataManager.Type.SAS, this))
                 .setMessage(R.string.login_exception_message)
                 .setPositiveButton(R.string.but_retry, new DialogInterface.OnClickListener() {
                     @Override

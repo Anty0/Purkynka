@@ -30,14 +30,6 @@
             android:text="@string/but_search" />
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="true"
-        android:onClick="onCheckBoxClick"
-        android:text="@string/check_box_attendance_text" />
-
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

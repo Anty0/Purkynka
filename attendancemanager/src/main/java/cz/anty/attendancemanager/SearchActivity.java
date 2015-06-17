@@ -1,16 +1,15 @@
 package cz.anty.attendancemanager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +29,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
         if (worker == null)
             worker = new OnceRunThreadWithProgress(this);
         onUpdate(null);
@@ -57,13 +57,6 @@ public class SearchActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onCheckBoxClick(View view) {
-        getSharedPreferences("AttendanceData", MODE_PRIVATE).edit()
-                .putBoolean("DISPLAY_WARNING", ((CheckBox) view).isChecked())
-                .apply();
-        sendBroadcast(new Intent(this, ScheduleReceiver.class));
-    }
-
     public void onUpdate(View view) {
         final String toSearch = ((EditText) findViewById(R.id.editText)).getText().toString();//TODO add auto complete using timetable and marks lessons
         worker.startWorker(new Runnable() {
@@ -76,7 +69,7 @@ public class SearchActivity extends AppCompatActivity {
                     for (int i = 0; i < values.length; i++) {
                         values[i] = mans.get(i).toString();
                     }
-                } catch (IOException e) {
+                } catch (IOException | URISyntaxException e) {
                     values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
                     e.printStackTrace();
                 }

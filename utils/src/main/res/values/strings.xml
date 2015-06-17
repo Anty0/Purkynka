@@ -22,7 +22,7 @@
     <string name="successfully_saved">LOGIN and PASSWORD are SUCCESSFULLY SAVED</string>
     <string name="successfully_validated">LOGIN and PASSWORD are VALID</string>
     <string name="manage_null_exception_message">EXCEPTION occured\nplease try refresh page</string>
-    <string name="login_exception_title">Cannot login</string>
+    <string name="login_exception_title">Cannot login as</string>
     <string name="login_exception_message">Username or password are wrong</string>
 
     <string name="insert_login">Login:</string>
@@ -78,6 +78,10 @@
     <string name="but_rename">Rename</string>
     <string name="check_box_attendance_text">Display a warning when it is likely to be a substitute teacher.</string>
     <string name="ntify_supplemetation_title">Supplementation</string>
-    <string name="notify_teacher_is_not_here">is not here</string>
+    <string name="notify_teacher_is_not_here">is not in school</string>
+    <string name="logged_in">Logged in</string>
+    <string name="menu_semester_second">Second</string>
+    <string name="menu_semester_first">First</string>
+    <string name="menu_semester">Semester</string>
 
 </resources>

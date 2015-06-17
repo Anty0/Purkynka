@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import cz.anty.utils.OnceRunThread;
 import cz.anty.utils.attendance.AttendanceConnector;
+import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
@@ -53,14 +56,18 @@ public class AttendanceReceiver extends BroadcastReceiver {
                     try {
                         Lesson lesson = timetable.getLesson(day, lessonIndex);
                         if (lesson == null) return;
-                        if (!Mans.parseMans(
-                                connector.getSupElements(
-                                        lesson.getTeacher(), 1
-                                )
-                        ).get(0).isInSchool()) {
+                        List<Man> mans = Mans.parseMans(
+                                connector.getSupElements(lesson.getTeacher(), 1));
+                        Man man = null;
+                        for (int i = 0; i < mans.size(); i++) {
+                            man = mans.get(i);
+                            if (man.getClassString().length() > 4) break;
+                            else man = null;
+                        }
+                        if (man != null && !man.isInSchool()) {
                             Notification n = new NotificationCompat.Builder(context)
                                     .setContentTitle(lesson.getShortName() + " " + context.getString(R.string.ntify_supplemetation_title))
-                                    .setContentText(lesson.getTeacher() + " " + context.getString(R.string.notify_teacher_is_not_here))
+                                    .setContentText(man.getName() + " " + context.getString(R.string.notify_teacher_is_not_here))
                                     .setSmallIcon(R.mipmap.ic_launcher)
                                             //.setContentIntent(null)
                                     .setAutoCancel(true)
@@ -68,11 +75,11 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                                     .build();
 
-                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, n);
+                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(2, n);
                             context.getSharedPreferences("ATTENDANCE", Context.MODE_PRIVATE).edit()
                                     .putLong(timetable.getName() + " LAST_NOTIFY", System.currentTimeMillis()).apply();
                         }
-                    } catch (IOException | IndexOutOfBoundsException e) {
+                    } catch (IOException | IndexOutOfBoundsException | URISyntaxException e) {
                         e.printStackTrace();
                     }
                 }

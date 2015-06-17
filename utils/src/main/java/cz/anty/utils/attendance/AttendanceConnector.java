@@ -7,6 +7,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -53,18 +55,21 @@ public class AttendanceConnector {
         }
     }*/
 
-    public synchronized Elements getSupElements(String search, int page) throws IOException {
+    public synchronized Elements getSupElements(String search, int page) throws IOException, URISyntaxException {
         return getSupElements(0, null, search, page);
     }
 
-    private synchronized Elements getSupElements(int depth, IOException last, String search, int page) throws IOException {
+    private synchronized Elements getSupElements(int depth, IOException last, String search, int page) throws IOException, URISyntaxException {
         if (depth >= MAX_TRY) throw last;
         try {
             //URLConnection url = new URL(DEFAULT_URL + "?" + SEARCH + "=" + search + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
             //        + "&" + ATT_URL_ADD + "=" + ATT_URL_ADD_VALUE + "&" + PAGE + "=" + Integer.toString(page)).openConnection();
+            String urlStr = DEFAULT_URL + "?" + SEARCH + "=" + URLEncoder.encode(search, "cp1252") + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
+                    + "&" + ATT_URL_ADD + "=" + ATT_URL_ADD_VALUE + "&" + PAGE + "=" + Integer.toString(page);
+            //URL url= new URL(urlStr);
+            //URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
             Document doc = Jsoup
-                    .connect(DEFAULT_URL + "?" + SEARCH + "=" + search + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
-                            + "&" + ATT_URL_ADD + "=" + ATT_URL_ADD_VALUE + "&" + PAGE + "=" + Integer.toString(page))
+                    .connect(urlStr)//uri.toASCIIString()
                             //.data(SEARCH, search, SEARCH_SUBMIT, SEARCH_SUBMIT_VALUE,
                             //        ATT_URL_ADD, ATT_URL_ADD_VALUE, PAGE, Integer.toString(page))
                             //.method(Connection.Method.POST)
@@ -74,7 +79,8 @@ public class AttendanceConnector {
 
             //Document doc = Jsoup.parse(url.getInputStream(), StandardCharsets.US_ASCII.name(), DEFAULT_URL);
 
-            System.out.println(doc);
+            //System.out.println(doc);
+            //System.out.println(urlStr);//uri.toASCIIString()
             //System.out.println("=============================");
 
             //elements.remove(0);

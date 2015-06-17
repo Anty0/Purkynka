@@ -27,17 +27,18 @@ public class OnceRunThread {
     }
 
     protected void start(Thread thread) {
-        synchronized (this) {
-            waitToWorkerStop();
-            worker = thread;
-            worker.start();
-        }
+        //waitToWorkerStop();
+        setWorker(thread);
+        worker.start();
     }
 
-    public boolean isWorkerRunning() {
-        synchronized (this) {
-            return !(worker == null || worker.getState() == Thread.State.TERMINATED);
-        }
+    private synchronized void setWorker(Thread worker) {
+        waitToWorkerStop();
+        this.worker = worker;
+    }
+
+    public synchronized boolean isWorkerRunning() {
+        return !(worker == null || worker.getState() == Thread.State.TERMINATED);
     }
 
     public synchronized void waitToWorkerStop() {

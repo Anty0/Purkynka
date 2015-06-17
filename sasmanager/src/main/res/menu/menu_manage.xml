@@ -27,6 +27,29 @@
     </item>
 
     <item
+        android:orderInCategory="100"
+        android:title="@string/menu_semester"
+        app:showAsAction="ifRoom">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_semester_first"
+                android:orderInCategory="100"
+                android:title="@string/menu_semester_first"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_semester_second"
+                android:orderInCategory="100"
+                android:title="@string/menu_semester_second"
+                app:showAsAction="never" />
+
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_refresh_white_48dp"
         android:orderInCategory="100"

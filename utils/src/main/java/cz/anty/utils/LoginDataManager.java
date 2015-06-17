@@ -59,8 +59,8 @@ public class LoginDataManager {
 
     public static synchronized void login(Type type, Context context, String username, String password) {
         context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE).edit()
-                .putString("LOGIN", username)
-                .putString("PASSWORD", password)
+                .putString("LOGIN", ByteEncryption.xor(username))
+                .putString("PASSWORD", ByteEncryption.xor(password))
                 .putBoolean("LOGGED_IN", true)
                 .apply();
         onChange(type);
@@ -90,13 +90,13 @@ public class LoginDataManager {
     }
 
     public static synchronized String getUsername(Type type, Context context) {
-        return context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
-                .getString("LOGIN", "");
+        return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
+                .getString("LOGIN", ""));
     }
 
     public static synchronized String getPassword(Type type, Context context) {
-        return context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
-                .getString("PASSWORD", "");
+        return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
+                .getString("PASSWORD", ""));
     }
 
     public enum Type {

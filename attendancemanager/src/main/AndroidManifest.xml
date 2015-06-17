@@ -14,7 +14,7 @@
         <receiver
             android:name=".AttendanceReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
         <receiver
             android:name=".ScheduleReceiver"
             android:enabled="true"

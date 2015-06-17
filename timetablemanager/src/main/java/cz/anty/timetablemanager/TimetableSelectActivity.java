@@ -9,12 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+import cz.anty.attendancemanager.ScheduleReceiver;
 import cz.anty.utils.StableArrayAdapter;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableManager;
@@ -27,6 +29,10 @@ public class TimetableSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable_select);
+        ((CheckBox) findViewById(R.id.checkBox))
+                .setChecked(getSharedPreferences("AttendanceData", MODE_PRIVATE)
+                        .getBoolean("DISPLAY_WARNING", false));
+
         if (timetableManager == null)
             timetableManager = new TimetableManager(this);
         initialize();
@@ -158,5 +164,12 @@ public class TimetableSelectActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initialize();
+    }
+
+    public void onCheckBoxClick(View view) {
+        getSharedPreferences("AttendanceData", MODE_PRIVATE).edit()
+                .putBoolean("DISPLAY_WARNING", ((CheckBox) view).isChecked())
+                .apply();
+        sendBroadcast(new Intent(this, ScheduleReceiver.class));
     }
 }
