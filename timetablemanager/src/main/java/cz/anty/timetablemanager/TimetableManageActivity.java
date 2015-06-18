@@ -79,6 +79,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                         display.getSize(size);
                         width = size.x;
                     } else {
+                        //noinspection deprecation
                         width = display.getWidth();
                     }
                     float newWidth = width + textView.getWidth();
