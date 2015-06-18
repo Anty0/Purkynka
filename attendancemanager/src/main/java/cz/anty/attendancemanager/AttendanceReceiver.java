@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -80,7 +81,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                     .putLong(timetable.getName() + " LAST_NOTIFY", System.currentTimeMillis()).apply();
                         }
                     } catch (IOException | IndexOutOfBoundsException | URISyntaxException e) {
-                        e.printStackTrace();
+                        Log.d(null, null, e);
                     }
                 }
             });

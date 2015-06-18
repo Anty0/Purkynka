@@ -2,11 +2,14 @@ package cz.anty.attendancemanager;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,6 +26,7 @@ import cz.anty.utils.listItem.TextMultilineItem;
 public class SearchActivity extends AppCompatActivity {
 
     private final AttendanceConnector connector = new AttendanceConnector();
+    private EditText searchEditText;
     private MultilineAdapter adapter;
     private OnceRunThreadWithProgress worker;
 
@@ -30,9 +34,20 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        searchEditText = (EditText) findViewById(R.id.editText);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (!worker.isWorkerRunning()) {
+                    onUpdate(null);
+                    return true;
+                }
+                return false;
+            }
+        });
+        ListView resultListView = ((ListView) findViewById(R.id.listView));
         adapter = new MultilineAdapter(this, R.layout.multi_line_list_item);
-        ListView listView = ((ListView) findViewById(R.id.listView));
-        listView.setAdapter(adapter);
+        resultListView.setAdapter(adapter);
 
         if (worker == null)
             worker = new OnceRunThreadWithProgress(this);
@@ -62,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onUpdate(View view) {
-        final String toSearch = ((EditText) findViewById(R.id.editText)).getText().toString();//TODO add auto complete using timetable and marks lessons
+        final String toSearch = searchEditText.getText().toString();//TODO add auto complete using timetable and marks lessons
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -78,7 +93,7 @@ public class SearchActivity extends AppCompatActivity {
                 } catch (IOException | URISyntaxException e) {
                     //values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
                     data = new MultilineItem[]{new TextMultilineItem("Check your internet connection", "Connection exception: " + e.getMessage())};
-                    e.printStackTrace();
+                    Log.d(null, null, e);
                 }
 
                 /*final ArrayList<String> list = new ArrayList<>();

@@ -1,5 +1,7 @@
 package cz.anty.utils.wifi;
 
+import android.util.Log;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -33,7 +35,7 @@ public class WifiLogin {
                         .execute();
                 return true;
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.d(null, null, e);
             }
         }
         return false;

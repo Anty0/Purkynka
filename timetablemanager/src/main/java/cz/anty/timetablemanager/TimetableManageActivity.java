@@ -201,7 +201,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                                 .setNegativeButton(R.string.but_delete, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        toShow.setLesson(context, null, day, position);
+                                        toShow.setLesson(null, day, position);
                                         initializeListView(rootView);
                                     }
                                 })
@@ -264,7 +264,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    toShow.setLesson(context, new Lesson(nameEditText.getText().toString(),
+                                    toShow.setLesson(new Lesson(nameEditText.getText().toString(),
                                             shortNameEditText.getText().toString(), classEditText.getText().toString(),
                                             teacherEditText.getText().toString()), day, lessonIndex);
                                     initializeListView(rootView);

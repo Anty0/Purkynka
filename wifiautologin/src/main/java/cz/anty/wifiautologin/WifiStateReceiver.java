@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import cz.anty.utils.LoginDataManager;
 import cz.anty.utils.OnceRunThread;
@@ -44,7 +45,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     try {
                         Thread.sleep(2500);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.d(null, null, e);
                     }
                     notificationManager.cancel(3);
                 }

@@ -9,6 +9,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -139,11 +140,11 @@ public class SASManagerService extends Service {
                 }
                 setState(State.LOGGED_IN);
             } catch (WrongLoginDataException e) {
-                e.printStackTrace();
+                Log.d(null, null, e);
                 setState(State.LOG_IN_EXCEPTION);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d(null, null, e);
             setState(State.CONNECT_EXCEPTION);
         }
     }

@@ -84,5 +84,10 @@
     <string name="menu_semester_second">Second</string>
     <string name="menu_semester_first">First</string>
     <string name="menu_semester">Semester</string>
+    <string name="check_box_auto_load">Auto load Timetable from SPSEIT web page (name must equals to class name</string>
+    <string name="exception_connection_title">Connection exception</string>
+    <string name="exception_connection_message">Timetable cannot by loaded from internet.\nCheck your internet connection.</string>
+    <string name="exception_name_title">Name exception</string>
+    <string name="exception_name_message">Class with this name doesn\'t exists.\nPlease check timetable name</string>
 
 </resources>

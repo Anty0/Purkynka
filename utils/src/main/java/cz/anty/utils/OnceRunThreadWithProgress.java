@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -68,7 +69,7 @@ public class OnceRunThreadWithProgress extends OnceRunThread {
             super.start(thread);
             thread.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.d(null, null, e);
         } finally {
             synchronized (this) {
                 if (message != null) {

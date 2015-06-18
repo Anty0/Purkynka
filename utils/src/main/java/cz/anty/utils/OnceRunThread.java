@@ -1,6 +1,7 @@
 package cz.anty.utils;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 /**
  * Created by anty on 9.6.15.
@@ -46,7 +47,7 @@ public class OnceRunThread {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.d(null, null, e);
             }
         }
     }

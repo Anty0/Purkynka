@@ -8,9 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import cz.anty.sasmanager.receiver.ScheduleReceiver;
 import cz.anty.utils.LoginDataManager;
+import cz.anty.utils.OnceRunThread;
 
 public class SASSplashActivity extends AppCompatActivity {
 
@@ -18,16 +20,17 @@ public class SASSplashActivity extends AppCompatActivity {
     private static final int MIN_LENGTH_TIME = 500;
 
     //private boolean exit = false;
+    private OnceRunThread worker = new OnceRunThread();
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, final IBinder binder) {
-            new Thread(new Runnable() {
+            worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Thread.sleep(WAIT_TIME);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Log.d(null, null, e);
                     }
                     long time = System.currentTimeMillis();
                     SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
@@ -51,7 +54,7 @@ public class SASSplashActivity extends AppCompatActivity {
                         }
                     });
                 }
-            }).start();
+            });
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -94,6 +97,7 @@ public class SASSplashActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        worker.waitToWorkerStop();
         super.onPause();
         unbindService(mConnection);
     }

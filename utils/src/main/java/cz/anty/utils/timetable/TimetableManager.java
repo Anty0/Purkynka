@@ -23,8 +23,10 @@ public class TimetableManager {
         }
     }
 
-    public synchronized void addTimetable(String timetableName) {
-        timetables.add(new Timetable(context, timetableName));
+    public synchronized Timetable addTimetable(String timetableName) {
+        Timetable newTimetable = new Timetable(context, timetableName);
+        timetables.add(newTimetable);
+        return newTimetable;
     }
 
     public synchronized void removeTimetable(Timetable timetable) {
