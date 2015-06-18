@@ -1,4 +1,4 @@
-package cz.anty.utils;
+package cz.anty.utils.listItem;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;

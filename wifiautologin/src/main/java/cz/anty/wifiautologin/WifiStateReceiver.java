@@ -32,7 +32,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     Notification n = new NotificationCompat.Builder(context)
                             .setContentTitle(WifiLogin.WIFI_NAME)
                             .setContentText(context.getString(R.string.logged_in) + " " + WifiLogin.WIFI_NAME)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.mipmap.ic_launcher_wifi)
                                     //.setContentIntent(null)
                             .setAutoCancel(true)
                                     //.setDefaults(Notification.DEFAULT_ALL)

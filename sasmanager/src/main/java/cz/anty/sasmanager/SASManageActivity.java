@@ -15,14 +15,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import cz.anty.utils.LoginDataManager;
 import cz.anty.utils.OnceRunThreadWithProgress;
-import cz.anty.utils.StableArrayAdapter;
+import cz.anty.utils.listItem.MultilineAdapter;
+import cz.anty.utils.listItem.MultilineItem;
+import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.sas.mark.Lesson;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.Marks;
@@ -31,6 +31,7 @@ import cz.anty.utils.sas.mark.MarksManager;
 public class SASManageActivity extends AppCompatActivity {
 
     private ListView listView;
+    private MultilineAdapter adapter;
     private SASManagerService.MyBinder binder = null;
     private OnceRunThreadWithProgress refreshThread;
     private MarksShort marksShort = MarksShort.DATE;
@@ -63,10 +64,10 @@ public class SASManageActivity extends AppCompatActivity {
                     SASManageActivity.this.binder.setOnMarksChangeListener(new Runnable() {
                         @Override
                         public void run() {
-                            onUpdate();
+                            onUpdate(false);
                         }
                     });
-                    onUpdate();
+                    onUpdate(true);
                 }
             });
         }
@@ -93,6 +94,9 @@ public class SASManageActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_manage);
         listView = ((ListView) findViewById(R.id.listView));
+        adapter = new MultilineAdapter(this, R.layout.multi_line_list_item);
+        listView.setAdapter(adapter);
+
 
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithProgress(this);
@@ -128,7 +132,7 @@ public class SASManageActivity extends AppCompatActivity {
         } else if (i == R.id.action_refresh) {
             if (binder != null) {
                 binder.refresh();
-                onUpdate();
+                onUpdate(true);
             }
             return true;
         } else if (i == R.id.action_log_out) {
@@ -136,19 +140,19 @@ public class SASManageActivity extends AppCompatActivity {
             return true;
         } else if (i == R.id.action_sort_date) {
             marksShort = MarksShort.DATE;
-            onUpdate();
+            onUpdate(true);
             return true;
         } else if (i == R.id.action_sort_lesson) {
             marksShort = MarksShort.LESSONS;
-            onUpdate();
+            onUpdate(true);
             return true;
         } else if (i == R.id.action_semester_first) {
             semester = MarksManager.Semester.FIRST;
-            onUpdate();
+            onUpdate(true);
             return true;
         } else if (i == R.id.action_semester_second) {
             semester = MarksManager.Semester.SECOND;
-            onUpdate();
+            onUpdate(true);
             return true;
         }
 
@@ -165,7 +169,7 @@ public class SASManageActivity extends AppCompatActivity {
         }
     }
 
-    public void onUpdate() {
+    public void onUpdate(boolean showProgressBar) {
         //((TextView) findViewById(R.id.textView3)).setText(R.string.loading);
         refreshThread.startWorker(new Runnable() {
             @Override
@@ -179,23 +183,24 @@ public class SASManageActivity extends AppCompatActivity {
                     }
                 } else
                     builder.append("null").append("\n").append(getString(R.string.marks)).append(":");*/
-                String[] values;
+                final MultilineItem[] data;
                 AdapterView.OnItemClickListener onClickListener = null;
                 if (binder != null) {
                     switch (marksShort) {
                         case LESSONS:
                             final List<Lesson> lessons = Marks.toLessons(Arrays.asList(binder.getMarks(semester)));
-                            values = new String[lessons.size()];
+                            data = lessons.toArray(new MultilineItem[lessons.size()]);
+                            /*values = new String[lessons.size()];
                             for (int i = 0; i < values.length; i++) {
                                 values[i] = lessons.get(i).toString();
-                            }
+                            }*/
                             onClickListener = new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     ListView listView = new ListView(SASManageActivity.this);
                                     Lesson lesson = lessons.get(position);
                                     Mark[] marks = lesson.getMarks();
-                                    String[] values = new String[marks.length];
+                                    /*String[] values = new String[marks.length];
                                     for (int i = 0; i < values.length; i++) {
                                         values[i] = marks[i].toString();
                                     }
@@ -204,7 +209,9 @@ public class SASManageActivity extends AppCompatActivity {
                                     Collections.addAll(list, values);
 
                                     final StableArrayAdapter adapter = new StableArrayAdapter(SASManageActivity.this,
-                                            android.R.layout.simple_list_item_1, list);
+                                            android.R.layout.simple_list_item_1, list);*/
+                                    MultilineAdapter adapter = new MultilineAdapter(SASManageActivity.this,
+                                            R.layout.multi_line_list_item, marks);
 
                                     listView.setAdapter(adapter);
                                     new AlertDialog.Builder(SASManageActivity.this)
@@ -219,29 +226,43 @@ public class SASManageActivity extends AppCompatActivity {
                             break;
                         case DATE:
                         default:
-                            Mark[] marks = binder.getMarks(semester);
-                            values = new String[marks.length];
+                            /*Mark[] marks*/
+                            data = binder.getMarks(semester);
+                            /*values = new String[marks.length];
                             for (int i = 0; i < values.length; i++) {
                                 values[i] = marks[i].toString();
-                            }
+                            }*/
                             break;
                     }
                 } else {
-                    values = new String[]{getString(R.string.manage_null_exception_message)};
+                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.manage_null_exception_title),
+                            getString(R.string.manage_null_exception_message))};
                 }
-                ArrayList<String> list = new ArrayList<>();
+                /*ArrayList<String> list = new ArrayList<>();
                 Collections.addAll(list, values);
 
                 final StableArrayAdapter adapter = new StableArrayAdapter(SASManageActivity.this,
-                        android.R.layout.simple_list_item_1, list);
+                        android.R.layout.simple_list_item_1, list);*/
 
                 final AdapterView.OnItemClickListener finalOnClickListener = onClickListener;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //String [] values = new String[] {getString(R.string.sas_app_name), getString(R.string.wifi_app_name)};
-                        listView.setAdapter(adapter);
+                        adapter.clear();
+                        for (MultilineItem item : data) {
+                            adapter.add(item);
+                        }
+                        adapter.notifyDataSetChanged();
                         listView.setOnItemClickListener(finalOnClickListener);
+                    }
+                });
+                /*runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //String [] values = new String[] {getString(R.string.sas_app_name), getString(R.string.wifi_app_name)};
+                        //listView.setAdapter(adapter);
+
+                        //adapter.notifyDataSetChanged();
 
                         /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -260,12 +281,12 @@ public class SASManageActivity extends AppCompatActivity {
                                 }
                             }
 
-                        });*/
+                        });
                         //((TextView) findViewById(R.id.textView3)).setText(builder);
                     }
-                });
+                });*/
             }
-        }, getString(R.string.loading));
+        }, showProgressBar ? getString(R.string.loading) : null);
     }
 
     private void logOut() {

@@ -3,13 +3,14 @@ package cz.anty.utils.attendance.man;
 import java.util.Date;
 
 import cz.anty.utils.attendance.AttendanceConnector;
+import cz.anty.utils.listItem.MultilineItem;
 
 /**
  * Created by anty on 13.6.15.
  *
  * @author anty
  */
-public class Man {
+public class Man implements MultilineItem {
 
     private final String name, classString;
     private final Date lastEnter;
@@ -48,6 +49,16 @@ public class Man {
                 + getClassString() + " | "
                 + getLastEnterAsString() + " | "
                 + isInSchool();
+    }
+
+    @Override
+    public String getTitle() {
+        return getName() + " " + getClassString();
+    }
+
+    @Override
+    public String getText() {
+        return isInSchool() + " " + getLastEnterAsString();
     }
 
     public static class Builder {

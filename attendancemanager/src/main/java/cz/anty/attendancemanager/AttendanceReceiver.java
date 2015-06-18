@@ -66,7 +66,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         }
                         if (man != null && !man.isInSchool()) {
                             Notification n = new NotificationCompat.Builder(context)
-                                    .setContentTitle(lesson.getShortName() + " " + context.getString(R.string.ntify_supplemetation_title))
+                                    .setContentTitle(lesson.getShortName() + " " + context.getString(R.string.notify_supplementation_title))
                                     .setContentText(man.getName() + " " + context.getString(R.string.notify_teacher_is_not_here))
                                     .setSmallIcon(R.mipmap.ic_launcher)
                                             //.setContentIntent(null)

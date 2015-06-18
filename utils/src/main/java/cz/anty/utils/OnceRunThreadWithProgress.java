@@ -7,6 +7,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
+
 /**
  * Created by anty on 10.6.15.
  *
@@ -16,6 +18,7 @@ public class OnceRunThreadWithProgress extends OnceRunThread {
 
     private final Activity activity;
     private final ProgressDialog progressDialog;
+    private final ArrayList<String> messages = new ArrayList<>();
     private int depth = 0;
 
     public OnceRunThreadWithProgress(Activity activity) {
@@ -29,7 +32,7 @@ public class OnceRunThreadWithProgress extends OnceRunThread {
     }
 
     public void startWorker(final Runnable runnable, @Nullable String message) {
-        startWorker(new Thread(runnable), message);
+        startWorker(new Thread(runnable, message + " Thread"), message);
     }
 
     public void startWorker(@NonNull final Thread thread, @Nullable final String message) {
@@ -46,11 +49,14 @@ public class OnceRunThreadWithProgress extends OnceRunThread {
     protected void start(Thread thread, final String message) {
         synchronized (this) {
             if (message != null) {
+                synchronized (messages) {
+                    messages.add(message);
+                }
                 if (depth == 0)
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            progressDialog.setMessage(message);
+                            progressDialog.setMessage(getMessage());
                             progressDialog.show();
                         }
                     });
@@ -67,6 +73,9 @@ public class OnceRunThreadWithProgress extends OnceRunThread {
             synchronized (this) {
                 if (message != null) {
                     depth--;
+                    synchronized (messages) {
+                        messages.remove(message);
+                    }
                     if (depth == 0)
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -76,6 +85,17 @@ public class OnceRunThreadWithProgress extends OnceRunThread {
                         });
                 }
             }
+        }
+    }
+
+    private String getMessage() {
+        synchronized (messages) {
+            if (messages.size() <= 0) return "";
+            StringBuilder builder = new StringBuilder(messages.get(0));
+            for (int i = 1; i < messages.size(); i++) {
+                builder.append("\n").append(messages.get(i));
+            }
+            return builder.toString();
         }
     }
 }

@@ -28,7 +28,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import cz.anty.utils.StableArrayAdapter;
+import cz.anty.utils.listItem.StableArrayAdapter;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
 

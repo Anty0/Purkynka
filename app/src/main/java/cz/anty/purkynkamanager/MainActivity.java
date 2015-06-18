@@ -17,7 +17,7 @@ import java.util.Collections;
 import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
-import cz.anty.utils.StableArrayAdapter;
+import cz.anty.utils.listItem.StableArrayAdapter;
 import cz.anty.wifiautologin.WifiLoginActivity;
 
 public class MainActivity extends AppCompatActivity {

@@ -36,7 +36,7 @@
     <string name="login_exception_title">Nelze provést přihlášení jako</string>
     <string name="login_label">Přihlášení do iSAS</string>
     <string name="logo">logo</string>
-    <string name="manage_null_exception_message">Došlok chybě\nzkuste obnovit stránku</string>
+    <string name="manage_null_exception_message">Došlok chybě</string>
     <string name="marks">Známky</string>
     <string name="menu_sort">Řadit podle</string>
     <string name="menu_sort_date">Data</string>
@@ -70,5 +70,10 @@
     <string name="validating">Ověřuji…</string>
     <string name="wifi_app_name">WIFI auto LOGIN</string>
     <string name="notify_teacher_is_not_here">se nenachází v prostorách školy</string>
-    <string name="ntify_supplemetation_title">Suplování</string>
+    <string name="notify_supplementation_title">Suplování</string>
+    <string name="logged_in">Přihlášen k</string>
+    <string name="manage_null_exception_title">zkuste obnovit stránku</string>
+    <string name="menu_semester">Pololetí</string>
+    <string name="menu_semester_first">První</string>
+    <string name="menu_semester_second">Druhé</string>
 </resources>

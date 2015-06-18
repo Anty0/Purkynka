@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 
 import cz.anty.sasmanager.SASManagerService;
+import cz.anty.utils.LoginDataManager;
 
 public class StartServiceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent service = new Intent(context, SASManagerService.class);
-        context.startService(service);
+        if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, context)) {
+            Intent service = new Intent(context, SASManagerService.class);
+            context.startService(service);
+        }
     }
 }

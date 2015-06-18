@@ -21,7 +21,8 @@
     <string name="validate_exception_no_valid_wifi">For working validator you must by connected to ISSWF1. Continue anyway?</string>
     <string name="successfully_saved">LOGIN and PASSWORD are SUCCESSFULLY SAVED</string>
     <string name="successfully_validated">LOGIN and PASSWORD are VALID</string>
-    <string name="manage_null_exception_message">EXCEPTION occured\nplease try refresh page</string>
+    <string name="manage_null_exception_title">EXCEPTION occurred</string>
+    <string name="manage_null_exception_message">please try refresh page</string>
     <string name="login_exception_title">Cannot login as</string>
     <string name="login_exception_message">Username or password are wrong</string>
 
@@ -77,7 +78,7 @@
     <string name="message_what_to_do">What are you want to do?</string>
     <string name="but_rename">Rename</string>
     <string name="check_box_attendance_text">Display a warning when it is likely to be a substitute teacher.</string>
-    <string name="ntify_supplemetation_title">Supplementation</string>
+    <string name="notify_supplementation_title">Supplementation</string>
     <string name="notify_teacher_is_not_here">is not in school</string>
     <string name="logged_in">Logged in</string>
     <string name="menu_semester_second">Second</string>

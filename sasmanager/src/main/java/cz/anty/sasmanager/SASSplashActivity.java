@@ -17,6 +17,7 @@ public class SASSplashActivity extends AppCompatActivity {
     private static final int WAIT_TIME = 100;
     private static final int MIN_LENGTH_TIME = 500;
 
+    //private boolean exit = false;
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, final IBinder binder) {
@@ -30,7 +31,7 @@ public class SASSplashActivity extends AppCompatActivity {
                     }
                     long time = System.currentTimeMillis();
                     SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
-                    myBinder.refresh();
+                    //myBinder.refresh();
                     myBinder.waitToWorkerStop();
                     long timeNew = System.currentTimeMillis();
                     if (timeNew - time < MIN_LENGTH_TIME)
@@ -45,7 +46,8 @@ public class SASSplashActivity extends AppCompatActivity {
                             //sendBroadcast(new Intent(SASSplashActivity.this, StartActivityReceiver.class));
                             //new StartActivityReceiver().onReceive(SASSplashActivity.this, null);
                             finish();
-                            startDefaultActivity(SASSplashActivity.this);
+                            startDefaultActivity();
+                            //exit = true;
                         }
                     });
                 }
@@ -58,17 +60,18 @@ public class SASSplashActivity extends AppCompatActivity {
 
     };
 
-    private static void startDefaultActivity(Context context) {
+    private void startDefaultActivity() {
         Intent activity;
-        if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, context)) {
-            activity = new Intent(context, SASManageActivity.class);
+        if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, this)) {
+            activity = new Intent(this, SASManageActivity.class);
         } else {
-            activity = new Intent(context, SASLoginActivity.class);
+            activity = new Intent(this, SASLoginActivity.class);
         }
         if (Build.VERSION.SDK_INT > 10)
             activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         else activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(activity);
+        this.startActivity(activity);
+        //this.startActivityFromChild(getParent(), activity, -1);
     }
 
     @Override
@@ -81,6 +84,10 @@ public class SASSplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        /*if (exit) {
+            finish();
+            return;
+        }*/
         Intent intent = new Intent(this, SASManagerService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }

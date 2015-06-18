@@ -6,12 +6,14 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import cz.anty.utils.listItem.MultilineItem;
+
 /**
  * Created by anty on 8.6.15.
  *
  * @author anty
  */
-public class Lesson {
+public class Lesson implements MultilineItem {
 
     private final String fullName, shortName;
     private final List<Mark> marks = new CopyOnWriteArrayList<>();
@@ -68,5 +70,15 @@ public class Lesson {
     @Override
     public String toString() {
         return getShortName() + ": " + getMarks().length + " | " + format.format(getDiameter());
+    }
+
+    @Override
+    public String getTitle() {
+        return getShortName() + ": " + format.format(getDiameter());
+    }
+
+    @Override
+    public String getText() {
+        return Integer.toString(getMarks().length);
     }
 }

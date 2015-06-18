@@ -5,6 +5,8 @@ import org.jsoup.select.Elements;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cz.anty.utils.sas.SASConnector;
@@ -31,6 +33,12 @@ public class Marks {
                 lessons.add(lesson);
             }
         }
+        Collections.sort(lessons, new Comparator<Lesson>() {
+            @Override
+            public int compare(Lesson lhs, Lesson rhs) {
+                return lhs.getShortName().compareTo(rhs.getShortName());
+            }
+        });
         return lessons;
     }
 

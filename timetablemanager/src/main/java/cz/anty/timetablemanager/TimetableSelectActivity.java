@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cz.anty.attendancemanager.ScheduleReceiver;
-import cz.anty.utils.StableArrayAdapter;
+import cz.anty.utils.listItem.StableArrayAdapter;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableManager;
 

@@ -10,6 +10,8 @@ import android.net.NetworkInfo;
 
 import java.util.Calendar;
 
+import cz.anty.utils.LoginDataManager;
+
 public class ScheduleReceiver extends BroadcastReceiver {
 
     // restart service every 30 seconds
@@ -26,7 +28,8 @@ public class ScheduleReceiver extends BroadcastReceiver {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (activeNetInfo != null && activeNetInfo.isConnected()) {
+        if (activeNetInfo != null && activeNetInfo.isConnected() &&
+                LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, context)) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
             cal.add(Calendar.SECOND, 10);

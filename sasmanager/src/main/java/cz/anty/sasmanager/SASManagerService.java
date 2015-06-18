@@ -11,7 +11,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import cz.anty.utils.LoginDataManager;
 import cz.anty.utils.OnceRunThread;
@@ -81,6 +83,7 @@ public class SASManagerService extends Service {
         } else {
             sasManager = null;
             setState(State.DISCONNECTED);
+            stopSelf();
         }
     }
 
@@ -182,7 +185,9 @@ public class SASManagerService extends Service {
                         .bigText(builderBig))
                 .build();
 
-        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, n);
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                .notify(calendar.get(Calendar.HOUR) * 60 * 60 + calendar.get(Calendar.MINUTE) * 60 + calendar.get(Calendar.SECOND) + 10, n);
     }
 
     @Override

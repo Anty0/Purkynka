@@ -2,6 +2,7 @@ package cz.anty.utils.sas.mark;
 
 import java.util.Date;
 
+import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.sas.SASConnector;
 
 /**
@@ -9,7 +10,7 @@ import cz.anty.utils.sas.SASConnector;
  *
  * @author anty
  */
-public class Mark {
+public class Mark implements MultilineItem {
 
     private final Date date;
     private final String shortLesson, longLesson, valueToShow, type, note, teacher;
@@ -73,8 +74,17 @@ public class Mark {
         return getDateAsString()
                 + " " + getShortLesson()
                 + " " + getValueToShow()
-                + " x " + getWeight()
-                + " | " + getNote();
+                + " x " + getWeight();
+    }
+
+    @Override
+    public String getTitle() {
+        return toString();
+    }
+
+    @Override
+    public String getText() {
+        return getNote();
     }
 
     public static class Builder {
