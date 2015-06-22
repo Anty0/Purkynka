@@ -20,7 +20,7 @@ public class SASSplashActivity extends AppCompatActivity {
     private static final int MIN_LENGTH_TIME = 500;
 
     //private boolean exit = false;
-    private OnceRunThread worker = new OnceRunThread();
+    private final OnceRunThread worker = new OnceRunThread();
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, final IBinder binder) {

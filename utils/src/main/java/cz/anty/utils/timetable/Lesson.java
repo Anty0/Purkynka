@@ -62,10 +62,10 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return getName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
-                + getShortName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
-                + getClassString().replace(PARSE_CHARS, "?????") + PARSE_CHARS
-                + getTeacher().replace(PARSE_CHARS, "?????");
+        return getName().replaceAll(PARSE_CHARS, "?????") + PARSE_CHARS
+                + getShortName().replaceAll(PARSE_CHARS, "?????") + PARSE_CHARS
+                + getClassString().replaceAll(PARSE_CHARS, "?????") + PARSE_CHARS
+                + getTeacher().replaceAll(PARSE_CHARS, "?????");
     }
 
     public static class Builder {

@@ -117,7 +117,7 @@ public class MarksManager {
         if (marks.length > 0) {
             builder.append(markToString(marks[0]));
             for (int i = 1; i < marks.length; i++) {
-                builder.append("\n").append(markToString(marks[i]).replace("\n", "?"));
+                builder.append("\n").append(markToString(marks[i]).replaceAll("\n", "?"));
             }
         }
 
@@ -129,59 +129,33 @@ public class MarksManager {
     }
 
     private String markToString(Mark mark) {
-        return mark.getDateAsString().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getShortLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getLongLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getValueToShow().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+        return mark.getDateAsString().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getShortLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getLongLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getValueToShow().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getValue() + SPLIT_VALUE
-                + mark.getType().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getType().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getWeight() + SPLIT_VALUE
-                + mark.getNote().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getTeacher().replace(SPLIT_VALUE, "?????");
+                + mark.getNote().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getTeacher().replaceAll(SPLIT_VALUE, "?????");
     }
 
     private Mark parseMark(String string) {
         String[] markData = string.split(SPLIT_VALUE);
-        Mark.Builder builder = new Mark.Builder();
-
-        for (int i = 0; i < markData.length; i++) {
-            String markInfo = markData[i];
-
-            switch (i) {
-                case 0:
-                    try {
-                        builder.setDate(SASConnector.DATE_FORMAT.parse(markInfo));
-                    } catch (ParseException e) {
-                        builder.setDate(new Date(System.currentTimeMillis()));
-                        //throw new IllegalArgumentException("Parameter error: invalid date " + markInfo, e);
-                    }
-                    break;
-                case 1:
-                    builder.setShortLesson(markInfo);
-                    break;
-                case 2:
-                    builder.setLongLesson(markInfo);
-                    break;
-                case 3:
-                    builder.setValueToShow(markInfo);
-                    break;
-                case 4:
-                    builder.setValue(Double.parseDouble(markInfo));
-                    break;
-                case 5:
-                    builder.setType(markInfo);
-                    break;
-                case 6:
-                    builder.setWeight(Integer.parseInt(markInfo));
-                    break;
-                case 7:
-                    builder.setNote(markInfo);
-                    break;
-                case 8:
-                    builder.setTeacher(markInfo);
-                    break;
-            }
-
+        Mark.Builder builder = new Mark.Builder()
+                .setShortLesson(markData[1])
+                .setLongLesson(markData[2])
+                .setValueToShow(markData[3])
+                .setValue(Double.parseDouble(markData[4]))
+                .setType(markData[5])
+                .setWeight(Integer.parseInt(markData[6]))
+                .setNote(markData[7])
+                .setTeacher(markData[8]);
+        try {
+            builder.setDate(SASConnector.DATE_FORMAT.parse(markData[0]));
+        } catch (ParseException e) {
+            builder.setDate(new Date(System.currentTimeMillis()));
+            //throw new IllegalArgumentException("Parameter error: invalid date " + markInfo, e);
         }
 
         return builder.get();

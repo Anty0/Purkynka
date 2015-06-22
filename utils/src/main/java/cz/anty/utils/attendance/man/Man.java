@@ -53,7 +53,8 @@ public class Man implements MultilineItem {
 
     @Override
     public String getTitle() {
-        return getName() + " " + getClassString();
+        String classString = getClassString();
+        return getName() + (classString.length() > 4 ? "" : " " + getClassString());
     }
 
     @Override

@@ -8,12 +8,7 @@
             android:label="@string/timetable_select_label" />
         <activity
             android:name=".TimetableManageActivity"
-            android:label="@string/timetable_manage_label"
-            android:parentActivityName=".TimetableSelectActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cz.anty.timetablemanager.TimetableSelectActivity" />
-        </activity>
+            android:label="@string/timetable_manage_label" />
     </application>
 
 </manifest>

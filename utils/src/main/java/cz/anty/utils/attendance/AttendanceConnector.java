@@ -59,7 +59,7 @@ public class AttendanceConnector {
         return getSupElements(0, null, search, page);
     }
 
-    private synchronized Elements getSupElements(int depth, IOException last, String search, int page) throws IOException, URISyntaxException {
+    private synchronized Elements getSupElements(int depth, IOException last, String search, int page) throws IOException {
         if (depth >= MAX_TRY) throw last;
         try {
             //URLConnection url = new URL(DEFAULT_URL + "?" + SEARCH + "=" + search + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE

@@ -30,6 +30,7 @@ public class WifiLoginActivity extends AppCompatActivity {
         ((EditText) findViewById(R.id.editText)).setText(LoginDataManager.getUsername(LoginDataManager.Type.WIFI, this));
         ((EditText) findViewById(R.id.editText2)).setText(LoginDataManager.getPassword(LoginDataManager.Type.WIFI, this));
         ((CheckBox) findViewById(R.id.auto_login_checkbox)).setChecked(LoginDataManager.isWifiAutoLogin(this));
+        ((CheckBox) findViewById(R.id.wait_login_checkbox)).setChecked(LoginDataManager.isWifiWaitLogin(this));
     }
 
     @Override
@@ -54,8 +55,12 @@ public class WifiLoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onCheckBoxClick(View view) {
+    public void onAutoCheckBoxClick(View view) {
         LoginDataManager.setWifiAutoLogin(this, ((CheckBox) findViewById(R.id.auto_login_checkbox)).isChecked());
+    }
+
+    public void onWaitCheckBoxClick(View view) {
+        LoginDataManager.setWifiWaitLogin(this, ((CheckBox) findViewById(R.id.wait_login_checkbox)).isChecked());
     }
 
     public void onClickSave(View view) {
@@ -65,21 +70,21 @@ public class WifiLoginActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.successfully_saved, Toast.LENGTH_LONG).show();
     }
 
-    public void onClickValidate(View view) {
-        validate(false);
+    public void onClickLogin(View view) {
+        login(false);
     }
 
-    private void validate(boolean force) {
+    private void login(boolean force) {
         if (!force) {
             WifiInfo wifiInfo = ((WifiManager) getSystemService(WIFI_SERVICE)).getConnectionInfo();
             if (!wifiInfo.getSSID().contains(WifiLogin.WIFI_NAME)) {
                 new AlertDialog.Builder(WifiLoginActivity.this, R.style.AppTheme_Dialog)
-                        .setTitle(R.string.validate_exception_title)
-                        .setMessage(R.string.validate_exception_no_valid_wifi)
+                        .setTitle(R.string.wifi_login_exception_title)
+                        .setMessage(R.string.wifi_login_exception_no_valid_wifi)
                         .setPositiveButton(R.string.but_continue, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                validate(true);
+                                login(true);
                             }
                         })
                         .setNegativeButton(R.string.but_cancel, null)
@@ -98,7 +103,7 @@ public class WifiLoginActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(WifiLoginActivity.this, R.string.successfully_validated, Toast.LENGTH_LONG).show();
+                            Toast.makeText(WifiLoginActivity.this, R.string.wifi_login_successful, Toast.LENGTH_LONG).show();
                         }
                     });
                     return;
@@ -107,8 +112,8 @@ public class WifiLoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         new AlertDialog.Builder(WifiLoginActivity.this, R.style.AppTheme_Dialog)
-                                .setTitle(R.string.validate_exception_title)
-                                .setMessage(R.string.validate_exception_wrong_login_or_wifi)
+                                .setTitle(R.string.wifi_login_exception_title)
+                                .setMessage(R.string.wifi_login_exception_wrong_login_or_wifi)
                                 .setPositiveButton(R.string.but_ok, null)
                                 .setIcon(R.mipmap.ic_launcher_wifi)
                                 .setCancelable(true)
@@ -116,7 +121,7 @@ public class WifiLoginActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.validating));
+        }, getString(R.string.logging_in));
 
     }
 

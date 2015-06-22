@@ -18,6 +18,8 @@ import cz.anty.utils.OnceRunThread;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
+import cz.anty.utils.teacher.Teacher;
+import cz.anty.utils.teacher.TeachersManager;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableManager;
@@ -26,7 +28,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     private static final long WAIT_TIME = 1000 * 60 * 15;
 
-    private OnceRunThread worker = new OnceRunThread();
+    private final OnceRunThread worker = new OnceRunThread();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -57,8 +59,22 @@ public class AttendanceReceiver extends BroadcastReceiver {
                     try {
                         Lesson lesson = timetable.getLesson(day, lessonIndex);
                         if (lesson == null) return;
+                        String teacherName = lesson.getTeacher();
+                        if (teacherName.length() != 4) {
+                            String[] name = teacherName.split(" ");
+                            teacherName = name[name.length - 1];
+                        } else {
+                            teacherName = teacherName.toLowerCase();
+                            TeachersManager teachersManager = new TeachersManager(context);
+                            for (Teacher teacher : teachersManager.get()) {
+                                if (teacher.getShortcut().equals(teacherName)) {
+                                    teacherName = teacher.getSurname();
+                                    break;
+                                }
+                            }
+                        }
                         List<Man> mans = Mans.parseMans(
-                                connector.getSupElements(lesson.getTeacher(), 1));
+                                connector.getSupElements(teacherName, 1));
                         Man man = null;
                         for (int i = 0; i < mans.size(); i++) {
                             man = mans.get(i);

@@ -10,6 +10,8 @@ import android.util.Log;
  */
 public class OnceRunThread {
 
+    private final Object waitLock = new Object();
+    private int waitingThreads = 0;
     private Thread worker = null;
 
     public void startWorker(final Runnable runnable) {
@@ -29,8 +31,18 @@ public class OnceRunThread {
 
     protected void start(Thread thread) {
         //waitToWorkerStop();
+        synchronized (waitLock) {
+            waitingThreads++;
+        }
         setWorker(thread);
+        synchronized (waitLock) {
+            waitingThreads--;
+        }
         worker.start();
+    }
+
+    public int getWaitingThreadsLength() {
+        return waitingThreads;
     }
 
     private synchronized void setWorker(Thread worker) {

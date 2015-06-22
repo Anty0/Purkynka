@@ -16,13 +16,20 @@ import cz.anty.utils.wifi.WifiLogin;
 
 public class WifiStateReceiver extends BroadcastReceiver {
 
-    private OnceRunThread worker = new OnceRunThread();
+    private final OnceRunThread worker = new OnceRunThread();
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
+                if (LoginDataManager.isWifiWaitLogin(context)) {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        Log.d(null, null, e);
+                    }
+                }
                 if (!LoginDataManager.isWifiAutoLogin(context) || !LoginDataManager.isLoggedIn(LoginDataManager.Type.WIFI, context))
                     return;
                 WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
@@ -31,8 +38,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
                             LoginDataManager.getPassword(LoginDataManager.Type.WIFI, context))) {
 
                     Notification n = new NotificationCompat.Builder(context)
-                            .setContentTitle(WifiLogin.WIFI_NAME)
-                            .setContentText(context.getString(R.string.logged_in) + " " + WifiLogin.WIFI_NAME)
+                            .setContentTitle(wifiInfo.getSSID())
+                            .setContentText(context.getString(R.string.logged_in) + " " + wifiInfo.getSSID())
                             .setSmallIcon(R.mipmap.ic_launcher_wifi)
                                     //.setContentIntent(null)
                             .setAutoCancel(true)

@@ -17,8 +17,8 @@
     <string name="validate_exception_title">Validate exception</string>
     <string name="validate_exception_wrong_login">Wrong LOGIN or PASSWORD</string>
     <string name="validate_exception_no_connection">No internet connection</string>
-    <string name="validate_exception_wrong_login_or_wifi">Wrong LOGIN or PASSWORD or you are connected to wrong wifi</string>
-    <string name="validate_exception_no_valid_wifi">For working validator you must by connected to ISSWF1. Continue anyway?</string>
+    <string name="wifi_login_exception_wrong_login_or_wifi">Wrong LOGIN or PASSWORD or you are connected to wrong WIFI.</string>
+    <string name="wifi_login_exception_no_valid_wifi">For working login you must by connected to ISSWF1. Continue anyway?</string>
     <string name="successfully_saved">LOGIN and PASSWORD are SUCCESSFULLY SAVED</string>
     <string name="successfully_validated">LOGIN and PASSWORD are VALID</string>
     <string name="manage_null_exception_title">EXCEPTION occurred</string>
@@ -64,7 +64,7 @@
     <string name="message_lesson_name">Lesson name</string>
     <string name="message_short_lesson_name">Short lesson name</string>
     <string name="message_class">Class</string>
-    <string name="message_teacher">Teacher (FULL NAME)</string>
+    <string name="message_teacher">Teacher (FULL NAME is better)</string>
     <string name="but_list_click_edit">Click to edit</string>
     <string name="title_timetable_still_exists">Cannot create TIMETABLE</string>
     <string name="message_timetable_still_exists">TIMETABLE with this name still exists</string>
@@ -84,10 +84,15 @@
     <string name="menu_semester_second">Second</string>
     <string name="menu_semester_first">First</string>
     <string name="menu_semester">Semester</string>
-    <string name="check_box_auto_load">Auto load Timetable from SPSEIT web page (name must equals to class name</string>
+    <string name="check_box_auto_load">Auto load Timetable from SPSEIT web page (name must equals to class name)</string>
     <string name="exception_connection_title">Connection exception</string>
     <string name="exception_connection_message">Timetable cannot by loaded from internet.\nCheck your internet connection.</string>
     <string name="exception_name_title">Name exception</string>
-    <string name="exception_name_message">Class with this name doesn\'t exists.\nPlease check timetable name</string>
+    <string name="exception_name_message">Class with this name doesn\'t exists.\nPlease check timetable name.</string>
+    <string name="wifi_login_exception_title">Cannot login</string>
+    <string name="wifi_login_successful">Login request successfully send.</string>
+    <string name="checkbox_wait_login">Wait 3s before login try (it can work without this, but most of devices requires this option)</string>
+    <string name="to_page">To page</string>
+    <string name="on_page">You are on page</string>
 
 </resources>

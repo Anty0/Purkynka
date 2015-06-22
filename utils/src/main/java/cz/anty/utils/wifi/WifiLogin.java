@@ -16,7 +16,7 @@ import cz.anty.utils.sas.SASConnector;
  */
 public class WifiLogin {
 
-    public static final String WIFI_NAME = "ISSWF1";
+    public static final String WIFI_NAME = "ISSWF";
     private static final String LOGIN_URL = "https://wifi.sspbrno.cz/login.html";
     //private static final String LOGOUT_URL = "https://wifi.sspbrno.cz/logout.html";
     private static final String LOGIN_FIELD = "username";

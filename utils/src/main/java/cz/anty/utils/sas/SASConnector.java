@@ -53,48 +53,34 @@ public class SASConnector {
     }
 
     public synchronized Elements getMarksElements(MarksManager.Semester semester) throws IOException {
-        if (!isLoggedIn()) throw new IllegalStateException("SAS Connector is not logged in");
+        Document marksPage = getMarksPage(0, null, semester);
+        if (!isLoggedIn(marksPage))
+            throw new IllegalStateException("SAS Connector is not logged in");
 
-        return getMarksElements(0, null, semester);
-    }
-
-    private synchronized Elements getMarksElements(int depth, IOException last, MarksManager.Semester semester) throws IOException {
-        if (depth >= MAX_TRY) throw last;
-        try {
-            Document doc = Jsoup
-                    .connect(MARKS_URL)
-                    .data(SEMESTER, semester.getValue().toString(), SHORT_BY, SHORT_BY_DATE)
-                    .method(Connection.Method.GET)
-                    .cookies(loginCookies).get();
-
-            //System.out.println(doc.title());
-            //System.out.println("=============================");
-
-            return doc.select("table.isas-tabulka")
-                    .select("tr")
-                    .not("tr.zahlavi");
-            //System.out.println("Mark: " + mark);
-            //System.out.println("Text: " + mark.text());
-        } catch (IOException e) {
-            depth++;
-            return getMarksElements(depth, e, semester);
-        }
+        return marksPage.select("table.isas-tabulka")
+                .select("tr")
+                .not("tr.zahlavi");
     }
 
     public synchronized boolean isLoggedIn() throws IOException {
-        return isLoggedIn(0, null);
+        return isLoggedIn(getMarksPage(0, null, MarksManager.Semester.AUTO));
     }
 
-    private synchronized boolean isLoggedIn(int depth, IOException last) throws IOException {
+    private synchronized boolean isLoggedIn(Document marksPage) {
+        return marksPage.select("div.isas-varovani").isEmpty();
+    }
+
+    private synchronized Document getMarksPage(int depth, IOException last, MarksManager.Semester semester) throws IOException {
         if (depth >= MAX_TRY) throw last;
         try {
             return Jsoup
                     .connect(MARKS_URL)
-                    .cookies(loginCookies).get()
-                    .select("div.isas-varovani").isEmpty();
+                    .data(SEMESTER, semester.getValue().toString(), SHORT_BY, SHORT_BY_DATE)
+                    .method(Connection.Method.GET)
+                    .cookies(loginCookies).get();
         } catch (IOException e) {
             depth++;
-            return isLoggedIn(depth, e);
+            return getMarksPage(depth, e, semester);
         }
     }
 }

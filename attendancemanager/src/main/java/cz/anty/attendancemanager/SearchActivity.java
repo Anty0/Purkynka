@@ -2,14 +2,15 @@ package cz.anty.attendancemanager;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,29 +30,46 @@ public class SearchActivity extends AppCompatActivity {
     private EditText searchEditText;
     private MultilineAdapter adapter;
     private OnceRunThreadWithProgress worker;
+    private int page = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         searchEditText = (EditText) findViewById(R.id.editText);
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (!worker.isWorkerRunning()) {
-                    onUpdate(null);
-                    return true;
-                }
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                page = 1;
+                update(false);
             }
         });
         ListView resultListView = ((ListView) findViewById(R.id.listView));
         adapter = new MultilineAdapter(this, R.layout.multi_line_list_item);
         resultListView.setAdapter(adapter);
+        resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == adapter.getCount() - 1) {
+                    page++;
+                    update(true);
+                }
+            }
+        });
 
         if (worker == null)
             worker = new OnceRunThreadWithProgress(this);
-        onUpdate(null);
+        update(false);
     }
 
     @Override
@@ -77,15 +95,22 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onUpdate(View view) {
+        page = 1;
+        update(true);
+    }
+
+    private void update(final boolean showMessage) {
         final String toSearch = searchEditText.getText().toString();//TODO add auto complete using timetable and marks lessons
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
+                if (!showMessage && worker.getWaitingThreadsLength() > 0) return;
                 //String[] values;
                 MultilineItem[] data;
                 try {
-                    List<Man> mans = Mans.parseMans(connector.getSupElements(toSearch, 1));
-                    data = mans.toArray(new MultilineItem[mans.size()]);
+                    List<Man> mans = Mans.parseMans(connector.getSupElements(toSearch, page));
+                    data = mans.toArray(new MultilineItem[mans.size() + 1]);
+                    data[data.length - 1] = new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page);
                     /*values = new String[mans.size()];
                     for (int i = 0; i < values.length; i++) {
                         values[i] = mans.get(i).toString();
@@ -115,6 +140,6 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, view == null ? null : getString(R.string.searching));
+        }, showMessage ? getString(R.string.searching) : null);
     }
 }

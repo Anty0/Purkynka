@@ -73,17 +73,6 @@ public class LoginDataManager {
         onChange(type);
     }
 
-    public static synchronized void setWifiAutoLogin(Context context, boolean toSet) {
-        context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE).edit()
-                .putBoolean("AUTO_LOGIN", toSet)
-                .apply();
-    }
-
-    public static synchronized boolean isWifiAutoLogin(Context context) {
-        return context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE)
-                .getBoolean("AUTO_LOGIN", true);
-    }
-
     public static synchronized boolean isLoggedIn(Type type, Context context) {
         return context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getBoolean("LOGGED_IN", false);
@@ -97,6 +86,28 @@ public class LoginDataManager {
     public static synchronized String getPassword(Type type, Context context) {
         return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getString("PASSWORD", ""));
+    }
+
+    public static synchronized void setWifiAutoLogin(Context context, boolean toSet) {
+        context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE).edit()
+                .putBoolean("AUTO_LOGIN", toSet)
+                .apply();
+    }
+
+    public static synchronized boolean isWifiAutoLogin(Context context) {
+        return context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE)
+                .getBoolean("AUTO_LOGIN", true);
+    }
+
+    public static synchronized void setWifiWaitLogin(Context context, boolean toSet) {
+        context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE).edit()
+                .putBoolean("WAIT_LOGIN", toSet)
+                .apply();
+    }
+
+    public static synchronized boolean isWifiWaitLogin(Context context) {
+        return context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE)
+                .getBoolean("WAIT_LOGIN", true);
     }
 
     public enum Type {

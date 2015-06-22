@@ -37,6 +37,7 @@
 
         <activity
             android:name=".SASSplashActivity"
+            android:excludeFromRecents="true"
             android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/sas_app_name"
             android:theme="@style/AppTheme_Splash" />

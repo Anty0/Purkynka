@@ -15,7 +15,7 @@
     <string name="but_delete">Smazat</string>
     <string name="but_edit">Upravit</string>
     <string name="but_exit">Konec</string>
-    <string name="but_list_add_timetable">" + PŘIDAT novoý ROZVRH hodin</string>
+    <string name="but_list_add_timetable">" + PŘIDAT novoý ROZVRH hodin"</string>
     <string name="but_list_click_edit">Klikněte pro  změnu</string>
     <string name="but_log_out">Odhlásit</string>
     <string name="but_login">Přihlásit</string>
@@ -63,10 +63,8 @@
     <string name="title_timetable_still_exists">Nelze vytvořit ROZVRH hodin</string>
     <string name="utils_app_name">Utils</string>
     <string name="validate_exception_no_connection">Nedaří se připojit internetu</string>
-    <string name="validate_exception_no_valid_wifi">Pro správné fungování validátoru musí byt telefon připojen k ISSWF1. Přesto pokračovat?</string>
     <string name="validate_exception_title">Chyba při ověřování</string>
     <string name="validate_exception_wrong_login">Špatné JMÉNO nebo HESLO</string>
-    <string name="validate_exception_wrong_login_or_wifi">Špatné JMÉNO nebo HESLO, nebo je telefon připojený ke špatné wifi </string>
     <string name="validating">Ověřuji…</string>
     <string name="wifi_app_name">WIFI auto LOGIN</string>
     <string name="notify_teacher_is_not_here">se nenachází v prostorách školy</string>
@@ -76,4 +74,16 @@
     <string name="menu_semester">Pololetí</string>
     <string name="menu_semester_first">První</string>
     <string name="menu_semester_second">Druhé</string>
+    <string name="check_box_auto_load">Automaticky načti rozvrh hodin ze stránek SPSEIT (jméno rozvrhu musí obsahovat jméno třídy)</string>
+    <string name="checkbox_wait_login">Počkej 3s před pokusem o přihlášení (přihlášení může fungovat i bez tohoto nastavení, ale většina nových zařízení vyžaduje tuto možnost)</string>
+    <string name="exception_connection_message">Rozvrh nemůže být načten z internetu.\nZkontroluj své připojení.</string>
+    <string name="exception_connection_title">Chyba připojení</string>
+    <string name="exception_name_message">Třída s tímto jménem neexistuje.\nProsím zkontrolujte jméno rozvrhu.</string>
+    <string name="exception_name_title">Špatné jméno</string>
+    <string name="wifi_login_exception_no_valid_wifi">Pro přihlášení musí být zařízení přpojeno k ISSWF1. Přesto pokračovat?</string>
+    <string name="wifi_login_exception_title">Nejde provést přihlášení</string>
+    <string name="wifi_login_exception_wrong_login_or_wifi">Špatné přihlašovací údaje nebo je zařízení připojeno k nesprávné WIFI.</string>
+    <string name="wifi_login_successful">Požadavek na přihlášení byl úspěšně odeslán.</string>
+    <string name="on_page">Jsi na straně</string>
+    <string name="to_page">Jdi na stranu</string>
 </resources>

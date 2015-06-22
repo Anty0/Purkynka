@@ -17,8 +17,8 @@ import cz.anty.utils.R;
  */
 public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
 
-    private Context context;
-    private int layoutResourceId;
+    private final Context context;
+    private final int layoutResourceId;
 
     public MultilineAdapter(Context context, int layoutResourceId) {
         super(context, layoutResourceId);
