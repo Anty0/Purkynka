@@ -36,10 +36,10 @@ public class TeachersManager {
 
         SharedPreferences preferences = context.getSharedPreferences("TeachersData", Context.MODE_PRIVATE);
         if (preferences.getInt("TEACHERS_SAVE_VERSION", 0) != TEACHERS_SAVE_VERSION) {
-            refresh();
             context.getSharedPreferences("TeachersData", Context.MODE_PRIVATE).edit()
                     .putInt("TEACHERS_SAVE_VERSION", TEACHERS_SAVE_VERSION)
                     .apply();
+            refresh();
             return;
         }
 
