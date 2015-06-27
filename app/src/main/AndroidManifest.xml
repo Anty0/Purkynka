@@ -16,6 +16,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".ScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".UpdateReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

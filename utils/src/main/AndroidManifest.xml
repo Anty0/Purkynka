@@ -1,10 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.anty.utils">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:allowBackup="true">
-
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".settings.SASManagerSettingsActivity"
+            android:label="@string/title_activity_sas_settings" />
+        <activity
+            android:name=".settings.WifiSettingsActivity"
+            android:label="@string/title_activity_wifi_settings" />
+        <activity
+            android:name=".settings.TimetableSettingsActivity"
+            android:label="@string/title_activity_timetable_settings" />
+        <activity
+            android:name=".settings.AttendanceSettingsActivity"
+            android:label="@string/title_activity_attendance_settings" />
+        <activity
+            android:name=".settings.AboutActivity"
+            android:label="@string/title_activity_about" />
     </application>
 
 </manifest>

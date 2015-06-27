@@ -36,7 +36,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
             return;
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        int minuteTime = calendar.get(Calendar.HOUR) * 60 + calendar.get(Calendar.MINUTE);
+        int minuteTime = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
         for (int i = 0; i < Timetable.MAX_LESSONS; i++) {
             int requestedTime = Timetable.START_TIMES_HOURS[i] * 60 + Timetable.START_TIMES_MINUTES[i];
             if (minuteTime < requestedTime && minuteTime > requestedTime - 15) {
@@ -83,7 +83,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         }
                         if (man != null && !man.isInSchool()) {
                             Notification n = new NotificationCompat.Builder(context)
-                                    .setContentTitle(lesson.getShortName() + " " + context.getString(R.string.notify_supplementation_title))
+                                    .setContentTitle(lesson.getShortName() + " " + context.getString(R.string.notify_substitution_title))
                                     .setContentText(man.getName() + " " + context.getString(R.string.notify_teacher_is_not_here))
                                     .setSmallIcon(R.mipmap.ic_launcher)
                                             //.setContentIntent(null)

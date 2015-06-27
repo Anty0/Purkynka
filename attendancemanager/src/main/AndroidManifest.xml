@@ -9,7 +9,7 @@
     <application android:allowBackup="true">
         <activity
             android:name=".SearchActivity"
-            android:label="@string/attendance_search_label" />
+            android:label="@string/title_activity_attendance_search" />
 
         <receiver
             android:name=".AttendanceReceiver"

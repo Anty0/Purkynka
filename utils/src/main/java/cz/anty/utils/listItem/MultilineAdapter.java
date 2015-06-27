@@ -55,7 +55,13 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
 
         MultilineItem item = getItem(position);
         holder.text1.setText(item.getTitle());
-        holder.text2.setText(item.getText());
+        String text = item.getText();
+        if (text == null) {
+            holder.text2.setVisibility(View.GONE);
+        } else {
+            holder.text2.setVisibility(View.VISIBLE);
+            holder.text2.setText(item.getText());
+        }
         //    holder.imgIcon.setImageResource(item.icon);
 
         return row;

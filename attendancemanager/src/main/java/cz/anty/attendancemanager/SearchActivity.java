@@ -1,16 +1,20 @@
 package cz.anty.attendancemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,6 +27,7 @@ import cz.anty.utils.attendance.man.Mans;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.settings.AttendanceSettingsActivity;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -54,8 +59,18 @@ public class SearchActivity extends AppCompatActivity {
                 update(false);
             }
         });
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    update(true);
+                    return true;
+                }
+                return false;
+            }
+        });
         ListView resultListView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter(this, R.layout.multi_line_list_item);
+        adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
         resultListView.setAdapter(adapter);
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,17 +101,12 @@ public class SearchActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, AttendanceSettingsActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void onUpdate(View view) {
-        page = 1;
-        update(true);
     }
 
     private void update(final boolean showMessage) {

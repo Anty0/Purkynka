@@ -5,10 +5,10 @@
     <application android:allowBackup="true">
         <activity
             android:name=".TimetableSelectActivity"
-            android:label="@string/timetable_select_label" />
+            android:label="@string/title_activity_timetable_select" />
         <activity
             android:name=".TimetableManageActivity"
-            android:label="@string/timetable_manage_label" />
+            android:label="@string/title_activity_timetable_manage" />
     </application>
 
 </manifest>

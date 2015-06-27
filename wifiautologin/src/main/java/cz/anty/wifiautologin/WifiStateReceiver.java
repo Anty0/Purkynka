@@ -1,14 +1,13 @@
 package cz.anty.wifiautologin;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.v4.app.NotificationCompat;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import cz.anty.utils.LoginDataManager;
 import cz.anty.utils.OnceRunThread;
@@ -20,24 +19,27 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        worker.startWorker(new Runnable() {
-            @Override
-            public void run() {
-                if (LoginDataManager.isWifiWaitLogin(context)) {
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        Log.d(null, null, e);
-                    }
-                }
-                if (!LoginDataManager.isWifiAutoLogin(context) || !LoginDataManager.isLoggedIn(LoginDataManager.Type.WIFI, context))
-                    return;
-                WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-                if (wifiInfo.getSSID().contains(WifiLogin.WIFI_NAME) &&
-                    WifiLogin.tryLogin(LoginDataManager.getUsername(LoginDataManager.Type.WIFI, context),
-                            LoginDataManager.getPassword(LoginDataManager.Type.WIFI, context))) {
+        if (!LoginDataManager.isWifiAutoLogin(context) || !LoginDataManager.isLoggedIn(LoginDataManager.Type.WIFI, context))
+            return;
 
-                    Notification n = new NotificationCompat.Builder(context)
+        final WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+        if (wifiInfo.getSSID().contains(WifiLogin.WIFI_NAME) &&
+                WifiLogin.tryLogin(LoginDataManager.getUsername(LoginDataManager.Type.WIFI, context),
+                        LoginDataManager.getPassword(LoginDataManager.Type.WIFI, context))) {
+
+            worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    if (LoginDataManager.isWifiWaitLogin(context)) {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            Log.d(null, null, e);
+                        }
+                    }
+
+
+                    /*Notification n = new NotificationCompat.Builder(context)
                             .setContentTitle(wifiInfo.getSSID())
                             .setContentText(context.getString(R.string.logged_in) + " " + wifiInfo.getSSID())
                             .setSmallIcon(R.mipmap.ic_launcher_wifi)
@@ -45,18 +47,25 @@ public class WifiStateReceiver extends BroadcastReceiver {
                             .setAutoCancel(true)
                                     //.setDefaults(Notification.DEFAULT_ALL)
                                     //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
-                            .build();
-
-                    NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                            .build();*/
+                    new Handler(context.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast toast = new Toast(context);
+                            toast.setText(context.getString(R.string.logged_in) + " " + wifiInfo.getSSID());
+                            toast.show();
+                        }
+                    });
+                    /*NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(3, n);
                     try {
                         Thread.sleep(2500);
                     } catch (InterruptedException e) {
                         Log.d(null, null, e);
                     }
-                    notificationManager.cancel(3);
+                    notificationManager.cancel(3);*/
                 }
-            }
-        });
+            });
+        }
     }
 }

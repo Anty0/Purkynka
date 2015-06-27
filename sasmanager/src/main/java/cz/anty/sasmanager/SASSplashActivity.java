@@ -2,11 +2,13 @@ package cz.anty.sasmanager;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -48,8 +50,8 @@ public class SASSplashActivity extends AppCompatActivity {
                         public void run() {
                             //sendBroadcast(new Intent(SASSplashActivity.this, StartActivityReceiver.class));
                             //new StartActivityReceiver().onReceive(SASSplashActivity.this, null);
-                            finish();
                             startDefaultActivity();
+                            finish();
                             //exit = true;
                         }
                     });
@@ -91,6 +93,21 @@ public class SASSplashActivity extends AppCompatActivity {
             finish();
             return;
         }*/
+        if (getSharedPreferences("MainData", Context.MODE_PRIVATE).getBoolean("CANT_START", false)) {
+            new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
+                    .setTitle(R.string.notification_update_title)
+                    .setMessage(R.string.notification_update_text_sas)
+                    .setNegativeButton(R.string.but_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setIcon(R.mipmap.ic_launcher_sas)
+                    .setCancelable(false)
+                    .show();
+            return;
+        }
         Intent intent = new Intent(this, SASManagerService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }

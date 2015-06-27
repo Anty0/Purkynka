@@ -15,6 +15,7 @@ import cz.anty.utils.LoginDataManager;
 import cz.anty.utils.OnceRunThreadWithProgress;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
+import cz.anty.utils.settings.SASManagerSettingsActivity;
 
 public class SASLoginActivity extends AppCompatActivity {
 
@@ -54,9 +55,8 @@ public class SASLoginActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SASManagerSettingsActivity.class));
             return true;
         }
 

@@ -23,6 +23,7 @@ import cz.anty.attendancemanager.ScheduleReceiver;
 import cz.anty.utils.OnceRunThreadWithProgress;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.StableArrayAdapter;
+import cz.anty.utils.settings.TimetableSettingsActivity;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableConnector;
 import cz.anty.utils.timetable.TimetableManager;
@@ -217,8 +218,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, TimetableSettingsActivity.class));
             return true;
         }
 

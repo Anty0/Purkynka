@@ -27,6 +27,7 @@ import cz.anty.utils.sas.mark.Lesson;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.Marks;
 import cz.anty.utils.sas.mark.MarksManager;
+import cz.anty.utils.settings.SASManagerSettingsActivity;
 
 public class SASManageActivity extends AppCompatActivity {
 
@@ -94,7 +95,7 @@ public class SASManageActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_manage);
         listView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter(this, R.layout.multi_line_list_item);
+        adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
         listView.setAdapter(adapter);
 
 
@@ -127,7 +128,7 @@ public class SASManageActivity extends AppCompatActivity {
         int i = item.getItemId();
 
         if (i == R.id.action_settings) {
-            //startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SASManagerSettingsActivity.class));
             return true;
         } else if (i == R.id.action_refresh) {
             if (binder != null) {
@@ -211,7 +212,7 @@ public class SASManageActivity extends AppCompatActivity {
                                     final StableArrayAdapter adapter = new StableArrayAdapter(SASManageActivity.this,
                                             android.R.layout.simple_list_item_1, list);*/
                                     MultilineAdapter adapter = new MultilineAdapter(SASManageActivity.this,
-                                            R.layout.multi_line_list_item, marks);
+                                            R.layout.text_multi_line_list_item, marks);
 
                                     listView.setAdapter(adapter);
                                     new AlertDialog.Builder(SASManageActivity.this)

@@ -8,7 +8,7 @@
     <string name="alert_new_timetable">Nový ROZVRH hodin</string>
     <string name="alert_timetable_name">Zadejte nové jméno pro ROZVRH hodin:</string>
     <string name="attendance_app_name">Docházkový systém</string>
-    <string name="attendance_search_label">Vyhledávat v docházkovém systému</string>
+    <string name="title_activity_attendance_search">Vyhledávat v docházkovém systému</string>
     <string name="but_accept">Přijmout</string>
     <string name="but_cancel">Storno</string>
     <string name="but_continue">Pokračovat</string>
@@ -34,7 +34,7 @@
     <string name="logging_in">Přihlašování…</string>
     <string name="login_exception_message">Uživatelské jméno, nebo heslo není v pořádku</string>
     <string name="login_exception_title">Nelze provést přihlášení jako</string>
-    <string name="login_label">Přihlášení do iSAS</string>
+    <string name="title_activity_login">Přihlášení do iSAS</string>
     <string name="logo">logo</string>
     <string name="manage_null_exception_message">Došlok chybě</string>
     <string name="marks">Známky</string>
@@ -56,8 +56,8 @@
     <string name="successfully_validated">Uživatelské JMÉNO a HESLO bylo úspěšně OVĚŘENO</string>
     <string name="text_terms">Použití aplikace je na vlastní nebezpečí.</string>
     <string name="timetable_app_name">Správce ROZVRHŮ</string>
-    <string name="timetable_manage_label">ROZVRH hodin</string>
-    <string name="timetable_select_label">Vyber ROZVRH hodin k zobrazení</string>
+    <string name="title_activity_timetable_manage">ROZVRH hodin</string>
+    <string name="title_activity_timetable_select">Vyber ROZVRH hodin k zobrazení</string>
     <string name="title_lesson_info">Informace o předmětu</string>
     <string name="title_terms">Podmínky používání aplikace</string>
     <string name="title_timetable_still_exists">Nelze vytvořit ROZVRH hodin</string>
@@ -66,9 +66,9 @@
     <string name="validate_exception_title">Chyba při ověřování</string>
     <string name="validate_exception_wrong_login">Špatné JMÉNO nebo HESLO</string>
     <string name="validating">Ověřuji…</string>
-    <string name="wifi_app_name">WIFI auto LOGIN</string>
+    <string name="wifi_app_name">Automatické přihlašování k WIFI</string>
     <string name="notify_teacher_is_not_here">se nenachází v prostorách školy</string>
-    <string name="notify_supplementation_title">Suplování</string>
+    <string name="notify_substitution_title">Suplování</string>
     <string name="logged_in">Přihlášen k</string>
     <string name="manage_null_exception_title">zkuste obnovit stránku</string>
     <string name="menu_semester">Pololetí</string>
@@ -86,4 +86,14 @@
     <string name="wifi_login_successful">Požadavek na přihlášení byl úspěšně odeslán.</string>
     <string name="on_page">Jsi na straně</string>
     <string name="to_page">Jdi na stranu</string>
+    <string name="settings_about">O Aplikaci</string>
+    <string name="title_activity_sas_settings">Nastavení správce SASu</string>
+    <string name="title_activity_settings">Nastavení</string>
+    <string name="title_activity_wifi_settings">Nastavení Automatického přihlašování k WIFI</string>
+    <string name="title_activity_about">O Aplikaci</string>
+    <string name="title_activity_attendance_settings">Nastavení správce docházky</string>
+    <string name="title_activity_timetable_settings">Nastavení správce rozvrhů</string>
+    <string name="sas_app_description">Správce SASu je jednoduchý prográmek pro správu vašich známek, umí upozorňovat na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
+    <string name="wifi_app_description">WIFI auto LOGIN je jednoduchý prográmek který vás automaticky přihlásí ke školní WIFI takže budete mít více času na surfování. :)</string>
+    <string name="timetable_app_description">Správce rozvrhů je prográmek určený ke správě a vytváření rozvrhů hodin, dokáže také stáhnout rozvrh hodin dané třídy z webových stránek školy a upozornit na to, že učitel zapsaný rozvrhu na další hodinu není ve škole a je proto velmi pravděpodobné, že bude následující hodina suplovaná.</string>
 </resources>

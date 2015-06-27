@@ -1,6 +1,7 @@
 package cz.anty.wifiautologin;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import cz.anty.utils.LoginDataManager;
 import cz.anty.utils.OnceRunThreadWithProgress;
+import cz.anty.utils.settings.WifiSettingsActivity;
 import cz.anty.utils.wifi.WifiLogin;
 
 public class WifiLoginActivity extends AppCompatActivity {
@@ -47,8 +49,8 @@ public class WifiLoginActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, WifiSettingsActivity.class));
             return true;
         }
 

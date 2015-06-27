@@ -9,26 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".SereachActivity">
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
-
-        <Button
-            android:id="@+id/button"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onUpdate"
-            android:text="@string/but_search" />
-    </LinearLayout>
+        android:ems="10"
+        android:inputType="textPersonName" />
 
     <ListView
         android:id="@+id/listView"

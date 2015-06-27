@@ -8,16 +8,26 @@
 
     <application android:allowBackup="true">
         <activity
+            android:name=".SASSplashActivity"
+            android:excludeFromRecents="true"
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/sas_app_name"
+            android:theme="@style/AppTheme_Splash" />
+        <activity
             android:name=".SASLoginActivity"
-            android:label="@string/login_label" />
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".SASManageActivity"
+            android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/sas_app_name" />
 
         <service
             android:name=".SASManagerService"
             android:enabled="true"
-            android:exported="false"> <!-- android:process=":SASManagerService" -->
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/title_service_sas_manager"> <!-- android:process=":SASManagerService" -->
         </service>
 
         <receiver
@@ -35,12 +45,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".SASSplashActivity"
-            android:excludeFromRecents="true"
-            android:icon="@mipmap/ic_launcher_sas"
-            android:label="@string/sas_app_name"
-            android:theme="@style/AppTheme_Splash" />
     </application>
 
 </manifest>
