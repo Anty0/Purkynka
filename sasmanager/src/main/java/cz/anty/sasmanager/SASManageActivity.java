@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.anty.utils.LoginDataManager;
-import cz.anty.utils.OnceRunThreadWithProgress;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -28,13 +27,14 @@ import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.Marks;
 import cz.anty.utils.sas.mark.MarksManager;
 import cz.anty.utils.settings.SASManagerSettingsActivity;
+import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class SASManageActivity extends AppCompatActivity {
 
     private ListView listView;
     private MultilineAdapter adapter;
     private SASManagerService.MyBinder binder = null;
-    private OnceRunThreadWithProgress refreshThread;
+    private OnceRunThreadWithSpinner refreshThread;
     private MarksShort marksShort = MarksShort.DATE;
     private MarksManager.Semester semester = MarksManager.Semester.AUTO.getStableSemester();
     private final ServiceConnection mConnection = new ServiceConnection() {
@@ -100,7 +100,7 @@ public class SASManageActivity extends AppCompatActivity {
 
 
         if (refreshThread == null)
-            refreshThread = new OnceRunThreadWithProgress(this);
+            refreshThread = new OnceRunThreadWithSpinner(this);
     }
 
     @Override

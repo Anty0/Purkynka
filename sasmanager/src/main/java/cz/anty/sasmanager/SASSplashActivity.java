@@ -8,13 +8,14 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import cz.anty.sasmanager.receiver.ScheduleReceiver;
 import cz.anty.utils.LoginDataManager;
-import cz.anty.utils.OnceRunThread;
+import cz.anty.utils.thread.OnceRunThread;
 
 public class SASSplashActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class SASSplashActivity extends AppCompatActivity {
     private static final int MIN_LENGTH_TIME = 500;
 
     //private boolean exit = false;
-    private final OnceRunThread worker = new OnceRunThread();
+    private final OnceRunThread worker = new OnceRunThread(null);
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, final IBinder binder) {
@@ -82,8 +83,10 @@ public class SASSplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sendBroadcast(new Intent(this, ScheduleReceiver.class));
         setContentView(R.layout.activity_splash);
+
+        worker.setPowerManager((PowerManager) getSystemService(POWER_SERVICE));
+        sendBroadcast(new Intent(this, ScheduleReceiver.class));
     }
 
     @Override

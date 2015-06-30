@@ -15,18 +15,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import cz.anty.utils.LoginDataManager;
-import cz.anty.utils.OnceRunThreadWithProgress;
 import cz.anty.utils.settings.WifiSettingsActivity;
+import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.wifi.WifiLogin;
 
 public class WifiLoginActivity extends AppCompatActivity {
 
-    private OnceRunThreadWithProgress worker;
+    private OnceRunThreadWithSpinner worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (worker == null) worker = new OnceRunThreadWithProgress(this);
+        if (worker == null) worker = new OnceRunThreadWithSpinner(this);
         setContentView(R.layout.activity_wifi_login);
 
         ((EditText) findViewById(R.id.editText)).setText(LoginDataManager.getUsername(LoginDataManager.Type.WIFI, this));

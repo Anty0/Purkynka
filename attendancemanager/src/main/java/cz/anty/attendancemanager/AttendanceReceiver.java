@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -14,12 +15,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import cz.anty.utils.OnceRunThread;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
 import cz.anty.utils.teacher.Teacher;
 import cz.anty.utils.teacher.TeachersManager;
+import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableManager;
@@ -28,7 +29,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     private static final long WAIT_TIME = 1000 * 60 * 15;
 
-    private final OnceRunThread worker = new OnceRunThread();
+    private static final OnceRunThread worker = new OnceRunThread(null);
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -53,6 +54,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
         for (final Timetable timetable : timetables) {
             if (context.getSharedPreferences("ATTENDANCE", Context.MODE_PRIVATE).getLong(timetable.getName() + " LAST_NOTIFY", 0) + WAIT_TIME > System.currentTimeMillis())
                 continue;
+            worker.setPowerManager((PowerManager) context.getSystemService(Context.POWER_SERVICE));
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
@@ -85,8 +87,8 @@ public class AttendanceReceiver extends BroadcastReceiver {
                             Notification n = new NotificationCompat.Builder(context)
                                     .setContentTitle(lesson.getShortName() + " " + context.getString(R.string.notify_substitution_title))
                                     .setContentText(man.getName() + " " + context.getString(R.string.notify_teacher_is_not_here))
-                                    .setSmallIcon(R.mipmap.ic_launcher)
-                                            //.setContentIntent(null)
+                                    .setSmallIcon(R.mipmap.ic_launcher) //TODO no default icon
+                                    .setContentIntent(null)
                                     .setAutoCancel(true)
                                     .setDefaults(Notification.DEFAULT_ALL)
                                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)

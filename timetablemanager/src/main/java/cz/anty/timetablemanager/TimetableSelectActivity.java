@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cz.anty.attendancemanager.ScheduleReceiver;
-import cz.anty.utils.OnceRunThreadWithProgress;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.StableArrayAdapter;
 import cz.anty.utils.settings.TimetableSettingsActivity;
+import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableConnector;
 import cz.anty.utils.timetable.TimetableManager;
@@ -31,7 +31,7 @@ import cz.anty.utils.timetable.TimetableManager;
 public class TimetableSelectActivity extends AppCompatActivity {
 
     private TimetableManager timetableManager;
-    private OnceRunThreadWithProgress worker;
+    private OnceRunThreadWithSpinner worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                         .getBoolean("DISPLAY_WARNING", false));
 
         if (worker == null)
-            worker = new OnceRunThreadWithProgress(this);
+            worker = new OnceRunThreadWithSpinner(this);
         if (timetableManager == null)
             timetableManager = new TimetableManager(this);
         initialize();

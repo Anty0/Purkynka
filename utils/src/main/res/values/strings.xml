@@ -114,5 +114,12 @@
     <string name="notify_but_defer_for">Defer for</string>
     <string name="notify_but_hours">h</string>
     <string name="notification_update_text_sas">Please start application by icon</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="downloading_update">Downloading update</string>
+    <string name="from">From</string>
+    <string name="latest">Latest</string>
+    <string name="download_successful">Download successful completed</string>
+    <string name="download_failed">Download failed</string>
+    <string name="language">EN</string>
 
 </resources>

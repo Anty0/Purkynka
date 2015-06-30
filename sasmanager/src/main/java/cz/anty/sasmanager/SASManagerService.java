@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -17,16 +18,16 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.anty.utils.LoginDataManager;
-import cz.anty.utils.OnceRunThread;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
+import cz.anty.utils.thread.OnceRunThread;
 
 public class SASManagerService extends Service {
 
     private final IBinder mBinder = new MyBinder();
-    private final OnceRunThread worker = new OnceRunThread();
+    private final OnceRunThread worker = new OnceRunThread(null);
     private State state = State.STOPPED;
     private SASManager sasManager;
     private MarksManager marks;
@@ -59,9 +60,12 @@ public class SASManagerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        worker.setPowerManager((PowerManager) getSystemService(POWER_SERVICE));
+
         if (marks == null)
             marks = new MarksManager(this);
         LoginDataManager.addOnChangeListener(LoginDataManager.Type.SAS, onLoginChange);
+
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -160,7 +164,7 @@ public class SASManagerService extends Service {
             builderBig.append("\n").append(marks[i]);
         }
 
-        StringBuilder builder = new StringBuilder("From: ");
+        StringBuilder builder = new StringBuilder(getString(R.string.from) + ": ");
         builder.append(marks[0].getShortLesson());
         for (int i = 1; i < newMarks; i++) {
             builder.append(", ").append(marks[i].getShortLesson());

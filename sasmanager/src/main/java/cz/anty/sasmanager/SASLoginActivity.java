@@ -12,15 +12,15 @@ import android.widget.EditText;
 import java.io.IOException;
 
 import cz.anty.utils.LoginDataManager;
-import cz.anty.utils.OnceRunThreadWithProgress;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
 import cz.anty.utils.settings.SASManagerSettingsActivity;
+import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class SASLoginActivity extends AppCompatActivity {
 
     //public static SASManager sasManager = null;
-    private OnceRunThreadWithProgress saveThread;
+    private OnceRunThreadWithSpinner saveThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class SASLoginActivity extends AppCompatActivity {
         ((EditText) findViewById(R.id.editText2)).setText(LoginDataManager.getPassword(LoginDataManager.Type.SAS, this));
 
         if (saveThread == null)
-            saveThread = new OnceRunThreadWithProgress(this);
+            saveThread = new OnceRunThreadWithSpinner(this);
     }
 
     @Override

@@ -96,4 +96,12 @@
     <string name="sas_app_description">Správce SASu je jednoduchý prográmek pro správu vašich známek, umí upozorňovat na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
     <string name="wifi_app_description">WIFI auto LOGIN je jednoduchý prográmek který vás automaticky přihlásí ke školní WIFI takže budete mít více času na surfování. :)</string>
     <string name="timetable_app_description">Správce rozvrhů je prográmek určený ke správě a vytváření rozvrhů hodin, dokáže také stáhnout rozvrh hodin dané třídy z webových stránek školy a upozornit na to, že učitel zapsaný rozvrhu na další hodinu není ve škole a je proto velmi pravděpodobné, že bude následující hodina suplovaná.</string>
+    <string name="but_update">Aktualizovat</string>
+    <string name="download_failed">Chyba stahování</string>
+    <string name="download_successful">Stahování úspěšně dokončeno</string>
+    <string name="downloading_update">Stahuji aktualizaci</string>
+    <string name="from">Z</string>
+    <string name="language">CS</string>
+    <string name="latest">Nejnovější</string>
+    <string name="attendance_app_description">Doházkový systém je prográmek, který dokáže vyhledávat v docházkovém systému školy a dokáže určit, kdo je v současné době ve škole a kdo ne, také je schopen sledovat docházku u vybraných osob a upozornit na změny přítomnosti ve škole u těchto osob.</string>
 </resources>

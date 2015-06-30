@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import cz.anty.utils.OnceRunThreadWithProgress;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -28,13 +27,14 @@ import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.settings.AttendanceSettingsActivity;
+import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class SearchActivity extends AppCompatActivity {
 
     private final AttendanceConnector connector = new AttendanceConnector();
     private EditText searchEditText;
     private MultilineAdapter adapter;
-    private OnceRunThreadWithProgress worker;
+    private OnceRunThreadWithSpinner worker;
     private int page = 1;
 
     @Override
@@ -83,7 +83,7 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         if (worker == null)
-            worker = new OnceRunThreadWithProgress(this);
+            worker = new OnceRunThreadWithSpinner(this);
         update(false);
     }
 

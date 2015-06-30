@@ -6,16 +6,17 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import cz.anty.utils.LoginDataManager;
-import cz.anty.utils.OnceRunThread;
+import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.wifi.WifiLogin;
 
 public class WifiStateReceiver extends BroadcastReceiver {
 
-    private final OnceRunThread worker = new OnceRunThread();
+    private static final OnceRunThread worker = new OnceRunThread(null);
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -27,6 +28,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
                 WifiLogin.tryLogin(LoginDataManager.getUsername(LoginDataManager.Type.WIFI, context),
                         LoginDataManager.getPassword(LoginDataManager.Type.WIFI, context))) {
 
+            worker.setPowerManager((PowerManager) context.getSystemService(Context.POWER_SERVICE));
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {

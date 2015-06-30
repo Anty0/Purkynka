@@ -7,24 +7,25 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
 
 import java.io.IOException;
 
-import cz.anty.utils.OnceRunThread;
+import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.update.UpdateConnector;
 
 public class UpdateReceiver extends BroadcastReceiver {
 
     private static final long DEFER_TIME = 1000 * 60 * 60 * 20;
-    private OnceRunThread worker = new OnceRunThread();
+    private static final OnceRunThread worker = new OnceRunThread(null);
 
     public static void checkUpdate(Context context) throws IOException {
         SharedPreferences preferences = context.getSharedPreferences("MainData", Context.MODE_PRIVATE);
-        Integer latestCode = UpdateConnector.latestVersionCode();
-        String latestName = UpdateConnector.latestVersionName();
+        Integer latestCode = UpdateConnector.getLatestVersionCode();
+        String latestName = UpdateConnector.getLatestVersionName();
         long latestTime = preferences.getInt("LATEST_CODE", BuildConfig.VERSION_CODE) == BuildConfig.VERSION_CODE ?
-                preferences.getLong("LATEST_TIME", System.currentTimeMillis()) : System.currentTimeMillis();
+                System.currentTimeMillis() : preferences.getLong("LATEST_TIME", System.currentTimeMillis());
         boolean showNotification = !latestCode.equals(preferences.getInt("LATEST_CODE", BuildConfig.VERSION_CODE));
 
         preferences.edit().putInt("LATEST_CODE", latestCode)
@@ -76,6 +77,7 @@ public class UpdateReceiver extends BroadcastReceiver {
             preferences.edit().clear().putInt("ACTUAL_CODE", BuildConfig.VERSION_CODE).apply();
         }
 
+        worker.setPowerManager((PowerManager) context.getSystemService(Context.POWER_SERVICE));
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
