@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.io.File;
 import java.io.IOException;
 
 import cz.anty.attendancemanager.SearchActivity;
@@ -123,11 +124,49 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public String run(ProgressReporter reporter) {
                 String filename = getString(R.string.latest) + " " + getString(R.string.app_name) + " " + versionCode + ".apk";
-                Cursor cursor = null;
-                try {
-                    long id = UpdateConnector.downloadUpdate(MainActivity.this, filename);
-                    DownloadManager manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
+                long id = UpdateConnector.downloadUpdate(MainActivity.this, filename);
+                DownloadManager manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                int status;
+
+                boolean pending = true;
+                while (true) {
                     DownloadManager.Query q = new DownloadManager.Query();
+                    q.setFilterById(id);
+
+                    Cursor cursor = manager.query(q);
+                    cursor.moveToFirst();
+
+                    status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+
+                    if (pending) {
+                        if (status != DownloadManager.STATUS_PENDING) {
+                            reporter.startShowingProgress();
+                            pending = false;
+                        }
+                    } else {
+                        reporter.setMaxProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)));
+                        reporter.reportProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)));
+                    }
+
+                    if (AppDataManager.isDebugMode(MainActivity.this)) {
+                        Log.d("STATUS", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))));
+                        Log.d("MAX", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))));
+                        Log.d("COMPLETED", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))));
+                    }
+
+                    cursor.close();
+                    if (status == DownloadManager.STATUS_SUCCESSFUL || status == DownloadManager.STATUS_FAILED || Thread.interrupted())
+                        break;
+
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+
+                    /*DownloadManager.Query q = new DownloadManager.Query();
                     q.setFilterById(id);
 
                     cursor = manager.query(q);
@@ -163,38 +202,38 @@ public class MainActivity extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             break;
                         }
-                    }
-                    if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) ==
-                            DownloadManager.STATUS_SUCCESSFUL) {
-                        //manager.openDownloadedFile(id);
-                        final Intent target = new Intent(Intent.ACTION_VIEW);
-                        target.setDataAndType(Uri.parse(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                                + "/" + filename), "application/vnd.android.package-archive");
-                        target.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    }*/
+                String toReturn;
+                if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                    //manager.openDownloadedFile(id);
+                    final Intent target = new Intent(Intent.ACTION_VIEW);
+                    target.setData(Uri.parse(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                            + File.separator + filename));
+                    /*target.setDataAndType(Uri.parse(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                            + "/" + filename), "application/vnd.android.package-archive");*/
+                    target.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                        if (AppDataManager.isDebugMode(MainActivity.this))
-                            Log.v("OPEN_FILE_PATH", getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
+                    if (AppDataManager.isDebugMode(MainActivity.this))
+                        Log.v("OPEN_FILE_PATH", getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + File.separator + filename);
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(target);//TODO delete target
-                            }
-                        });
-
-                        return getString(R.string.download_successful);
-                    }
-                    return getString(R.string.download_failed);
-                } finally {
-                    if (cursor != null)
-                        cursor.close();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            finish();
+                            startActivity(target);//TODO delete target
                         }
                     });
-                }
+
+                    toReturn = getString(R.string.download_successful);
+                } else
+                    toReturn = getString(R.string.download_failed);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
+                return toReturn;
             }
         }, getString(R.string.downloading_update) + "…");
     }

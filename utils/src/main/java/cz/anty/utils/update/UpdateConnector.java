@@ -8,6 +8,7 @@ import android.os.Environment;
 
 import org.jsoup.Jsoup;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -49,6 +50,10 @@ public class UpdateConnector {
     }
 
     public static long downloadUpdate(Context context, String filename) {
+        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                + File.separator + filename);
+        if (file.exists()) file.delete();
+
         DownloadManager.Request request = new DownloadManager
                 .Request(Uri.parse(DEFAULT_URL + LATEST_APK_URL_ADD));
         request.setTitle(context.getString(R.string.downloading_update));
