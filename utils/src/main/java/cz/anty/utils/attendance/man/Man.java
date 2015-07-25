@@ -16,7 +16,7 @@ public class Man implements MultilineItem {
     private final Date lastEnter;
     private final boolean inSchool;
 
-    public Man(String name, String classString, Date lastEnter, boolean inSchool) {
+    private Man(String name, String classString, Date lastEnter, boolean inSchool) {
         this.name = name == null ? "" : name;
         this.classString = classString == null ? "" : classString;
         this.lastEnter = lastEnter == null ? new Date(System.currentTimeMillis()) : lastEnter;

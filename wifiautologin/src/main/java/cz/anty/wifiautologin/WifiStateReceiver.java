@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import cz.anty.utils.LoginDataManager;
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.wifi.WifiLogin;
 
@@ -20,23 +19,23 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        if (!LoginDataManager.isWifiAutoLogin(context) || !LoginDataManager.isLoggedIn(LoginDataManager.Type.WIFI, context))
+        if (!AppDataManager.isWifiAutoLogin(context) || !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI, context))
             return;
 
         final WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         if (wifiInfo.getSSID().contains(WifiLogin.WIFI_NAME) &&
-                WifiLogin.tryLogin(LoginDataManager.getUsername(LoginDataManager.Type.WIFI, context),
-                        LoginDataManager.getPassword(LoginDataManager.Type.WIFI, context))) {
+                WifiLogin.tryLogin(AppDataManager.getUsername(AppDataManager.Type.WIFI, context),
+                        AppDataManager.getPassword(AppDataManager.Type.WIFI, context))) {
 
-            worker.setPowerManager((PowerManager) context.getSystemService(Context.POWER_SERVICE));
+            worker.setPowerManager(context);
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    if (LoginDataManager.isWifiWaitLogin(context)) {
+                    if (AppDataManager.isWifiWaitLogin(context)) {
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
-                            Log.d(null, null, e);
+                            if (AppDataManager.isDebugMode(context)) Log.d(null, null, e);
                         }
                     }
 

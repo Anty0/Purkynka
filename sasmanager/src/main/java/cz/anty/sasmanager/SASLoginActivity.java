@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import java.io.IOException;
 
-import cz.anty.utils.LoginDataManager;
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
 import cz.anty.utils.settings.SASManagerSettingsActivity;
@@ -34,8 +34,8 @@ public class SASLoginActivity extends AppCompatActivity {
         }*/
         setContentView(R.layout.activity_login);
 
-        ((EditText) findViewById(R.id.editText)).setText(LoginDataManager.getUsername(LoginDataManager.Type.SAS, this));
-        ((EditText) findViewById(R.id.editText2)).setText(LoginDataManager.getPassword(LoginDataManager.Type.SAS, this));
+        ((EditText) findViewById(R.id.editText)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS, this));
+        ((EditText) findViewById(R.id.editText2)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS, this));
 
         if (saveThread == null)
             saveThread = new OnceRunThreadWithSpinner(this);
@@ -63,7 +63,7 @@ public class SASLoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onClickLogin(View view) {
+    public void onClickLogin(@SuppressWarnings("UnusedParameters") View view) {
         final String username = ((EditText) findViewById(R.id.editText)).getText().toString();
         final String password = ((EditText) findViewById(R.id.editText2)).getText().toString();
         if (username.equals("") || password.equals("")) {
@@ -93,7 +93,7 @@ public class SASLoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                LoginDataManager.login(LoginDataManager.Type.SAS, SASLoginActivity.this, username, password);
+                AppDataManager.login(AppDataManager.Type.SAS, SASLoginActivity.this, username, password);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

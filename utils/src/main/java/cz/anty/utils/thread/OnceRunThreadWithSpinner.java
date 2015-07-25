@@ -21,6 +21,7 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
     private final Activity activity;
     private final ProgressDialog progressDialog;
     private final ArrayList<String> messages = new ArrayList<>();
+    private final Object depthLock = new Object();
     private int depth = 0;
 
     public OnceRunThreadWithSpinner(Activity activity) {
@@ -35,7 +36,7 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     }
 
-    protected ProgressDialog getProgressDialog() {
+    ProgressDialog getProgressDialog() {
         return progressDialog;
     }
 
@@ -58,7 +59,7 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
         return thread;
     }
 
-    protected void start(final Thread thread, final String message) throws InterruptedException {
+    void start(final Thread thread, final String message) throws InterruptedException {
         if (message != null) {
             synchronized (messages) {
                 messages.add(message);
@@ -66,12 +67,14 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    synchronized (this) {
+                    synchronized (progressDialog) {
                         progressDialog.setMessage(getMessage());
-                        if (depth == 0)
-                            progressDialog.show();
+                        synchronized (depthLock) {
+                            if (depth == 0)
+                                progressDialog.show();
 
-                        depth++;
+                            depth++;
+                        }
                     }
                 }
             });
@@ -84,19 +87,22 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
                 synchronized (messages) {
                     messages.remove(message);
                 }
-                synchronized (this) {
-                    depth--;
 
-                    if (depth == 0)
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                synchronized (this) {
-                                    progressDialog.hide();
-                                }
-                            }
-                        });
+                int localDepth;
+                synchronized (depthLock) {
+                    depth--;
+                    localDepth = depth;
                 }
+
+                if (localDepth == 0)
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            synchronized (progressDialog) {
+                                progressDialog.hide();
+                            }
+                        }
+                    });
             }
         }
     }

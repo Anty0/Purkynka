@@ -1,9 +1,12 @@
 package cz.anty.utils.thread;
 
+import android.content.Context;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import cz.anty.utils.AppDataManager;
 
 /**
  * Created by anty on 9.6.15.
@@ -13,6 +16,8 @@ import android.util.Log;
 public class OnceRunThread {
 
     private final Object waitingThreadsLock = new Object();
+    private final Object waitingLock = new Object();
+    private final Object powerManagerLock = new Object();
     private PowerManager powerManager;
     private int waitingThreads = 0;
     private Thread worker = null;
@@ -21,13 +26,21 @@ public class OnceRunThread {
         this.powerManager = powerManager;
     }
 
-    public synchronized void setPowerManager(@Nullable PowerManager powerManager) {
-        this.powerManager = powerManager;
+    public void setPowerManager(@Nullable PowerManager powerManager) {
+        synchronized (powerManagerLock) {
+            this.powerManager = powerManager;
+        }
     }
 
-    private synchronized PowerManager.WakeLock getWakeLock() {
-        return powerManager != null ? powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK, getClass().getName()) : null;
+    public void setPowerManager(@NonNull Context context) {
+        setPowerManager((PowerManager) context.getSystemService(Context.POWER_SERVICE));
+    }
+
+    private PowerManager.WakeLock getWakeLock() {
+        synchronized (powerManagerLock) {
+            return powerManager != null ? powerManager.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK, getClass().getName()) : null;
+        }
     }
 
     public Thread startWorker(final Runnable runnable) {
@@ -50,7 +63,7 @@ public class OnceRunThread {
         return thread;
     }
 
-    protected void start(Thread thread) throws InterruptedException {
+    void start(Thread thread) throws InterruptedException {
         //waitToWorkerStop();
         synchronized (waitingThreadsLock) {
             waitingThreads++;
@@ -73,29 +86,39 @@ public class OnceRunThread {
     }
 
     public int getWaitingThreadsLength() {
-        return waitingThreads;
-    }
-
-    private synchronized void setWorker(Thread worker) {
-        waitToWorkerStop();
-        this.worker = worker;
-    }
-
-    public synchronized boolean isWorkerRunning() {
-        return !(worker == null || worker.getState() == Thread.State.TERMINATED);
-    }
-
-    public synchronized void waitToWorkerStop() {
-        while (isWorkerRunning()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                Log.d(null, null, e);
-            }
+        synchronized (waitingThreadsLock) {
+            return waitingThreads;
         }
     }
 
-    public synchronized void waitToWorkerStop(@NonNull Thread thread) {
+    private void setWorker(Thread worker) {
+        synchronized (waitingLock) {
+            waitToWorkerStop();
+            this.worker = worker;
+        }
+    }
+
+    public boolean isWorkerRunning() {
+        synchronized (waitingLock) {
+            return !(worker == null || worker.getState() == Thread.State.TERMINATED);
+        }
+    }
+
+    public boolean waitToWorkerStop() {
+        synchronized (waitingLock) {
+            while (isWorkerRunning()) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    if (AppDataManager.isDebugMode(null)) Log.d(null, null, e);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void waitToWorkerStop(@NonNull Thread thread) {
         while (thread.getState() != Thread.State.TERMINATED)
             waitToWorkerStop();
     }

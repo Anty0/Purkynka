@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cz.anty.attendancemanager.ScheduleReceiver;
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.StableArrayAdapter;
 import cz.anty.utils.settings.TimetableSettingsActivity;
@@ -36,10 +37,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sendBroadcast(new Intent(this, ScheduleReceiver.class));
         setContentView(R.layout.activity_timetable_select);
-        ((CheckBox) findViewById(R.id.checkBox))
-                .setChecked(getSharedPreferences("AttendanceData", MODE_PRIVATE)
-                        .getBoolean("DISPLAY_WARNING", false));
 
         if (worker == null)
             worker = new OnceRunThreadWithSpinner(this);
@@ -95,7 +94,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                 if (autoLoadCheckBox.isChecked())
                                                     TimetableConnector.tryLoadTimetable(newTimetable);
                                             } catch (WrongLoginDataException e) {
-                                                Log.d(null, null, e);
+                                                if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
+                                                    Log.d(null, null, e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -109,7 +109,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     }
                                                 });
                                             } catch (IOException e) {
-                                                Log.d(null, null, e);
+                                                if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
+                                                    Log.d(null, null, e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -123,7 +124,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     }
                                                 });
                                             } catch (Exception e) {
-                                                Log.d(null, null, e);
+                                                if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
+                                                    Log.d(null, null, e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -230,12 +232,5 @@ public class TimetableSelectActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initialize();
-    }
-
-    public void onCheckBoxClick(View view) {
-        getSharedPreferences("AttendanceData", MODE_PRIVATE).edit()
-                .putBoolean("DISPLAY_WARNING", ((CheckBox) view).isChecked())
-                .apply();
-        sendBroadcast(new Intent(this, ScheduleReceiver.class));
     }
 }

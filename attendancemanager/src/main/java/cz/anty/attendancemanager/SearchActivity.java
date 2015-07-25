@@ -17,9 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -125,10 +125,10 @@ public class SearchActivity extends AppCompatActivity {
                     for (int i = 0; i < values.length; i++) {
                         values[i] = mans.get(i).toString();
                     }*/
-                } catch (IOException | URISyntaxException e) {
+                } catch (IOException e) {
                     //values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
                     data = new MultilineItem[]{new TextMultilineItem("Check your internet connection", "Connection exception: " + e.getMessage())};
-                    Log.d(null, null, e);
+                    if (AppDataManager.isDebugMode(SearchActivity.this)) Log.d(null, null, e);
                 }
 
                 /*final ArrayList<String> list = new ArrayList<>();

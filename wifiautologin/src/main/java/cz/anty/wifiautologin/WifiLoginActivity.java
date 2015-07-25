@@ -10,11 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import cz.anty.utils.LoginDataManager;
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.settings.WifiSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.wifi.WifiLogin;
@@ -29,10 +28,8 @@ public class WifiLoginActivity extends AppCompatActivity {
         if (worker == null) worker = new OnceRunThreadWithSpinner(this);
         setContentView(R.layout.activity_wifi_login);
 
-        ((EditText) findViewById(R.id.editText)).setText(LoginDataManager.getUsername(LoginDataManager.Type.WIFI, this));
-        ((EditText) findViewById(R.id.editText2)).setText(LoginDataManager.getPassword(LoginDataManager.Type.WIFI, this));
-        ((CheckBox) findViewById(R.id.auto_login_checkbox)).setChecked(LoginDataManager.isWifiAutoLogin(this));
-        ((CheckBox) findViewById(R.id.wait_login_checkbox)).setChecked(LoginDataManager.isWifiWaitLogin(this));
+        ((EditText) findViewById(R.id.editText)).setText(AppDataManager.getUsername(AppDataManager.Type.WIFI, this));
+        ((EditText) findViewById(R.id.editText2)).setText(AppDataManager.getPassword(AppDataManager.Type.WIFI, this));
     }
 
     @Override
@@ -57,22 +54,14 @@ public class WifiLoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onAutoCheckBoxClick(View view) {
-        LoginDataManager.setWifiAutoLogin(this, ((CheckBox) findViewById(R.id.auto_login_checkbox)).isChecked());
-    }
-
-    public void onWaitCheckBoxClick(View view) {
-        LoginDataManager.setWifiWaitLogin(this, ((CheckBox) findViewById(R.id.wait_login_checkbox)).isChecked());
-    }
-
-    public void onClickSave(View view) {
-        LoginDataManager.login(LoginDataManager.Type.WIFI, this,
+    public void onClickSave(@SuppressWarnings("UnusedParameters") View view) {
+        AppDataManager.login(AppDataManager.Type.WIFI, this,
                 ((EditText) findViewById(R.id.editText)).getText().toString(),
                 ((EditText) findViewById(R.id.editText2)).getText().toString());
         Toast.makeText(this, R.string.successfully_saved, Toast.LENGTH_LONG).show();
     }
 
-    public void onClickLogin(View view) {
+    public void onClickLogin(@SuppressWarnings("UnusedParameters") View view) {
         login(false);
     }
 

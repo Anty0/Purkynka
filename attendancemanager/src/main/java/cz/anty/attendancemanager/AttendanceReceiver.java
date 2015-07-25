@@ -5,16 +5,15 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -33,8 +32,10 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!context.getSharedPreferences("AttendanceData", Context.MODE_PRIVATE).getBoolean("DISPLAY_WARNING", false))
+        if (!context.getSharedPreferences("AttendanceData", Context.MODE_PRIVATE).getBoolean("DISPLAY_WARNING", false)) {
+            context.sendBroadcast(new Intent(context, ScheduleReceiver.class));
             return;
+        }
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         int minuteTime = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
@@ -54,7 +55,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
         for (final Timetable timetable : timetables) {
             if (context.getSharedPreferences("ATTENDANCE", Context.MODE_PRIVATE).getLong(timetable.getName() + " LAST_NOTIFY", 0) + WAIT_TIME > System.currentTimeMillis())
                 continue;
-            worker.setPowerManager((PowerManager) context.getSystemService(Context.POWER_SERVICE));
+            worker.setPowerManager(context);
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
@@ -98,8 +99,8 @@ public class AttendanceReceiver extends BroadcastReceiver {
                             context.getSharedPreferences("ATTENDANCE", Context.MODE_PRIVATE).edit()
                                     .putLong(timetable.getName() + " LAST_NOTIFY", System.currentTimeMillis()).apply();
                         }
-                    } catch (IOException | IndexOutOfBoundsException | URISyntaxException e) {
-                        Log.d(null, null, e);
+                    } catch (IOException | IndexOutOfBoundsException e) {
+                        if (AppDataManager.isDebugMode(context)) Log.d(null, null, e);
                     }
                 }
             });

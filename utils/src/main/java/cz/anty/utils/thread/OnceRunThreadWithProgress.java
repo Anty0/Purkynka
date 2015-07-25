@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import cz.anty.utils.R;
-
 /**
  * Created by anty on 29.6.15.
  *
@@ -23,6 +21,8 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
         this.activity = activity;
 
         progressDialog = getProgressDialog();
+        progressDialog.setProgress(0);
+        progressDialog.setMax(100);
         //progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     }
 
@@ -43,14 +43,17 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
         }, message + " Thread"), message);
     }
 
-    protected void start(final Thread thread, final String message) throws InterruptedException {
+    @Override
+    void start(final Thread thread, final String message) throws InterruptedException {
         if (message != null) {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    synchronized (this) {
+                    synchronized (progressDialog) {
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         progressDialog.setProgress(0);
-                        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                        progressDialog.setMax(100);
+                        /*progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                                 activity.getString(R.string.but_cancel),
                                 new DialogInterface.OnClickListener() {
                                     @Override
@@ -58,21 +61,42 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
                                         thread.interrupt();
                                     }
                                 });
+                        if (Build.VERSION.SDK_INT >= 21)
+                            progressDialog.create();
+                        else {
+                            progressDialog.show();
+                            progressDialog.hide();
+                        }
+                        Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        if (but != null)
+                            but.setVisibility(View.GONE);*/
+                        progressDialog.setCancelable(false);
+                        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                thread.interrupt();
+                            }
+                        });
                     }
                 }
             });
         }
-        super.start(thread, message);
-        if (message != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (this) {
-                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        try {
+            super.start(thread, message);
+        } finally {
+            if (message != null) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized (progressDialog) {
+                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
+
     }
 
     @Override
@@ -80,8 +104,12 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                synchronized (this) {
+                synchronized (progressDialog) {
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressDialog.setCancelable(true);
+                    /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                    if (but != null)
+                        but.setVisibility(View.VISIBLE);*/
                 }
             }
         });
@@ -92,8 +120,12 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                synchronized (this) {
+                synchronized (progressDialog) {
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.setCancelable(false);
+                    /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                    if (but != null)
+                        but.setVisibility(View.GONE);*/
                 }
             }
         });
@@ -104,7 +136,7 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                synchronized (this) {
+                synchronized (progressDialog) {
                     progressDialog.setMax(max);
                 }
             }
@@ -116,7 +148,7 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                synchronized (this) {
+                synchronized (progressDialog) {
                     progressDialog.setProgress(progress);
                 }
             }

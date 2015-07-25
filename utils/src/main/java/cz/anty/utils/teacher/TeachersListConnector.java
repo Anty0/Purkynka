@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class TeachersListConnector {
 
-    public static final int MAX_TRY = 3;
+    private static final int MAX_TRY = 3;
     private static final String DEFAULT_URL = "http://www.sspbrno.cz/view.php?cisloclanku=2005090605";
 
     public static Elements getTeachersElements() throws IOException {

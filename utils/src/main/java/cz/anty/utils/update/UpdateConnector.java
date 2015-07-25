@@ -55,10 +55,11 @@ public class UpdateConnector {
         request.setDescription(context.getString(R.string.please_wait));
 
         // in order for this if to run, you must use the android 3.2 to compile your app
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= 11) {
             request.allowScanningByMediaScanner();
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         } else {
+            //noinspection deprecation
             request.setShowRunningNotification(false);
         }
         request.setVisibleInDownloadsUi(false);

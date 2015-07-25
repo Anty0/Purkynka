@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
  *
  * @author anty
  */
-public class ByteEncryption {
+class ByteEncryption {
 
     public static final byte[] MY_KEY = "Copyright ANTY 2015".getBytes(Charset.defaultCharset());
 

@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -20,7 +19,7 @@ import java.util.Locale;
 public class AttendanceConnector {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-    public static final int MAX_TRY = 3;
+    private static final int MAX_TRY = 3;
     //private static final String DEFAULT_LOGIN = "rodic";
     private static final String DEFAULT_URL = "http://www2.sspbrno.cz/main.asp";
     //private static final String LOGIN_FIELD = "LOGIN";
@@ -55,7 +54,7 @@ public class AttendanceConnector {
         }
     }*/
 
-    public synchronized Elements getSupElements(String search, int page) throws IOException, URISyntaxException {
+    public synchronized Elements getSupElements(String search, int page) throws IOException {
         return getSupElements(0, null, search, page);
     }
 

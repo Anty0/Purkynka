@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
  */
 public class Timetables {
 
-    public static final String SETTINGS_NAME_CONST = "Timetables";
+    private static final String SETTINGS_NAME_CONST = "Timetables";
 
     synchronized static String[] getTimetablesNames(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(SETTINGS_NAME_CONST, Context.MODE_PRIVATE);

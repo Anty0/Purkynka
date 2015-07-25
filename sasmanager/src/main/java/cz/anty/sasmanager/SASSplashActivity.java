@@ -2,25 +2,22 @@ package cz.anty.sasmanager;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import cz.anty.sasmanager.receiver.ScheduleReceiver;
-import cz.anty.utils.LoginDataManager;
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class SASSplashActivity extends AppCompatActivity {
 
     private static final int WAIT_TIME = 100;
-    private static final int MIN_LENGTH_TIME = 500;
+    //private static final int MIN_LENGTH_TIME = 500;
 
     //private boolean exit = false;
     private final OnceRunThread worker = new OnceRunThread(null);
@@ -33,19 +30,20 @@ public class SASSplashActivity extends AppCompatActivity {
                     try {
                         Thread.sleep(WAIT_TIME);
                     } catch (InterruptedException e) {
-                        Log.d(null, null, e);
+                        if (AppDataManager.isDebugMode(SASSplashActivity.this))
+                            Log.d(null, null, e);
                     }
-                    long time = System.currentTimeMillis();
+                    //long time = System.currentTimeMillis();
                     SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
                     //myBinder.refresh();
                     myBinder.waitToWorkerStop();
-                    long timeNew = System.currentTimeMillis();
-                    if (timeNew - time < MIN_LENGTH_TIME)
+                    //long timeNew = System.currentTimeMillis();
+                    /*if (timeNew - time < MIN_LENGTH_TIME)
                         try {
                             Thread.sleep(time - timeNew + MIN_LENGTH_TIME);
                         } catch (InterruptedException e) {
                             //e.printStackTrace();
-                        }
+                        }*/
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -68,7 +66,7 @@ public class SASSplashActivity extends AppCompatActivity {
 
     private void startDefaultActivity() {
         Intent activity;
-        if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, this)) {
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, this)) {
             activity = new Intent(this, SASManageActivity.class);
         } else {
             activity = new Intent(this, SASLoginActivity.class);
@@ -85,7 +83,7 @@ public class SASSplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        worker.setPowerManager((PowerManager) getSystemService(POWER_SERVICE));
+        worker.setPowerManager(this);
         sendBroadcast(new Intent(this, ScheduleReceiver.class));
     }
 
@@ -96,7 +94,7 @@ public class SASSplashActivity extends AppCompatActivity {
             finish();
             return;
         }*/
-        if (getSharedPreferences("MainData", Context.MODE_PRIVATE).getBoolean("CANT_START", false)) {
+        /*if (getSharedPreferences("MainData", Context.MODE_PRIVATE).getBoolean("CANT_START", false)) {
             new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
                     .setTitle(R.string.notification_update_title)
                     .setMessage(R.string.notification_update_text_sas)
@@ -110,7 +108,7 @@ public class SASSplashActivity extends AppCompatActivity {
                     .setCancelable(false)
                     .show();
             return;
-        }
+        }*/
         Intent intent = new Intent(this, SASManagerService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }

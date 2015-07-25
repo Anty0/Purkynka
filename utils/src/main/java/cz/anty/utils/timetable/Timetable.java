@@ -10,8 +10,6 @@ import android.content.Context;
 public class Timetable {
 
     public static final String SETTINGS_NAME_CONST = "TimetablesData";
-    public static final String PARSE_CONST_DAY = ":;TD;:";
-    public static final String PARSE_CONST_OBJECT = ":;TO;:";
     public static final String NAME_CONST = "TIMETABLE ";
     public static final String[] DAYS = new String[]{
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
@@ -24,7 +22,8 @@ public class Timetable {
     public static final int[] START_TIMES_MINUTES = new int[]{
             10, 0, 55, 0, 55, 50, 45, 40, 35, 30, 25};
     public static final int MAX_LESSONS = 11;
-
+    private static final String PARSE_CONST_DAY = ":;TD;:";
+    private static final String PARSE_CONST_OBJECT = ":;TO;:";
     /*private static final int MONDAY = 0;
     private static final int TUESDAY = 1;
     private static final int WEDNESDAY = 2;

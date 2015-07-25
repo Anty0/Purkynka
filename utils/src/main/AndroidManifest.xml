@@ -26,6 +26,12 @@
         <activity
             android:name=".settings.AboutActivity"
             android:label="@string/title_activity_about" />
+
+        <service
+            android:name=".listItem.WidgetService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS"></service>
     </application>
 
 </manifest>

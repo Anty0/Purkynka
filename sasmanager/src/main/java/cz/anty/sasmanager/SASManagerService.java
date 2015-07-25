@@ -4,10 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -17,9 +17,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import cz.anty.utils.LoginDataManager;
+import cz.anty.sasmanager.widget.SASManageWidget;
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
+import cz.anty.utils.sas.mark.Lesson;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
 import cz.anty.utils.thread.OnceRunThread;
@@ -49,7 +51,8 @@ public class SASManagerService extends Service {
         }
     };
 
-    public void setState(State state) {
+    private void setState(State state) {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "setState: " + state);
         if (state != this.state) {
             this.state = state;
             if (onStateChangedListener != null)
@@ -59,12 +62,13 @@ public class SASManagerService extends Service {
 
     @Override
     public void onCreate() {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onCreate");
         super.onCreate();
-        worker.setPowerManager((PowerManager) getSystemService(POWER_SERVICE));
+        worker.setPowerManager(this);
 
         if (marks == null)
             marks = new MarksManager(this);
-        LoginDataManager.addOnChangeListener(LoginDataManager.Type.SAS, onLoginChange);
+        AppDataManager.addOnChangeListener(AppDataManager.Type.SAS, onLoginChange);
 
         worker.startWorker(new Runnable() {
             @Override
@@ -75,14 +79,15 @@ public class SASManagerService extends Service {
     }
 
     private void initialize() {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "initialize");
         if (sasManager != null && sasManager.isConnected()) {
             sasManager.disconnect();
             setState(State.DISCONNECTED);
         }
 
-        if (LoginDataManager.isLoggedIn(LoginDataManager.Type.SAS, SASManagerService.this)) {
-            sasManager = new SASManager(LoginDataManager.getUsername(LoginDataManager.Type.SAS, SASManagerService.this),
-                    LoginDataManager.getPassword(LoginDataManager.Type.SAS, SASManagerService.this));
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, SASManagerService.this)) {
+            sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS, SASManagerService.this),
+                    AppDataManager.getPassword(AppDataManager.Type.SAS, SASManagerService.this));
             refreshMarks(true);
             //setState(State.CONNECTED);
         } else {
@@ -94,13 +99,15 @@ public class SASManagerService extends Service {
 
     @Override
     public void onDestroy() {
-        LoginDataManager.removeOnChangeListener(LoginDataManager.Type.SAS, onLoginChange);
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onDestroy");
+        AppDataManager.removeOnChangeListener(AppDataManager.Type.SAS, onLoginChange);
         setState(State.STOPPED);
         super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onStartCommand");
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -112,6 +119,8 @@ public class SASManagerService extends Service {
     }
 
     private void refreshMarks(boolean deepRefresh) {
+        if (AppDataManager.isDebugMode(this))
+            Log.d("SASManagerService", "refreshMarks: " + deepRefresh);
         if (sasManager == null) return;
         try {
             if (!sasManager.isConnected()) {
@@ -144,18 +153,24 @@ public class SASManagerService extends Service {
                 }
                 setState(State.LOGGED_IN);
             } catch (WrongLoginDataException e) {
-                Log.d(null, null, e);
+                if (AppDataManager.isDebugMode(this)) Log.d(null, null, e);
                 setState(State.LOG_IN_EXCEPTION);
             }
         } catch (IOException e) {
-            Log.d(null, null, e);
+            if (AppDataManager.isDebugMode(this)) Log.d(null, null, e);
             setState(State.CONNECT_EXCEPTION);
         }
     }
 
     private void onMarksChange(MarksManager.Semester semester, int newMarks) {
+        if (AppDataManager.isDebugMode(this))
+            Log.d("SASManagerService", "onMarksChange: " + semester + " - " + newMarks);
         if (onMarksChange != null)
             onMarksChange.run();
+        SASManageWidget.callUpdate(this);
+
+        if (!AppDataManager.isSASMarksAutoUpdate(this))
+            return;
 
         Mark[] marks = this.marks.get(semester);
         StringBuilder builderBig = new StringBuilder();
@@ -197,6 +212,7 @@ public class SASManagerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onBind");
         return mBinder;
     }
 
@@ -243,9 +259,23 @@ public class SASManagerService extends Service {
             return SASManagerService.this;
         }*/
 
+        public Lesson[] getLessons(MarksManager.Semester semester) {
+            waitToWorkerStop();
+            return marks.getAsLessons(semester);
+        }
+
         public Mark[] getMarks(MarksManager.Semester semester) {
             waitToWorkerStop();
             return marks.get(semester);
+        }
+
+        public String getMarksAsString(MarksManager.Semester semester) {
+            waitToWorkerStop();
+            return marks.toString(semester);
+        }
+
+        public Context getContext() {
+            return getApplicationContext();
         }
 
     }

@@ -18,11 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
+import cz.anty.utils.AppDataManager;
+import cz.anty.utils.BuildConfig;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode(this));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -64,17 +66,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (UpdateReceiver.isUpdateAvailable(MainActivity.this)) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(
+                            final String versionCode = UpdateReceiver.getLatestName(MainActivity.this);
+                            new AlertDialog.Builder(
                                     MainActivity.this, R.style.AppTheme_Dialog)
                                     .setTitle(R.string.notification_update_title)
                                     .setMessage(getString(R.string.notification_update_text_old) +
                                             " " + BuildConfig.VERSION_NAME
-                                            + "\n" + getString(R.string.notification_update_text_new) + " " +
-                                            UpdateReceiver.getLatestName(MainActivity.this))
+                                            + "\n" + getString(R.string.notification_update_text_new) + " " + versionCode
+                                            + "\n" + getString(R.string.notify_message_update_alert))
                                     .setPositiveButton(R.string.but_update, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            downloadInstallUpdate();
+                                            downloadInstallUpdate(versionCode);
                                         }
                                     }).setNegativeButton(R.string.but_exit, new DialogInterface.OnClickListener() {
                                         @Override
@@ -82,9 +85,16 @@ public class MainActivity extends AppCompatActivity {
                                             finish();
                                         }
                                     }).setIcon(R.mipmap.ic_launcher)
-                                    .setCancelable(false);
+                                    .setCancelable(false)
+                                    .setNeutralButton(R.string.but_defer, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkTerms();
+                                        }
+                                    })
+                                    .show();
 
-                            long deferTime = UpdateReceiver.getDeferTime(MainActivity.this);
+                            /*long deferTime = UpdateReceiver.getDeferTime(MainActivity.this);
                             if (deferTime > 0) {
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.setTimeInMillis(deferTime);
@@ -96,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
                                         checkTerms();
                                     }
                                 });
-                            }
+                            }*/
 
-                            builder.show();
+                            //builder.show();
                             return;
                         }
                         checkTerms();
@@ -108,11 +118,11 @@ public class MainActivity extends AppCompatActivity {
         }, getString(R.string.loading));
     }
 
-    private void downloadInstallUpdate() {
+    private void downloadInstallUpdate(final String versionCode) {
         worker.startWorker(new RunnableWithProgress() {
             @Override
             public String run(ProgressReporter reporter) {
-                String filename = getString(R.string.latest) + " " + getString(R.string.app_name) + ".apk";
+                String filename = getString(R.string.latest) + " " + getString(R.string.app_name) + " " + versionCode + ".apk";
                 Cursor cursor = null;
                 try {
                     long id = UpdateConnector.downloadUpdate(MainActivity.this, filename);
@@ -142,9 +152,11 @@ public class MainActivity extends AppCompatActivity {
                         reporter.setMaxProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)));
                         reporter.reportProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)));
 
-                        Log.d("STATUS", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))));
-                        Log.d("MAX", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))));
-                        Log.d("COMPLETED", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))));
+                        if (AppDataManager.isDebugMode(MainActivity.this)) {
+                            Log.d("STATUS", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))));
+                            Log.d("MAX", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))));
+                            Log.d("COMPLETED", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))));
+                        }
 
                         try {
                             Thread.sleep(250);
@@ -160,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
                                 + "/" + filename), "application/vnd.android.package-archive");
                         target.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                        Log.v("OPEN_FILE_PATH", getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
+                        if (AppDataManager.isDebugMode(MainActivity.this))
+                            Log.v("OPEN_FILE_PATH", getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -187,47 +200,54 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkTerms() {
-        final SharedPreferences preferences = getSharedPreferences("MainData", MODE_PRIVATE);
-        if (preferences.getBoolean("FIRST_START", true)) {
-            new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                    .setTitle(R.string.title_terms)
-                    .setMessage(getTerms())
-                    .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
+        worker.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                final SharedPreferences preferences = getSharedPreferences("MainData", MODE_PRIVATE);
+                if (preferences.getBoolean("FIRST_START", true)) {
+                    final String terms = getTerms();
+                    runOnUiThread(new Runnable() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            preferences.edit().putBoolean("FIRST_START", false).apply();
-                            initialize();
+                        public void run() {
+                            new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog)
+                                    .setTitle(R.string.title_terms)
+                                    .setMessage(terms)
+                                    .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            preferences.edit().putBoolean("FIRST_START", false).apply();
+                                            initialize();
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.but_exit, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                        }
+                                    })
+                                    .setIcon(R.mipmap.ic_launcher)
+                                    .setCancelable(false)
+                                    .show();
                         }
-                    })
-                    .setNegativeButton(R.string.but_exit, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setIcon(R.mipmap.ic_launcher)
-                    .setCancelable(false)
-                    .show();
-            return;
-        }
-        initialize();
+                    });
+                    return;
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initialize();
+                    }
+                });
+            }
+        }, getString(R.string.loading));
     }
 
     private String getTerms() {
-        final StringBuilder builder = new StringBuilder();
-        worker.waitToWorkerStop(worker.startWorker(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    builder.append(UpdateConnector.getLatestTerms(getString(R.string.language)));
-                } catch (IOException e) {
-                    builder.append("null");
-                }
-            }
-        }, getString(R.string.loading)));
-
-        String result = builder.toString();
-        return result.equals("null") ? getString(R.string.text_terms) : result;
+        try {
+            return UpdateConnector.getLatestTerms(getString(R.string.language));
+        } catch (IOException e) {
+            return getString(R.string.text_terms);
+        }
     }
 
     private void initialize() {

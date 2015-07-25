@@ -70,22 +70,4 @@
 
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/auto_login_checkbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:enabled="true"
-            android:onClick="onAutoCheckBoxClick"
-            android:text="@string/check_box_auto_login" />
-
-    <CheckBox
-        android:id="@+id/wait_login_checkbox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:enabled="true"
-        android:onClick="onWaitCheckBoxClick"
-        android:text="@string/checkbox_wait_login" />
-
 </LinearLayout>

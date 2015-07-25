@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class StableArrayAdapter extends ArrayAdapter<String> {
 
-    final HashMap<String, Integer> mIdMap = new HashMap<>();
+    private final HashMap<String, Integer> mIdMap = new HashMap<>();
 
     public StableArrayAdapter(Context context, int textViewResourceId,
                               List<String> objects) {

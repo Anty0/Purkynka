@@ -42,6 +42,60 @@ public class MarksManager {
         load();
     }
 
+    private static String marksToString(Mark[] marks) {
+        StringBuilder builder = new StringBuilder();
+        if (marks.length > 0) {
+            builder.append(markToString(marks[0]));
+            for (int i = 1; i < marks.length; i++) {
+                builder.append("\n").append(markToString(marks[i]).replaceAll("\n", "?"));
+            }
+        }
+        return builder.toString();
+    }
+
+    private static String markToString(Mark mark) {
+        return mark.getDateAsString().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getShortLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getLongLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getValueToShow().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getValue() + SPLIT_VALUE
+                + mark.getType().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getWeight() + SPLIT_VALUE
+                + mark.getNote().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getTeacher().replaceAll(SPLIT_VALUE, "?????");
+    }
+
+    public static List<Mark> parseMarks(String toParse) {
+        String[] marksData = toParse.split("\n");
+        List<Mark> marks = new ArrayList<>();
+        if (marksData[0].equals("")) return marks;
+        for (String string : marksData) {
+            marks.add(parseMark(string));
+        }
+        return marks;
+    }
+
+    private static Mark parseMark(String string) {
+        String[] markData = string.split(SPLIT_VALUE);
+        Mark.Builder builder = new Mark.Builder()
+                .setShortLesson(markData[1])
+                .setLongLesson(markData[2])
+                .setValueToShow(markData[3])
+                .setValue(Double.parseDouble(markData[4]))
+                .setType(markData[5])
+                .setWeight(Integer.parseInt(markData[6]))
+                .setNote(markData[7])
+                .setTeacher(markData[8]);
+        try {
+            builder.setDate(SASConnector.DATE_FORMAT.parse(markData[0]));
+        } catch (ParseException e) {
+            builder.setDate(new Date(System.currentTimeMillis()));
+            //throw new IllegalArgumentException("Parameter error: invalid date " + markInfo, e);
+        }
+
+        return builder.get();
+    }
+
     public synchronized void add(Mark mark, Semester semester) {
         marks.get(semester.getIndexValue()).add(mark);
     }
@@ -88,22 +142,19 @@ public class MarksManager {
 
     private synchronized void load(Semester semester) {
         SharedPreferences preferences = context.getSharedPreferences("MarksData", Context.MODE_PRIVATE);
-        String[] marksData;
         /*if (Build.VERSION.SDK_INT >= 11) {
             Set<String> marks = preferences.getStringSet("MARKS" + semester.getValue(), new HashSet<String>());
             marksData = marks.toArray(new String[marks.size()]);
         } else {*/
-        marksData = preferences.getString("MARKS" + semester.getValue(), "").split("\n");
-        if (marksData[0].equals("")) return;
+        String toParse = preferences.getString("MARKS" + semester.getValue(), "");
         //}
-        for (String string : marksData) {
-            add(parseMark(string), semester);
-        }
+
+        addAll(parseMarks(toParse), semester);
         lessons.set(semester.getIndexValue(), Marks.toLessons(this.marks.get(semester.getIndexValue())));
     }
 
     public synchronized void apply(Semester semester) {
-        Mark[] marks = get(semester);
+        //Mark[] marks = get(semester);
         /*if (Build.VERSION.SDK_INT >= 11) {
             Set<String> masksSet = new HashSet<>();
             for (Mark mark : marks) {
@@ -113,52 +164,28 @@ public class MarksManager {
                     .putStringSet("MARKS" + semester.getValue(), masksSet)
                     .apply();
         } else {*/
-        StringBuilder builder = new StringBuilder();
+        /*StringBuilder builder = new StringBuilder();
         if (marks.length > 0) {
             builder.append(markToString(marks[0]));
             for (int i = 1; i < marks.length; i++) {
                 builder.append("\n").append(markToString(marks[i]).replaceAll("\n", "?"));
             }
-        }
+        }*/
 
         context.getSharedPreferences("MarksData", Context.MODE_PRIVATE).edit()
-                .putString("MARKS" + semester.getValue(), builder.toString())
+                .putString("MARKS" + semester.getValue(), marksToString(get(semester)))
                 .apply();
         //}
         lessons.set(semester.getIndexValue(), Marks.toLessons(this.marks.get(semester.getIndexValue())));
     }
 
-    private String markToString(Mark mark) {
-        return mark.getDateAsString().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getShortLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getLongLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getValueToShow().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getValue() + SPLIT_VALUE
-                + mark.getType().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getWeight() + SPLIT_VALUE
-                + mark.getNote().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getTeacher().replaceAll(SPLIT_VALUE, "?????");
+    @Override
+    public String toString() {
+        return toString(Semester.AUTO);
     }
 
-    private Mark parseMark(String string) {
-        String[] markData = string.split(SPLIT_VALUE);
-        Mark.Builder builder = new Mark.Builder()
-                .setShortLesson(markData[1])
-                .setLongLesson(markData[2])
-                .setValueToShow(markData[3])
-                .setValue(Double.parseDouble(markData[4]))
-                .setType(markData[5])
-                .setWeight(Integer.parseInt(markData[6]))
-                .setNote(markData[7])
-                .setTeacher(markData[8]);
-        try {
-            builder.setDate(SASConnector.DATE_FORMAT.parse(markData[0]));
-        } catch (ParseException e) {
-            builder.setDate(new Date(System.currentTimeMillis()));
-            //throw new IllegalArgumentException("Parameter error: invalid date " + markInfo, e);
-        }
-
-        return builder.get();
+    public String toString(Semester semester) {
+        return marksToString(get(semester));
     }
 
     public enum Semester {

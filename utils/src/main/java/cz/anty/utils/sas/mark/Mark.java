@@ -17,7 +17,7 @@ public class Mark implements MultilineItem {
     private final double value;
     private final int weight;
 
-    public Mark(Date date, String shortLesson, String longLesson, String valueToShow, double value, String type, int weight, String note, String teacher) {
+    private Mark(Date date, String shortLesson, String longLesson, String valueToShow, double value, String type, int weight, String note, String teacher) {
         this.date = date == null ? new Date(System.currentTimeMillis()) : date;
         this.shortLesson = shortLesson == null ? "NONE" : shortLesson;
         this.longLesson = longLesson == null ? "" : longLesson;
