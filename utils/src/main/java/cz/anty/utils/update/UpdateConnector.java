@@ -1,18 +1,19 @@
 package cz.anty.utils.update;
 
-import android.app.DownloadManager;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 
 import org.jsoup.Jsoup;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Locale;
 
-import cz.anty.utils.R;
+import cz.anty.utils.thread.ProgressReporter;
 
 /**
  * Created by anty on 25.6.15.
@@ -49,8 +50,47 @@ public class UpdateConnector {
         return terms;
     }
 
-    public static long downloadUpdate(Context context, String filename) {
-        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+    public static String downloadUpdate(Context context, ProgressReporter reporter, String filename) throws IOException {
+        FileOutputStream fos = null;
+        InputStream is = null;
+        try {
+            URL url = new URL(DEFAULT_URL + LATEST_APK_URL_ADD);
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            c.setRequestMethod("GET");
+            c.setDoOutput(true);
+            c.connect();
+
+            String PATH = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                    + File.separator;
+            File file = new File(PATH);
+            file.mkdirs();
+            File outputFile = new File(file, filename);
+            if (outputFile.exists()) outputFile.delete();
+            fos = new FileOutputStream(outputFile);
+
+            is = c.getInputStream();
+
+            byte[] buffer = new byte[1024];
+            int len;
+            int completedLen = 0;
+            reporter.setMaxProgress(is.available());
+            //Log.d("UpdateConnector", "TotalLen: " + is.available());
+            reporter.startShowingProgress();
+            while ((len = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len);
+                completedLen += len;
+                reporter.reportProgress(completedLen);
+                //Log.d("UpdateConnector", "CompletedLen: " + completedLen);
+            }
+            reporter.stopShowingProgress();
+
+            return PATH + filename;
+        } finally {
+            if (fos != null) fos.close();
+            if (is != null) is.close();
+        }
+
+        /*File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
                 + File.separator + filename);
         if (file.exists()) file.delete();
 
@@ -73,6 +113,6 @@ public class UpdateConnector {
         // get download service and enqueue file
         DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         //manager.query(new DownloadManager.Query().setFilterById())
-        return manager.enqueue(request);
+        return manager.enqueue(request);*/
     }
 }

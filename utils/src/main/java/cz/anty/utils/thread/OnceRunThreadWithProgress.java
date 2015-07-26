@@ -110,6 +110,8 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
                     /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                     if (but != null)
                         but.setVisibility(View.VISIBLE);*/
+                    if (progressDialog.isShowing())
+                        progressDialog.show();
                 }
             }
         });
@@ -126,6 +128,8 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
                     /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                     if (but != null)
                         but.setVisibility(View.GONE);*/
+                    if (progressDialog.isShowing())
+                        progressDialog.show();
                 }
             }
         });

@@ -63,6 +63,11 @@ public class UpdateReceiver extends BroadcastReceiver {
                 .getString("LATEST_NAME", BuildConfig.VERSION_NAME);
     }
 
+    public static int getLatestCode(Context context) {
+        return context.getSharedPreferences("MainData", Context.MODE_PRIVATE)
+                .getInt("LATEST_CODE", BuildConfig.VERSION_CODE);
+    }
+
     /*public static long getDeferTime(Context context) {
         return DEFER_TIME - (System.currentTimeMillis() -
                 context.getSharedPreferences("MainData", Context.MODE_PRIVATE)

@@ -1,13 +1,10 @@
 package cz.anty.purkynkamanager;
 
-import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -67,18 +64,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (UpdateReceiver.isUpdateAvailable(MainActivity.this)) {
-                            final String versionCode = UpdateReceiver.getLatestName(MainActivity.this);
                             new AlertDialog.Builder(
                                     MainActivity.this, R.style.AppTheme_Dialog)
                                     .setTitle(R.string.notification_update_title)
                                     .setMessage(getString(R.string.notification_update_text_old) +
                                             " " + BuildConfig.VERSION_NAME
-                                            + "\n" + getString(R.string.notification_update_text_new) + " " + versionCode
+                                            + "\n" + getString(R.string.notification_update_text_new) + " " + UpdateReceiver.getLatestName(MainActivity.this)
                                             + "\n" + getString(R.string.notify_message_update_alert))
                                     .setPositiveButton(R.string.but_update, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            downloadInstallUpdate(versionCode);
+                                            downloadInstallUpdate();
                                         }
                                     }).setNegativeButton(R.string.but_exit, new DialogInterface.OnClickListener() {
                                         @Override
@@ -119,14 +115,39 @@ public class MainActivity extends AppCompatActivity {
         }, getString(R.string.loading));
     }
 
-    private void downloadInstallUpdate(final String versionCode) {
+    private void downloadInstallUpdate() {
         worker.startWorker(new RunnableWithProgress() {
             @Override
             public String run(ProgressReporter reporter) {
-                String filename = getString(R.string.latest) + " " + getString(R.string.app_name) + " " + versionCode + ".apk";
+                String filename = getString(R.string.latest) + " " + getString(R.string.app_name) + " " + UpdateReceiver.getLatestCode(MainActivity.this) + ".apk";
 
-                long id = UpdateConnector.downloadUpdate(MainActivity.this, filename);
-                DownloadManager manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                Intent intent = null;
+                String toReturn;
+                try {
+                    String path = UpdateConnector.downloadUpdate(MainActivity.this, reporter, filename);
+
+                    intent = new Intent(Intent.ACTION_VIEW)
+                            .setDataAndType(Uri.fromFile(new File(path)),
+                                    "application/vnd.android.package-archive")
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    toReturn = getString(R.string.download_successful);
+                } catch (IOException e) {
+                    toReturn = getString(R.string.download_failed);
+                }
+
+                final Intent finalIntent = intent;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                        if (finalIntent != null)
+                            startActivity(finalIntent);
+                    }
+                });
+                return toReturn;
+
+                /*DownloadManager manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 int status;
 
                 boolean pending = true;
@@ -164,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         break;
                     }
-                }
+                }*/
 
                     /*DownloadManager.Query q = new DownloadManager.Query();
                     q.setFilterById(id);
@@ -203,14 +224,14 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         }
                     }*/
-                String toReturn;
+                /*String toReturn;
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
                     //manager.openDownloadedFile(id);
                     final Intent target = new Intent(Intent.ACTION_VIEW);
                     target.setData(Uri.parse(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
                             + File.separator + filename));
                     /*target.setDataAndType(Uri.parse(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                            + "/" + filename), "application/vnd.android.package-archive");*/
+                            + "/" + filename), "application/vnd.android.package-archive");//
                     target.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                     if (AppDataManager.isDebugMode(MainActivity.this))
@@ -225,15 +246,9 @@ public class MainActivity extends AppCompatActivity {
 
                     toReturn = getString(R.string.download_successful);
                 } else
-                    toReturn = getString(R.string.download_failed);
+                    toReturn = getString(R.string.download_failed);*/
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                });
-                return toReturn;
+                //return toReturn;
             }
         }, getString(R.string.downloading_update) + "…");
     }
