@@ -155,14 +155,14 @@ public class SearchActivity extends AppCompatActivity {
                                     new AlertDialog.Builder(SearchActivity.this)
                                             .setTitle(man.getName())
                                             .setIcon(R.mipmap.ic_launcher)
-                                            .setMessage(getString(R.string.dialog_attendance_tracking_text).replace("&NAME&", man.getName()))
+                                            .setMessage(getString(R.string.dialog_attendance_tracking_text).replace("|NAME|", man.getName()))
                                             .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     new AlertDialog.Builder(SearchActivity.this)
                                                             .setTitle(R.string.dialog_terms_warning_title)
                                                             .setIcon(R.mipmap.ic_launcher)
-                                                            .setMessage(getString(R.string.text_attendance_tracking_terms).replace("%NAME%", man.getName()))
+                                                            .setMessage(getString(R.string.text_attendance_tracking_terms).replace("|NAME|", man.getName()))
                                                             .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(DialogInterface dialog, int which) {

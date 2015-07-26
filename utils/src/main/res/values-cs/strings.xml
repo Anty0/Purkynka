@@ -124,8 +124,8 @@
     <string name="text_in_school">ve škole</string>
     <string name="text_is">je</string>
     <string name="text_isnt">není</string>
-    <string name="dialog_attendance_tracking_text">Začít sledovat docházku člověka jménem "%NAME%"?</string>
-    <string name="text_attendance_tracking_terms">Pokud chcete sledovat nějakého člověka musíte mít od něj na to povolení! Kliknutím na tlačítko souhlasím stvrzujete, že máte povolení sledovat docházku pomocí této aplikace od zvolené osoby jménem "%NAME%" (dále jen "zvolená osoba") a nesete veškerou zodpovědnost za veškeré právní i jiné problémy způsobené sledováním zvolené osoby.</string>
+    <string name="dialog_attendance_tracking_text">Začít sledovat docházku člověka jménem "|NAME|"?</string>
+    <string name="text_attendance_tracking_terms">Pokud chcete sledovat nějakého člověka musíte mít od něj na to povolení! Kliknutím na tlačítko souhlasím stvrzujete, že máte povolení sledovat docházku pomocí této aplikace od zvolené osoby jménem "|NAME|" (dále jen "zvolená osoba") a nesete veškerou zodpovědnost za veškeré právní i jiné problémy způsobené sledováním zvolené osoby.</string>
     <string name="but_no">Ne</string>
     <string name="but_yes">Ano</string>
     <string name="dialog_terms_warning_title">!!!POZOR!!!</string>

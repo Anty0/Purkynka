@@ -148,10 +148,10 @@
     <string name="text_wednesday">WEDNESDAY</string>
     <string name="text_thursday">THURSDAY</string>
     <string name="text_friday">FRIDAY</string>
-    <string name="dialog_attendance_tracking_text">Start tracking attendance a man named \"%NAME%\"?</string>
+    <string name="dialog_attendance_tracking_text">Start tracking attendance a man named \"|NAME|\"?</string>
     <string name="but_yes">Yes</string>
     <string name="but_no">No</string>
     <string name="dialog_terms_warning_title">!!!WARNING!!!</string>
-    <string name="text_attendance_tracking_terms">If you want to watch a man must have him on the warrant!\nClicking agree you acknowledge that you have permission to track attendance using this application from the selected person named \"%NAME%\" (hereinafter \"selected person\"), and bear all responsibility for all legal and other problems caused by tracking the selected person.</string>
+    <string name="text_attendance_tracking_terms">If you want to watch a man must have him on the warrant!\nClicking agree you acknowledge that you have permission to track attendance using this application from the selected person named \"|NAME|\" (hereinafter \"selected person\"), and bear all responsibility for all legal and other problems caused by tracking the selected person.</string>
 
 </resources>
