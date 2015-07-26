@@ -11,6 +11,7 @@ import android.support.v7.app.NotificationCompat;
 
 import java.io.IOException;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.update.UpdateConnector;
 
@@ -20,15 +21,15 @@ public class UpdateReceiver extends BroadcastReceiver {
     private static final OnceRunThread worker = new OnceRunThread(null);
 
     public static void checkUpdate(Context context) throws IOException {
-        SharedPreferences preferences = context.getSharedPreferences("MainData", Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
         Integer latestCode = UpdateConnector.getLatestVersionCode();
         String latestName = UpdateConnector.getLatestVersionName();
         /*long latestTime = preferences.getInt("LATEST_CODE", BuildConfig.VERSION_CODE) == BuildConfig.VERSION_CODE ?
                 System.currentTimeMillis() : preferences.getLong("LATEST_TIME", System.currentTimeMillis());*/
-        boolean showNotification = !latestCode.equals(preferences.getInt("LATEST_CODE", BuildConfig.VERSION_CODE));
+        boolean showNotification = !latestCode.equals(preferences.getInt(Constants.SETTING_NAME_LATEST_CODE, BuildConfig.VERSION_CODE));
 
-        preferences.edit().putInt("LATEST_CODE", latestCode)
-                .putString("LATEST_NAME", latestName)
+        preferences.edit().putInt(Constants.SETTING_NAME_LATEST_CODE, latestCode)
+                .putString(Constants.SETTING_NAME_LATEST_NAME, latestName)
                         //.putLong("LATEST_TIME", latestTime)
                 .apply();
 
@@ -38,7 +39,8 @@ public class UpdateReceiver extends BroadcastReceiver {
 
     private static void showNotification(Context context) {
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
-                .notify(3, new NotificationCompat.Builder(context)
+                .notify(Constants.UPDATE_NOTIFICATION_ID,
+                        new NotificationCompat.Builder(context)
                         .setContentTitle(context.getString(R.string.notification_update_title))
                         .setContentText(context.getString(R.string.notification_update_text_old) + " " +
                                 BuildConfig.VERSION_NAME + " " + context.getString(R.string.notification_update_text_new) +
@@ -53,19 +55,19 @@ public class UpdateReceiver extends BroadcastReceiver {
     }
 
     public static boolean isUpdateAvailable(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("MainData", Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
         //preferences.edit().putBoolean("CANT_START", updateAvailable && getDeferTime(context) <= 0).apply();
-        return preferences.getInt("LATEST_CODE", BuildConfig.VERSION_CODE) != BuildConfig.VERSION_CODE;
+        return preferences.getInt(Constants.SETTING_NAME_LATEST_CODE, BuildConfig.VERSION_CODE) != BuildConfig.VERSION_CODE;
     }
 
     public static String getLatestName(Context context) {
-        return context.getSharedPreferences("MainData", Context.MODE_PRIVATE)
-                .getString("LATEST_NAME", BuildConfig.VERSION_NAME);
+        return context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                .getString(Constants.SETTING_NAME_LATEST_NAME, BuildConfig.VERSION_NAME);
     }
 
     public static int getLatestCode(Context context) {
-        return context.getSharedPreferences("MainData", Context.MODE_PRIVATE)
-                .getInt("LATEST_CODE", BuildConfig.VERSION_CODE);
+        return context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                .getInt(Constants.SETTING_NAME_LATEST_CODE, BuildConfig.VERSION_CODE);
     }
 
     /*public static long getDeferTime(Context context) {
@@ -76,10 +78,10 @@ public class UpdateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        SharedPreferences preferences = context.getSharedPreferences("MainData", Context.MODE_PRIVATE);
-        if (preferences.getInt("ACTUAL_CODE", -1) != BuildConfig.VERSION_CODE) {
+        //SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
+        /*if (preferences.getInt("ACTUAL_CODE", -1) != BuildConfig.VERSION_CODE) {
             preferences.edit().clear().putInt("ACTUAL_CODE", BuildConfig.VERSION_CODE).apply();
-        }
+        }*/
 
         worker.setPowerManager(context);
         worker.startWorker(new Runnable() {

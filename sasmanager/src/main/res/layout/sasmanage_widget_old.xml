@@ -18,7 +18,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:text="@string/sas_app_name"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,6 +31,7 @@
                 android:id="@+id/image_button_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="#0000"
                 android:clickable="true"
                 android:contentDescription="@string/but_refresh"
                 android:src="@drawable/ic_refresh_white_48dp" />

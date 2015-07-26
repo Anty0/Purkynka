@@ -21,7 +21,7 @@ import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.AppDataManager;
-import cz.anty.utils.BuildConfig;
+import cz.anty.utils.Constants;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
                             new AlertDialog.Builder(
                                     MainActivity.this, R.style.AppTheme_Dialog)
                                     .setTitle(R.string.notification_update_title)
-                                    .setMessage(getString(R.string.notification_update_text_old) +
-                                            " " + BuildConfig.VERSION_NAME
+                                    .setMessage(getString(R.string.notification_update_text_old) + " " + BuildConfig.VERSION_NAME
                                             + "\n" + getString(R.string.notification_update_text_new) + " " + UpdateReceiver.getLatestName(MainActivity.this)
                                             + "\n" + getString(R.string.notify_message_update_alert))
                                     .setPositiveButton(R.string.but_update, new DialogInterface.OnClickListener() {
@@ -257,8 +256,8 @@ public class MainActivity extends AppCompatActivity {
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                final SharedPreferences preferences = getSharedPreferences("MainData", MODE_PRIVATE);
-                if (preferences.getBoolean("FIRST_START", true)) {
+                final SharedPreferences preferences = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
+                if (preferences.getInt(Constants.SETTING_NAME_FIRST_START, -1) != BuildConfig.VERSION_CODE) {
                     final String terms = getTerms();
                     runOnUiThread(new Runnable() {
                         @Override
@@ -269,7 +268,8 @@ public class MainActivity extends AppCompatActivity {
                                     .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            preferences.edit().putBoolean("FIRST_START", false).apply();
+                                            preferences.edit().putInt(Constants.SETTING_NAME_FIRST_START,
+                                                    BuildConfig.VERSION_CODE).apply();
                                             initialize();
                                         }
                                     })
@@ -311,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
                 new TextMultilineItem(getString(R.string.timetable_app_name), getString(R.string.timetable_app_description)),
                 new TextMultilineItem(getString(R.string.attendance_app_name), getString(R.string.attendance_app_description))};
 
+        adapter.setNotifyOnChange(false);
         adapter.clear();
         for (MultilineItem item : data) {
             adapter.add(item);

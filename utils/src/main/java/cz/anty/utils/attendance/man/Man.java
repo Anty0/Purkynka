@@ -1,7 +1,10 @@
 package cz.anty.utils.attendance.man;
 
+import android.content.Context;
+
 import java.util.Date;
 
+import cz.anty.utils.R;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.listItem.MultilineItem;
 
@@ -52,14 +55,15 @@ public class Man implements MultilineItem {
     }
 
     @Override
-    public String getTitle() {
+    public String getTitle(Context context) {
         String classString = getClassString();
-        return getName() + (classString.length() > 4 ? "" : " " + getClassString());
+        return getName() + (classString.length() > 4 ? "" : " " + classString) + " "
+                + (isInSchool() ? context.getString(R.string.text_is) : context.getString(R.string.text_isnt)) + " " + context.getString(R.string.text_in_school);
     }
 
     @Override
-    public String getText() {
-        return isInSchool() + " " + getLastEnterAsString();
+    public String getText(Context context) {
+        return getLastEnterAsString();
     }
 
     public static class Builder {

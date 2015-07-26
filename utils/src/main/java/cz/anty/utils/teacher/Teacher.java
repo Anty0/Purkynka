@@ -1,5 +1,7 @@
 package cz.anty.utils.teacher;
 
+import android.content.Context;
+
 import java.util.Locale;
 
 import cz.anty.utils.listItem.MultilineItem;
@@ -81,12 +83,12 @@ public class Teacher implements MultilineItem {
     }
 
     @Override
-    public String getTitle() {
+    public String getTitle(Context context) {
         return toString();
     }
 
     @Override
-    public String getText() {
+    public String getText(Context context) {
         return getPhoneNumber() + " " + getEmail();
     }
 }

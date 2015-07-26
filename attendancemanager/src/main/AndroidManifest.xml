@@ -10,21 +10,6 @@
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_attendance_search" />
-
-        <receiver
-            android:name=".AttendanceReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
-            android:name=".ScheduleReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

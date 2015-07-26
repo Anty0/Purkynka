@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.sas.SASConnector;
 
 /**
@@ -126,12 +127,12 @@ public class MarksManager {
         clear(Semester.FIRST);
         clear(Semester.SECOND);
 
-        SharedPreferences preferences = context.getSharedPreferences("MarksData", Context.MODE_PRIVATE);
-        if (preferences.getInt("MARKS_SAVE_VERSION", 0) != MARKS_SAVE_VERSION) {
+        SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE);
+        if (preferences.getInt(Constants.SETTING_NAME_MARKS_SAVE_VERSION, 0) != MARKS_SAVE_VERSION) {
             apply(Semester.FIRST);
             apply(Semester.SECOND);
-            context.getSharedPreferences("MarksData", Context.MODE_PRIVATE).edit()
-                    .putInt("MARKS_SAVE_VERSION", MARKS_SAVE_VERSION)
+            context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE).edit()
+                    .putInt(Constants.SETTING_NAME_MARKS_SAVE_VERSION, MARKS_SAVE_VERSION)
                     .apply();
             return;
         }
@@ -141,12 +142,12 @@ public class MarksManager {
     }
 
     private synchronized void load(Semester semester) {
-        SharedPreferences preferences = context.getSharedPreferences("MarksData", Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE);
         /*if (Build.VERSION.SDK_INT >= 11) {
             Set<String> marks = preferences.getStringSet("MARKS" + semester.getValue(), new HashSet<String>());
             marksData = marks.toArray(new String[marks.size()]);
         } else {*/
-        String toParse = preferences.getString("MARKS" + semester.getValue(), "");
+        String toParse = preferences.getString(Constants.SETTING_NAME_ADD_MARKS + semester.getValue(), "");
         //}
 
         addAll(parseMarks(toParse), semester);
@@ -172,8 +173,8 @@ public class MarksManager {
             }
         }*/
 
-        context.getSharedPreferences("MarksData", Context.MODE_PRIVATE).edit()
-                .putString("MARKS" + semester.getValue(), marksToString(get(semester)))
+        context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE).edit()
+                .putString(Constants.SETTING_NAME_ADD_MARKS + semester.getValue(), marksToString(get(semester)))
                 .apply();
         //}
         lessons.set(semester.getIndexValue(), Marks.toLessons(this.marks.get(semester.getIndexValue())));

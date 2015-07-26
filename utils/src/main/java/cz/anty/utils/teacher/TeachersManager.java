@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.anty.utils.Constants;
+
 /**
  * Created by anty on 22.6.15.
  *
@@ -34,23 +36,23 @@ public class TeachersManager {
     private synchronized void load() {
         teachers.clear();
 
-        SharedPreferences preferences = context.getSharedPreferences("TeachersData", Context.MODE_PRIVATE);
-        if (preferences.getInt("TEACHERS_SAVE_VERSION", 0) != TEACHERS_SAVE_VERSION) {
-            context.getSharedPreferences("TeachersData", Context.MODE_PRIVATE).edit()
-                    .putInt("TEACHERS_SAVE_VERSION", TEACHERS_SAVE_VERSION)
+        SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_TEACHERS, Context.MODE_PRIVATE);
+        if (preferences.getInt(Constants.SETTING_NAME_TEACHERS_SAVE_VERSION, 0) != TEACHERS_SAVE_VERSION) {
+            context.getSharedPreferences(Constants.SETTINGS_NAME_TEACHERS, Context.MODE_PRIVATE).edit()
+                    .putInt(Constants.SETTING_NAME_TEACHERS_SAVE_VERSION, TEACHERS_SAVE_VERSION)
                     .apply();
             refresh();
             return;
         }
 
         String[] teachersData;
-        teachersData = preferences.getString("TEACHERS", "").split("\n");
+        teachersData = preferences.getString(Constants.SETTING_NAME_TEACHERS, "").split("\n");
         if (teachersData[0].equals("")) return;
         for (String string : teachersData) {
             teachers.add(parseTeacher(string));
         }
 
-        if (preferences.getLong("LastRefresh", lastRefresh) - lastRefresh > 1000 * 60 * 60 * 24) {
+        if (preferences.getLong(Constants.SETTING_NAME_LAST_REFRESH, lastRefresh) - lastRefresh > 1000 * 60 * 60 * 24) {
             refresh();
         }
     }
@@ -73,9 +75,9 @@ public class TeachersManager {
             }
         }
 
-        context.getSharedPreferences("TeachersData", Context.MODE_PRIVATE).edit()
-                .putString("TEACHERS", builder.toString())
-                .putLong("LastRefresh", lastRefresh)
+        context.getSharedPreferences(Constants.SETTINGS_NAME_TEACHERS, Context.MODE_PRIVATE).edit()
+                .putString(Constants.SETTING_NAME_TEACHERS, builder.toString())
+                .putLong(Constants.SETTING_NAME_LAST_REFRESH, lastRefresh)
                 .apply();
         load();
     }

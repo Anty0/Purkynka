@@ -11,11 +11,9 @@ import android.net.NetworkInfo;
 import java.util.Calendar;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 
 public class ScheduleReceiver extends BroadcastReceiver {
-
-    // restart service every 30 seconds
-    private static final long REPEAT_TIME = 1000 * 60 * 15;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -32,12 +30,12 @@ public class ScheduleReceiver extends BroadcastReceiver {
                 AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
-            cal.add(Calendar.SECOND, 10);
+            cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);
             // fetch every 30 seconds
             // InexactRepeating allows Android to optimize the energy consumption
             service.cancel(pending);
             service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    cal.getTimeInMillis(), REPEAT_TIME, pending);
+                    cal.getTimeInMillis(), Constants.REPEAT_TIME_SAS_MARKS_UPDATE, pending);
 
             // service.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
             // REPEAT_TIME, pending);

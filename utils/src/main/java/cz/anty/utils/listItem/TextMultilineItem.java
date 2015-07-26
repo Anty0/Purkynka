@@ -1,5 +1,7 @@
 package cz.anty.utils.listItem;
 
+import android.content.Context;
+
 /**
  * Created by anty on 18.6.15.
  *
@@ -16,12 +18,12 @@ public class TextMultilineItem implements MultilineItem {
     }
 
     @Override
-    public String getTitle() {
+    public String getTitle(Context context) {
         return title;
     }
 
     @Override
-    public String getText() {
+    public String getText(Context context) {
         return text;
     }
 }

@@ -13,12 +13,11 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import cz.anty.sasmanager.widget.SASManageWidget;
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
 import cz.anty.utils.sas.mark.Lesson;
@@ -205,9 +204,10 @@ public class SASManagerService extends Service {
                         .bigText(builderBig))
                 .build();
 
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        //Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        //calendar.get(Calendar.HOUR) * 60 * 60 + calendar.get(Calendar.MINUTE) * 60 + calendar.get(Calendar.SECOND) + 10
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                .notify(calendar.get(Calendar.HOUR) * 60 * 60 + calendar.get(Calendar.MINUTE) * 60 + calendar.get(Calendar.SECOND) + 10, n);
+                .notify(Constants.SAS_MANAGER_SERVICE_NOTIFICATION_ID, n);
     }
 
     @Override

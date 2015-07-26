@@ -1,11 +1,13 @@
 package cz.anty.utils.sas.mark;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 
 /**
@@ -15,9 +17,9 @@ import cz.anty.utils.listItem.MultilineItem;
  */
 public class Lesson implements MultilineItem {
 
+    private static final DecimalFormat FORMAT = new DecimalFormat("#.###");
     private final String fullName, shortName;
     private final List<Mark> marks = new CopyOnWriteArrayList<>();
-    private final DecimalFormat format = new DecimalFormat("#.###");
 
     public Lesson(@NonNull String fullName, @NonNull String shortName) {
         this.fullName = fullName;
@@ -69,16 +71,16 @@ public class Lesson implements MultilineItem {
 
     @Override
     public String toString() {
-        return getShortName() + ": " + getMarks().length + " | " + format.format(getDiameter());
+        return getShortName() + ": " + getMarks().length + " | " + FORMAT.format(getDiameter());
     }
 
     @Override
-    public String getTitle() {
-        return getShortName() + ": " + format.format(getDiameter());
+    public String getTitle(Context context) {
+        return getShortName() + ": " + FORMAT.format(getDiameter());
     }
 
     @Override
-    public String getText() {
-        return Integer.toString(getMarks().length);
+    public String getText(Context context) {
+        return Integer.toString(getMarks().length) + " " + context.getString(R.string.text_marks);
     }
 }

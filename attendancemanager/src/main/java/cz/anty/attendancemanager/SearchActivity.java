@@ -1,7 +1,9 @@
 package cz.anty.attendancemanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +34,7 @@ import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 public class SearchActivity extends AppCompatActivity {
 
     private final AttendanceConnector connector = new AttendanceConnector();
+    private ListView resultListView;
     private EditText searchEditText;
     private MultilineAdapter adapter;
     private OnceRunThreadWithSpinner worker;
@@ -69,18 +72,9 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
-        ListView resultListView = ((ListView) findViewById(R.id.listView));
+        resultListView = ((ListView) findViewById(R.id.listView));
         adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
         resultListView.setAdapter(adapter);
-        resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == adapter.getCount() - 1) {
-                    page++;
-                    update(true);
-                }
-            }
-        });
 
         if (worker == null)
             worker = new OnceRunThreadWithSpinner(this);
@@ -127,7 +121,9 @@ public class SearchActivity extends AppCompatActivity {
                     }*/
                 } catch (IOException e) {
                     //values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
-                    data = new MultilineItem[]{new TextMultilineItem("Check your internet connection", "Connection exception: " + e.getMessage())};
+                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.text_title_connection_exception),
+                            getString(R.string.text_connection_exception) + ": " + e.getMessage()),
+                            new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page)};
                     if (AppDataManager.isDebugMode(SearchActivity.this)) Log.d(null, null, e);
                 }
 
@@ -136,19 +132,57 @@ public class SearchActivity extends AppCompatActivity {
                 final StableArrayAdapter adapter = new StableArrayAdapter(SearchActivity.this,
                         android.R.layout.simple_list_item_1, list);*/
 
+                adapter.setNotifyOnChange(false);
+                adapter.clear();
+                for (MultilineItem item : data) {
+                    adapter.add(item);
+                }
                 final MultilineItem[] finalData = data;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.clear();
-                        for (MultilineItem item : finalData) {
-                            adapter.add(item);
-                        }
                         adapter.notifyDataSetChanged();
-                        //ListView listView = ((ListView) findViewById(R.id.listView));
-                        //listView.setAdapter(adapter);
+                        resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                if (position == adapter.getCount() - 1) {
+                                    page++;
+                                    update(true);
+                                    return;
+                                }
+                                final Man man = finalData[position] instanceof Man ? (Man) finalData[position] : null;
+                                if (man != null) {
+                                    new AlertDialog.Builder(SearchActivity.this)
+                                            .setTitle(man.getName())
+                                            .setIcon(R.mipmap.ic_launcher)
+                                            .setMessage(getString(R.string.dialog_attendance_tracking_text).replace("&NAME&", man.getName()))
+                                            .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    new AlertDialog.Builder(SearchActivity.this)
+                                                            .setTitle(R.string.dialog_terms_warning_title)
+                                                            .setIcon(R.mipmap.ic_launcher)
+                                                            .setMessage(getString(R.string.text_attendance_tracking_terms).replace("%NAME%", man.getName()))
+                                                            .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    //TODO Add man to tracking mans
+                                                                }
+                                                            })
+                                                            .setNegativeButton(R.string.but_cancel, null)
+                                                            .setCancelable(true)
+                                                            .show();
+                                                }
+                                            })
+                                            .setNegativeButton(R.string.but_no, null)
+                                            .setCancelable(true)
+                                            .show();
+                                }
+                            }
+                        });
                     }
                 });
+
             }
         }, showMessage ? getString(R.string.searching) : null);
     }

@@ -2,6 +2,9 @@ package cz.anty.utils.timetable;
 
 import android.content.Context;
 
+import cz.anty.utils.Constants;
+import cz.anty.utils.R;
+
 /**
  * Created by anty on 13.6.15.
  *
@@ -9,10 +12,9 @@ import android.content.Context;
  */
 public class Timetable {
 
-    public static final String SETTINGS_NAME_CONST = "TimetablesData";
-    public static final String NAME_CONST = "TIMETABLE ";
-    public static final String[] DAYS = new String[]{
-            "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"};
+    public static final int[] DAYS_STRINGS_IDS = new int[]{R.string.text_monday,
+            R.string.text_tuesday, R.string.text_wednesday,
+            R.string.text_thursday, R.string.text_friday};
     /*public static final String[] START_TIMES = new String[]{
             "7:10", "8:00", "8:55", "10:00", "10:55", "11:50",
             "12:45", "13:40", "14:35", "15:30", "16:25"};*/
@@ -42,7 +44,7 @@ public class Timetable {
     Timetable(Context context, String name) {
         this.context = context;
         this.name = name;
-        lessons = new Lesson[DAYS.length][MAX_LESSONS];
+        lessons = new Lesson[DAYS_STRINGS_IDS.length][MAX_LESSONS];
         /*for (int i = 0; i < lessons.length; i++) {
             lessons[i] = new Lesson[MAX_LESSONS];
         }*/
@@ -51,8 +53,9 @@ public class Timetable {
     }
 
     static Timetable loadTimetable(Context context, String key) {
-        String[] days = context.getSharedPreferences(SETTINGS_NAME_CONST, Context.MODE_PRIVATE).getString(NAME_CONST + key, "").split(PARSE_CONST_DAY);
-        Lesson[][] lessons = new Lesson[DAYS.length][MAX_LESSONS];
+        String[] days = context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
+                .getString(Constants.SETTING_NAME_TIMETABLE + key, "").split(PARSE_CONST_DAY);
+        Lesson[][] lessons = new Lesson[DAYS_STRINGS_IDS.length][MAX_LESSONS];
         for (int i = 0; i < days.length; i++) {
             lessons[i] = parseDay(days[i]);
         }
@@ -107,8 +110,8 @@ public class Timetable {
             //builder.append(Arrays.toString(lessons.get(i).toArray()));
         }
 
-        context.getSharedPreferences(SETTINGS_NAME_CONST, Context.MODE_PRIVATE).edit()
-                .putString(NAME_CONST + name, builder.toString())
+        context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE).edit()
+                .putString(Constants.SETTING_NAME_TIMETABLE + name, builder.toString())
                 .apply();
     }
 

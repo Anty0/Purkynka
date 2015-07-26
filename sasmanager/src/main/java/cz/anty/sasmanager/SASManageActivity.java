@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.Arrays;
+
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
@@ -229,6 +231,8 @@ public class SASManageActivity extends AppCompatActivity {
                                             R.layout.text_multi_line_list_item, marks);
 
                                     listView.setAdapter(adapter);
+                                    listView.setOnItemClickListener(generateMarkOnClickListener(Arrays.asList(marks)
+                                            .toArray(new MultilineItem[marks.length])));
                                     new AlertDialog.Builder(SASManageActivity.this)
                                             .setTitle(lesson.getFullName())
                                             .setIcon(R.mipmap.ic_launcher_sas)
@@ -249,6 +253,7 @@ public class SASManageActivity extends AppCompatActivity {
                             for (int i = 0; i < values.length; i++) {
                                 values[i] = marks[i].toString();
                             }*/
+                            onClickListener = generateMarkOnClickListener(data);
                             break;
                     }
                 } else {
@@ -313,6 +318,30 @@ public class SASManageActivity extends AppCompatActivity {
         }, showProgressBar ? getString(R.string.loading) : null);
         if (AppDataManager.isDebugMode(this))
             Log.d("SASManageActivity", "onUpdate: Thread started");
+    }
+
+    private AdapterView.OnItemClickListener generateMarkOnClickListener(final MultilineItem[] data) {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Mark mark = (Mark) data[position];
+                new AlertDialog.Builder(SASManageActivity.this)
+                        .setTitle("".equals(mark.getNote()) ? mark.getLongLesson() : mark.getNote())
+                        .setIcon(R.mipmap.ic_launcher_sas)
+                                //.setView(listView)
+                        .setMessage(getString(R.string.text_date) + ": " + mark.getDateAsString()
+                                + "\n" + getString(R.string.text_short_lesson_name) + ": " + mark.getShortLesson()
+                                + "\n" + getString(R.string.text_long_lesson_name) + ": " + mark.getLongLesson()
+                                + "\n" + getString(R.string.text_value) + ": " + mark.getValueToShow()
+                                + "\n" + getString(R.string.text_weight) + ": " + mark.getWeight()
+                                + "\n" + getString(R.string.text_type) + ": " + mark.getType()
+                                + "\n" + getString(R.string.text_note) + ": " + mark.getNote()
+                                + "\n" + getString(R.string.text_teacher) + ": " + mark.getTeacher())
+                        .setPositiveButton(R.string.but_ok, null)
+                        .setCancelable(true)
+                        .show();
+            }
+        };
     }
 
     private void logOut() {

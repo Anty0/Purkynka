@@ -1,7 +1,10 @@
 package cz.anty.utils.sas.mark;
 
+import android.content.Context;
+
 import java.util.Date;
 
+import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.sas.SASConnector;
 
@@ -78,13 +81,16 @@ public class Mark implements MultilineItem {
     }
 
     @Override
-    public String getTitle() {
-        return toString();
+    public String getTitle(Context context) {
+        return getShortLesson()
+                + " " + getValueToShow()
+                + " " + context.getString(R.string.text_with_weight)
+                + " " + getWeight();
     }
 
     @Override
-    public String getText() {
-        return getNote();
+    public String getText(Context context) {
+        return getDateAsString() + " " + getNote();
     }
 
     public static class Builder {

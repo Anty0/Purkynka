@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import cz.anty.attendancemanager.ScheduleReceiver;
+import cz.anty.timetablemanager.receiver.ScheduleReceiver;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.StableArrayAdapter;

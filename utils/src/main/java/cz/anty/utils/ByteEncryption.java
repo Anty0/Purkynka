@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
  */
 class ByteEncryption {
 
-    public static final byte[] MY_KEY = "Copyright ANTY 2015".getBytes(Charset.defaultCharset());
+    private static final byte[] MY_KEY = "Copyright ANTY 2015".getBytes(Charset.defaultCharset());
 
     public static String xor(final String input) {
         return new String(xor(input.getBytes(Charset.defaultCharset()), MY_KEY), Charset.defaultCharset());

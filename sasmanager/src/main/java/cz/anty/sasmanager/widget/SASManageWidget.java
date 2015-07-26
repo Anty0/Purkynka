@@ -1,5 +1,6 @@
 package cz.anty.sasmanager.widget;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -41,6 +42,7 @@ public class SASManageWidget extends AppWidgetProvider {
         context.sendBroadcast(getUpdateIntent(context));
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "onUpdate");

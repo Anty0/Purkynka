@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.wifi.WifiLogin;
 
@@ -33,7 +34,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
                 public void run() {
                     if (AppDataManager.isWifiWaitLogin(context)) {
                         try {
-                            Thread.sleep(3000);
+                            Thread.sleep(Constants.WAIT_TIME_WIFI_LOGIN);
                         } catch (InterruptedException e) {
                             if (AppDataManager.isDebugMode(context)) Log.d(null, null, e);
                         }

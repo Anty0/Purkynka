@@ -1,4 +1,4 @@
-package cz.anty.attendancemanager;
+package cz.anty.timetablemanager.receiver;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -10,9 +10,9 @@ import android.net.NetworkInfo;
 
 import java.util.Calendar;
 
-public class ScheduleReceiver extends BroadcastReceiver {
+import cz.anty.utils.Constants;
 
-    private static final long REPEAT_TIME = 1000 * 60;
+public class ScheduleReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -26,17 +26,17 @@ public class ScheduleReceiver extends BroadcastReceiver {
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (context.getSharedPreferences("AttendanceData", Context.MODE_PRIVATE)
-                .getBoolean("DISPLAY_WARNING", false)
+        if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
+                .getBoolean(Constants.SETTING_NAME_DISPLAY_WARNINGS, false)
                 && activeNetInfo != null && activeNetInfo.isConnected()) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
-            cal.add(Calendar.SECOND, 10);
+            cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);
             // fetch every 30 seconds
             // InexactRepeating allows Android to optimize the energy consumption
             service.cancel(pending);
             service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    cal.getTimeInMillis(), REPEAT_TIME, pending);
+                    cal.getTimeInMillis(), Constants.REPEAT_TIME_TEACHERS_ATTENDANCE, pending);
 
             // service.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
             // REPEAT_TIME, pending);

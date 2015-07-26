@@ -63,7 +63,7 @@ public class TimetableManageActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                textView.setText(positionOffset < 0.5f ? Timetable.DAYS[position] : Timetable.DAYS[position + 1]);
+                textView.setText(positionOffset < 0.5f ? getString(Timetable.DAYS_STRINGS_IDS[position]) : getString(Timetable.DAYS_STRINGS_IDS[position + 1]));
                 if (Build.VERSION.SDK_INT >= 11) {
                     float width;
                     Display display = getWindowManager().getDefaultDisplay();
@@ -89,7 +89,7 @@ public class TimetableManageActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                //textView.setText(Timetable.DAYS[position]);
+                //textView.setText(Timetable.DAYS_STRINGS_IDS[position]);
             }
 
             @Override
@@ -251,7 +251,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                     linearLayout.addView(teacherEditText);
 
                     new AlertDialog.Builder(context)
-                            .setTitle(Timetable.DAYS[day] + " " + lessonIndex + ". " + context.getString(R.string.lesson))
+                            .setTitle(context.getString(Timetable.DAYS_STRINGS_IDS[day]) + " " + lessonIndex + ". " + context.getString(R.string.lesson))
                                     //TODO add set icon with icon "T"
                             .setView(linearLayout)
                             .setCancelable(false)
@@ -293,13 +293,13 @@ public class TimetableManageActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return Timetable.DAYS.length;
+            return Timetable.DAYS_STRINGS_IDS.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             try {
-                return Timetable.DAYS[position];
+                return getString(Timetable.DAYS_STRINGS_IDS[position]);
             } catch (Exception ignored) {
                 return null;
             }

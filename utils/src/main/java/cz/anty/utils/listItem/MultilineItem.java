@@ -1,5 +1,7 @@
 package cz.anty.utils.listItem;
 
+import android.content.Context;
+
 /**
  * Created by anty on 18.6.15.
  *
@@ -7,8 +9,8 @@ package cz.anty.utils.listItem;
  */
 public interface MultilineItem {
 
-    String getTitle();
+    String getTitle(Context context);
 
-    String getText();
+    String getText(Context context);
 
 }

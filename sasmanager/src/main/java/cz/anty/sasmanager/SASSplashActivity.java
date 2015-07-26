@@ -12,14 +12,11 @@ import android.util.Log;
 
 import cz.anty.sasmanager.receiver.ScheduleReceiver;
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class SASSplashActivity extends AppCompatActivity {
 
-    private static final int WAIT_TIME = 100;
-    //private static final int MIN_LENGTH_TIME = 500;
-
-    //private boolean exit = false;
     private final OnceRunThread worker = new OnceRunThread(null);
     private final ServiceConnection mConnection = new ServiceConnection() {
 
@@ -27,31 +24,20 @@ public class SASSplashActivity extends AppCompatActivity {
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
+                    SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
                     try {
-                        Thread.sleep(WAIT_TIME);
+                        Thread.sleep(Constants.WAIT_TIME_SAS_SPLASH_ON_BIND);
                     } catch (InterruptedException e) {
                         if (AppDataManager.isDebugMode(SASSplashActivity.this))
                             Log.d(null, null, e);
                     }
-                    //long time = System.currentTimeMillis();
-                    SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
-                    //myBinder.refresh();
                     myBinder.waitToWorkerStop();
-                    //long timeNew = System.currentTimeMillis();
-                    /*if (timeNew - time < MIN_LENGTH_TIME)
-                        try {
-                            Thread.sleep(time - timeNew + MIN_LENGTH_TIME);
-                        } catch (InterruptedException e) {
-                            //e.printStackTrace();
-                        }*/
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //sendBroadcast(new Intent(SASSplashActivity.this, StartActivityReceiver.class));
-                            //new StartActivityReceiver().onReceive(SASSplashActivity.this, null);
                             startDefaultActivity();
                             finish();
-                            //exit = true;
                         }
                     });
                 }
@@ -74,8 +60,7 @@ public class SASSplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT > 10)
             activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         else activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(activity);
-        //this.startActivityFromChild(getParent(), activity, -1);
+        startActivity(activity);
     }
 
     @Override

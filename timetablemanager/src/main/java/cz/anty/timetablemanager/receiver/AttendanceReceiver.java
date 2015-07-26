@@ -1,4 +1,4 @@
-package cz.anty.attendancemanager;
+package cz.anty.timetablemanager.receiver;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,7 +13,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import cz.anty.timetablemanager.R;
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -26,13 +28,12 @@ import cz.anty.utils.timetable.TimetableManager;
 
 public class AttendanceReceiver extends BroadcastReceiver {
 
-    private static final long WAIT_TIME = 1000 * 60 * 15;
-
     private static final OnceRunThread worker = new OnceRunThread(null);
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!context.getSharedPreferences("AttendanceData", Context.MODE_PRIVATE).getBoolean("DISPLAY_WARNING", false)) {
+        if (!context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
+                .getBoolean(Constants.SETTING_NAME_DISPLAY_WARNINGS, false)) {
             context.sendBroadcast(new Intent(context, ScheduleReceiver.class));
             return;
         }
@@ -53,7 +54,9 @@ public class AttendanceReceiver extends BroadcastReceiver {
         Timetable[] timetables = new TimetableManager(context).getTimetables();
         final AttendanceConnector connector = new AttendanceConnector();
         for (final Timetable timetable : timetables) {
-            if (context.getSharedPreferences("ATTENDANCE", Context.MODE_PRIVATE).getLong(timetable.getName() + " LAST_NOTIFY", 0) + WAIT_TIME > System.currentTimeMillis())
+            if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE)
+                    .getLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, 0) +
+                    Constants.WAIT_TIME_TEACHERS_ATTENDANCE > System.currentTimeMillis())
                 continue;
             worker.setPowerManager(context);
             worker.startWorker(new Runnable() {
@@ -95,9 +98,9 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                                     .build();
 
-                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(2, n);
-                            context.getSharedPreferences("ATTENDANCE", Context.MODE_PRIVATE).edit()
-                                    .putLong(timetable.getName() + " LAST_NOTIFY", System.currentTimeMillis()).apply();
+                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(Constants.TEACHERS_ATTENDANCE_NOTIFICATION_ID, n);
+                            context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE).edit()
+                                    .putLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, System.currentTimeMillis()).apply();
                         }
                     } catch (IOException | IndexOutOfBoundsException e) {
                         if (AppDataManager.isDebugMode(context)) Log.d(null, null, e);

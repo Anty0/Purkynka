@@ -38,40 +38,39 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
         ItemDataHolder holder;
 
-        if (row == null) {
+        if (convertView == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
-            //row.setMinimumHeight(200);
+            convertView = inflater.inflate(layoutResourceId, parent, false);
+            //convertView.setMinimumHeight(200);
             holder = new ItemDataHolder();
-            // holder.imgIcon = (ImageView)row.findViewById(R.id.imgIcon);
-            holder.text1 = (TextView) row.findViewById(R.id.txtTitle);
-            holder.text2 = (TextView) row.findViewById(R.id.txtTitle2);
+            holder.text1 = (TextView) convertView.findViewById(R.id.txtTitle);
+            holder.text2 = (TextView) convertView.findViewById(R.id.txtTitle2);
+            //holder.imgIcon = (ImageView)convertView.findViewById(R.id.imgIcon);
 
-            row.setTag(holder);
-        } else holder = (ItemDataHolder) row.getTag();
+            convertView.setTag(holder);
+        } else holder = (ItemDataHolder) convertView.getTag();
 
         MultilineItem item = getItem(position);
-        holder.text1.setText(item.getTitle());
-        String text = item.getText();
+        holder.text1.setText(item.getTitle(context));
+        String text = item.getText(context);
         if (text == null) {
             holder.text2.setVisibility(View.GONE);
         } else {
             holder.text2.setVisibility(View.VISIBLE);
-            holder.text2.setText(item.getText());
+            holder.text2.setText(text);
+            //holder.imgIcon.setImageResource(item.icon);
         }
-        //    holder.imgIcon.setImageResource(item.icon);
 
-        return row;
+        return convertView;
     }
 
     static class ItemDataHolder {
-        //   ImageView imgIcon;
+        //ImageView imgIcon;
         TextView text1;
         TextView text2;
-        //    ImageView imgIcon2;
+        //ImageView imgIcon2;
     }
 
 }
