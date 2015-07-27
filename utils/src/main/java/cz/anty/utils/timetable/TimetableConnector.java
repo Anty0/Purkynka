@@ -1,7 +1,5 @@
 package cz.anty.utils.timetable;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
@@ -54,7 +52,7 @@ public class TimetableConnector {
     public static void tryLoadTimetable(Timetable timetable) throws IOException {
         int lessonIndex = getLessonIndex(timetable.getName());
         String url = DEFAULT_URL_START + (lessonIndex < 10 ? "0" + lessonIndex : lessonIndex) + DEFAULT_URL_END;
-        Log.i(null, url);
+        //Log.i(null, url);
         Elements elements = Jsoup.connect(url).get().select("td[rowspan=6][colspan=2]");
         //Log.d(null, elements.toString());
 

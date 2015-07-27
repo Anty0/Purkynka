@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.anty.sasmanager.R;
+import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.listItem.WidgetMultilineAdapter;
 import cz.anty.utils.listItem.WidgetService;
@@ -63,9 +64,13 @@ public class SASManageWidget extends AppWidgetProvider {
                     context.getPackageName(), R.layout.sasmanage_widget_old);
         }
 
-        //Log.d("UPDATE", "onUpdate setting onClick refresh");
+        //Log.d("UPDATE", "onUpdate setting onClick listeners");
         remoteViews.setOnClickPendingIntent(R.id.image_button_refresh,
                 PendingIntent.getBroadcast(context, 0, getUpdateIntent(context), 0));
+
+        remoteViews.setOnClickPendingIntent(R.id.linear_layout_widget_main,
+                PendingIntent.getActivity(context, 0,
+                        new Intent(context, SASSplashActivity.class), 0));
 
         //Log.d("UPDATE", "onUpdate checking if is logged in");
         if (!AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {

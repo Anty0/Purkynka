@@ -47,6 +47,13 @@ public class Man implements MultilineItem {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return super.equals(o) || o instanceof Man &&
+                ((Man) o).getName().equals(getName()) &&
+                ((Man) o).getClassString().equals(getClassString());
+    }
+
+    @Override
     public String toString() {
         return getName() + " | "
                 + getClassString() + " | "

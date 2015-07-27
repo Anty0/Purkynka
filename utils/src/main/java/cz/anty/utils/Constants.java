@@ -6,21 +6,30 @@ package cz.anty.utils;
  * @author anty
  */
 public class Constants {
-    public static final int SAS_MANAGER_SERVICE_NOTIFICATION_ID = 1;
-    public static final int TEACHERS_ATTENDANCE_NOTIFICATION_ID = 2;
-    public static final int UPDATE_NOTIFICATION_ID = 3;
+    public static final int NOTIFICATION_ID_SAS_MANAGER_SERVICE = 1;
+    public static final int NOTIFICATION_ID_TEACHERS_ATTENDANCE = 2;
+    public static final int NOTIFICATION_ID_UPDATE = 3;
+    public static final int NOTIFICATION_ID_TRACKING = 4;
 
     public static final int WAIT_TIME_SAS_SPLASH_ON_BIND = 100;
     public static final int WAIT_TIME_FIRST_REPEAT = 10;
     public static final long WAIT_TIME_TEACHERS_ATTENDANCE = 1000 * 60 * 15;
+    public static final long WAIT_TIME_SAS_MARKS_REFRESH = 1000 * 60 * 5;
     public static final int WAIT_TIME_WIFI_LOGIN = 3000;
 
     public static final long REPEAT_TIME_UPDATE = 1000 * 60 * 60 * 5;
     public static final long REPEAT_TIME_SAS_MARKS_UPDATE = 1000 * 60 * 15;
     public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;
+    public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 5;
+
+    public static final String STRINGS_CONST_NAME = "/NAME/";
 
     public static final String SETTINGS_NAME_ATTENDANCE = "AttendanceData";
-    public static final String SETTING_NAME_DISPLAY_WARNINGS = "DISPLAY_WARNING";
+    public static final String SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS = "DISPLAY_TEACHERS_WARNING";
+    public static final String SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS = "DISPLAY_TRACKING_WARNING";
+    public static final String SETTING_NAME_TRACKING_MANS_SAVE = "TRACKING_MANS";
+    public static final String SETTING_NAME_ADD_LAST_UPDATE = " LAST_UPDATE";
+
 
     public static final String SETTINGS_NAME_TIMETABLE_ATTENDANCE = "ATTENDANCE";
     public static final String SETTING_NAME_ADD_LAST_NOTIFY = " LAST_NOTIFY";
@@ -37,7 +46,7 @@ public class Constants {
     public static final String SETTINGS_NAME_TEACHERS = "TeachersData";
     public static final String SETTING_NAME_TEACHERS_SAVE_VERSION = "TEACHERS_SAVE_VERSION";
     public static final String SETTING_NAME_TEACHERS = "TEACHERS";
-    public static final String SETTING_NAME_LAST_REFRESH = "SETTING_NAME_LAST_REFRESH";
+    public static final String SETTING_NAME_LAST_REFRESH = "LAST_REFRESH";
 
     public static final String SETTINGS_NAME_MARKS = "MarksData";
     public static final String SETTING_NAME_MARKS_SAVE_VERSION = "MARKS_SAVE_VERSION";

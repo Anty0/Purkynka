@@ -28,12 +28,12 @@ import cz.anty.utils.timetable.TimetableManager;
 
 public class AttendanceReceiver extends BroadcastReceiver {
 
-    private static final OnceRunThread worker = new OnceRunThread(null);
+    private static final OnceRunThread worker = new OnceRunThread();
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (!context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_DISPLAY_WARNINGS, false)) {
+                .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)) {
             context.sendBroadcast(new Intent(context, ScheduleReceiver.class));
             return;
         }
@@ -98,12 +98,13 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                                     .build();
 
-                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(Constants.TEACHERS_ATTENDANCE_NOTIFICATION_ID, n);
+                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID_TEACHERS_ATTENDANCE, n);
                             context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE).edit()
                                     .putLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, System.currentTimeMillis()).apply();
                         }
                     } catch (IOException | IndexOutOfBoundsException e) {
-                        if (AppDataManager.isDebugMode(context)) Log.d(null, null, e);
+                        if (AppDataManager.isDebugMode(context))
+                            Log.d("AttendanceReceiver", "testSupplementation", e);
                     }
                 }
             });

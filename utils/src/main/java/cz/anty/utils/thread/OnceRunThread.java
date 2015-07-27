@@ -18,12 +18,20 @@ public class OnceRunThread {
     private final Object waitingThreadsLock = new Object();
     private final Object waitingLock = new Object();
     private final Object powerManagerLock = new Object();
-    private PowerManager powerManager;
+    private PowerManager powerManager = null;
     private int waitingThreads = 0;
     private Thread worker = null;
 
+    public OnceRunThread() {
+
+    }
+
     public OnceRunThread(@Nullable PowerManager powerManager) {
-        this.powerManager = powerManager;
+        setPowerManager(powerManager);
+    }
+
+    public OnceRunThread(@NonNull Context context) {
+        setPowerManager(context);
     }
 
     public void setPowerManager(@Nullable PowerManager powerManager) {
@@ -110,7 +118,8 @@ public class OnceRunThread {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
-                    if (AppDataManager.isDebugMode(null)) Log.d(null, null, e);
+                    if (AppDataManager.isDebugMode(null))
+                        Log.d("OnceRunThread", "waitToWorkerStop", e);
                     return false;
                 }
             }

@@ -1,4 +1,4 @@
-package cz.anty.timetablemanager.receiver;
+package cz.anty.attendancemanager.receiver;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import java.util.Calendar;
 
 import cz.anty.utils.Constants;
+import cz.anty.utils.attendance.man.TrackingMansManager;
 
 public class ScheduleReceiver extends BroadcastReceiver {
 
@@ -18,7 +19,7 @@ public class ScheduleReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         AlarmManager service = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(context, AttendanceReceiver.class);
+        Intent i = new Intent(context, TrackingReceiver.class);
         PendingIntent pending = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -27,8 +28,8 @@ public class ScheduleReceiver extends BroadcastReceiver {
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
         if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)
-                && activeNetInfo != null && activeNetInfo.isConnected()) {
+                .getBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS, true) &&
+                new TrackingMansManager(context).get().length != 0 && activeNetInfo != null && activeNetInfo.isConnected()) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
             cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);
@@ -36,7 +37,7 @@ public class ScheduleReceiver extends BroadcastReceiver {
             // InexactRepeating allows Android to optimize the energy consumption
             service.cancel(pending);
             service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    cal.getTimeInMillis(), Constants.REPEAT_TIME_TEACHERS_ATTENDANCE, pending);
+                    cal.getTimeInMillis(), Constants.REPEAT_TIME_TRACKING_ATTENDANCE, pending);
 
             // service.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
             // REPEAT_TIME, pending);

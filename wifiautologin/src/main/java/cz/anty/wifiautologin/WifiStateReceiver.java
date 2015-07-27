@@ -16,7 +16,7 @@ import cz.anty.utils.wifi.WifiLogin;
 
 public class WifiStateReceiver extends BroadcastReceiver {
 
-    private static final OnceRunThread worker = new OnceRunThread(null);
+    private static final OnceRunThread worker = new OnceRunThread();
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -36,7 +36,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
                         try {
                             Thread.sleep(Constants.WAIT_TIME_WIFI_LOGIN);
                         } catch (InterruptedException e) {
-                            if (AppDataManager.isDebugMode(context)) Log.d(null, null, e);
+                            if (AppDataManager.isDebugMode(context))
+                                Log.d("WifiStateReceiver", "onReceive", e);
                         }
                     }
 

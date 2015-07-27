@@ -20,11 +20,13 @@ public class AppDataManager {
     public static synchronized void addOnChangeListener(Type type, Runnable onChange) {
         switch (type) {
             case WIFI:
-                onChangeWIFI.add(onChange);
+                if (!onChangeWIFI.contains(onChange))
+                    onChangeWIFI.add(onChange);
                 break;
             case SAS:
             default:
-                onChangeSAS.add(onChange);
+                if (!onChangeSAS.contains(onChange))
+                    onChangeSAS.add(onChange);
                 break;
         }
     }

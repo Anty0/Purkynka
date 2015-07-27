@@ -68,7 +68,7 @@
     <string name="alert_new_timetable">New TIMETABLE</string>
     <string name="alert_timetable_name">Insert TIMETABLE name:</string>
     <string name="title_terms">Terms of use</string>
-    <string name="text_terms">Using the application is at your own risk.\nThe developer has the right at any time without notice to change these conditions.</string>
+    <string name="text_terms">Using the application is at your own risk.\n\nThe developer has the right at any time without notice to change the terms of use of this application, or any part thereof.</string>
     <string name="but_accept">Accept</string>
     <string name="but_exit">Exit</string>
     <string name="title_lesson_info">Lesson info</string>
@@ -148,10 +148,14 @@
     <string name="text_wednesday">WEDNESDAY</string>
     <string name="text_thursday">THURSDAY</string>
     <string name="text_friday">FRIDAY</string>
-    <string name="dialog_attendance_tracking_text">Start tracking attendance a man named \"|NAME|\"?</string>
+    <string name="dialog_attendance_tracking_text">Start tracking attendance a man named \"/NAME/\"?</string>
     <string name="but_yes">Yes</string>
     <string name="but_no">No</string>
     <string name="dialog_terms_warning_title">!!!WARNING!!!</string>
-    <string name="text_attendance_tracking_terms">If you want to watch a man must have him on the warrant!\nClicking agree you acknowledge that you have permission to track attendance using this application from the selected person named \"|NAME|\" (hereinafter \"selected person\"), and bear all responsibility for all legal and other problems caused by tracking the selected person.</string>
+    <string name="text_attendance_tracking_terms">If you want to watch a man must have him on the warrant!\n\nClicking agree you acknowledge that you have permission to track attendance using this application from the selected person named \"/NAME/\" (hereinafter \"selected person\"), and bear all responsibility for all legal and other problems caused by tracking the selected person.</string>
+    <string name="dialog_attendance_stop_tracking_text">Are you sere you want to remove \"/NAME/\" from tracked?</string>
+    <string name="notify_text_tracked_is_in_school">/NAME/ came to school now</string>
+    <string name="notify_text_tracked_is_in_not_school">/NAME/ leave school now</string>
+    <string name="check_box_text_alert_tracked">Alert me when tracked person leaves or comes to school.</string>
 
 </resources>

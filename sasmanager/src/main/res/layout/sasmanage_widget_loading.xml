@@ -1,13 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#209C"
+    android:background="#809C"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin">
 
     <LinearLayout
+        android:id="@+id/linear_layout_widget_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#809C"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

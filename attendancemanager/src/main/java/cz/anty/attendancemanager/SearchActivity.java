@@ -21,10 +21,13 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.util.List;
 
+import cz.anty.attendancemanager.receiver.ScheduleReceiver;
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
+import cz.anty.utils.attendance.man.TrackingMansManager;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -32,6 +35,8 @@ import cz.anty.utils.settings.AttendanceSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class SearchActivity extends AppCompatActivity {
+
+    public static final String EXTRA_SEARCH = "EXTRA_SEARCH";
 
     private final AttendanceConnector connector = new AttendanceConnector();
     private ListView resultListView;
@@ -45,6 +50,13 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         searchEditText = (EditText) findViewById(R.id.editText);
+        if (savedInstanceState != null) {
+            String search = savedInstanceState.getString(EXTRA_SEARCH);
+            if (search != null) {
+                searchEditText.setText(search);
+                update(true);
+            }
+        }
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -124,7 +136,8 @@ public class SearchActivity extends AppCompatActivity {
                     data = new MultilineItem[]{new TextMultilineItem(getString(R.string.text_title_connection_exception),
                             getString(R.string.text_connection_exception) + ": " + e.getMessage()),
                             new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page)};
-                    if (AppDataManager.isDebugMode(SearchActivity.this)) Log.d(null, null, e);
+                    if (AppDataManager.isDebugMode(SearchActivity.this))
+                        Log.d("SearchActivity", "update", e);
                 }
 
                 /*final ArrayList<String> list = new ArrayList<>();
@@ -152,31 +165,53 @@ public class SearchActivity extends AppCompatActivity {
                                 }
                                 final Man man = finalData[position] instanceof Man ? (Man) finalData[position] : null;
                                 if (man != null) {
-                                    new AlertDialog.Builder(SearchActivity.this)
-                                            .setTitle(man.getName())
-                                            .setIcon(R.mipmap.ic_launcher)
-                                            .setMessage(getString(R.string.dialog_attendance_tracking_text).replace("|NAME|", man.getName()))
-                                            .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    new AlertDialog.Builder(SearchActivity.this)
-                                                            .setTitle(R.string.dialog_terms_warning_title)
-                                                            .setIcon(R.mipmap.ic_launcher)
-                                                            .setMessage(getString(R.string.text_attendance_tracking_terms).replace("|NAME|", man.getName()))
-                                                            .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    //TODO Add man to tracking mans
-                                                                }
-                                                            })
-                                                            .setNegativeButton(R.string.but_cancel, null)
-                                                            .setCancelable(true)
-                                                            .show();
-                                                }
-                                            })
-                                            .setNegativeButton(R.string.but_no, null)
-                                            .setCancelable(true)
-                                            .show();
+                                    final TrackingMansManager mansManager = new TrackingMansManager(SearchActivity.this);
+                                    if (mansManager.contains(man)) {
+                                        new AlertDialog.Builder(SearchActivity.this)
+                                                .setTitle(man.getName())
+                                                .setIcon(R.mipmap.ic_launcher)
+                                                .setMessage(getString(R.string.dialog_attendance_stop_tracking_text)
+                                                        .replaceAll(Constants.STRINGS_CONST_NAME, man.getName()))
+                                                .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        mansManager.remove(man).apply();
+                                                        sendBroadcast(new Intent(SearchActivity.this, ScheduleReceiver.class));
+                                                    }
+                                                })
+                                                .setNegativeButton(R.string.but_no, null)
+                                                .setCancelable(true)
+                                                .show();
+                                    } else {
+                                        new AlertDialog.Builder(SearchActivity.this)
+                                                .setTitle(man.getName())
+                                                .setIcon(R.mipmap.ic_launcher)
+                                                .setMessage(getString(R.string.dialog_attendance_tracking_text)
+                                                        .replaceAll(Constants.STRINGS_CONST_NAME, man.getName()))
+                                                .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        new AlertDialog.Builder(SearchActivity.this)
+                                                                .setTitle(R.string.dialog_terms_warning_title)
+                                                                .setIcon(R.mipmap.ic_launcher)
+                                                                .setMessage(getString(R.string.text_attendance_tracking_terms)
+                                                                        .replaceAll(Constants.STRINGS_CONST_NAME, man.getName()))
+                                                                .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        mansManager.add(man).apply();
+                                                                        sendBroadcast(new Intent(SearchActivity.this, ScheduleReceiver.class));
+                                                                    }
+                                                                })
+                                                                .setNegativeButton(R.string.but_cancel, null)
+                                                                .setCancelable(true)
+                                                                .show();
+                                                    }
+                                                })
+                                                .setNegativeButton(R.string.but_no, null)
+                                                .setCancelable(true)
+                                                .show();
+                                    }
                                 }
                             }
                         });

@@ -12,9 +12,9 @@ public class ByteEncryptionTest extends TestCase {
     public void testXor() throws Exception {
         String start = "test";
         System.out.println(start);
-        start = new String(ByteEncryption.xor(start.getBytes("UTF-8"), ByteEncryption.MY_KEY), "UTF-8");
+        start = ByteEncryption.xor(start);
         System.out.println(start);
-        start = new String(ByteEncryption.xor(start.getBytes("UTF-8"), ByteEncryption.MY_KEY), "UTF-8");
+        start = ByteEncryption.xor(start);
         System.out.println(start);
     }
 }

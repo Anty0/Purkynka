@@ -1,10 +1,11 @@
 package cz.anty.utils.thread;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
+
+import cz.anty.utils.AppCompatProgressDialog;
 
 /**
  * Created by anty on 29.6.15.
@@ -14,7 +15,7 @@ import android.widget.Toast;
 public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implements ProgressReporter {
 
     private final Activity activity;
-    private final ProgressDialog progressDialog;
+    private final AppCompatProgressDialog progressDialog;
 
     public OnceRunThreadWithProgress(Activity activity) {
         super(activity);
@@ -50,7 +51,7 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
                 @Override
                 public void run() {
                     synchronized (progressDialog) {
-                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.setProgressStyle(AppCompatProgressDialog.STYLE_SPINNER);
                         progressDialog.setProgress(0);
                         progressDialog.setMax(100);
                         /*progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
@@ -90,7 +91,7 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
                     @Override
                     public void run() {
                         synchronized (progressDialog) {
-                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            progressDialog.setProgressStyle(AppCompatProgressDialog.STYLE_SPINNER);
                         }
                     }
                 });
@@ -105,13 +106,15 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
             @Override
             public void run() {
                 synchronized (progressDialog) {
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    progressDialog.setProgressStyle(AppCompatProgressDialog.STYLE_HORIZONTAL);
                     progressDialog.setCancelable(true);
                     /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                     if (but != null)
                         but.setVisibility(View.VISIBLE);*/
-                    if (progressDialog.isShowing())
+                    if (progressDialog.isShowing()) {
+                        progressDialog.hide();
                         progressDialog.show();
+                    }
                 }
             }
         });
@@ -123,13 +126,15 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
             @Override
             public void run() {
                 synchronized (progressDialog) {
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progressDialog.setProgressStyle(AppCompatProgressDialog.STYLE_SPINNER);
                     progressDialog.setCancelable(false);
                     /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                     if (but != null)
                         but.setVisibility(View.GONE);*/
-                    if (progressDialog.isShowing())
+                    if (progressDialog.isShowing()) {
+                        progressDialog.hide();
                         progressDialog.show();
+                    }
                 }
             }
         });

@@ -28,7 +28,7 @@ import cz.anty.utils.thread.OnceRunThread;
 public class SASManagerService extends Service {
 
     private final IBinder mBinder = new MyBinder();
-    private final OnceRunThread worker = new OnceRunThread(null);
+    private final OnceRunThread worker = new OnceRunThread();
     private State state = State.STOPPED;
     private SASManager sasManager;
     private MarksManager marks;
@@ -37,13 +37,15 @@ public class SASManagerService extends Service {
     private final Runnable onLoginChange = new Runnable() {
         @Override
         public void run() {
-            marks.clear(MarksManager.Semester.FIRST);
-            marks.clear(MarksManager.Semester.SECOND);
-            marks.apply(MarksManager.Semester.FIRST);
-            marks.apply(MarksManager.Semester.SECOND);
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
+                    getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE).edit()
+                            .putLong(Constants.SETTING_NAME_LAST_REFRESH, 0).apply();
+                    marks.clear(MarksManager.Semester.FIRST);
+                    marks.clear(MarksManager.Semester.SECOND);
+                    marks.apply(MarksManager.Semester.FIRST);
+                    marks.apply(MarksManager.Semester.SECOND);
                     initialize();
                 }
             });
@@ -53,10 +55,24 @@ public class SASManagerService extends Service {
     private void setState(State state) {
         if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "setState: " + state);
         if (state != this.state) {
-            this.state = state;
-            if (onStateChangedListener != null)
-                onStateChangedListener.run();
+            if (state.isException() || this.state.isException()) {
+                updateState(state);
+                return;
+            }
+            if (this.state.getValue() >= State.getMaxValue()) {
+                updateState(State.getStateByValue(State.getMinValue()));
+            } else {
+                updateState(State.getStateByValue(this.state.getValue() + 1));
+            }
+            setState(state);
         }
+    }
+
+    private void updateState(State state) {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "updateState: " + state);
+        this.state = state;
+        if (onStateChangedListener != null)
+            onStateChangedListener.run();
     }
 
     @Override
@@ -87,7 +103,7 @@ public class SASManagerService extends Service {
         if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, SASManagerService.this)) {
             sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS, SASManagerService.this),
                     AppDataManager.getPassword(AppDataManager.Type.SAS, SASManagerService.this));
-            refreshMarks(true);
+            refreshMarks(false, true);
             //setState(State.CONNECTED);
         } else {
             sasManager = null;
@@ -110,17 +126,22 @@ public class SASManagerService extends Service {
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                refreshMarks(false);
+                refreshMarks(true, false);
             }
         });
         //return super.onStartCommand(intent, flags, startId);
         return START_NOT_STICKY;
     }
 
-    private void refreshMarks(boolean deepRefresh) {
+    private void refreshMarks(boolean force, boolean deepRefresh) {
         if (AppDataManager.isDebugMode(this))
-            Log.d("SASManagerService", "refreshMarks: " + deepRefresh);
+            Log.d("SASManagerService", "refreshMarks: force=" + force + " deep=" + deepRefresh);
         if (sasManager == null) return;
+        if (System.currentTimeMillis() - getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE)
+                .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) < Constants.WAIT_TIME_SAS_MARKS_REFRESH) {
+            setState(State.LOGGED_IN);
+            return;
+        }
         try {
             if (!sasManager.isConnected()) {
                 sasManager.connect();
@@ -151,12 +172,14 @@ public class SASManagerService extends Service {
                                 }*/
                 }
                 setState(State.LOGGED_IN);
+                getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE).edit()
+                        .putLong(Constants.SETTING_NAME_LAST_REFRESH, System.currentTimeMillis()).apply();
             } catch (WrongLoginDataException e) {
-                if (AppDataManager.isDebugMode(this)) Log.d(null, null, e);
+                if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "refreshMarks", e);
                 setState(State.LOG_IN_EXCEPTION);
             }
         } catch (IOException e) {
-            if (AppDataManager.isDebugMode(this)) Log.d(null, null, e);
+            if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "refreshMarks", e);
             setState(State.CONNECT_EXCEPTION);
         }
     }
@@ -207,7 +230,7 @@ public class SASManagerService extends Service {
         //Calendar calendar = Calendar.getInstance(Locale.getDefault());
         //calendar.get(Calendar.HOUR) * 60 * 60 + calendar.get(Calendar.MINUTE) * 60 + calendar.get(Calendar.SECOND) + 10
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                .notify(Constants.SAS_MANAGER_SERVICE_NOTIFICATION_ID, n);
+                .notify(Constants.NOTIFICATION_ID_SAS_MANAGER_SERVICE, n);
     }
 
     @Override
@@ -217,7 +240,49 @@ public class SASManagerService extends Service {
     }
 
     public enum State {
-        STOPPED, CONNECTED, CONNECT_EXCEPTION, LOGGED_IN, LOG_IN_EXCEPTION, DISCONNECTED
+        STOPPED, CONNECTED, CONNECT_EXCEPTION, LOGGED_IN, LOG_IN_EXCEPTION, DISCONNECTED;
+
+        public static int getMinValue() {
+            return 0;
+        }
+
+        public static int getMaxValue() {
+            return 3;
+        }
+
+        public static State getStateByValue(int value) {
+            switch (value) {
+                case 3:
+                    return DISCONNECTED;
+                case 2:
+                    return LOGGED_IN;
+                case 1:
+                    return CONNECTED;
+                case 0:
+                default:
+                    return STOPPED;
+            }
+        }
+
+        public int getValue() {
+            switch (this) {
+                case DISCONNECTED:
+                    return 3;
+                case LOGGED_IN:
+                case LOG_IN_EXCEPTION:
+                    return 2;
+                case CONNECTED:
+                case CONNECT_EXCEPTION:
+                    return 1;
+                case STOPPED:
+                default:
+                    return 0;
+            }
+        }
+
+        public boolean isException() {
+            return this.equals(CONNECT_EXCEPTION) || this.equals(LOG_IN_EXCEPTION);
+        }
     }
 
     public class MyBinder extends Binder {
@@ -250,7 +315,7 @@ public class SASManagerService extends Service {
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    refreshMarks(true);
+                    refreshMarks(true, true);
                 }
             });
         }

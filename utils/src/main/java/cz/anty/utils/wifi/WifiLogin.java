@@ -35,7 +35,7 @@ public class WifiLogin {
                         .execute();
                 return true;
             } catch (IOException e) {
-                Log.d(null, null, e);
+                Log.d("WifiLogin", "tryLogin", e);
             }
         }
         return false;

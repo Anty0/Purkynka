@@ -95,7 +95,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     TimetableConnector.tryLoadTimetable(newTimetable);
                                             } catch (WrongLoginDataException e) {
                                                 if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
-                                                    Log.d(null, null, e);
+                                                    Log.d("TimetableSelectActivity", "initialize", e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -110,7 +110,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                 });
                                             } catch (IOException e) {
                                                 if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
-                                                    Log.d(null, null, e);
+                                                    Log.d("TimetableSelectActivity", "initialize", e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -125,7 +125,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                 });
                                             } catch (Exception e) {
                                                 if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
-                                                    Log.d(null, null, e);
+                                                    Log.d("TimetableSelectActivity", "initialize", e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {

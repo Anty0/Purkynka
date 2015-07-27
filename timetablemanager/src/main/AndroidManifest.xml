@@ -15,11 +15,11 @@
             android:label="@string/title_activity_timetable_manage" />
 
         <receiver
-            android:name="cz.anty.timetablemanager.receiver.AttendanceReceiver"
+            android:name=".receiver.AttendanceReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name="cz.anty.timetablemanager.receiver.ScheduleReceiver"
+            android:name=".receiver.ScheduleReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

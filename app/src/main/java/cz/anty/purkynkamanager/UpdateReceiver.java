@@ -18,7 +18,7 @@ import cz.anty.utils.update.UpdateConnector;
 public class UpdateReceiver extends BroadcastReceiver {
 
     //private static final long DEFER_TIME = 1000 * 60 * 60 * 20;
-    private static final OnceRunThread worker = new OnceRunThread(null);
+    private static final OnceRunThread worker = new OnceRunThread();
 
     public static void checkUpdate(Context context) throws IOException {
         SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
@@ -39,7 +39,7 @@ public class UpdateReceiver extends BroadcastReceiver {
 
     private static void showNotification(Context context) {
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
-                .notify(Constants.UPDATE_NOTIFICATION_ID,
+                .notify(Constants.NOTIFICATION_ID_UPDATE,
                         new NotificationCompat.Builder(context)
                         .setContentTitle(context.getString(R.string.notification_update_title))
                         .setContentText(context.getString(R.string.notification_update_text_old) + " " +

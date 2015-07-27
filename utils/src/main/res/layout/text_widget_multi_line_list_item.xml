@@ -17,7 +17,7 @@
         android:padding="1dip"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:textColor="#FFFFFF"
-        android:textSize="15sp"
+        android:textSize="13sp"
         android:textStyle="normal" />
     <!--"#736F6E"-->
 
@@ -34,7 +34,7 @@
         android:padding="1dip"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
         android:textColor="#A39F9E"
-        android:textSize="13sp"
+        android:textSize="12sp"
         android:textStyle="normal" />
 
 </RelativeLayout>

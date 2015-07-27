@@ -17,7 +17,7 @@ import cz.anty.utils.thread.OnceRunThread;
 
 public class SASSplashActivity extends AppCompatActivity {
 
-    private final OnceRunThread worker = new OnceRunThread(null);
+    private final OnceRunThread worker = new OnceRunThread();
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, final IBinder binder) {
@@ -29,7 +29,7 @@ public class SASSplashActivity extends AppCompatActivity {
                         Thread.sleep(Constants.WAIT_TIME_SAS_SPLASH_ON_BIND);
                     } catch (InterruptedException e) {
                         if (AppDataManager.isDebugMode(SASSplashActivity.this))
-                            Log.d(null, null, e);
+                            Log.d("SASSplashActivity", "onServiceConnected", e);
                     }
                     myBinder.waitToWorkerStop();
 

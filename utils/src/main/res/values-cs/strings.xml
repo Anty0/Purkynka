@@ -54,7 +54,7 @@
     <string name="state">Stav</string>
     <string name="successfully_saved">Uživatelské JMÉNO a HESLO bylo úspěšně ULOŽENO</string>
     <string name="successfully_validated">Uživatelské JMÉNO a HESLO bylo úspěšně OVĚŘENO</string>
-    <string name="text_terms">Použití aplikace je na vlastní nebezpečí.\nVývojář má právo kdykoliv bez upozornění změnit tyto podmínky.</string>
+    <string name="text_terms">Použití aplikace je na vlastní nebezpečí.\nVývojář má právo kdykoliv bez upozornění změnit podmínky použití této aplikace, nebo jakékoli její části.</string>
     <string name="timetable_app_name">Správce ROZVRHŮ</string>
     <string name="title_activity_timetable_manage">ROZVRH hodin</string>
     <string name="title_activity_timetable_select">Vyber ROZVRH hodin k zobrazení</string>
@@ -124,8 +124,8 @@
     <string name="text_in_school">ve škole</string>
     <string name="text_is">je</string>
     <string name="text_isnt">není</string>
-    <string name="dialog_attendance_tracking_text">Začít sledovat docházku člověka jménem "|NAME|"?</string>
-    <string name="text_attendance_tracking_terms">Pokud chcete sledovat nějakého člověka musíte mít od něj na to povolení! Kliknutím na tlačítko souhlasím stvrzujete, že máte povolení sledovat docházku pomocí této aplikace od zvolené osoby jménem "|NAME|" (dále jen "zvolená osoba") a nesete veškerou zodpovědnost za veškeré právní i jiné problémy způsobené sledováním zvolené osoby.</string>
+    <string name="dialog_attendance_tracking_text">Začít sledovat docházku člověka jménem "/NAME/"?</string>
+    <string name="text_attendance_tracking_terms">Pokud chcete sledovat nějakého člověka musíte mít od něj na to povolení!\n\nKliknutím na tlačítko souhlasím stvrzujete, že máte povolení sledovat docházku pomocí této aplikace od zvolené osoby jménem "/NAME/" (dále jen "zvolená osoba") a nesete veškerou zodpovědnost za veškeré právní i jiné problémy způsobené sledováním zvolené osoby.</string>
     <string name="but_no">Ne</string>
     <string name="but_yes">Ano</string>
     <string name="dialog_terms_warning_title">!!!POZOR!!!</string>
@@ -144,4 +144,8 @@
     <string name="text_weight">Váha</string>
     <string name="text_title_connection_exception">Zkontroluj připojení k internetu</string>
     <string name="text_thursday">ČTVRTEK</string>
+    <string name="check_box_text_alert_tracked">Zobrazit upozornění, když sledovaný člověk opustí nebo příjde do školy.</string>
+    <string name="dialog_attendance_stop_tracking_text">Opravdu si přejete odebrat "/NAME/" ze sledovaných?</string>
+    <string name="notify_text_tracked_is_in_not_school">/NAME/ právě opustil školu</string>
+    <string name="notify_text_tracked_is_in_school">/NAME/ právě přišel do školy</string>
 </resources>
