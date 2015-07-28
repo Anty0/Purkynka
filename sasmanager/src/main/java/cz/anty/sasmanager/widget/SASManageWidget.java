@@ -68,7 +68,7 @@ public class SASManageWidget extends AppWidgetProvider {
         remoteViews.setOnClickPendingIntent(R.id.image_button_refresh,
                 PendingIntent.getBroadcast(context, 0, getUpdateIntent(context), 0));
 
-        remoteViews.setOnClickPendingIntent(R.id.linear_layout_widget_main,
+        remoteViews.setOnClickPendingIntent(R.id.relative_layout_widget_main,
                 PendingIntent.getActivity(context, 0,
                         new Intent(context, SASSplashActivity.class), 0));
 
