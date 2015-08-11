@@ -41,10 +41,14 @@ public class UpdateReceiver extends BroadcastReceiver {
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
                 .notify(Constants.NOTIFICATION_ID_UPDATE,
                         new NotificationCompat.Builder(context)
-                        .setContentTitle(context.getString(R.string.notification_update_title))
-                        .setContentText(context.getString(R.string.notification_update_text_old) + " " +
-                                BuildConfig.VERSION_NAME + " " + context.getString(R.string.notification_update_text_new) +
-                                " " + getLatestName(context))
+                                .setContentTitle(context.getString(R.string.notify_title_update))
+                                .setContentText(context.getString(R.string.notify_text_update_new)
+                                        .replace(Constants.STRINGS_CONST_VERSION, getLatestName(context)))
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                        .bigText(context.getString(R.string.notify_text_update_new)
+                                                .replace(Constants.STRINGS_CONST_VERSION, getLatestName(context)) + "\n" +
+                                                context.getString(R.string.notify_text_update_old)
+                                                        .replace(Constants.STRINGS_CONST_VERSION, BuildConfig.VERSION_NAME)))
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentIntent(PendingIntent.getActivity(
                                 context, 0, new Intent(context, MainActivity.class), 0))

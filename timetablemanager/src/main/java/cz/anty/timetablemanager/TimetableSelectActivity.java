@@ -54,7 +54,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
         for (int i = 0; i < timetables.length; i++) {
             values[i] = timetables[i].toString();
         }
-        values[timetables.length] = getString(R.string.but_list_add_timetable);
+        values[timetables.length] = getString(R.string.list_item_text_add_timetable);
 
         final ArrayList<String> list = new ArrayList<>();
         Collections.addAll(list, values);
@@ -76,13 +76,13 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
                     final CheckBox autoLoadCheckBox = new CheckBox(TimetableSelectActivity.this);
                     autoLoadCheckBox.setChecked(true);
-                    autoLoadCheckBox.setText(R.string.check_box_auto_load);
+                    autoLoadCheckBox.setText(R.string.check_box_text_auto_load);
                     layout.addView(autoLoadCheckBox);
 
                     new AlertDialog.Builder(TimetableSelectActivity.this)
-                            .setTitle(R.string.alert_new_timetable)
+                            .setTitle(R.string.dialog_title_new_timetable)
                                     //TODO add set icon with icon "T"
-                            .setMessage(R.string.alert_timetable_name)
+                            .setMessage(R.string.dialog_text_insert_timetable_name)
                             .setView(layout)
                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -100,9 +100,9 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     @Override
                                                     public void run() {
                                                         new AlertDialog.Builder(TimetableSelectActivity.this)
-                                                                .setTitle(getString(R.string.exception_name_title) + ": " + input.getText())
+                                                                .setTitle(getString(R.string.exception_title_name) + ": " + input.getText())
                                                                         //TODO add set icon with icon "T"
-                                                                .setMessage(R.string.exception_name_message)
+                                                                .setMessage(R.string.exception_message_name)
                                                                 .setPositiveButton(R.string.but_ok, null)
                                                                 .setCancelable(true)
                                                                 .show();
@@ -115,9 +115,9 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     @Override
                                                     public void run() {
                                                         new AlertDialog.Builder(TimetableSelectActivity.this)
-                                                                .setTitle(R.string.exception_connection_title)
+                                                                .setTitle(R.string.exception_title_connection)
                                                                         //TODO add set icon with icon "T"
-                                                                .setMessage(R.string.exception_connection_message)
+                                                                .setMessage(R.string.exception_message_connection)
                                                                 .setPositiveButton(R.string.but_ok, null)
                                                                 .setCancelable(true)
                                                                 .show();
@@ -130,9 +130,9 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     @Override
                                                     public void run() {
                                                         new AlertDialog.Builder(TimetableSelectActivity.this)
-                                                                .setTitle(R.string.title_timetable_still_exists)
+                                                                .setTitle(R.string.dialog_title_timetable_still_exists)
                                                                         //TODO add set icon with icon "T"
-                                                                .setMessage(R.string.message_timetable_still_exists)
+                                                                .setMessage(R.string.dialog_message_timetable_still_exists)
                                                                 .setPositiveButton(R.string.but_ok, null)
                                                                 .setCancelable(true)
                                                                 .show();
@@ -146,7 +146,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                 }
                                             });
                                         }
-                                    }, getString(R.string.loading));
+                                    }, getString(R.string.wait_text_loading));
                                 }
                             })
                             .setNegativeButton(R.string.but_cancel, null)
@@ -168,7 +168,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                 new AlertDialog.Builder(TimetableSelectActivity.this)
                         .setTitle(timetable.getName())
                                 //TODO add set icon with icon "T"
-                        .setMessage(R.string.message_what_to_do)
+                        .setMessage(R.string.dialog_message_what_to_do)
                         .setPositiveButton(R.string.but_rename, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -178,7 +178,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                 new AlertDialog.Builder(TimetableSelectActivity.this)
                                         .setTitle(getString(R.string.but_rename) + ": " + timetable.getName())
                                                 //TODO add set icon with icon "T"
-                                        .setMessage(R.string.alert_timetable_name)
+                                        .setMessage(R.string.dialog_text_insert_timetable_name)
                                         .setView(input)
                                         .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int whichButton) {

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.listItem.StableArrayAdapter;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
@@ -165,8 +166,11 @@ public class TimetableManageActivity extends AppCompatActivity {
             for (int i = 0; i < values.length; i++) {
                 Lesson lesson = lessons[i];
                 if (lesson != null)
-                    values[i] = i + ". " + lesson.getShortName() + " " + context.getString(R.string.lesson_in) + " " + lesson.getClassString();
-                else values[i] = i + ". " + context.getString(R.string.but_list_click_edit);
+                    values[i] = i + ". " + context.getString(R.string.list_item_text_lesson)
+                            .replace(Constants.STRINGS_CONST_NAME, lesson.getShortName())
+                            .replace(Constants.STRINGS_CONST_CLASS, lesson.getClassString());
+                else
+                    values[i] = i + ". " + context.getString(R.string.list_item_text_click_to_edit);
             }
 
             final ArrayList<String> list = new ArrayList<>();
@@ -185,12 +189,12 @@ public class TimetableManageActivity extends AppCompatActivity {
                         edit(context, null, day, position);
                     } else {
                         new AlertDialog.Builder(context)
-                                .setTitle(R.string.title_lesson_info)
+                                .setTitle(R.string.dialog_title_lesson_info)
                                         //TODO add set icon with icon "T"
-                                .setMessage(context.getString(R.string.message_lesson_name) + ": " + lesson.getName() + "\n" +
-                                        context.getString(R.string.message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
-                                        context.getString(R.string.message_class) + ": " + lesson.getClassString() + "\n" +
-                                        context.getString(R.string.message_teacher) + ": " + lesson.getTeacher())
+                                .setMessage(context.getString(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
+                                        context.getString(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
+                                        context.getString(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
+                                        context.getString(R.string.dialog_message_teacher) + ": " + lesson.getTeacher())
                                 .setPositiveButton(R.string.but_ok, null)
                                 .setNegativeButton(R.string.but_delete, new DialogInterface.OnClickListener() {
                                     @Override
@@ -212,16 +216,16 @@ public class TimetableManageActivity extends AppCompatActivity {
 
                 private void edit(final Context context, @Nullable Lesson lesson, final int day, final int lessonIndex) {
                     TextView nameTextView = new TextView(context);
-                    nameTextView.setText(R.string.message_lesson_name);
+                    nameTextView.setText(R.string.dialog_message_lesson_name);
 
                     TextView shortNameTextView = new TextView(context);
-                    shortNameTextView.setText(R.string.message_short_lesson_name);
+                    shortNameTextView.setText(R.string.dialog_message_short_lesson_name);
 
                     TextView classTextView = new TextView(context);
-                    classTextView.setText(R.string.message_class);
+                    classTextView.setText(R.string.dialog_message_class);
 
                     TextView teacherTextView = new TextView(context);
-                    teacherTextView.setText(R.string.message_teacher);
+                    teacherTextView.setText(R.string.dialog_message_teacher);
 
                     final EditText nameEditText = new EditText(context);
                     final EditText shortNameEditText = new EditText(context);
@@ -251,7 +255,9 @@ public class TimetableManageActivity extends AppCompatActivity {
                     linearLayout.addView(teacherEditText);
 
                     new AlertDialog.Builder(context)
-                            .setTitle(context.getString(Timetable.DAYS_STRINGS_IDS[day]) + " " + lessonIndex + ". " + context.getString(R.string.lesson))
+                            .setTitle(context.getString(R.string.dialog_title_lesson)
+                                    .replace(Constants.STRINGS_CONST_NAME, context.getString(Timetable.DAYS_STRINGS_IDS[day]))
+                                    .replace(Constants.STRINGS_CONST_NUMBER, Integer.toString(lessonIndex)))
                                     //TODO add set icon with icon "T"
                             .setView(linearLayout)
                             .setCancelable(false)

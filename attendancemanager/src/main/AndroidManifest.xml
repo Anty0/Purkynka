@@ -9,7 +9,7 @@
     <application android:allowBackup="true">
         <activity
             android:name=".SearchActivity"
-            android:label="@string/title_activity_attendance_search" />
+            android:label="@string/activity_title_attendance_search" />
 
         <receiver
             android:name=".receiver.TrackingReceiver"

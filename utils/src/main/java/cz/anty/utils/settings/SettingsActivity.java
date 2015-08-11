@@ -30,15 +30,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void initialize() {
         MultilineItem[] data = new MultilineItem[]{
-                new TextMultilineItem(getString(R.string.sas_app_name) + " " +
-                        getString(R.string.action_settings), null),
-                new TextMultilineItem(getString(R.string.wifi_app_name) + " " +
-                        getString(R.string.action_settings), null),
-                new TextMultilineItem(getString(R.string.timetable_app_name) + " " +
-                        getString(R.string.action_settings), null),
-                new TextMultilineItem(getString(R.string.attendance_app_name) + " " +
-                        getString(R.string.action_settings), null),
-                new TextMultilineItem(getString(R.string.settings_about), null)};
+                new TextMultilineItem(getString(R.string.activity_title_sas_settings), null),
+                new TextMultilineItem(getString(R.string.activity_title_wifi_settings), null),
+                new TextMultilineItem(getString(R.string.activity_title_timetable_settings), null),
+                new TextMultilineItem(getString(R.string.activity_title_attendance_settings), null),
+                new TextMultilineItem(getString(R.string.activity_title_about), null)};
 
         adapter.clear();
         for (MultilineItem item : data) {

@@ -51,14 +51,26 @@ public class TrackingMansManager {
     public TrackingMansManager apply() {
         StringBuilder data = new StringBuilder();
         synchronized (mans) {
-            for (Man man : mans) {
-                data.append(man.getName())
+            if (!mans.isEmpty()) {
+                Man man2 = mans.get(0);
+                data.append(man2.getName().replace(MAN_SPLIT_VALUE, "?????"))
                         .append(MAN_SPLIT_VALUE)
-                        .append(man.getClassString())
+                        .append(man2.getClassString().replace(MAN_SPLIT_VALUE, "?????"))
                         .append(MAN_SPLIT_VALUE)
-                        .append(man.getLastEnterAsString())
+                        .append(man2.getLastEnterAsString().replace(MAN_SPLIT_VALUE, "?????"))
                         .append(MAN_SPLIT_VALUE)
-                        .append(man.isInSchool());
+                        .append(man2.isInSchool());
+                for (Man man : mans) {
+                    if (man == man2) continue;
+                    data.append(MAIN_SPLIT_VALUE)
+                            .append(man.getName().replace(MAN_SPLIT_VALUE, "?????"))
+                            .append(MAN_SPLIT_VALUE)
+                            .append(man.getClassString().replace(MAN_SPLIT_VALUE, "?????"))
+                            .append(MAN_SPLIT_VALUE)
+                            .append(man.getLastEnterAsString().replace(MAN_SPLIT_VALUE, "?????"))
+                            .append(MAN_SPLIT_VALUE)
+                            .append(man.isInSchool());
+                }
             }
         }
         context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE).edit()

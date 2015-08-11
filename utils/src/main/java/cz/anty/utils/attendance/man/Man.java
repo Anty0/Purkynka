@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.Date;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.listItem.MultilineItem;
@@ -64,13 +65,20 @@ public class Man implements MultilineItem {
     @Override
     public String getTitle(Context context) {
         String classString = getClassString();
-        return getName() + (classString.length() > 4 ? "" : " " + classString) + " "
-                + (isInSchool() ? context.getString(R.string.text_is) : context.getString(R.string.text_isnt)) + " " + context.getString(R.string.text_in_school);
+        return (isInSchool() ? context.getString(R.string.text_is_in_school)
+                : context.getString(R.string.text_isnt_in_school))
+                .replace(Constants.STRINGS_CONST_NAME, getName() +
+                        (classString.length() > 4 ? "" : " " + classString));
     }
 
     @Override
     public String getText(Context context) {
         return getLastEnterAsString();
+    }
+
+    @Override
+    public Integer getLayoutResourceId(Context context) {
+        return null;
     }
 
     public static class Builder {

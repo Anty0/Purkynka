@@ -48,22 +48,22 @@ public class MarksManager {
         if (marks.length > 0) {
             builder.append(markToString(marks[0]));
             for (int i = 1; i < marks.length; i++) {
-                builder.append("\n").append(markToString(marks[i]).replaceAll("\n", "?"));
+                builder.append("\n").append(markToString(marks[i]).replace('\n', '?'));
             }
         }
         return builder.toString();
     }
 
     private static String markToString(Mark mark) {
-        return mark.getDateAsString().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getShortLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getLongLesson().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getValueToShow().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+        return mark.getDateAsString().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getShortLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getLongLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getValueToShow().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getValue() + SPLIT_VALUE
-                + mark.getType().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getType().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getWeight() + SPLIT_VALUE
-                + mark.getNote().replaceAll(SPLIT_VALUE, "?????") + SPLIT_VALUE
-                + mark.getTeacher().replaceAll(SPLIT_VALUE, "?????");
+                + mark.getNote().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
+                + mark.getTeacher().replace(SPLIT_VALUE, "?????");
     }
 
     public static List<Mark> parseMarks(String toParse) {

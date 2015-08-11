@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.Date;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.sas.SASConnector;
@@ -82,15 +83,20 @@ public class Mark implements MultilineItem {
 
     @Override
     public String getTitle(Context context) {
-        return getShortLesson()
-                + " " + getValueToShow()
-                + " " + context.getString(R.string.text_with_weight)
-                + " " + getWeight();
+        return context.getString(R.string.text_mark_with_weight)
+                .replace(Constants.STRINGS_CONST_NAME, getShortLesson())
+                .replace(Constants.STRINGS_CONST_NUMBER, getValueToShow())
+                .replace(Constants.STRINGS_CONST_WEIGHT, Integer.toString(getWeight()));
     }
 
     @Override
     public String getText(Context context) {
         return getDateAsString() + " " + getNote();
+    }
+
+    @Override
+    public Integer getLayoutResourceId(Context context) {
+        return null;
     }
 
     public static class Builder {

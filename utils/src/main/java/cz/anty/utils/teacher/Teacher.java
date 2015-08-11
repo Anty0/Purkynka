@@ -91,4 +91,9 @@ public class Teacher implements MultilineItem {
     public String getText(Context context) {
         return getPhoneNumber() + " " + getEmail();
     }
+
+    @Override
+    public Integer getLayoutResourceId(Context context) {
+        return null;
+    }
 }

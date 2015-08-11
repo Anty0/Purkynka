@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.IOException;
@@ -26,6 +26,8 @@ import cz.anty.utils.sas.mark.MarksManager;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class SASManagerService extends Service {
+
+    public static final String FORCE_UPDATE_WIDGET = "UPDATE_WIDGET";
 
     private final IBinder mBinder = new MyBinder();
     private final OnceRunThread worker = new OnceRunThread();
@@ -103,7 +105,7 @@ public class SASManagerService extends Service {
         if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, SASManagerService.this)) {
             sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS, SASManagerService.this),
                     AppDataManager.getPassword(AppDataManager.Type.SAS, SASManagerService.this));
-            refreshMarks(false, true);
+            refreshMarks(false, true, false);
             //setState(State.CONNECTED);
         } else {
             sasManager = null;
@@ -123,24 +125,29 @@ public class SASManagerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onStartCommand");
-        worker.startWorker(new Runnable() {
-            @Override
-            public void run() {
-                refreshMarks(true, false);
-            }
-        });
+        if (intent != null) {
+            final boolean updateWidget = intent.getBooleanExtra(FORCE_UPDATE_WIDGET, false);
+            worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    if (refreshMarks(true, false, updateWidget)) {
+                        SASManageWidget.callUpdate(SASManagerService.this, marks.toString());
+                    }
+                }
+            });
+        }
         //return super.onStartCommand(intent, flags, startId);
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
-    private void refreshMarks(boolean force, boolean deepRefresh) {
+    private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget) {
         if (AppDataManager.isDebugMode(this))
             Log.d("SASManagerService", "refreshMarks: force=" + force + " deep=" + deepRefresh);
-        if (sasManager == null) return;
+        if (sasManager == null) return updateWidget;
         if (System.currentTimeMillis() - getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE)
                 .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) < Constants.WAIT_TIME_SAS_MARKS_REFRESH) {
             setState(State.LOGGED_IN);
-            return;
+            return updateWidget;
         }
         try {
             if (!sasManager.isConnected()) {
@@ -159,6 +166,7 @@ public class SASManagerService extends Service {
                 marks.apply(semester);
                 if (numberOfNewMarks > 0) {
                     onMarksChange(semester, numberOfNewMarks);
+                    updateWidget = false;
                 }
                 semester = semester.reverse();
                 if (deepRefresh || marks.get(semester).length == 0) {
@@ -182,6 +190,7 @@ public class SASManagerService extends Service {
             if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "refreshMarks", e);
             setState(State.CONNECT_EXCEPTION);
         }
+        return updateWidget;
     }
 
     private void onMarksChange(MarksManager.Semester semester, int newMarks) {
@@ -189,7 +198,7 @@ public class SASManagerService extends Service {
             Log.d("SASManagerService", "onMarksChange: " + semester + " - " + newMarks);
         if (onMarksChange != null)
             onMarksChange.run();
-        SASManageWidget.callUpdate(this);
+        SASManageWidget.callUpdate(this, marks.toString());
 
         if (!AppDataManager.isSASMarksAutoUpdate(this))
             return;
@@ -201,7 +210,7 @@ public class SASManagerService extends Service {
             builderBig.append("\n").append(marks[i]);
         }
 
-        StringBuilder builder = new StringBuilder(getString(R.string.from) + ": ");
+        StringBuilder builder = new StringBuilder(getString(R.string.text_from) + ": ");
         builder.append(marks[0].getShortLesson());
         for (int i = 1; i < newMarks; i++) {
             builder.append(", ").append(marks[i].getShortLesson());
@@ -216,7 +225,8 @@ public class SASManagerService extends Service {
         // build notification
         // the addAction re-use the same intent to keep the example short
         Notification n = new NotificationCompat.Builder(SASManagerService.this)
-                .setContentTitle(newMarks + " " + (newMarks > 1 ? getString(R.string.new_marks) : getString(R.string.new_mark)))
+                .setContentTitle((newMarks > 1 ? getString(R.string.notify_title_new_marks) : getString(R.string.notify_title_new_mark))
+                        .replace(Constants.STRINGS_CONST_NUMBER, Integer.toString(newMarks)))
                 .setContentText(builder)
                 .setSmallIcon(R.mipmap.ic_launcher_sas)
                 .setContentIntent(pIntent)
@@ -315,7 +325,7 @@ public class SASManagerService extends Service {
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    refreshMarks(true, true);
+                    refreshMarks(true, true, false);
                 }
             });
         }

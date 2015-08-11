@@ -58,7 +58,7 @@ public class WifiLoginActivity extends AppCompatActivity {
         AppDataManager.login(AppDataManager.Type.WIFI, this,
                 ((EditText) findViewById(R.id.editText)).getText().toString(),
                 ((EditText) findViewById(R.id.editText2)).getText().toString());
-        Toast.makeText(this, R.string.successfully_saved, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.text_login_data_successfully_saved, Toast.LENGTH_LONG).show();
     }
 
     public void onClickLogin(@SuppressWarnings("UnusedParameters") View view) {
@@ -70,8 +70,8 @@ public class WifiLoginActivity extends AppCompatActivity {
             WifiInfo wifiInfo = ((WifiManager) getSystemService(WIFI_SERVICE)).getConnectionInfo();
             if (!wifiInfo.getSSID().contains(WifiLogin.WIFI_NAME)) {
                 new AlertDialog.Builder(WifiLoginActivity.this, R.style.AppTheme_Dialog)
-                        .setTitle(R.string.wifi_login_exception_title)
-                        .setMessage(R.string.wifi_login_exception_no_valid_wifi)
+                        .setTitle(R.string.exception_title_wifi_login)
+                        .setMessage(R.string.exception_wifi_login_no_valid_wifi)
                         .setPositiveButton(R.string.but_continue, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -94,7 +94,7 @@ public class WifiLoginActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(WifiLoginActivity.this, R.string.wifi_login_successful, Toast.LENGTH_LONG).show();
+                            Toast.makeText(WifiLoginActivity.this, R.string.toast_text_wifi_login_successful, Toast.LENGTH_LONG).show();
                         }
                     });
                     return;
@@ -103,8 +103,8 @@ public class WifiLoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         new AlertDialog.Builder(WifiLoginActivity.this, R.style.AppTheme_Dialog)
-                                .setTitle(R.string.wifi_login_exception_title)
-                                .setMessage(R.string.wifi_login_exception_wrong_login_or_wifi)
+                                .setTitle(R.string.exception_title_wifi_login)
+                                .setMessage(R.string.exception_wifi_login_wrong_login_or_wifi)
                                 .setPositiveButton(R.string.but_ok, null)
                                 .setIcon(R.mipmap.ic_launcher_wifi)
                                 .setCancelable(true)
@@ -112,7 +112,7 @@ public class WifiLoginActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.logging_in));
+        }, getString(R.string.wait_text_logging_in));
 
     }
 

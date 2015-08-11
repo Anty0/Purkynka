@@ -4,22 +4,29 @@
     tools:context="cz.anty.sasmanager.SASManageActivity">
 
     <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh_white_48dp"
         android:orderInCategory="100"
-        android:title="@string/menu_sort"
-        app:showAsAction="always">
+        android:title="@string/menu_item_text_refresh"
+        app:showAsAction="always" />
+
+    <item
+        android:orderInCategory="100"
+        android:title="@string/menu_item_text_sort"
+        app:showAsAction="ifRoom">
 
         <menu>
 
             <item
                 android:id="@+id/action_sort_date"
                 android:orderInCategory="100"
-                android:title="@string/menu_sort_date"
+                android:title="@string/menu_item_text_sort_date"
                 app:showAsAction="never" />
 
             <item
                 android:id="@+id/action_sort_lesson"
                 android:orderInCategory="100"
-                android:title="@string/menu_sort_lesson"
+                android:title="@string/menu_item_text_sort_lesson"
                 app:showAsAction="never" />
 
         </menu>
@@ -28,7 +35,7 @@
 
     <item
         android:orderInCategory="100"
-        android:title="@string/menu_semester"
+        android:title="@string/menu_item_text_semester"
         app:showAsAction="ifRoom">
 
         <menu>
@@ -36,13 +43,13 @@
             <item
                 android:id="@+id/action_semester_first"
                 android:orderInCategory="100"
-                android:title="@string/menu_semester_first"
+                android:title="@string/menu_item_text_semester_first"
                 app:showAsAction="never" />
 
             <item
                 android:id="@+id/action_semester_second"
                 android:orderInCategory="100"
-                android:title="@string/menu_semester_second"
+                android:title="@string/menu_item_text_semester_second"
                 app:showAsAction="never" />
 
         </menu>
@@ -50,22 +57,15 @@
     </item>
 
     <item
-        android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_refresh_white_48dp"
-        android:orderInCategory="100"
-        android:title="@string/action_refresh"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings_white_48dp"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/menu_item_text_settings"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_log_out"
         android:orderInCategory="100"
-        android:title="@string/action_log_out"
+        android:title="@string/menu_item_text_log_out"
         app:showAsAction="ifRoom" />
 </menu>

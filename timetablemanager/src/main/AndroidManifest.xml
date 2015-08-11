@@ -9,10 +9,10 @@
     <application android:allowBackup="true">
         <activity
             android:name=".TimetableSelectActivity"
-            android:label="@string/title_activity_timetable_select" />
+            android:label="@string/activity_title_timetable_select" />
         <activity
             android:name=".TimetableManageActivity"
-            android:label="@string/title_activity_timetable_manage" />
+            android:label="@string/activity_title_timetable_manage" />
 
         <receiver
             android:name=".receiver.AttendanceReceiver"

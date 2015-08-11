@@ -9,7 +9,7 @@
         <activity
             android:name=".WifiLoginActivity"
             android:icon="@mipmap/ic_launcher_wifi"
-            android:label="@string/wifi_app_name" />
+            android:label="@string/app_name_wifi" />
 
         <receiver
             android:name=".WifiStateReceiver"

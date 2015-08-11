@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Purkyňka Manager</string>
+
+    <string name="dialog_title_terms">Terms of use</string>
+    <string name="dialog_text_terms">Using the application is at your own risk.\n\nThe developer has the right at any time without notice to change the terms of use of this application, or any part thereof.</string>
+    <string name="dialog_message_update_alert">If \"Update\" button don\'t working for you, then download and install update manually from official application web page.</string>
+
+    <string name="toast_text_download_successful">Download successful completed</string>
+    <string name="toast_text_download_failed">Download failed</string>
+
+    <string name="notify_title_update">Update available</string>
+    <string name="notify_text_update_old">Your version: [VERSION]</string>
+    <string name="notify_text_update_new">New version: [VERSION]</string>
+
+    <string name="wait_text_downloading_update">Downloading update</string>
+
+    <string name="text_app_apk_name">Latest [NAME] [NUMBER].apk</string>
+</resources>

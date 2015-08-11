@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="language">CS</string>
+
+    <string name="activity_title_settings">Nastavení</string>
+    <string name="activity_title_about">O Aplikaci</string>
+
+    <string name="menu_item_text_settings">Nastavení</string>
+    <string name="menu_item_text_refresh">Obnovit</string>
+    <string name="menu_item_text_log_out">Odhlásit se</string>
+
+    <string name="text_view_text_insert_login">Uživatelské jméno:</string>
+    <string name="text_view_text_insert_password">Heslo:</string>
+
+    <string name="text_about">Aplikaci vytvořil Anty (Jiří Kuchyňka), pokud máte nějaký problém můžete jej nahlásit na webových stránkách aplikace (http://student.sspbrno.cz/~kuchynka.jiri/), nebo mě osobně v prostorách školy.</string>
+
+    <string name="check_box_text_enable_debug">Povolit DEBUG Mode (určeno pouze pro debugging)</string>
+
+    <string name="wait_text_loading">Načítání…</string>
+    <string name="wait_text_logging_in">Přihlašování…</string>
+    <string name="wait_text_validating">Ověřuji…</string>
+    <string name="wait_text_searching">Vyhledávám…</string>
+    <string name="wait_text_please_wait">Prosím čekejte…</string>
+
+    <string name="but_login">Přihlásit</string>
+    <string name="but_ok">OK</string>
+    <string name="but_continue">Pokračovat</string>
+    <string name="but_validate">Ověřit</string>
+    <string name="but_save">Uložit</string>
+    <string name="but_retry">Zkusit ZNOVU</string>
+    <string name="but_log_out">Odhlásit</string>
+    <string name="but_cancel">Storno</string>
+    <string name="but_search">Vyhledat</string>
+    <string name="but_accept">Přijmout</string>
+    <string name="but_exit">Konec</string>
+    <string name="but_edit">Upravit</string>
+    <string name="but_delete">Smazat</string>
+    <string name="but_rename">Přejmenovat</string>
+    <string name="but_update">Aktualizovat</string>
+    <string name="but_refresh">Obnovit</string>
+    <string name="but_yes">Ano</string>
+    <string name="but_no">Ne</string>
+    <string name="but_skip">Přeskočit</string>
+</resources>

@@ -54,9 +54,9 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     new Handler(context.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast toast = new Toast(context);
-                            toast.setText(context.getString(R.string.logged_in) + " " + wifiInfo.getSSID());
-                            toast.show();
+                            Toast.makeText(context, context.getString(R.string.toast_text_logged_in_wifi)
+                                    .replace(Constants.STRINGS_CONST_NAME, wifiInfo.getSSID())
+                                    , Toast.LENGTH_LONG).show();
                         }
                     });
                     /*NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

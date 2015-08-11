@@ -9,11 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.anty.sasmanager.R;
+import cz.anty.sasmanager.SASManagerService;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.listItem.WidgetMultilineAdapter;
@@ -25,32 +28,51 @@ import cz.anty.utils.sas.mark.MarksManager;
  */
 public class SASManageWidget extends AppWidgetProvider {
 
-    private static Intent getUpdateIntent(Context context) {
+    private static final String REQUEST_UPDATE = "REQUEST_MARKS_UPDATE";
+
+    private Intent lastIntent = null;
+
+    public static void callUpdate(Context context, @Nullable String marks) {
+        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "callUpdate");
+        //context.sendBroadcast(new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, SASManageWidget.class));
+        context.sendBroadcast(getUpdateIntent(context, marks, false));
+    }
+
+    private static Intent getUpdateIntent(Context context, @Nullable String marks, boolean requestUpdateMarks) {
         if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "getUpdateIntent");
         int[] allWidgetIds = AppWidgetManager.getInstance(context)
                 .getAppWidgetIds(new ComponentName(context, SASManageWidget.class));
 
-        Intent intent = new Intent(context.getApplicationContext(),
-                SASManageWidget.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
-        return intent;
+        return new Intent(context.getApplicationContext(),
+                SASManageWidget.class)
+                .setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds)
+                .putExtra(WidgetMultilineAdapter.EXTRA_MARKS_AS_STRING, marks)
+                .putExtra(REQUEST_UPDATE, requestUpdateMarks);
     }
 
-    public static void callUpdate(Context context) {
-        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "callUpdate");
-        //context.sendBroadcast(new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, SASManageWidget.class));
-        context.sendBroadcast(getUpdateIntent(context));
+    @Override
+    public synchronized void onReceive(@NonNull Context context, @NonNull Intent intent) {
+        lastIntent = intent;
+        super.onReceive(context, intent);
     }
 
     @SuppressLint("NewApi")
     @Override
-    public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
+    public synchronized void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "onUpdate");
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
                 context.getPackageName(), R.layout.sasmanage_widget_loading));
 
-        String marks = updateMarks(context);
+        if (lastIntent.getBooleanExtra(REQUEST_UPDATE, false) &&
+                AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
+            context.startService(new Intent(context, SASManagerService.class)
+                    .putExtra(SASManagerService.FORCE_UPDATE_WIDGET, true));
+            return;
+        }
+
+        String marks = lastIntent.getStringExtra(WidgetMultilineAdapter.EXTRA_MARKS_AS_STRING);
+        marks = marks == null ? updateMarks(context) : marks;
 
         //Log.d("UPDATE", "onUpdate creating remote views");
         //which layout to show on widget
@@ -66,7 +88,7 @@ public class SASManageWidget extends AppWidgetProvider {
 
         //Log.d("UPDATE", "onUpdate setting onClick listeners");
         remoteViews.setOnClickPendingIntent(R.id.image_button_refresh,
-                PendingIntent.getBroadcast(context, 0, getUpdateIntent(context), 0));
+                PendingIntent.getBroadcast(context, 0, getUpdateIntent(context, null, true), 0));
 
         remoteViews.setOnClickPendingIntent(R.id.relative_layout_widget_main,
                 PendingIntent.getActivity(context, 0,

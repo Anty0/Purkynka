@@ -11,10 +11,16 @@ public class TextMultilineItem implements MultilineItem {
 
     private final String title;
     private final String text;
+    private final Integer layoutResourceId;
 
     public TextMultilineItem(String title, String text) {
+        this(title, text, null);
+    }
+
+    public TextMultilineItem(String title, String text, Integer layoutResourceId) {
         this.title = title;
         this.text = text;
+        this.layoutResourceId = layoutResourceId;
     }
 
     @Override
@@ -25,5 +31,10 @@ public class TextMultilineItem implements MultilineItem {
     @Override
     public String getText(Context context) {
         return text;
+    }
+
+    @Override
+    public Integer getLayoutResourceId(Context context) {
+        return layoutResourceId;
     }
 }

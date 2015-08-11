@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 
@@ -71,7 +72,8 @@ public class Lesson implements MultilineItem {
 
     @Override
     public String toString() {
-        return getShortName() + ": " + getMarks().length + " | " + FORMAT.format(getDiameter());
+        return getShortName() + ": " + getMarks().length
+                + " | " + FORMAT.format(getDiameter());
     }
 
     @Override
@@ -81,6 +83,13 @@ public class Lesson implements MultilineItem {
 
     @Override
     public String getText(Context context) {
-        return Integer.toString(getMarks().length) + " " + context.getString(R.string.text_marks);
+        return context.getString(R.string.text_marks)
+                .replace(Constants.STRINGS_CONST_NUMBER
+                        , Integer.toString(getMarks().length));
+    }
+
+    @Override
+    public Integer getLayoutResourceId(Context context) {
+        return null;
     }
 }

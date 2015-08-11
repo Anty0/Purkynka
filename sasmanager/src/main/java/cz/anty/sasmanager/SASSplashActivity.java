@@ -73,8 +73,8 @@ public class SASSplashActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         /*if (exit) {
             finish();
             return;
@@ -99,9 +99,9 @@ public class SASSplashActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
         worker.waitToWorkerStop();
-        super.onPause();
+        super.onStop();
         unbindService(mConnection);
     }
 }

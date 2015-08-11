@@ -104,9 +104,9 @@ public class Timetable {
     }
 
     private synchronized void apply() {
-        StringBuilder builder = new StringBuilder(dayToString(0).replaceAll(PARSE_CONST_DAY, "??????"));
+        StringBuilder builder = new StringBuilder(dayToString(0).replace(PARSE_CONST_DAY, "??????"));
         for (int i = 1; i < lessons.length; i++) {
-            builder.append(PARSE_CONST_DAY).append(dayToString(i).replaceAll(PARSE_CONST_DAY, "??????"));
+            builder.append(PARSE_CONST_DAY).append(dayToString(i).replace(PARSE_CONST_DAY, "??????"));
             //builder.append(Arrays.toString(lessons.get(i).toArray()));
         }
 
@@ -117,9 +117,9 @@ public class Timetable {
 
     private synchronized String dayToString(int day) {
         Lesson[] lessonsDay = lessons[day];
-        StringBuilder builder = new StringBuilder().append(lessonsDay[0] == null ? "null" : lessonsDay[0].toString().replaceAll(PARSE_CONST_OBJECT, "??????"));
+        StringBuilder builder = new StringBuilder().append(lessonsDay[0] == null ? "null" : lessonsDay[0].toString().replace(PARSE_CONST_OBJECT, "??????"));
         for (int i = 1; i < lessonsDay.length; i++) {
-            builder.append(PARSE_CONST_OBJECT).append(lessonsDay[i] == null ? "null" : lessonsDay[i].toString().replaceAll(PARSE_CONST_OBJECT, "??????"));
+            builder.append(PARSE_CONST_OBJECT).append(lessonsDay[i] == null ? "null" : lessonsDay[i].toString().replace(PARSE_CONST_OBJECT, "??????"));
         }
         return builder.toString();
     }

@@ -30,12 +30,12 @@ public class UpdateConnector {
 
     public static Integer getLatestVersionCode() throws IOException {
         return Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
-                .execute().body().replaceAll("\n", ""));
+                .execute().body().replace("\n", ""));
     }
 
     public static String getLatestVersionName() throws IOException {
         return Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
-                .execute().body().replaceAll("\n", "");
+                .execute().body().replace("\n", "");
     }
 
     public static String getLatestTerms(String languageShortcut) throws IOException {

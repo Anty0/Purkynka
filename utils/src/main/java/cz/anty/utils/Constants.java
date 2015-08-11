@@ -22,7 +22,11 @@ public class Constants {
     public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;
     public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 5;
 
-    public static final String STRINGS_CONST_NAME = "/NAME/";
+    public static final String STRINGS_CONST_NAME = "[NAME]";
+    public static final String STRINGS_CONST_VERSION = "[VERSION]";
+    public static final String STRINGS_CONST_NUMBER = "[NUMBER]";
+    public static final String STRINGS_CONST_WEIGHT = "[WEIGHT]";
+    public static final String STRINGS_CONST_CLASS = "[CLASS]";
 
     public static final String SETTINGS_NAME_ATTENDANCE = "AttendanceData";
     public static final String SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS = "DISPLAY_TEACHERS_WARNING";

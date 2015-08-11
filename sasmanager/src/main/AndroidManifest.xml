@@ -11,23 +11,23 @@
             android:name=".SASSplashActivity"
             android:excludeFromRecents="true"
             android:icon="@mipmap/ic_launcher_sas"
-            android:label="@string/sas_app_name"
+            android:label="@string/app_name_sas"
             android:theme="@style/AppTheme_Splash" />
         <activity
             android:name=".SASLoginActivity"
             android:icon="@mipmap/ic_launcher_sas"
-            android:label="@string/title_activity_login" />
+            android:label="@string/activity_title_login" />
         <activity
             android:name=".SASManageActivity"
             android:icon="@mipmap/ic_launcher_sas"
-            android:label="@string/sas_app_name" />
+            android:label="@string/app_name_sas" />
 
         <service
             android:name=".SASManagerService"
             android:enabled="true"
             android:exported="false"
             android:icon="@mipmap/ic_launcher_sas"
-            android:label="@string/title_service_sas_manager"> <!-- android:process=":SASManagerService" -->
+            android:label="@string/service_title_sas_manager"> <!-- android:process=":SASManagerService" -->
         </service>
 
         <receiver

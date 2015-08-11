@@ -67,7 +67,7 @@ public class SASLoginActivity extends AppCompatActivity {
         final String username = ((EditText) findViewById(R.id.editText)).getText().toString();
         final String password = ((EditText) findViewById(R.id.editText2)).getText().toString();
         if (username.equals("") || password.equals("")) {
-            validateException(getString(R.string.validate_exception_wrong_login));
+            validateException(getString(R.string.exception_validate_wrong_login));
             return;
         }
         saveThread.startWorker(new Runnable() {
@@ -79,7 +79,7 @@ public class SASLoginActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            validateException(getString(R.string.validate_exception_wrong_login));
+                            validateException(getString(R.string.exception_validate_wrong_login));
                         }
                     });
                     return;
@@ -87,7 +87,7 @@ public class SASLoginActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            validateException(getString(R.string.validate_exception_no_connection));
+                            validateException(getString(R.string.exception_validate_no_connection));
                         }
                     });
                     return;
@@ -104,12 +104,12 @@ public class SASLoginActivity extends AppCompatActivity {
                 });
 
             }
-        }, getString(R.string.logging_in));
+        }, getString(R.string.wait_text_logging_in));
     }
 
     private void validateException(String message) {
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                .setTitle(R.string.validate_exception_title)
+                .setTitle(R.string.exception_title_validate)
                 .setMessage(message)
                 .setPositiveButton(R.string.but_ok, null)
                 .setIcon(R.mipmap.ic_launcher_sas)

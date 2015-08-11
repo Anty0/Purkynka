@@ -1,6 +1,5 @@
 package cz.anty.utils.listItem;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +27,8 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
 
     public MultilineAdapter(Context context, int layoutResourceId, MultilineItem[] data) {
         super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
         this.context = context;
+        this.layoutResourceId = layoutResourceId;
     }
 
     public long getItemId(int position) {
@@ -38,21 +37,34 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        MultilineItem item = getItem(position);
+        Integer layoutResourceId = item.getLayoutResourceId(context);
+        layoutResourceId = layoutResourceId == null ?
+                this.layoutResourceId : layoutResourceId;
+
+        if (convertView != null) {
+            if (!((ItemDataHolder) convertView.getTag())
+                    .layoutResourceId.equals(layoutResourceId))
+                convertView = null;
+        }
+
         ItemDataHolder holder;
 
         if (convertView == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(context);
+            //LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
             //convertView.setMinimumHeight(200);
             holder = new ItemDataHolder();
             holder.text1 = (TextView) convertView.findViewById(R.id.txtTitle);
             holder.text2 = (TextView) convertView.findViewById(R.id.txtTitle2);
+            holder.layoutResourceId = layoutResourceId;
             //holder.imgIcon = (ImageView)convertView.findViewById(R.id.imgIcon);
 
             convertView.setTag(holder);
-        } else holder = (ItemDataHolder) convertView.getTag();
+        }
 
-        MultilineItem item = getItem(position);
+        holder = (ItemDataHolder) convertView.getTag();
         holder.text1.setText(item.getTitle(context));
         String text = item.getText(context);
         if (text == null) {
@@ -71,6 +83,7 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
         TextView text1;
         TextView text2;
         //ImageView imgIcon2;
+        Integer layoutResourceId;
     }
 
 }

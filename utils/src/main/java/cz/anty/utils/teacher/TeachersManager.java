@@ -71,7 +71,7 @@ public class TeachersManager {
         if (teachers.length > 0) {
             builder.append(teacherToString(teachers[0]));
             for (int i = 1; i < teachers.length; i++) {
-                builder.append("\n").append(teacherToString(teachers[i]).replaceAll("\n", "?"));
+                builder.append("\n").append(teacherToString(teachers[i]).replace('\n', '?'));
             }
         }
 
@@ -83,10 +83,10 @@ public class TeachersManager {
     }
 
     private String teacherToString(Teacher teacher) {
-        return teacher.getName().replaceAll(SPLIT_VALUE, "??????") + SPLIT_VALUE
-                + teacher.getShortcut().replaceAll(SPLIT_VALUE, "??????") + SPLIT_VALUE
-                + teacher.getPhoneNumber().replaceAll(SPLIT_VALUE, "??????") + SPLIT_VALUE
-                + teacher.getEmail().replaceAll(SPLIT_VALUE, "??????");
+        return teacher.getName().replace(SPLIT_VALUE, "??????") + SPLIT_VALUE
+                + teacher.getShortcut().replace(SPLIT_VALUE, "??????") + SPLIT_VALUE
+                + teacher.getPhoneNumber().replace(SPLIT_VALUE, "??????") + SPLIT_VALUE
+                + teacher.getEmail().replace(SPLIT_VALUE, "??????");
     }
 
     private Teacher parseTeacher(String string) {

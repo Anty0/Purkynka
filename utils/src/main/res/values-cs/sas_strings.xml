@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_sas">Správce SASu</string>
+
+    <string name="activity_title_login">Přihlášení do iSAS</string>
+    <string name="activity_title_sas_settings">Nastavení správce SASu</string>
+
+    <string name="service_title_sas_manager">Služba kontroly známek pro Správce SASu</string>
+
+    <string name="app_description_sas">Správce SASu je jednoduchý prográmek pro správu vašich známek, umí upozorňovat na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
+
+    <string name="exception_title_validate">Chyba při ověřování</string>
+    <string name="exception_validate_wrong_login">Špatné JMÉNO nebo HESLO</string>
+    <string name="exception_validate_no_connection">Nedaří se připojit internetu</string>
+    <string name="exception_title_sas_manager_binder_null">zkuste obnovit stránku</string>
+    <string name="exception_message_sas_manager_binder_null">Došlok chybě</string>
+    <string name="exception_title_login">Nelze provést přihlášení jako [NAME]</string>
+    <string name="exception_message_login">Uživatelské jméno, nebo heslo není v pořádku</string>
+
+    <string name="text_date">Datum</string>
+    <string name="text_logo">logo</string>
+    <string name="text_from">Z</string>
+    <string name="text_free_list">Nic k zobrazení</string>
+    <string name="text_marks">[NUMBER] Známek</string>
+    <string name="text_mark_with_weight">[NAME] [NUMBER] s vahou [WEIGHT]</string>
+    <string name="text_value">Známka</string>
+    <string name="text_weight">Váha</string>
+    <string name="text_type">Typ</string>
+    <string name="text_note">Poznámka</string>
+    <string name="text_teacher">Učitel</string>
+    <string name="text_short_lesson_name">Krátký název předmětu</string>
+    <string name="text_long_lesson_name">Dlouhý název předmětu</string>
+
+    <string name="check_box_text_sas_marks_update">Upozorňovat na nové známky</string>
+
+    <string name="menu_item_text_semester">Pololetí</string>
+    <string name="menu_item_text_semester_first">První</string>
+    <string name="menu_item_text_semester_second">Druhé</string>
+
+    <string name="menu_item_text_sort">Řadit podle</string>
+    <string name="menu_item_text_sort_date">Data</string>
+    <string name="menu_item_text_sort_lesson">Předmětů</string>
+
+    <string name="notify_title_new_marks">[NUMBER] nové ZNÁMKY</string>
+    <string name="notify_title_new_mark">[NUMBER] nová ZNÁMKA</string>
+</resources>

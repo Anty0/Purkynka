@@ -89,8 +89,10 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         }
                         if (man != null && !man.isInSchool()) {
                             Notification n = new NotificationCompat.Builder(context)
-                                    .setContentTitle(lesson.getShortName() + " " + context.getString(R.string.notify_substitution_title))
-                                    .setContentText(man.getName() + " " + context.getString(R.string.notify_teacher_is_not_here))
+                                    .setContentTitle(context.getString(R.string.notify_title_substitution)
+                                            .replace(Constants.STRINGS_CONST_NAME, lesson.getShortName()))
+                                    .setContentText(context.getString(R.string.notify_text_teacher_is_not_here)
+                                            .replace(Constants.STRINGS_CONST_NAME, man.getName()))
                                     .setSmallIcon(R.mipmap.ic_launcher) //TODO no default icon
                                     .setContentIntent(null)
                                     .setAutoCancel(true)

@@ -64,12 +64,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (UpdateReceiver.isUpdateAvailable(MainActivity.this)) {
-                            new AlertDialog.Builder(
-                                    MainActivity.this, R.style.AppTheme_Dialog)
-                                    .setTitle(R.string.notification_update_title)
-                                    .setMessage(getString(R.string.notification_update_text_old) + " " + BuildConfig.VERSION_NAME
-                                            + "\n" + getString(R.string.notification_update_text_new) + " " + UpdateReceiver.getLatestName(MainActivity.this)
-                                            + "\n" + getString(R.string.notify_message_update_alert))
+                            new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog)
+                                    .setTitle(R.string.notify_title_update)
+                                    .setMessage(getString(R.string.notify_text_update_old)
+                                            .replace(Constants.STRINGS_CONST_VERSION, BuildConfig.VERSION_NAME)
+                                            + "\n" + getString(R.string.notify_text_update_new)
+                                            .replace(Constants.STRINGS_CONST_VERSION, UpdateReceiver.getLatestName(MainActivity.this))
+                                            + "\n\n" + getString(R.string.dialog_message_update_alert))
                                     .setPositiveButton(R.string.but_update, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }).setIcon(R.mipmap.ic_launcher)
                                     .setCancelable(false)
-                                    .setNeutralButton(R.string.but_defer, new DialogInterface.OnClickListener() {
+                                    .setNeutralButton(R.string.but_skip, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             checkTerms();
@@ -111,14 +112,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.loading));
+        }, getString(R.string.wait_text_loading));
     }
 
     private void downloadInstallUpdate() {
         worker.startWorker(new RunnableWithProgress() {
             @Override
             public String run(ProgressReporter reporter) {
-                String filename = getString(R.string.latest) + " " + getString(R.string.app_name) + " " + UpdateReceiver.getLatestCode(MainActivity.this) + ".apk";
+                String filename = getString(R.string.text_app_apk_name)
+                        .replace(Constants.STRINGS_CONST_NAME, getString(R.string.app_name))
+                        .replace(Constants.STRINGS_CONST_NUMBER,
+                                Integer.toString(UpdateReceiver.getLatestCode(MainActivity.this)));
 
                 Intent intent = null;
                 String toReturn;
@@ -130,9 +134,9 @@ public class MainActivity extends AppCompatActivity {
                                     "application/vnd.android.package-archive")
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    toReturn = getString(R.string.download_successful);
+                    toReturn = getString(R.string.toast_text_download_successful);
                 } catch (IOException e) {
-                    toReturn = getString(R.string.download_failed);
+                    toReturn = getString(R.string.toast_text_download_failed);
                 }
 
                 final Intent finalIntent = intent;
@@ -249,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //return toReturn;
             }
-        }, getString(R.string.downloading_update) + "…");
+        }, getString(R.string.wait_text_downloading_update) + "…");
     }
 
     private void checkTerms() {
@@ -263,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog)
-                                    .setTitle(R.string.title_terms)
+                                    .setTitle(R.string.dialog_title_terms)
                                     .setMessage(terms)
                                     .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
                                         @Override
@@ -293,23 +297,23 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.loading));
+        }, getString(R.string.wait_text_loading));
     }
 
     private String getTerms() {
         try {
             return UpdateConnector.getLatestTerms(getString(R.string.language));
         } catch (IOException e) {
-            return getString(R.string.text_terms);
+            return getString(R.string.dialog_text_terms);
         }
     }
 
     private void initialize() {
         MultilineItem[] data = new MultilineItem[]{
-                new TextMultilineItem(getString(R.string.sas_app_name), getString(R.string.sas_app_description)),
-                new TextMultilineItem(getString(R.string.wifi_app_name), getString(R.string.wifi_app_description)),
-                new TextMultilineItem(getString(R.string.timetable_app_name), getString(R.string.timetable_app_description)),
-                new TextMultilineItem(getString(R.string.attendance_app_name), getString(R.string.attendance_app_description))};
+                new TextMultilineItem(getString(R.string.app_name_sas), getString(R.string.app_description_sas)),
+                new TextMultilineItem(getString(R.string.app_name_wifi), getString(R.string.app_description_wifi)),
+                new TextMultilineItem(getString(R.string.app_name_timetable), getString(R.string.app_description_timetable)),
+                new TextMultilineItem(getString(R.string.app_name_attendance), getString(R.string.app_description_attendance))};
 
         adapter.setNotifyOnChange(false);
         adapter.clear();

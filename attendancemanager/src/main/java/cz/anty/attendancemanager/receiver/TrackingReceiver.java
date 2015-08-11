@@ -62,7 +62,7 @@ public class TrackingReceiver extends BroadcastReceiver {
                                         .setContentText((findMan.isInSchool() ?
                                                 context.getString(R.string.notify_text_tracked_is_in_school) :
                                                 context.getString(R.string.notify_text_tracked_is_in_not_school))
-                                                .replaceAll(Constants.STRINGS_CONST_NAME,
+                                                .replace(Constants.STRINGS_CONST_NAME,
                                                         findMan.getName()) + " (" + findMan.getLastEnterAsString() + ")")
                                         .setSmallIcon(R.mipmap.ic_launcher) //TODO no default icon
                                         .setContentIntent(PendingIntent.getActivity(context, 0,

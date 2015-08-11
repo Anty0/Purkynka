@@ -18,7 +18,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/insert_login"
+                android:text="@string/text_view_text_insert_login"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <EditText
@@ -38,7 +38,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/insert_password"
+                android:text="@string/text_view_text_insert_password"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <EditText

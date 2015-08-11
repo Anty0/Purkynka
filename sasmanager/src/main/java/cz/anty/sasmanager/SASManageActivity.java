@@ -19,6 +19,7 @@ import android.widget.ListView;
 import java.util.Arrays;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -108,17 +109,17 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onResume");
-        super.onResume();
+    protected void onStart() {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onStart");
+        super.onStart();
         Intent intent = new Intent(this, SASManagerService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
-    protected void onPause() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onPause");
-        super.onPause();
+    protected void onStop() {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onStop");
+        super.onStop();
         unbindService(mConnection);
     }
 
@@ -257,8 +258,8 @@ public class SASManageActivity extends AppCompatActivity {
                             break;
                     }
                 } else {
-                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.manage_null_exception_title),
-                            getString(R.string.manage_null_exception_message))};
+                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
+                            getString(R.string.exception_message_sas_manager_binder_null))};
                 }
                 /*ArrayList<String> list = new ArrayList<>();
                 Collections.addAll(list, values);
@@ -315,7 +316,7 @@ public class SASManageActivity extends AppCompatActivity {
                     }
                 });*/
             }
-        }, showProgressBar ? getString(R.string.loading) : null);
+        }, showProgressBar ? getString(R.string.wait_text_loading) : null);
         if (AppDataManager.isDebugMode(this))
             Log.d("SASManageActivity", "onUpdate: Thread started");
     }
@@ -357,8 +358,10 @@ public class SASManageActivity extends AppCompatActivity {
     private void logInException() {
         if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "logInException");
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                .setTitle(getString(R.string.login_exception_title) + " " + AppDataManager.getUsername(AppDataManager.Type.SAS, this))
-                .setMessage(R.string.login_exception_message)
+                .setTitle(getString(R.string.exception_title_login)
+                        .replace(Constants.STRINGS_CONST_NAME,
+                                AppDataManager.getUsername(AppDataManager.Type.SAS, this)))
+                .setMessage(R.string.exception_message_login)
                 .setPositiveButton(R.string.but_retry, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -378,7 +381,7 @@ public class SASManageActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-                        }, getString(R.string.logging_in));
+                        }, getString(R.string.wait_text_logging_in));
                     }
                 })
                 .setNeutralButton(R.string.but_log_out,

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_title_terms">Podmínky používání aplikace</string>
+    <string name="dialog_text_terms">Použití aplikace je na vlastní nebezpečí.\nVývojář si vyhrazuje právo kdykoliv bez upozornění změnit podmínky použití této aplikace, nebo jakékoli její části.</string>
+    <string name="dialog_message_update_alert">Pokud tlačítko \"Aktualizovat\" nefunguje, tak stáhni a nainstaluj aktualizaci manuálně z oficiálních webových stránek aplikace.</string>
+
+    <string name="toast_text_download_successful">Stahování úspěšně dokončeno</string>
+    <string name="toast_text_download_failed">Chyba stahování</string>
+
+    <string name="notify_title_update">Dostupná aktualizace</string>
+    <string name="notify_text_update_old">Nainstalovaná verze:</string>
+    <string name="notify_text_update_new">Dostupná verze:</string>
+
+    <string name="wait_text_downloading_update">Stahuji aktualizaci</string>
+
+    <string name="text_app_apk_name">Nejnovější [NAME] [NUMBER].apk</string>
+</resources>
