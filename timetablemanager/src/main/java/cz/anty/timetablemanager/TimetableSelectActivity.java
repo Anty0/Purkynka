@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import cz.anty.timetablemanager.receiver.ScheduleReceiver;
+import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.StableArrayAdapter;
@@ -36,18 +36,21 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (AppDataManager.isDebugMode(this))
+            Log.d("TimetableSelectActivity", "onCreate");
         super.onCreate(savedInstanceState);
-        sendBroadcast(new Intent(this, ScheduleReceiver.class));
+        sendBroadcast(new Intent(this, TimetableScheduleReceiver.class));
         setContentView(R.layout.activity_timetable_select);
 
         if (worker == null)
             worker = new OnceRunThreadWithSpinner(this);
         if (timetableManager == null)
             timetableManager = new TimetableManager(this);
-        initialize();
     }
 
     private void initialize() {
+        if (AppDataManager.isDebugMode(this))
+            Log.d("TimetableSelectActivity", "initialize");
         ListView listView = ((ListView) findViewById(R.id.listView));
         final Timetable[] timetables = timetableManager.getTimetables();
         String[] values = new String[timetables.length + 1];

@@ -14,6 +14,7 @@ import java.util.List;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.R;
+import cz.anty.utils.attendance.man.TrackingMansManager;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
 
@@ -26,6 +27,7 @@ import cz.anty.utils.sas.mark.MarksManager;
 public class WidgetMultilineAdapter implements RemoteViewsService.RemoteViewsFactory {
 
     public static final String EXTRA_MARKS_AS_STRING = "MARKS_STRING";
+    public static final String EXTRA_MANS_AS_STRING = "MANS_STRING";
 
     private final ArrayList<MultilineItem> listItemList = new ArrayList<>();
     private final Context context;
@@ -40,13 +42,18 @@ public class WidgetMultilineAdapter implements RemoteViewsService.RemoteViewsFac
         MultilineItem[] items;
 
         Bundle extras = intent.getExtras();
-        if (extras != null) {
+        if (extras == null) {
+            items = new MultilineItem[0];
+        } else {
             String marksAsString = extras.getString(EXTRA_MARKS_AS_STRING);
+            String mansAsString = extras.getString(EXTRA_MANS_AS_STRING);
             if (marksAsString != null) {
                 List<Mark> itemList = MarksManager.parseMarks(marksAsString);
                 items = itemList.toArray(new MultilineItem[itemList.size()]);
+            } else if (mansAsString != null) {
+                items = new TrackingMansManager(mansAsString).get();
             } else items = new MultilineItem[0];
-        } else items = new MultilineItem[0];
+        }
 
         populateListItem(items);
     }

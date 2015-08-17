@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.sas.mark.MarksManager;
 
 /**
@@ -20,18 +21,20 @@ import cz.anty.utils.sas.mark.MarksManager;
 public class SASConnector {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-    //private static final String SHORT_BY_LESSONS = "predmety";
-    //private static final String SHORT_BY_SCORE = "hodnoceni";
-    public static final int MAX_TRY = 3;
+
     private static final String LOGIN_URL = "https://www.sspbrno.cz/ISAS/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
     private static final String PASS_FIELD = "login-isas-password";
     private static final String SUBMIT = "login-isas-send";
     private static final String SUBMIT_VALUE = "isas-send";
+
     private static final String MARKS_URL = "https://www.sspbrno.cz/ISAS/prubezna-klasifikace.php";
     private static final String SEMESTER = "pololeti";
     private static final String SHORT_BY = "zobraz";
     private static final String SHORT_BY_DATE = "datum";
+    //private static final String SHORT_BY_LESSONS = "predmety";
+    //private static final String SHORT_BY_SCORE = "hodnoceni";
+
     private final Map<String, String> loginCookies;
 
     public SASConnector(String username, String password) throws IOException {
@@ -39,7 +42,7 @@ public class SASConnector {
     }
 
     private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {
-        if (depth >= MAX_TRY) throw last;
+        if (depth >= Constants.MAX_TRY) throw last;
         try {
             return Jsoup
                     .connect(LOGIN_URL)
@@ -71,7 +74,7 @@ public class SASConnector {
     }
 
     private synchronized Document getMarksPage(int depth, IOException last, MarksManager.Semester semester) throws IOException {
-        if (depth >= MAX_TRY) throw last;
+        if (depth >= Constants.MAX_TRY) throw last;
         try {
             return Jsoup
                     .connect(MARKS_URL)

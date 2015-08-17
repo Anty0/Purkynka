@@ -5,6 +5,8 @@
     <string name="activity_title_login">Přihlášení do iSAS</string>
     <string name="activity_title_sas_settings">Nastavení správce SASu</string>
 
+    <string name="widget_label_sas_manage">Widget Správce SASu</string>
+
     <string name="service_title_sas_manager">Služba kontroly známek pro Správce SASu</string>
 
     <string name="app_description_sas">Správce SASu je jednoduchý prográmek pro správu vašich známek, umí upozorňovat na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>

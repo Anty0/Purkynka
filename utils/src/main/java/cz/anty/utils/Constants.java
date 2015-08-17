@@ -6,6 +6,9 @@ package cz.anty.utils;
  * @author anty
  */
 public class Constants {
+
+    public static final int MAX_TRY = 3;
+
     public static final int NOTIFICATION_ID_SAS_MANAGER_SERVICE = 1;
     public static final int NOTIFICATION_ID_TEACHERS_ATTENDANCE = 2;
     public static final int NOTIFICATION_ID_UPDATE = 3;
@@ -19,7 +22,7 @@ public class Constants {
 
     public static final long REPEAT_TIME_UPDATE = 1000 * 60 * 60 * 5;
     public static final long REPEAT_TIME_SAS_MARKS_UPDATE = 1000 * 60 * 15;
-    public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;
+    //public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;
     public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 5;
 
     public static final String STRINGS_CONST_NAME = "[NAME]";
@@ -65,6 +68,8 @@ public class Constants {
     public static final String SETTINGS_NAME_WIFI = "WIFILoginData";
     public static final String SETTING_NAME_WAIT_LOGIN = "WAIT_LOGIN";
     public static final String SETTING_NAME_AUTO_LOGIN = "AUTO_LOGIN";
+
+    public static final String SETTINGS_NAME_I_CANTEEN = "iCanteenLoginData";
 
     public static final String SETTINGS_NAME_DEBUG = "DEBUGSettingsData";
     public static final String SETTING_NAME_DEBUG_MODE = "DEBUG_MODE";

@@ -5,6 +5,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.List;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.Marks;
@@ -52,7 +53,7 @@ public class SASManager {
 
     private synchronized List<Mark> getMarks(MarksManager.Semester semester, int depth) throws IOException {
         if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
-        if (depth >= SASConnector.MAX_TRY) throw new WrongLoginDataException();
+        if (depth >= Constants.MAX_TRY) throw new WrongLoginDataException();
         Elements marksElements;
         try {
             marksElements = connector.getMarksElements(semester);

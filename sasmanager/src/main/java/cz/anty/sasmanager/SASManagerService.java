@@ -136,8 +136,7 @@ public class SASManagerService extends Service {
                 }
             });
         }
-        //return super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
+        return super.onStartCommand(intent, flags, startId);
     }
 
     private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget) {
@@ -234,7 +233,7 @@ public class SASManagerService extends Service {
                 .setDefaults(Notification.DEFAULT_ALL)
                         //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(builderBig))
+                        .bigText(builderBig).setSummaryText(builder))//TODO Check if working SummaryText
                 .build();
 
         //Calendar calendar = Calendar.getInstance(Locale.getDefault());

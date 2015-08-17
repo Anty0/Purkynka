@@ -19,7 +19,6 @@ android {
             renderscriptDebuggable false
             renderscriptOptimLevel 5
             zipAlignEnabled true
-            pseudoLocalesEnabled false
         }
         debug {
             debuggable true

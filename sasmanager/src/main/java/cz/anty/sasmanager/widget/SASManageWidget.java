@@ -15,12 +15,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.util.List;
+
 import cz.anty.sasmanager.R;
 import cz.anty.sasmanager.SASManagerService;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.WidgetMultilineAdapter;
 import cz.anty.utils.listItem.WidgetService;
+import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
 
 /**
@@ -59,7 +63,7 @@ public class SASManageWidget extends AppWidgetProvider {
 
     @SuppressLint("NewApi")
     @Override
-    public synchronized void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
+    public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "onUpdate");
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
                 context.getPackageName(), R.layout.sasmanage_widget_loading));
@@ -76,15 +80,8 @@ public class SASManageWidget extends AppWidgetProvider {
 
         //Log.d("UPDATE", "onUpdate creating remote views");
         //which layout to show on widget
-        RemoteViews remoteViews;
-
-        if (Build.VERSION.SDK_INT >= 11) {
-            remoteViews = new RemoteViews(
-                    context.getPackageName(), R.layout.sasmanage_widget_new);
-        } else {
-            remoteViews = new RemoteViews(
-                    context.getPackageName(), R.layout.sasmanage_widget_old);
-        }
+        RemoteViews remoteViews = new RemoteViews(
+                context.getPackageName(), R.layout.sasmanage_widget);
 
         //Log.d("UPDATE", "onUpdate setting onClick listeners");
         remoteViews.setOnClickPendingIntent(R.id.image_button_refresh,
@@ -123,7 +120,23 @@ public class SASManageWidget extends AppWidgetProvider {
             remoteViews.setEmptyView(R.id.list_view_marks, R.id.empty_view);
         } else {
             //Log.d("UPDATE", "onUpdate loading old version view");
-            remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE);
+            List<Mark> itemList = MarksManager.parseMarks(marks);
+            if (itemList.isEmpty())
+                remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE);
+            else {
+                remoteViews.setViewVisibility(R.id.widget_main_layout, View.VISIBLE);
+                //remoteViews.removeAllViews(R.id.widget_main_layout);
+                int len = itemList.size();
+                len = len > 7 ? 7 : len;
+                for (int i = 0; i < len; i++) {
+                    MultilineItem multilineItem = itemList.get(i);
+                    RemoteViews itemRemoteViews = new RemoteViews(
+                            context.getPackageName(), R.layout.text_widget_multi_line_list_item);
+                    itemRemoteViews.setTextViewText(R.id.txtTitle, multilineItem.getTitle(context));
+                    itemRemoteViews.setTextViewText(R.id.txtTitle2, multilineItem.getText(context));
+                    remoteViews.addView(R.id.widget_main_layout, itemRemoteViews);
+                }
+            }
             //remoteViews.setViewVisibility(R.id.linear_layout_marks, View.VISIBLE);
                     /*MultilineItem[] items = (MultilineItem[]) MarksManager.parseMarks(marks).toArray();
                     int len = items.length > 10 ? 10 : items.length;
@@ -134,6 +147,8 @@ public class SASManageWidget extends AppWidgetProvider {
 
         //Log.d("UPDATE", "onUpdate updating widget");
         // Instruct the widget manager to update the widget
+        //ComponentName thisWidget = new ComponentName(context, SASManageWidget.class);
+        //appWidgetManager = AppWidgetManager.getInstance(context);
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
         //Log.d("UPDATE", "onUpdate exiting");
     }

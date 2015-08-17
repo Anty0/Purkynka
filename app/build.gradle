@@ -20,7 +20,6 @@ android {
             renderscriptDebuggable false
             renderscriptOptimLevel 5
             zipAlignEnabled true
-            pseudoLocalesEnabled false
         }
         debug {
             debuggable true
@@ -37,6 +36,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile project(':sasmanager')
     compile project(':wifiautologin')
+    compile project(':icanteenmanager')
     compile project(':timetablemanager')
     compile project(':attendancemanager')
     compile project(':utils')

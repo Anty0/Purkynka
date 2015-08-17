@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 
 import cz.anty.attendancemanager.SearchActivity;
+import cz.anty.icanteenmanager.ICanteenSplashActivity;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.AppDataManager;
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             preferences.edit().putInt(Constants.SETTING_NAME_FIRST_START,
                                                     BuildConfig.VERSION_CODE).apply();
-                                            initialize();
+                                            init();
                                         }
                                     })
                                     .setNegativeButton(R.string.but_exit, new DialogInterface.OnClickListener() {
@@ -293,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initialize();
+                        init();
                     }
                 });
             }
@@ -308,10 +309,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initialize() {
+    private void init() {
         MultilineItem[] data = new MultilineItem[]{
                 new TextMultilineItem(getString(R.string.app_name_sas), getString(R.string.app_description_sas)),
                 new TextMultilineItem(getString(R.string.app_name_wifi), getString(R.string.app_description_wifi)),
+                new TextMultilineItem(getString(R.string.app_name_icanteen), getString(R.string.app_description_icanteen)),
                 new TextMultilineItem(getString(R.string.app_name_timetable), getString(R.string.app_description_timetable)),
                 new TextMultilineItem(getString(R.string.app_name_attendance), getString(R.string.app_description_attendance))};
 
@@ -336,9 +338,12 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, WifiLoginActivity.class));
                         break;
                     case 2:
-                        startActivity(new Intent(MainActivity.this, TimetableSelectActivity.class));
+                        startActivity(new Intent(MainActivity.this, ICanteenSplashActivity.class));
                         break;
                     case 3:
+                        startActivity(new Intent(MainActivity.this, TimetableSelectActivity.class));
+                        break;
+                    case 4:
                         startActivity(new Intent(MainActivity.this, SearchActivity.class));
                         break;
                 }

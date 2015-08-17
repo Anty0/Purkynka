@@ -19,7 +19,7 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".receiver.ScheduleReceiver"
+            android:name=".receiver.TimetableScheduleReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

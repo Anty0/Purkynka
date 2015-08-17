@@ -4,13 +4,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import cz.anty.sasmanager.receiver.ScheduleReceiver;
+import cz.anty.sasmanager.receiver.StartServiceScheduleReceiver;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.thread.OnceRunThread;
@@ -37,7 +36,6 @@ public class SASSplashActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             startDefaultActivity();
-                            finish();
                         }
                     });
                 }
@@ -57,10 +55,12 @@ public class SASSplashActivity extends AppCompatActivity {
         } else {
             activity = new Intent(this, SASLoginActivity.class);
         }
-        if (Build.VERSION.SDK_INT > 10)
+        /*if (Build.VERSION.SDK_INT > 10)
             activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        else activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        else */
+        activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(activity);
+        finish();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class SASSplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         worker.setPowerManager(this);
-        sendBroadcast(new Intent(this, ScheduleReceiver.class));
+        sendBroadcast(new Intent(this, StartServiceScheduleReceiver.class));
     }
 
     @Override

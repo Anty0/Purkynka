@@ -11,6 +11,8 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import cz.anty.utils.Constants;
+
 /**
  * Created by anty on 13.6.15.
  *
@@ -19,7 +21,7 @@ import java.util.Locale;
 public class AttendanceConnector {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
-    private static final int MAX_TRY = 3;
+
     //private static final String DEFAULT_LOGIN = "rodic";
     private static final String DEFAULT_URL = "http://www2.sspbrno.cz/main.asp";
     //private static final String LOGIN_FIELD = "LOGIN";
@@ -58,13 +60,22 @@ public class AttendanceConnector {
         return getSupElements(0, null, search, page);
     }
 
+    /*private synchronized String encodeString(String toEncode) {
+        return toEncode.replace("ň", "%F2").replace("Ň", "%D2");//Š
+    }*/
+
     private synchronized Elements getSupElements(int depth, IOException last, String search, int page) throws IOException {
-        if (depth >= MAX_TRY) throw last;
+        if (depth >= Constants.MAX_TRY) throw last;
         try {
             //URLConnection url = new URL(DEFAULT_URL + "?" + SEARCH + "=" + search + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
             //        + "&" + ATT_URL_ADD + "=" + ATT_URL_ADD_VALUE + "&" + PAGE + "=" + Integer.toString(page)).openConnection();
-            String urlStr = DEFAULT_URL + "?" + SEARCH + "=" + URLEncoder.encode(search, "cp1252") + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
+            String urlStr = DEFAULT_URL + "?" + SEARCH + "=" + URLEncoder.encode(search, "Windows-1250") + "&" + SEARCH_SUBMIT + "=" + SEARCH_SUBMIT_VALUE
                     + "&" + ATT_URL_ADD + "=" + ATT_URL_ADD_VALUE + "&" + PAGE + "=" + Integer.toString(page);
+            //Log.d("AttendanceConnector", "getSupElements URLEncoder cp1252: " + URLEncoder.encode(search, "cp1252"));
+            //Log.d("AttendanceConnector", "getSupElements URLEncoder us-ascii: " + URLEncoder.encode(search, "us-ascii"));
+            //Log.d("AttendanceConnector", "getSupElements URLEncoder UTF8: " + URLEncoder.encode(search, "UTF8"));
+            //Log.d("AttendanceConnector", "getSupElements URLEncoder Windows-1250: " + URLEncoder.encode(search, "Windows-1250"));
+            //Log.d("AttendanceConnector", "getSupElements encodeString: " + encodeString(search));
             //URL url= new URL(urlStr);
             //URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
             Document doc = Jsoup

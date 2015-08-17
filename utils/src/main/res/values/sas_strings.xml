@@ -5,6 +5,8 @@
     <string name="activity_title_login">Login to iSAS</string>
     <string name="activity_title_sas_settings">SAS Manager Settings</string>
 
+    <string name="widget_label_sas_manage">SAS Manager Widget</string>
+
     <string name="service_title_sas_manager">SAS Manager Service</string>
 
     <string name="app_description_sas">SAS Manager is a simple program for managing your marks, can notify you of new marks and provides complete view of your marks.</string>

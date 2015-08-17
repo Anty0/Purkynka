@@ -7,7 +7,7 @@ import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
-import cz.anty.utils.sas.SASConnector;
+import cz.anty.utils.Constants;
 
 /**
  * Created by anty on 11.6.15.
@@ -25,7 +25,7 @@ public class WifiLogin {
     private static final String SUBMIT_VALUE = "Submit";
 
     public static boolean tryLogin(String username, String password) {
-        for (int i = 0; i < SASConnector.MAX_TRY; i++) {
+        for (int i = 0; i < Constants.MAX_TRY; i++) {
             try {
                 Jsoup.connect(LOGIN_URL)
                         .data("buttonClicked", "4", "err_flag", "0", "err_msg", "", "info_flag", "0", "redirect_url", ""

@@ -6,7 +6,6 @@ import org.jsoup.select.Elements;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import cz.anty.utils.attendance.AttendanceConnector;
 
@@ -32,39 +31,14 @@ public class Mans {
     }
 
     public static Man parseMan(Element man) {
-        Man.Builder builder = new Man.Builder();
-
         Elements manData = man.select("td");
-        for (int i = 0; i < manData.size(); i++) {
-            String manInfoText = manData.get(i).text();
-            switch (i) {
-                case 0:
-                    //name
-                    builder.setName(manInfoText);
-                    break;
-                case 1:
-                    //class
-                    builder.setClassString(manInfoText);
-                    break;
-                case 2:
-                    //date
-                    try {
-                        builder.setLastEnter(AttendanceConnector.DATE_FORMAT.parse(manInfoText));
-                    } catch (ParseException e) {
-                        throw new IllegalArgumentException("Parameter error: invalid date " + manInfoText, e);
-                    }
-                    break;
-                case 3:
-                    //inSchool
-                    builder.setInSchool(!manInfoText.toLowerCase(Locale.getDefault()).contains("ne"));
-                    break;
-                default:
-                    //unknown parameter
-                    throw new IllegalArgumentException("Parameter error: " + manInfoText);
-            }
+        try {
+            return new Man(manData.get(0).text(), manData.get(1).text(),
+                    AttendanceConnector.DATE_FORMAT.parse(manData.get(2).text()),
+                    Man.IsInSchoolState.parseIsInSchoolState(manData.get(3).text()));
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Parameter error: invalid date " + manData.get(2).text(), e);
         }
-
-        return builder.get();
     }
 
 }

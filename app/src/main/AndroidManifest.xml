@@ -18,7 +18,7 @@
         </activity>
 
         <receiver
-            android:name=".ScheduleReceiver"
+            android:name=".UpdateScheduleReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

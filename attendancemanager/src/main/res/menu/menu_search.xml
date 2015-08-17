@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SearchActivity">
+
+    <item
+        android:id="@+id/action_show_tracked_people"
+        android:orderInCategory="100"
+        android:title="@string/menu_item_text_show_tracked_people"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_white_48dp"
+        android:orderInCategory="100"
+        android:title="@string/menu_item_text_settings"
+        app:showAsAction="always" />
+</menu>

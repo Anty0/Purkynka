@@ -78,23 +78,15 @@ public class MarksManager {
 
     private static Mark parseMark(String string) {
         String[] markData = string.split(SPLIT_VALUE);
-        Mark.Builder builder = new Mark.Builder()
-                .setShortLesson(markData[1])
-                .setLongLesson(markData[2])
-                .setValueToShow(markData[3])
-                .setValue(Double.parseDouble(markData[4]))
-                .setType(markData[5])
-                .setWeight(Integer.parseInt(markData[6]))
-                .setNote(markData[7])
-                .setTeacher(markData[8]);
+        Date date;
         try {
-            builder.setDate(SASConnector.DATE_FORMAT.parse(markData[0]));
+            date = SASConnector.DATE_FORMAT.parse(markData[0]);
         } catch (ParseException e) {
-            builder.setDate(new Date(System.currentTimeMillis()));
-            //throw new IllegalArgumentException("Parameter error: invalid date " + markInfo, e);
+            date = new Date(System.currentTimeMillis());
         }
-
-        return builder.get();
+        return new Mark(date,
+                markData[1], markData[2], markData[3], Double.parseDouble(markData[4]),
+                markData[5], Integer.parseInt(markData[6]), markData[7], markData[8]);
     }
 
     public synchronized void add(Mark mark, Semester semester) {

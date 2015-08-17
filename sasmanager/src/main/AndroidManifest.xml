@@ -35,7 +35,7 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".receiver.ScheduleReceiver"
+            android:name=".receiver.StartServiceScheduleReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -43,7 +43,9 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".widget.SASManageWidget">
+        <receiver
+            android:name=".widget.SASManageWidget"
+            android:label="@string/widget_label_sas_manage">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

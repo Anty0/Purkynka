@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import cz.anty.attendancemanager.receiver.ScheduleReceiver;
+import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.attendance.AttendanceConnector;
@@ -108,7 +108,7 @@ public class SearchActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         mansManager.remove(man).apply();
-                                        sendBroadcast(new Intent(SearchActivity.this, ScheduleReceiver.class));
+                                        sendBroadcast(new Intent(SearchActivity.this, TrackingScheduleReceiver.class));
                                     }
                                 })
                                 .setNegativeButton(R.string.but_no, null)
@@ -132,7 +132,7 @@ public class SearchActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         mansManager.add(man).apply();
-                                                        sendBroadcast(new Intent(SearchActivity.this, ScheduleReceiver.class));
+                                                        sendBroadcast(new Intent(SearchActivity.this, TrackingScheduleReceiver.class));
                                                     }
                                                 })
                                                 .setNegativeButton(R.string.but_cancel, null)
@@ -157,7 +157,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_default, menu);
+        getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
     }
 
@@ -170,6 +170,10 @@ public class SearchActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, AttendanceSettingsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_show_tracked_people) {
+            startActivity(new Intent(this, TrackingActivity.class));
             return true;
         }
 

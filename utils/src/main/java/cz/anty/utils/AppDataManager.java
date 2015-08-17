@@ -140,13 +140,15 @@ public class AppDataManager {
     }
 
     public enum Type {
-        SAS, WIFI, DEBUG;
+        SAS, WIFI, I_CANTEEN, DEBUG;
 
         @Override
         public String toString() {
             switch (this) {
                 case DEBUG:
                     return Constants.SETTINGS_NAME_DEBUG;
+                case I_CANTEEN:
+                    return Constants.SETTINGS_NAME_I_CANTEEN;
                 case WIFI:
                     return Constants.SETTINGS_NAME_WIFI;
                 case SAS:

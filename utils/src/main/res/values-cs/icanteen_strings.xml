@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_icanteen">Správce iCanteen</string>
+    <string name="app_name_icanteen_burza">Hlídač Burzy</string>
+
+    <string name="activity_title_login_icanteen">Přihlášení do iCanteen</string>
+
+    <string name="app_description_icanteen">Správce iCanteen je prográmek, který dokáže spravovat a objednávat školní obědy, také dokáže hlídat burzu a automaticky objednat oběd, jakmile bude dostupný.</string>
+    <string name="app_description_icanteen_burza">Hlídač burzy dokáže kontrolovat ve velmi krátkých intervalech obědovou burzu a tak zvyšuje vaši pravděpodobnost na zisk oběda ze školní burzy.</string>
+</resources>

@@ -4,6 +4,9 @@
 
     <string name="activity_title_attendance_search">Vyhledávat v docházkovém systému</string>
     <string name="activity_title_attendance_settings">Nastavení správce docházky</string>
+    <string name="activity_title_tracking">Sledovaní lidé</string>
+
+    <string name="widget_label_tracking">Widget Sledovaných lidí</string>
 
     <string name="app_description_attendance">Doházkový systém je prográmek, který dokáže vyhledávat v docházkovém systému školy a dokáže určit, kdo je v současné době ve škole a kdo ne, také je schopen sledovat docházku u vybraných osob a upozornit na změny přítomnosti ve škole u těchto osob.</string>
 
@@ -12,6 +15,8 @@
 
     <string name="list_item_title_connection_exception">Zkontroluj připojení k internetu</string>
     <string name="list_item_text_connection_exception">Chyba připojení</string>
+
+    <string name="menu_item_text_show_tracked_people">Zobraz sledované lidi</string>
 
     <string name="dialog_title_terms_warning">!!!POZOR!!!</string>
     <string name="dialog_text_attendance_tracking">Začít sledovat docházku člověka jménem "[NAME]"?</string>

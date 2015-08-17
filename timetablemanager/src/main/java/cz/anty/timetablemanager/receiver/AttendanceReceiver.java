@@ -9,9 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import cz.anty.timetablemanager.R;
 import cz.anty.utils.AppDataManager;
@@ -28,29 +26,28 @@ import cz.anty.utils.timetable.TimetableManager;
 
 public class AttendanceReceiver extends BroadcastReceiver {
 
-    private static final OnceRunThread worker = new OnceRunThread();
+    public static final String DAY = "DAY";
+    public static final String LESSON_INDEX = "LESSON_INDEX";
+
+    private final OnceRunThread worker = new OnceRunThread();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
+        if (AppDataManager.isDebugMode(context))
+            Log.d("AttendanceReceiver", "onReceive");
+        int day = intent.getIntExtra(DAY, -1);
+        int lessonIndex = intent.getIntExtra(LESSON_INDEX, -1);
+        if (day != -1 && lessonIndex != -1 && context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)) {
-            context.sendBroadcast(new Intent(context, ScheduleReceiver.class));
-            return;
+            testSupplementation(context, day, lessonIndex);
         }
 
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        int minuteTime = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
-        for (int i = 0; i < Timetable.MAX_LESSONS; i++) {
-            int requestedTime = Timetable.START_TIMES_HOURS[i] * 60 + Timetable.START_TIMES_MINUTES[i];
-            if (minuteTime < requestedTime && minuteTime > requestedTime - 15) {
-                int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
-                testSupplementation(context, day, i);
-                break;
-            }
-        }
+        context.sendBroadcast(new Intent(context, TimetableScheduleReceiver.class));
     }
 
     private void testSupplementation(final Context context, final int day, final int lessonIndex) {
+        if (AppDataManager.isDebugMode(context))
+            Log.d("AttendanceReceiver", "testSupplementation");
         Timetable[] timetables = new TimetableManager(context).getTimetables();
         final AttendanceConnector connector = new AttendanceConnector();
         for (final Timetable timetable : timetables) {
@@ -87,7 +84,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                             if (man.getClassString().length() > 4) break;
                             else man = null;
                         }
-                        if (man != null && !man.isInSchool()) {
+                        if (man != null && Man.IsInSchoolState.IS_NOT_IN_SCHOOL.equals(man.isInSchool())) {
                             Notification n = new NotificationCompat.Builder(context)
                                     .setContentTitle(context.getString(R.string.notify_title_substitution)
                                             .replace(Constants.STRINGS_CONST_NAME, lesson.getShortName()))

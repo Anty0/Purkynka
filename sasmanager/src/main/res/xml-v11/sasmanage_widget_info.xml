@@ -4,7 +4,6 @@
     android:initialLayout="@layout/sasmanage_widget_loading"
     android:minHeight="180dp"
     android:minWidth="120dp"
-    android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen|keyguard" />

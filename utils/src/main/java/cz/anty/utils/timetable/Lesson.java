@@ -19,29 +19,9 @@ public class Lesson {
 
     public static Lesson parse(String toParse) {
         if ("".equals(toParse) || "null".equals(toParse)) return null;
-        Builder builder = new Builder();
         String[] toParseData = toParse.split(PARSE_CHARS);
 
-        for (int i = 0; i < toParseData.length; i++) {
-            String toParseInfo = toParseData[i];
-
-            switch (i) {
-                case 0:
-                    builder.setName(toParseInfo);
-                    break;
-                case 1:
-                    builder.setShortName(toParseInfo);
-                    break;
-                case 2:
-                    builder.setClassString(toParseInfo);
-                    break;
-                case 3:
-                    builder.setTeacher(toParseInfo);
-                    break;
-            }
-        }
-
-        return builder.get();
+        return new Lesson(toParseData[0], toParseData[1], toParseData[2], toParseData[3]);
     }
 
     public String getName() {
@@ -66,45 +46,5 @@ public class Lesson {
                 + getShortName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getClassString().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getTeacher().replace(PARSE_CHARS, "?????");
-    }
-
-    public static class Builder {
-
-        private String name, shortName, classString, teacher;
-
-        public Builder(String name, String shortName, String classString, String teacher) {
-            this.name = name;
-            this.shortName = shortName;
-            this.classString = classString;
-            this.teacher = teacher;
-        }
-
-        public Builder() {
-
-        }
-
-        public synchronized Builder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public synchronized Builder setShortName(String shortName) {
-            this.shortName = shortName;
-            return this;
-        }
-
-        public synchronized Builder setClassString(String classString) {
-            this.classString = classString;
-            return this;
-        }
-
-        public synchronized Builder setTeacher(String teacher) {
-            this.teacher = teacher;
-            return this;
-        }
-
-        public synchronized Lesson get() {
-            return new Lesson(name, shortName, classString, teacher);
-        }
     }
 }

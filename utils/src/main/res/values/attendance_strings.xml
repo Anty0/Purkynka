@@ -4,6 +4,9 @@
 
     <string name="activity_title_attendance_search">Search in attendance</string>
     <string name="activity_title_attendance_settings">Attendance Settings</string>
+    <string name="activity_title_tracking">Tracking people</string>
+
+    <string name="widget_label_tracking">Tracking people Widget</string>
 
     <string name="app_description_attendance">Attendance Manager is a program that can search in attendance system and can identify who is currently in school and who is not also able to track attendance at selected persons and draw attention to the presence of a change in the school for such persons.</string>
 
@@ -12,6 +15,8 @@
 
     <string name="list_item_title_connection_exception">Check your internet connection</string>
     <string name="list_item_text_connection_exception">Connection exception</string>
+
+    <string name="menu_item_text_show_tracked_people">Show tracked people</string>
 
     <string name="dialog_title_terms_warning">!!!WARNING!!!</string>
     <string name="dialog_text_attendance_tracking">Start tracking attendance a man named \"[NAME]\"?</string>

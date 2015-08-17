@@ -58,57 +58,16 @@ public class Marks {
     }
 
     public static Mark parseMark(Element mark) {
-        Mark.Builder builder = new Mark.Builder();
-
         Elements markData = mark.select("td");
-        for (int i = 0; i < markData.size(); i++) {
-            Element markInfo = markData.get(i);
-            String markInfoText = markInfo.text();
-            switch (i) {
-                case 0:
-                    //date
-                    try {
-                        builder.setDate(SASConnector.DATE_FORMAT.parse(markInfoText));
-                    } catch (ParseException e) {
-                        throw new IllegalArgumentException("Parameter error: invalid date " + markInfoText, e);
-                    }
-                    break;
-                case 1:
-                    //lesson
-                    builder.setShortLesson(markInfoText)
-                            .setLongLesson(markInfo.attr("title"));
-                    break;
-                case 2:
-                    //mark
-                    builder.setValueToShow(markInfoText);
-                    break;
-                case 3:
-                    //mark value
-                    builder.setValue(Double.parseDouble(markInfoText));
-                    break;
-                case 4:
-                    //type
-                    builder.setType(markInfoText);
-                    break;
-                case 5:
-                    //weight
-                    builder.setWeight(Integer.parseInt(markInfoText));
-                    break;
-                case 6:
-                    //note
-                    builder.setNote(markInfoText);
-                    break;
-                case 7:
-                    //teacher
-                    builder.setTeacher(markInfoText);
-                    break;
-                default:
-                    //unknown parameter
-                    throw new IllegalArgumentException("Parameter error: " + markInfoText);
-            }
-        }
 
-        return builder.get();
+        try {
+            return new Mark(SASConnector.DATE_FORMAT.parse(markData.get(0).text()),
+                    markData.get(1).text(), markData.get(1).attr("title"), markData.get(2).text(),
+                    Double.parseDouble(markData.get(3).text()), markData.get(4).text(),
+                    Integer.parseInt(markData.get(5).text()), markData.get(6).text(), markData.get(7).text());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Parameter error: invalid date " + markData.get(0).text(), e);
+        }
     }
 
 }

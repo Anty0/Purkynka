@@ -16,14 +16,29 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".receiver.ScheduleReceiver"
+            android:name=".receiver.TrackingScheduleReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".TrackingActivity"
+            android:label="@string/activity_title_tracking"></activity>
+
+        <receiver
+            android:name=".widget.TrackingWidget"
+            android:label="@string/widget_label_tracking">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/tracking_widget_info" />
         </receiver>
     </application>
 
