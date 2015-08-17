@@ -71,8 +71,15 @@ public class TrackingWidget extends AppWidgetProvider {
 
         //Log.d("UPDATE", "onUpdate creating remote views");
         //which layout to show on widget
-        RemoteViews remoteViews = new RemoteViews(
-                context.getPackageName(), R.layout.tracking_widget);
+        RemoteViews remoteViews;
+
+        if (Build.VERSION.SDK_INT >= 11) {
+            remoteViews = new RemoteViews(
+                    context.getPackageName(), R.layout.tracking_widget_new);
+        } else {
+            remoteViews = new RemoteViews(
+                    context.getPackageName(), R.layout.tracking_widget_old);
+        }
 
         //Log.d("UPDATE", "onUpdate setting onClick listeners");
         remoteViews.setOnClickPendingIntent(R.id.image_button_refresh,
@@ -85,6 +92,7 @@ public class TrackingWidget extends AppWidgetProvider {
         //Log.d("UPDATE", "onUpdate checking if is logged in");
         if (Build.VERSION.SDK_INT >= 11) {
             //Log.d("UPDATE", "onUpdate loading new version view");
+            //remoteViews.setViewVisibility(R.id.list_view_marks, View.VISIBLE);
             //RemoteViews Service needed to provide adapter for ListView
             Intent svcIntent = new Intent(context, WidgetService.class);
             //passing app widget id to that RemoteViews Service
