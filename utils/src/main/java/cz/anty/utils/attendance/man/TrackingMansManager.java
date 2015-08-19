@@ -1,7 +1,10 @@
 package cz.anty.utils.attendance.man;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -10,6 +13,7 @@ import java.util.List;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.R;
 import cz.anty.utils.attendance.AttendanceConnector;
 
 /**
@@ -91,6 +95,66 @@ public class TrackingMansManager {
     public Man[] get() {
         synchronized (mans) {
             return mans.toArray(new Man[mans.size()]);
+        }
+    }
+
+    public void processMan(@NonNull final Man man, @Nullable final Runnable onChange) {
+        if (context == null) return;
+        if (contains(man)) {
+            new AlertDialog.Builder(context)
+                    .setTitle(man.getName())
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setMessage(context.getString(R.string.dialog_text_attendance_stop_tracking)
+                            .replace(Constants.STRINGS_CONST_NAME, man.getName()))
+                    .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            remove(man).apply();
+                            if (onChange != null) onChange.run();
+                        }
+                    })
+                    .setNegativeButton(R.string.but_no, null)
+                    .setCancelable(true)
+                    .show();
+        } else {
+            new AlertDialog.Builder(context)
+                    .setTitle(man.getName())
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setMessage(context.getString(R.string.dialog_text_attendance_tracking)
+                            .replace(Constants.STRINGS_CONST_NAME, man.getName()))
+                    .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle(R.string.dialog_title_terms_warning)
+                                        .setIcon(R.mipmap.ic_launcher)
+                                        .setMessage(context.getString(R.string.dialog_text_terms_attendance_tracking)
+                                                .replace(Constants.STRINGS_CONST_NAME, man.getName()))
+                                        .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                add(man).apply();
+                                                if (onChange != null) onChange.run();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.but_cancel, null)
+                                        .setCancelable(true)
+                                        .show();
+                            } else {
+                                new AlertDialog.Builder(context)
+                                        .setTitle(R.string.dialog_title_terms_warning)
+                                        .setIcon(R.mipmap.ic_launcher)
+                                        .setMessage(R.string.dialog_text_attendance_can_not_start_tracking)
+                                        .setPositiveButton(R.string.but_cancel, null)
+                                        .setCancelable(true)
+                                        .show();
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.but_no, null)
+                    .setCancelable(true)
+                    .show();
         }
     }
 

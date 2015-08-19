@@ -2,9 +2,27 @@
 <resources>
     <string name="app_name_icanteen">Správce iCanteen</string>
     <string name="app_name_icanteen_burza">Hlídač Burzy</string>
+    <string name="app_name_icanteen_lunch_order">Obědnavač obědů</string>
 
     <string name="activity_title_login_icanteen">Přihlášení do iCanteen</string>
 
     <string name="app_description_icanteen">Správce iCanteen je prográmek, který dokáže spravovat a objednávat školní obědy, také dokáže hlídat burzu a automaticky objednat oběd, jakmile bude dostupný.</string>
     <string name="app_description_icanteen_burza">Hlídač burzy dokáže kontrolovat ve velmi krátkých intervalech obědovou burzu a tak zvyšuje vaši pravděpodobnost na zisk oběda ze školní burzy.</string>
+    <string name="app_description_icanteen_lunch_order">Již brzy</string>
+
+    <string name="notify_title_can_not_login">Nejde se přihlásit do iCanteen</string>
+    <string name="notify_text_can_not_login">Prosím zkuste se odhlásit a zase znovu přihlásit</string>
+    <string name="notify_title_burza_checker_running">Hlídač Burzy běží</string>
+    <string name="notify_text_burza_checker_running">Klikněte pro ukončení</string>
+    <string name="notify_title_burza_checker_completed">Požadavek na objednávku úspěšně odeslán</string>
+    <string name="notify_text_burza_checker_completed">Prosím zkontrolujte, jestli proběhlo objednání úspěšně na webové stránce iCanteen</string>
+
+    <string name="notify_title_select_to_watch">Zvolte co hlídat</string>
+    <string name="text_view_text_date_to_watch">Zvolte hlídané DATUM:</string>
+    <string name="text_view_text_numbers_to_watch">Zvolte OBĚDY pro hlídání:</string>
+
+    <string name="menu_item_text_start_burza_checking">Spustit Hlídač burzy</string>
+
+    <string name="toast_text_can_not_start_burza_checker">Nejde spustit Hlídač burzy, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
+    <string name="toast_text_can_not_order_burza_lunch">Nejde objednat jídlo z burzy, prosím zkuste restartovat aplikaci</string>
 </resources>

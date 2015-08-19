@@ -16,6 +16,7 @@ import cz.anty.utils.AppDataManager;
 public class OnceRunThread {
 
     private final Object waitingThreadsLock = new Object();
+    private final Object workerLock = new Object();
     private final Object waitingLock = new Object();
     private final Object powerManagerLock = new Object();
     private PowerManager powerManager = null;
@@ -102,13 +103,25 @@ public class OnceRunThread {
     private void setWorker(Thread worker) {
         synchronized (waitingLock) {
             waitToWorkerStop();
-            this.worker = worker;
+            synchronized (workerLock) {
+                this.worker = worker;
+            }
         }
     }
 
+    public boolean stopWorker() {
+        synchronized (workerLock) {
+            if (isWorkerRunning()) {
+                worker.interrupt();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isWorkerRunning() {
-        synchronized (waitingLock) {
-            return !(worker == null || worker.getState() == Thread.State.TERMINATED);
+        synchronized (workerLock) {
+            return worker != null && worker.getState() != Thread.State.TERMINATED;
         }
     }
 

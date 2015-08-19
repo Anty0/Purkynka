@@ -24,9 +24,11 @@
 
     <string name="but_login">Login</string>
     <string name="but_ok">OK</string>
+    <string name="but_order">Order</string>
     <string name="but_continue">Continue</string>
     <string name="but_validate">Validate</string>
     <string name="but_save">Save</string>
+    <string name="but_start">Start</string>
     <string name="but_retry">Retry</string>
     <string name="but_log_out">Log out</string>
     <string name="but_cancel">Cancel</string>

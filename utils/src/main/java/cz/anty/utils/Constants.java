@@ -13,8 +13,10 @@ public class Constants {
     public static final int NOTIFICATION_ID_TEACHERS_ATTENDANCE = 2;
     public static final int NOTIFICATION_ID_UPDATE = 3;
     public static final int NOTIFICATION_ID_TRACKING = 4;
+    public static final int NOTIFICATION_ID_I_CANTEEN_BURZA = 5;
+    public static final int NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION = 6;
 
-    public static final int WAIT_TIME_SAS_SPLASH_ON_BIND = 100;
+    public static final int WAIT_TIME_ON_BIND = 100;
     public static final int WAIT_TIME_FIRST_REPEAT = 10;
     public static final long WAIT_TIME_TEACHERS_ATTENDANCE = 1000 * 60 * 15;
     public static final long WAIT_TIME_SAS_MARKS_REFRESH = 1000 * 60 * 5;

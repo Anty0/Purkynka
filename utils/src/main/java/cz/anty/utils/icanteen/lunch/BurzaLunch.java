@@ -1,6 +1,11 @@
 package cz.anty.utils.icanteen.lunch;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import cz.anty.utils.listItem.MultilineItem;
 
@@ -11,12 +16,17 @@ import cz.anty.utils.listItem.MultilineItem;
  */
 public class BurzaLunch implements MultilineItem {
 
-    LunchNumber lunchNumber;
-    String date, name, canteen;
-    int pieces;
-    String orderUrlAdd;
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
-    BurzaLunch(LunchNumber lunchNumber, String date, String name, String canteen, int pieces, String orderUrlAdd) {
+    private final LunchNumber lunchNumber;
+    private final Date date;
+    private final String name, canteen;
+    private final int pieces;
+    private final String orderUrlAdd;
+
+    BurzaLunch(@NonNull LunchNumber lunchNumber, @NonNull Date date,
+               @NonNull String name, @NonNull String canteen, int pieces,
+               @NonNull String orderUrlAdd) {
         this.lunchNumber = lunchNumber;
         this.date = date;
         this.name = name;
@@ -29,7 +39,7 @@ public class BurzaLunch implements MultilineItem {
         return lunchNumber;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -50,8 +60,18 @@ public class BurzaLunch implements MultilineItem {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return super.equals(o) || o instanceof BurzaLunch
+                && ((BurzaLunch) o).getLunchNumber().equals(getLunchNumber())
+                && ((BurzaLunch) o).getDate().equals(getDate())
+                && ((BurzaLunch) o).getCanteen().equals(getCanteen())
+                && ((BurzaLunch) o).getPieces() == getPieces()
+                && ((BurzaLunch) o).getOrderUrlAdd().equals(getOrderUrlAdd());
+    }
+
+    @Override
     public String getTitle(Context context) {
-        return getPieces() + " x " + getLunchNumber().toString();
+        return DATE_FORMAT.format(getDate()) + " " + getPieces() + " x " + getLunchNumber().toString();
     }
 
     @Override

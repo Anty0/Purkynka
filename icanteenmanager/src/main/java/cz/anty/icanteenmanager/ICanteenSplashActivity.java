@@ -1,26 +1,33 @@
 package cz.anty.icanteenmanager;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
+import cz.anty.utils.thread.OnceRunThread;
 
 public class ICanteenSplashActivity extends AppCompatActivity {
 
-    //private final OnceRunThread worker = new OnceRunThread();
-    /*private final ServiceConnection mConnection = new ServiceConnection() {
+    private final OnceRunThread worker = new OnceRunThread();
+    private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, final IBinder binder) {
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
+                    ICanteenService.MyBinder myBinder = (ICanteenService.MyBinder) binder;
                     try {
-                        Thread.sleep(Constants.WAIT_TIME_SAS_SPLASH_ON_BIND);
+                        Thread.sleep(Constants.WAIT_TIME_ON_BIND);
                     } catch (InterruptedException e) {
-                        if (AppDataManager.isDebugMode(SASSplashActivity.this))
-                            Log.d("SASSplashActivity", "onServiceConnected", e);
+                        if (AppDataManager.isDebugMode(ICanteenSplashActivity.this))
+                            Log.d("ICanteenSplashActivity", "onServiceConnected", e);
                     }
                     myBinder.waitToWorkerStop();
 
@@ -38,7 +45,7 @@ public class ICanteenSplashActivity extends AppCompatActivity {
 
         }
 
-    };*/
+    };
 
     private void startDefaultActivity() {
         Intent activity;
@@ -60,41 +67,21 @@ public class ICanteenSplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);//TODO new logo for ICanteen to layout
 
-        //worker.setPowerManager(this);
+        worker.setPowerManager(this);
         //sendBroadcast(new Intent(this, StartServiceScheduleReceiver.class));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        /*if (exit) {
-            finish();
-            return;
-        }*/
-        /*if (getSharedPreferences("MainData", Context.MODE_PRIVATE).getBoolean("CANT_START", false)) {
-            new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                    .setTitle(R.string.notification_update_title)
-                    .setMessage(R.string.notification_update_text_sas)
-                    .setNegativeButton(R.string.but_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setIcon(R.mipmap.ic_launcher_sas)
-                    .setCancelable(false)
-                    .show();
-            return;
-        }*/
-        //Intent intent = new Intent(this, SASManagerService.class);
-        //bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        startDefaultActivity();
+        bindService(new Intent(this, ICanteenService.class),
+                mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    /*@Override
+    @Override
     protected void onStop() {
-        //worker.waitToWorkerStop();
+        worker.waitToWorkerStop();
+        unbindService(mConnection);
         super.onStop();
-        //unbindService(mConnection);
-    }*/
+    }
 }

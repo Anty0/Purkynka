@@ -6,8 +6,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 import java.util.Map;
 
 import cz.anty.utils.Constants;
@@ -19,8 +17,6 @@ import cz.anty.utils.sas.mark.MarksManager;
  * @author anty
  */
 public class SASConnector {
-
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
     private static final String LOGIN_URL = "https://www.sspbrno.cz/ISAS/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";

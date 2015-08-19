@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.anty.utils.Constants;
-import cz.anty.utils.sas.SASConnector;
 
 /**
  * Created by anty on 10.6.15.
@@ -80,7 +79,7 @@ public class MarksManager {
         String[] markData = string.split(SPLIT_VALUE);
         Date date;
         try {
-            date = SASConnector.DATE_FORMAT.parse(markData[0]);
+            date = Mark.DATE_FORMAT.parse(markData[0]);
         } catch (ParseException e) {
             date = new Date(System.currentTimeMillis());
         }

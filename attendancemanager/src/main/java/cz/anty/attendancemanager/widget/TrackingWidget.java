@@ -24,6 +24,7 @@ import cz.anty.utils.attendance.man.TrackingMansManager;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.WidgetMultilineAdapter;
 import cz.anty.utils.listItem.WidgetService;
+import cz.anty.utils.thread.OnceRunThread;
 
 /**
  * Implementation of App Widget functionality.
@@ -49,8 +50,16 @@ public class TrackingWidget extends AppWidgetProvider {
                 .putExtra(WidgetMultilineAdapter.EXTRA_MANS_AS_STRING, mans);
     }
 
-    private String updateMans(Context context) {
-        return TrackingReceiver.refreshTrackingMans(context, null, false).toString();
+    private String updateMans(final Context context) {
+        OnceRunThread worker = new OnceRunThread(context);
+        final StringBuilder builder = new StringBuilder();
+        worker.waitToWorkerStop(worker.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                builder.append(TrackingReceiver.refreshTrackingMans(context, null, false));
+            }
+        }));
+        return builder.toString();
     }
 
     @Override

@@ -98,11 +98,10 @@ public class SASManageActivity extends AppCompatActivity {
             return;
         }*/
 
-        setContentView(R.layout.activity_manage);
+        setContentView(R.layout.activity_list);
         listView = ((ListView) findViewById(R.id.listView));
         adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
         listView.setAdapter(adapter);
-
 
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);

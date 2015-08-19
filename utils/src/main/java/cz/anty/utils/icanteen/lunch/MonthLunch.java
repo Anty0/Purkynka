@@ -15,6 +15,11 @@ public class MonthLunch implements MultilineItem {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return super.equals(o) || o instanceof MonthLunch;
+    }
+
+    @Override
     public String getTitle(Context context) {
         return null;
     }

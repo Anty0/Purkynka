@@ -1,10 +1,15 @@
 package cz.anty.utils.icanteen.lunch;
 
+import android.util.Log;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.anty.utils.AppDataManager;
 
 /**
  * Created by anty on 17.8.15.
@@ -14,6 +19,9 @@ import java.util.List;
 public class Lunches {
 
     public static List<BurzaLunch> parseBurzaLunches(Elements lunches) {
+        if (AppDataManager.isDebugMode(null))
+            Log.d("Lunches", "parseBurzaLunches lunches: " + lunches.toString());
+
         List<BurzaLunch> lunchList = new ArrayList<>();
 
         for (Element element : lunches) {
@@ -23,9 +31,13 @@ public class Lunches {
             int startIndex = onClickText.indexOf("document.location='") + "document.location='".length();
             String urlAdd = onClickText.substring(startIndex, onClickText.indexOf(";", startIndex));
 
-            lunchList.add(new BurzaLunch(BurzaLunch.LunchNumber.parseLunchNumber(lunchElements.get(0).text()),
-                    lunchElements.get(1).text(), lunchElements.get(2).text(), lunchElements.get(3).text(),
-                    Integer.parseInt(lunchElements.get(4).text()), urlAdd));
+            try {
+                lunchList.add(new BurzaLunch(BurzaLunch.LunchNumber.parseLunchNumber(lunchElements.get(0).text()),
+                        BurzaLunch.DATE_FORMAT.parse(lunchElements.get(1).text().split("\n")[0]), lunchElements.get(2).text(), lunchElements.get(3).text(),
+                        Integer.parseInt(lunchElements.get(4).text()), urlAdd));
+            } catch (ParseException e) {
+                Log.d("Lunches", "parseBurzaLunches", e);
+            }
         }
 
         return lunchList;

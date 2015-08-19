@@ -25,7 +25,7 @@ public class SASSplashActivity extends AppCompatActivity {
                 public void run() {
                     SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
                     try {
-                        Thread.sleep(Constants.WAIT_TIME_SAS_SPLASH_ON_BIND);
+                        Thread.sleep(Constants.WAIT_TIME_ON_BIND);
                     } catch (InterruptedException e) {
                         if (AppDataManager.isDebugMode(SASSplashActivity.this))
                             Log.d("SASSplashActivity", "onServiceConnected", e);

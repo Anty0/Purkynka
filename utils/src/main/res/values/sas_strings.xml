@@ -15,7 +15,7 @@
     <string name="exception_validate_wrong_login">Wrong LOGIN or PASSWORD</string>
     <string name="exception_validate_no_connection">No internet connection</string>
     <string name="exception_title_sas_manager_binder_null">EXCEPTION occurred</string>
-    <string name="exception_message_sas_manager_binder_null">please try refresh page</string>
+    <string name="exception_message_sas_manager_binder_null">please try click refresh</string>
     <string name="exception_title_login">Cannot login as [NAME]</string>
     <string name="exception_message_login">Username or password are wrong</string>
 

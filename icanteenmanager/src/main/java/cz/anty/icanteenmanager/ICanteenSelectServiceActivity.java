@@ -3,12 +3,12 @@ package cz.anty.icanteenmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.listItem.MultilineAdapter;
@@ -22,9 +22,8 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode(this));
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select);
+        setContentView(R.layout.activity_list);
 
         listView = (ListView) findViewById(R.id.listView);
         adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
@@ -35,7 +34,9 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
 
     private void init() {
         MultilineItem[] data = new MultilineItem[]{
-                new TextMultilineItem(getString(R.string.app_name_icanteen_burza), getString(R.string.app_description_icanteen_burza))};
+                new TextMultilineItem(getString(R.string.app_name_icanteen_burza), getString(R.string.app_description_icanteen_burza)),
+                new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order), getString(R.string.app_description_icanteen_lunch_order))
+        };
 
         adapter.setNotifyOnChange(false);
         adapter.clear();
@@ -52,7 +53,12 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
                 //final String item = (String) parent.getItemAtPosition(position);
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(ICanteenSelectServiceActivity.this, ICanteenSelectServiceActivity.class));//TODO start Burza checker
+                        startActivity(new Intent(ICanteenSelectServiceActivity.this, BurzaActivity.class));
+                        break;
+                    case 1:
+                        Toast.makeText(ICanteenSelectServiceActivity.this,
+                                R.string.app_description_icanteen_lunch_order, Toast.LENGTH_LONG).show();
+                        //startActivity(new Intent(ICanteenSelectServiceActivity.this, LunchOrderActivity.class)); //TODO CREATE
                         break;
                 }
             }
@@ -63,7 +69,7 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_default, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -79,7 +85,18 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
             //TODO open settings
             return true;
         }
+        if (id == R.id.action_log_out) {
+            logOut();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void logOut() {
+        AppDataManager.logout(AppDataManager.Type.I_CANTEEN, this);
+        startActivity(new Intent(this, ICanteenSplashActivity.class));
+        finish();
     }
 }

@@ -82,7 +82,7 @@ public class ICanteenConnector {
         if (!isLoggedIn(marksPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
-        return marksPage.select("div.mainContext")
+        return marksPage.select("div#mainContext")
                 .select("table")
                 .select("form.objednatJidlo-");
     }
@@ -93,10 +93,12 @@ public class ICanteenConnector {
         if (!isLoggedIn(marksPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
-        return marksPage.select("div.mainContext")
+        Elements toReturn = marksPage
+                .select("div#mainContext")
                 .select("table")
-                .select("tr")
-                .not("tr.blod");
+                .select("tr");
+        toReturn.remove(0);
+        return toReturn;
     }
 
 

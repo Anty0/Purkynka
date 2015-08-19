@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_icanteen">iCanteen Manager</string>
-    <string name="app_name_icanteen_burza">Burza checker</string>
+    <string name="app_name_icanteen_burza">Burza watcher</string>
+    <string name="app_name_icanteen_lunch_order">Lunch order</string>
 
     <string name="activity_title_login_icanteen">Login to iCanteen</string>
 
     <string name="app_description_icanteen">ICanteen Manager is a program that can manage and ordering school lunches.</string>
-    <string name="app_description_icanteen_burza">Burza checker can control at very short intervals burza and thus increases your likelihood to profit from the school lunch burza.</string>
+    <string name="app_description_icanteen_burza">Burza watcher can control at very short intervals burza and thus increases your likelihood to profit from the school lunch burza.</string>
+    <string name="app_description_icanteen_lunch_order">Coming soon</string>
+
+    <string name="notify_title_can_not_login">Can\'t login to iCanteen</string>
+    <string name="notify_text_can_not_login">Please try logout and login again</string>
+    <string name="notify_title_burza_checker_running">Burza watcher running</string>
+    <string name="notify_text_burza_checker_running">Click to stop</string>
+    <string name="notify_title_burza_checker_completed">Order request for your lunch successfully send to burza</string>
+    <string name="notify_text_burza_checker_completed">Please check, if you have your lunch on iCanteen web page</string>
+
+    <string name="notify_title_select_to_watch">Select what to watch</string>
+    <string name="text_view_text_date_to_watch">Set DATE to watch:</string>
+    <string name="text_view_text_numbers_to_watch">Set LUNCH numbers to watch:</string>
+
+    <string name="menu_item_text_start_burza_checking">Start Burza watcher</string>
+
+    <string name="toast_text_can_not_start_burza_checker">Can\'t start Burza watcher, maybe still running, please try stop it or restart application</string>
+    <string name="toast_text_can_not_order_burza_lunch">Can\'t order Burza Lunch, please try restart application</string>
 </resources>

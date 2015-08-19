@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import cz.anty.utils.sas.SASConnector;
-
 /**
  * Created by anty on 8.6.15.
  *
@@ -61,7 +59,7 @@ public class Marks {
         Elements markData = mark.select("td");
 
         try {
-            return new Mark(SASConnector.DATE_FORMAT.parse(markData.get(0).text()),
+            return new Mark(Mark.DATE_FORMAT.parse(markData.get(0).text()),
                     markData.get(1).text(), markData.get(1).attr("title"), markData.get(2).text(),
                     Double.parseDouble(markData.get(3).text()), markData.get(4).text(),
                     Integer.parseInt(markData.get(5).text()), markData.get(6).text(), markData.get(7).text());

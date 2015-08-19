@@ -1,22 +1,18 @@
 package cz.anty.attendancemanager;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +20,6 @@ import java.util.List;
 
 import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
 import cz.anty.utils.AppDataManager;
-import cz.anty.utils.Constants;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -53,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
             String search = savedInstanceState.getString(EXTRA_SEARCH);
             if (search != null) {
                 searchEditText.setText(search);
-                update(true, true, 1);
+                update(true, true, 1, search);
             }
         }
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -69,17 +64,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                update(false, true, 1);
-            }
-        });
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    update(true, true, 1);
-                    return true;
-                }
-                return false;
+                update(false, true, 1, s.toString());
             }
         });
         ListView resultListView = ((ListView) findViewById(R.id.listView));
@@ -87,63 +72,23 @@ public class SearchActivity extends AppCompatActivity {
                 new AutoLoadMultilineAdapter.OnLoadNextListListener() {
                     @Override
                     public void onLoadNextList(AutoLoadMultilineAdapter multilineAdapter, int page) {
-                        update(false, false, page);
+                        update(false, false, page, null);
                     }
                 });
         resultListView.setAdapter(adapter);
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Man man = adapter.getItem(position) instanceof Man
-                        ? (Man) adapter.getItem(position) : null;
+                MultilineItem item = adapter.getItem(position);
+                final Man man = item instanceof Man
+                        ? (Man) item : null;
                 if (man != null) {
-                    final TrackingMansManager mansManager = new TrackingMansManager(SearchActivity.this);
-                    if (mansManager.contains(man)) {
-                        new AlertDialog.Builder(SearchActivity.this)
-                                .setTitle(man.getName())
-                                .setIcon(R.mipmap.ic_launcher)
-                                .setMessage(getString(R.string.dialog_text_attendance_stop_tracking)
-                                        .replace(Constants.STRINGS_CONST_NAME, man.getName()))
-                                .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mansManager.remove(man).apply();
-                                        sendBroadcast(new Intent(SearchActivity.this, TrackingScheduleReceiver.class));
-                                    }
-                                })
-                                .setNegativeButton(R.string.but_no, null)
-                                .setCancelable(true)
-                                .show();
-                    } else {
-                        new AlertDialog.Builder(SearchActivity.this)
-                                .setTitle(man.getName())
-                                .setIcon(R.mipmap.ic_launcher)
-                                .setMessage(getString(R.string.dialog_text_attendance_tracking)
-                                        .replace(Constants.STRINGS_CONST_NAME, man.getName()))
-                                .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        new AlertDialog.Builder(SearchActivity.this)
-                                                .setTitle(R.string.dialog_title_terms_warning)
-                                                .setIcon(R.mipmap.ic_launcher)
-                                                .setMessage(getString(R.string.dialog_text_terms_attendance_tracking)
-                                                        .replace(Constants.STRINGS_CONST_NAME, man.getName()))
-                                                .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        mansManager.add(man).apply();
-                                                        sendBroadcast(new Intent(SearchActivity.this, TrackingScheduleReceiver.class));
-                                                    }
-                                                })
-                                                .setNegativeButton(R.string.but_cancel, null)
-                                                .setCancelable(true)
-                                                .show();
-                                    }
-                                })
-                                .setNegativeButton(R.string.but_no, null)
-                                .setCancelable(true)
-                                .show();
-                    }
+                    new TrackingMansManager(SearchActivity.this).processMan(man, new Runnable() {
+                        @Override
+                        public void run() {
+                            sendBroadcast(new Intent(SearchActivity.this, TrackingScheduleReceiver.class));
+                        }
+                    });
                 }
             }
         });
@@ -151,7 +96,7 @@ public class SearchActivity extends AppCompatActivity {
         if (worker == null)
             worker = new OnceRunThreadWithSpinner(this);
         if (adapter.isEmpty())
-            update(false, true, 1);
+            update(false, true, 1, null);
     }
 
     @Override
@@ -180,10 +125,10 @@ public class SearchActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void update(final boolean showMessage, final boolean clearData, final int page) {
+    private void update(final boolean showMessage, final boolean clearData, final int page, @Nullable String search) {
         if (AppDataManager.isDebugMode(this)) Log.d("SearchActivity",
-                "update showMessage: " + showMessage + " clearData: " + clearData + " page: " + page);
-        final String toSearch = searchEditText.getText().toString();
+                "update showMessage: " + showMessage + " clearData: " + clearData + " page: " + page + " search: " + search);
+        final String toSearch = search == null ? searchEditText.getText().toString() : search;
         if (AppDataManager.isDebugMode(this))
             Log.d("SearchActivity", "update toSearch: " + toSearch);
         worker.startWorker(new Runnable() {

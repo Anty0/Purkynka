@@ -14,8 +14,8 @@
     <string name="exception_title_validate">Chyba při ověřování</string>
     <string name="exception_validate_wrong_login">Špatné JMÉNO nebo HESLO</string>
     <string name="exception_validate_no_connection">Nedaří se připojit internetu</string>
-    <string name="exception_title_sas_manager_binder_null">zkuste obnovit stránku</string>
-    <string name="exception_message_sas_manager_binder_null">Došlok chybě</string>
+    <string name="exception_title_sas_manager_binder_null">Došlo k chybě</string>
+    <string name="exception_message_sas_manager_binder_null">zkuste kliknout na obnovit</string>
     <string name="exception_title_login">Nelze provést přihlášení jako [NAME]</string>
     <string name="exception_message_login">Uživatelské jméno, nebo heslo není v pořádku</string>
 

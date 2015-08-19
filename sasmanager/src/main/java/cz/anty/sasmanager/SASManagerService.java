@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -87,12 +86,13 @@ public class SASManagerService extends Service {
             marks = new MarksManager(this);
         AppDataManager.addOnChangeListener(AppDataManager.Type.SAS, onLoginChange);
 
-        worker.startWorker(new Runnable() {
-            @Override
-            public void run() {
-                initialize();
-            }
-        });
+        worker.waitToWorkerStop(worker.startWorker(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        initialize();
+                    }
+                }));
     }
 
     private void initialize() {
@@ -102,9 +102,9 @@ public class SASManagerService extends Service {
             setState(State.DISCONNECTED);
         }
 
-        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, SASManagerService.this)) {
-            sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS, SASManagerService.this),
-                    AppDataManager.getPassword(AppDataManager.Type.SAS, SASManagerService.this));
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, this)) {
+            sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS, this),
+                    AppDataManager.getPassword(AppDataManager.Type.SAS, this));
             refreshMarks(false, true, false);
             //setState(State.CONNECTED);
         } else {
@@ -141,7 +141,7 @@ public class SASManagerService extends Service {
 
     private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget) {
         if (AppDataManager.isDebugMode(this))
-            Log.d("SASManagerService", "refreshMarks: force=" + force + " deep=" + deepRefresh);
+            Log.d("SASManagerService", "refreshMarks: force=" + force + " deep=" + deepRefresh + " updateWidget=" + updateWidget);
         if (sasManager == null) return updateWidget;
         if (System.currentTimeMillis() - getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE)
                 .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) < Constants.WAIT_TIME_SAS_MARKS_REFRESH) {
@@ -296,9 +296,9 @@ public class SASManagerService extends Service {
 
     public class MyBinder extends Binder {
 
-        public boolean isWorkerRunning() {
+        /*public boolean isWorkerRunning() {
             return worker.isWorkerRunning();
-        }
+        }*/
 
         public void waitToWorkerStop() {
             worker.waitToWorkerStop();
@@ -316,22 +316,14 @@ public class SASManagerService extends Service {
             return state;
         }
 
-        /*public boolean isLoggedIn() throws IOException {
-            return sasManager != null && sasManager.isLoggedIn();
-        }*/
-
-        public void refresh() {
-            worker.startWorker(new Runnable() {
+        public Thread refresh() {
+            return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
                     refreshMarks(true, true, false);
                 }
             });
         }
-
-        /*public SASManagerService getService() {
-            return SASManagerService.this;
-        }*/
 
         public Lesson[] getLessons(MarksManager.Semester semester) {
             waitToWorkerStop();
@@ -346,10 +338,6 @@ public class SASManagerService extends Service {
         public String getMarksAsString(MarksManager.Semester semester) {
             waitToWorkerStop();
             return marks.toString(semester);
-        }
-
-        public Context getContext() {
-            return getApplicationContext();
         }
 
     }

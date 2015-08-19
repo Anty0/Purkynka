@@ -2,12 +2,13 @@ package cz.anty.utils.sas.mark;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.sas.SASConnector;
 
 /**
  * Created by anty on 8.6.15.
@@ -15,6 +16,8 @@ import cz.anty.utils.sas.SASConnector;
  * @author anty
  */
 public class Mark implements MultilineItem {
+
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
     private final Date date;
     private final String shortLesson, longLesson, valueToShow, type, note, teacher;
@@ -38,7 +41,7 @@ public class Mark implements MultilineItem {
     }
 
     public String getDateAsString() {
-        return SASConnector.DATE_FORMAT.format(getDate());
+        return DATE_FORMAT.format(getDate());
     }
 
     public String getShortLesson() {
