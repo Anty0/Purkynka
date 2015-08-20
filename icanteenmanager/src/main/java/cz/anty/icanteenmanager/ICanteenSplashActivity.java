@@ -65,7 +65,7 @@ public class ICanteenSplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);//TODO new logo for ICanteen to layout
+        setContentView(R.layout.activity_splash);
 
         worker.setPowerManager(this);
         //sendBroadcast(new Intent(this, StartServiceScheduleReceiver.class));

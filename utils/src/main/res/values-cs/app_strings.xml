@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Purkyňka Manager</string>
+
     <string name="dialog_title_terms">Podmínky používání aplikace</string>
     <string name="dialog_text_terms">Použití aplikace je na vlastní nebezpečí.\nVývojář si vyhrazuje právo kdykoliv bez upozornění změnit podmínky použití této aplikace, nebo jakékoli její části.</string>
     <string name="dialog_message_update_alert">Pokud tlačítko \"Aktualizovat\" nefunguje, tak stáhni a nainstaluj aktualizaci manuálně z oficiálních webových stránek aplikace.</string>

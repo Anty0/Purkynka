@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Purkyňka Manager</string>
+    <string name="app_name">Purkynka Manager</string>
 
     <string name="dialog_title_terms">Terms of use</string>
     <string name="dialog_text_terms">Using the application is at your own risk.\n\nThe developer has the right at any time without notice to change the terms of use of this application, or any part thereof.</string>

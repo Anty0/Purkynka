@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
@@ -190,12 +191,15 @@ public class BurzaActivity extends AppCompatActivity {
     private void startBurzaChecker() {
         LinearLayout mainLinearLayout = new LinearLayout(this);
         mainLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        mainLinearLayout.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
 
         TextView dateTextView = new TextView(this);
         dateTextView.setText(R.string.text_view_text_date_to_watch);
         mainLinearLayout.addView(dateTextView);
 
         final DatePicker datePicker = new DatePicker(this);
+        if (Build.VERSION.SDK_INT >= 11)
+            datePicker.setMinDate(System.currentTimeMillis());
         mainLinearLayout.addView(datePicker);
 
         TextView lunchNumberTextView = new TextView(this);
