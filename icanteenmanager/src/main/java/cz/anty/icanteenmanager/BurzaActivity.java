@@ -118,12 +118,11 @@ public class BurzaActivity extends AppCompatActivity {
         refreshThread.startWorker(new Runnable() {
             @Override
             public void run() {
-                final MultilineItem[] data;
-                if (binder != null) {
+                MultilineItem[] data;
+                try {
                     List<BurzaLunch> dataList = binder.getBurza();
                     data = dataList.toArray(new BurzaLunch[dataList.size()]);
-
-                } else {
+                } catch (NullPointerException e) {
                     data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
                             getString(R.string.exception_message_sas_manager_binder_null))};
                 }

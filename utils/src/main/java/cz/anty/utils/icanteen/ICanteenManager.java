@@ -48,8 +48,8 @@ public class ICanteenManager {
     }
 
     public synchronized void orderMonthLunch(MonthLunch lunch) throws IOException {
-        //TODO CREATE
         if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
+        //TODO CREATE
         connector.orderMonthLunch(null);
     }
 
