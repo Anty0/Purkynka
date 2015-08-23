@@ -347,7 +347,7 @@ public class SASManageActivity extends AppCompatActivity {
     private void logOut() {
         if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "logOut");
         AppDataManager.logout(AppDataManager.Type.SAS, this);
-        binder.waitToWorkerStop();
+        //binder.waitToWorkerStop();
         //sendBroadcast(new Intent(this, StartActivityReceiver.class));
         //new StartActivityReceiver().onReceive(this, null);
         startActivity(new Intent(this, SASSplashActivity.class));
