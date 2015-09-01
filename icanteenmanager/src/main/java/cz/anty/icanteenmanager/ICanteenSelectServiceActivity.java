@@ -53,7 +53,7 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
                 //final String item = (String) parent.getItemAtPosition(position);
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(ICanteenSelectServiceActivity.this, BurzaActivity.class));
+                        startActivity(new Intent(ICanteenSelectServiceActivity.this, ICanteenBurzaActivity.class));
                         break;
                     case 1:
                         Toast.makeText(ICanteenSelectServiceActivity.this,

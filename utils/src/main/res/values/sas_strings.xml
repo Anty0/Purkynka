@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name_sas">SAS Manager</string>
+    <string name="app_name_sas">iSAS Manager</string>
 
     <string name="activity_title_login">Login to iSAS</string>
-    <string name="activity_title_sas_settings">SAS Manager Settings</string>
+    <string name="activity_title_sas_settings">iSAS Manager Settings</string>
 
-    <string name="widget_label_sas_manage">SAS Manager Widget</string>
+    <string name="widget_label_sas_manage">iSAS Manager (latest marks)</string>
 
-    <string name="service_title_sas_manager">SAS Manager Service</string>
+    <string name="service_title_sas_manager">iSAS Manager Service</string>
 
-    <string name="app_description_sas">SAS Manager is a simple program for managing your marks, can notify you of new marks and provides complete view of your marks.</string>
+    <string name="app_description_sas">iSAS Manager is a simple program for managing your marks, can notify you of new marks and provides complete view of your marks.</string>
 
     <string name="exception_title_validate">Validate exception</string>
     <string name="exception_validate_wrong_login">Wrong LOGIN or PASSWORD</string>

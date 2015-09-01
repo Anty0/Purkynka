@@ -2,7 +2,6 @@ package cz.anty.purkynkamanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +18,7 @@ import java.io.IOException;
 
 import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.icanteenmanager.ICanteenSplashActivity;
+import cz.anty.purkynkamanager.firststart.FirstStartActivity;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.AppDataManager;
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     String path = UpdateConnector.downloadUpdate(MainActivity.this, reporter, filename);
 
                     intent = new Intent(Intent.ACTION_VIEW)
-                            .setDataAndType(Uri.fromFile(new File(path)),
+                            .setDataAndType(Uri.fromFile(new File(path)), //TODO delete file after install
                                     "application/vnd.android.package-archive")
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            startActivity(target);//TODO delete target
+                            startActivity(target);
                         }
                     });
 
@@ -258,7 +258,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkTerms() {
-        worker.startWorker(new Runnable() {
+        if (getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
+                .getInt(Constants.SETTING_NAME_FIRST_START, -1) != BuildConfig.VERSION_CODE) {
+            startActivity(new Intent(this, FirstStartActivity.class));
+            finish();
+            return;
+        }
+        init();
+        /*worker.startWorker(new Runnable() {
             @Override
             public void run() {
                 final SharedPreferences preferences = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
@@ -298,15 +305,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.wait_text_loading));
-    }
-
-    private String getTerms() {
-        try {
-            return UpdateConnector.getLatestTerms(getString(R.string.language));
-        } catch (IOException e) {
-            return getString(R.string.dialog_text_terms);
-        }
+        }, getString(R.string.wait_text_loading));*/
     }
 
     private void init() {
@@ -350,13 +349,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+        invalidateOptionsMenu();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_default, menu);
-        return true;
+        if (!adapter.isEmpty()) {
+            getMenuInflater().inflate(R.menu.menu_default, menu);
+            return true;
+        }
+        return false;
     }
 
     @Override

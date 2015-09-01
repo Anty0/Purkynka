@@ -1,5 +1,7 @@
 package cz.anty.utils.icanteen;
 
+import android.util.Log;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,6 +10,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.Map;
 
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 
 /**
@@ -17,7 +20,7 @@ import cz.anty.utils.Constants;
  */
 public class ICanteenConnector {
 
-    //public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    //public static final SimpleDateFormat DATE_PARSE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
     private static final String LOGIN_URL = "http://stravovani.sspbrno.cz:8080/faces/j_spring_security_check";
     private static final String LOGIN_FIELD = "j_username";
@@ -31,9 +34,9 @@ public class ICanteenConnector {
     private static final String TARGET_URL = "targetUrl";
     private static final String TARGET_URL_VALUE = "/faces/secured/main.jsp?terminal=false&amp;status=true&amp;printer=false&amp;keyboard=false";
 
-    private static final String BURZA_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/burza.jsp?terminal=false&keyboard=false&printer=false";
-    private static final String MAIN_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/main.jsp?terminal=false&keyboard=false&printer=false";
-    private static final String MONTH_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/month.jsp?terminal=false&keyboard=false&printer=false";
+    private static final String BURZA_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/burza.jsp";//?terminal=false&keyboard=false&printer=false";
+    private static final String MAIN_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/main.jsp";//?terminal=false&keyboard=false&printer=false";
+    private static final String MONTH_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/month.jsp";//?terminal=false&keyboard=false&printer=false";
 
     private static final String ORDER_URL_START = "http://stravovani.sspbrno.cz:8080/faces/secured/";
 
@@ -43,7 +46,7 @@ public class ICanteenConnector {
         this.loginCookies = login(0, null, username, password);
     }
 
-    private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {
+    private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {//// TODO: 1.9.15 REPAIR (NOT WORKING)
         if (depth >= Constants.MAX_TRY) throw last;
         try {
             return Jsoup
@@ -67,37 +70,47 @@ public class ICanteenConnector {
     }
 
     public synchronized void orderBurzaLunch(String urlAdd) throws IOException {
-        Jsoup.connect(ORDER_URL_START + urlAdd)
+        Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
     }
 
     public synchronized void orderMonthLunch(String urlAdd) throws IOException {
-        //TODO CREATE
-        /*Jsoup.connect(ORDER_URL_START + urlAdd)
-                .cookies(loginCookies).execute();*/
+        Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
+                .cookies(loginCookies).execute();
     }
 
     public synchronized Elements getMonthElements() throws IOException {
-        Document marksPage = getMonthPage(0, null);
-        if (!isLoggedIn(marksPage))
+        Document monthPage = getMonthPage(0, null);
+        if (!isLoggedIn(monthPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
-        return marksPage.select("div#mainContext")
+        if (AppDataManager.isDebugMode(null))
+            Log.d("ICanteenConnector", "getMonthElements startElements: " + monthPage);
+
+        Elements toReturn = monthPage.select("div#mainContext")
                 .select("table")
                 .select("form.objednatJidlo-");
+        if (AppDataManager.isDebugMode(null))
+            Log.d("ICanteenConnector", "getMonthElements finalElements: " + toReturn);
+        return toReturn;
     }
 
 
     public synchronized Elements getBurzaElements() throws IOException {
-        Document marksPage = getBurzaPage(0, null);
-        if (!isLoggedIn(marksPage))
+        Document burzaPage = getBurzaPage(0, null);
+        if (!isLoggedIn(burzaPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
-        Elements toReturn = marksPage
+        if (AppDataManager.isDebugMode(null))
+            Log.d("ICanteenConnector", "getBurzaElements startElements: " + burzaPage);
+
+        Elements toReturn = burzaPage
                 .select("div#mainContext")
                 .select("table")
                 .select("tr");
         toReturn.remove(0);
+        if (AppDataManager.isDebugMode(null))
+            Log.d("ICanteenConnector", "getBurzaElements finalElements: " + toReturn);
         return toReturn;
     }
 

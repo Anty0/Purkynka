@@ -18,3 +18,6 @@
 -keep public class org.jsoup.** {
 public *;
 }
+-keep public cz.anty.wifiautologin.WifiFirstStartPage {
+public *;
+}

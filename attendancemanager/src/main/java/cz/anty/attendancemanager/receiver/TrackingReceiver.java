@@ -26,7 +26,7 @@ import cz.anty.utils.thread.OnceRunThread;
 
 public class TrackingReceiver extends BroadcastReceiver {
 
-    private static OnceRunThread worker = new OnceRunThread();
+    private static final OnceRunThread worker = new OnceRunThread();
 
     public static TrackingMansManager refreshTrackingMans(Context context, @Nullable TrackingMansManager mansManager, boolean updateWidget) {
         if (mansManager == null) mansManager = new TrackingMansManager(context);

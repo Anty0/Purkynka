@@ -18,3 +18,8 @@
 -keep public class org.jsoup.** {
 public *;
 }
+-keep public class cz.anty.utils.** {
+public *;
+}
+-keep public interface cz.anty.utils.** {*;}
+-keep public enum cz.anty.utils.** {**[] $VALUES;*;}

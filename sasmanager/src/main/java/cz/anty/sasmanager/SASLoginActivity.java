@@ -1,5 +1,7 @@
 package cz.anty.sasmanager;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +24,38 @@ public class SASLoginActivity extends AppCompatActivity {
     //public static SASManager sasManager = null;
     private OnceRunThreadWithSpinner saveThread;
 
+    static boolean login(final Activity activity, String username, String password) {
+        try {
+            if (username.equals("") || password.equals(""))
+                throw new WrongLoginDataException();
+
+            SASManager.validate(username, password);
+        } catch (final IOException e) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    validateException(activity, e instanceof WrongLoginDataException
+                            ? activity.getString(R.string.exception_validate_wrong_login)
+                            : activity.getString(R.string.exception_validate_no_connection));
+                }
+            });
+            return false;
+        }
+
+        AppDataManager.login(AppDataManager.Type.SAS, activity, username, password);
+        return true;
+    }
+
+    private static void validateException(Context context, String message) {
+        new AlertDialog.Builder(context, R.style.AppTheme_Dialog)
+                .setTitle(R.string.exception_title_validate)
+                .setMessage(message)
+                .setPositiveButton(R.string.but_ok, null)
+                .setIcon(R.mipmap.ic_launcher_sas)
+                .setCancelable(true)
+                .show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +66,10 @@ public class SASLoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, SASManageActivity.class));
             return;
         }*/
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sas_login);
 
-        ((EditText) findViewById(R.id.editText)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS, this));
-        ((EditText) findViewById(R.id.editText2)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS, this));
+        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS, this));
+        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS, this));
 
         if (saveThread == null)
             saveThread = new OnceRunThreadWithSpinner(this);
@@ -64,56 +98,22 @@ public class SASLoginActivity extends AppCompatActivity {
     }
 
     public void onClickLogin(@SuppressWarnings("UnusedParameters") View view) {
-        final String username = ((EditText) findViewById(R.id.editText)).getText().toString();
-        final String password = ((EditText) findViewById(R.id.editText2)).getText().toString();
-        if (username.equals("") || password.equals("")) {
-            validateException(getString(R.string.exception_validate_wrong_login));
-            return;
-        }
+        final String username = ((EditText) findViewById(R.id.edit_username)).getText().toString();
+        final String password = ((EditText) findViewById(R.id.edit_password)).getText().toString();
         saveThread.startWorker(new Runnable() {
             @Override
             public void run() {
-                try {
-                    SASManager.validate(username, password);
-                } catch (WrongLoginDataException e) {
+                if (login(SASLoginActivity.this, username, password))
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            validateException(getString(R.string.exception_validate_wrong_login));
+                            //sendBroadcast(new Intent(SASLoginActivity.this, StartActivityReceiver.class));
+                            startActivity(new Intent(SASLoginActivity.this, SASSplashActivity.class));
+                            finish();
                         }
                     });
-                    return;
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            validateException(getString(R.string.exception_validate_no_connection));
-                        }
-                    });
-                    return;
-                }
-
-                AppDataManager.login(AppDataManager.Type.SAS, SASLoginActivity.this, username, password);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //sendBroadcast(new Intent(SASLoginActivity.this, StartActivityReceiver.class));
-                        startActivity(new Intent(SASLoginActivity.this, SASSplashActivity.class));
-                        SASLoginActivity.this.finish();
-                    }
-                });
 
             }
         }, getString(R.string.wait_text_logging_in));
-    }
-
-    private void validateException(String message) {
-        new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                .setTitle(R.string.exception_title_validate)
-                .setMessage(message)
-                .setPositiveButton(R.string.but_ok, null)
-                .setIcon(R.mipmap.ic_launcher_sas)
-                .setCancelable(true)
-                .show();
     }
 }

@@ -1,4 +1,4 @@
-package cz.anty.utils.icanteen.lunch;
+package cz.anty.utils.icanteen.lunch.burza;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -24,9 +24,9 @@ public class BurzaLunch implements MultilineItem {
     private final int pieces;
     private final String orderUrlAdd;
 
-    BurzaLunch(@NonNull LunchNumber lunchNumber, @NonNull Date date,
-               @NonNull String name, @NonNull String canteen, int pieces,
-               @NonNull String orderUrlAdd) {
+    public BurzaLunch(@NonNull LunchNumber lunchNumber, @NonNull Date date,
+                      @NonNull String name, @NonNull String canteen, int pieces,
+                      @NonNull String orderUrlAdd) {
         this.lunchNumber = lunchNumber;
         this.date = date;
         this.name = name;

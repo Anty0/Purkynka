@@ -2,7 +2,6 @@ package cz.anty.icanteenmanager;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -19,21 +18,19 @@ import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.icanteen.ICanteenManager;
-import cz.anty.utils.icanteen.lunch.BurzaLunch;
-import cz.anty.utils.icanteen.lunch.BurzaLunchSelector;
-import cz.anty.utils.icanteen.lunch.MonthLunch;
+import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
+import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
+import cz.anty.utils.icanteen.lunch.month.MonthLunch;
+import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class ICanteenService extends Service {
 
-    private static final String EXTRA_STOP_BURZA_CHECKER = "STOP_BURZA_CHECKER";
-
     private final IBinder mBinder = new MyBinder();
     private final OnceRunThread worker = new OnceRunThread();
-    private final OnceRunThread burzaCheckerWorker = new OnceRunThread();
     private ICanteenManager manager;
     private List<BurzaLunch> mBurzaLunchList = null;
-    private List<MonthLunch> mMonthLunchList = null;
+    private List<MonthLunchDay> mMonthLunchList = null;
     private Runnable onBurzaChange = null;
     private Runnable onMonthChange = null;
     private final Runnable onLoginChange = new Runnable() {
@@ -53,7 +50,6 @@ public class ICanteenService extends Service {
         if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "onCreate");
         super.onCreate();
         worker.setPowerManager(this);
-        burzaCheckerWorker.setPowerManager(this);
         AppDataManager.addOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
         worker.waitToWorkerStop(worker.startWorker(
                 new Runnable() {
@@ -105,74 +101,22 @@ public class ICanteenService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getBooleanExtra(EXTRA_STOP_BURZA_CHECKER, false)
-                && burzaCheckerWorker.isWorkerRunning()) burzaCheckerWorker.stopWorker();
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
     public void onDestroy() {
         if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "onDestroy");
         AppDataManager.removeOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
         super.onDestroy();
     }
 
-    private void burzaChecker(@NonNull BurzaLunchSelector[] selectors) {
-        Notification n = new NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.notify_title_burza_checker_running))
-                .setContentText(getString(R.string.notify_text_burza_checker_running))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(PendingIntent.getService(this, 0,
-                        new Intent(this, ICanteenService.class)
-                                .putExtra(EXTRA_STOP_BURZA_CHECKER, true), 0))
-                .setAutoCancel(false)
-                .setOngoing(true)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .build();
-
-        NotificationManager notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
-        notificationManager.notify(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA, n);
-
-        final Runnable refreshRunnable = new Runnable() {
-            @Override
-            public void run() {
-                refreshBurza();
-            }
-        };
-        boolean completed = false;
-        while (!Thread.interrupted()) {
-            worker.waitToWorkerStop(worker.startWorker(refreshRunnable));
-            for (BurzaLunch lunch : mBurzaLunchList)
-                for (BurzaLunchSelector selector : selectors)
-                    if (selector.isSelected(lunch)) {
-                        completed = orderBurza(lunch);
-                        Thread.currentThread().interrupt();
-                    }
-        }
-
-        notificationManager.cancel(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA);
-
-        if (completed) {
-            Notification n1 = new NotificationCompat.Builder(this)
-                    .setContentTitle(getString(R.string.notify_title_burza_checker_completed))
-                    .setContentText(getString(R.string.notify_text_burza_checker_completed))
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .build();
-
-            notificationManager.notify(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA, n1);
-        }
-    }
-
     private boolean refreshBurza() {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "refreshBurza");
+        if (AppDataManager.isDebugMode(this))
+            Log.d("ICanteenService", "refreshBurza startStage: " + mBurzaLunchList);
         try {
             List<BurzaLunch> burzaLunchList = mBurzaLunchList;
             mBurzaLunchList = manager.getBurza();
             if (!listEquals(mBurzaLunchList, burzaLunchList) && onBurzaChange != null)
                 onBurzaChange.run();
+            if (AppDataManager.isDebugMode(this))
+                Log.d("ICanteenService", "refreshBurza finalStage: " + mBurzaLunchList);
             return true;
         } catch (IOException | IndexOutOfBoundsException e) {
             Log.d("ICanteenService", "refreshBurza", e);
@@ -181,12 +125,15 @@ public class ICanteenService extends Service {
     }
 
     private boolean refreshMonth() {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "refreshMonth");
+        if (AppDataManager.isDebugMode(this))
+            Log.d("ICanteenService", "refreshMonth startStage: " + mMonthLunchList);
         try {
-            List<MonthLunch> monthLunchList = mMonthLunchList;
+            List<MonthLunchDay> monthLunchList = mMonthLunchList;
             mMonthLunchList = manager.getMonth();
             if (!listEquals(mMonthLunchList, monthLunchList) && onMonthChange != null)
                 onMonthChange.run();
+            if (AppDataManager.isDebugMode(this))
+                Log.d("ICanteenService", "refreshMonth finalStage: " + mMonthLunchList);
             return true;
         } catch (IOException e) {
             Log.d("ICanteenService", "refreshMonth", e);
@@ -240,7 +187,6 @@ public class ICanteenService extends Service {
             worker.waitToWorkerStop();
         }
 
-
         public void setOnBurzaChangeListener(@Nullable Runnable onBurzaChange) {
             ICanteenService.this.onBurzaChange = onBurzaChange;
         }
@@ -253,7 +199,7 @@ public class ICanteenService extends Service {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    refreshBurza();
+                    ICanteenService.this.refreshBurza();
                 }
             });
         }
@@ -262,7 +208,7 @@ public class ICanteenService extends Service {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    refreshMonth();
+                    ICanteenService.this.refreshMonth();
                 }
             });
         }
@@ -272,6 +218,7 @@ public class ICanteenService extends Service {
                 @Override
                 public void run() {
                     orderBurza(lunch);
+                    ICanteenService.this.refreshBurza();
                 }
             });
         }
@@ -281,24 +228,16 @@ public class ICanteenService extends Service {
                 @Override
                 public void run() {
                     orderMonth(lunch);
+                    ICanteenService.this.refreshMonth();
                 }
             });
         }
 
-        public Thread startBurzaChecker(@NonNull final BurzaLunchSelector[] selectors) {
-            if (!isBurzaCheckerRunning()) {
-                return burzaCheckerWorker.startWorker(new Runnable() {
-                    @Override
-                    public void run() {
-                        burzaChecker(selectors);
-                    }
-                });
-            }
-            return null;
-        }
-
-        public boolean isBurzaCheckerRunning() {
-            return burzaCheckerWorker.isWorkerRunning();
+        public void startBurzaChecker(@NonNull final BurzaLunchSelector selector) {
+            startService(new Intent(ICanteenService.this, BurzaCheckerService.class)
+                            .putExtra(BurzaCheckerService.EXTRA_BURZA_CHECKER_STATE, BurzaCheckerService.BURZA_CHECKER_STATE_START)
+                            .putExtra(BurzaCheckerService.EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING, selector.toString())
+            );
         }
 
         public List<BurzaLunch> getBurza() {
@@ -306,7 +245,7 @@ public class ICanteenService extends Service {
             return mBurzaLunchList;
         }
 
-        public List<MonthLunch> getMonth() {
+        public List<MonthLunchDay> getMonth() {
             waitToWorkerStop();
             return mMonthLunchList;
         }

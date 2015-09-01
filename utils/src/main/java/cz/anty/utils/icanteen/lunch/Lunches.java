@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
+import cz.anty.utils.icanteen.lunch.month.MonthLunch;
+import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 
 /**
  * Created by anty on 17.8.15.
@@ -25,11 +28,11 @@ public class Lunches {
         List<BurzaLunch> lunchList = new ArrayList<>();
 
         for (Element element : lunches) {
-            Elements lunchElements = element.getAllElements();
+            Elements lunchElements = element.children();
 
             String onClickText = lunchElements.get(5).child(0).attr("onClick");
             int startIndex = onClickText.indexOf("document.location='") + "document.location='".length();
-            String urlAdd = onClickText.substring(startIndex, onClickText.indexOf(";", startIndex));
+            String urlAdd = onClickText.substring(startIndex, onClickText.indexOf("';", startIndex));
 
             try {
                 lunchList.add(new BurzaLunch(BurzaLunch.LunchNumber.parseLunchNumber(lunchElements.get(0).text()),
@@ -43,13 +46,39 @@ public class Lunches {
         return lunchList;
     }
 
-    public static List<MonthLunch> parseMonthLunches(Elements lunches) {
-        List<MonthLunch> lunchList = new ArrayList<>();
+    public static List<MonthLunchDay> parseMonthLunches(Elements lunches) {
+        List<MonthLunchDay> lunchList = new ArrayList<>();
 
         for (Element element : lunches) {
-            Elements lunchElements = element.getAllElements();
-            //TODO CREATE
-            lunchList.add(new MonthLunch());
+            Elements lunchElements = element.children();
+
+            List<MonthLunch> monthLunches = new ArrayList<>();
+            Elements lunchesElements = lunchElements.get(1).select("div.jidelnicekItem");//child(0).children();
+            for (Element lunchElement : lunchesElements) {
+                String name = lunchElement.child(0).child(1).text().split("\n")[0].trim();
+
+                MonthLunch.State state;
+                if (!lunchElement.select("a." + MonthLunch.State.ENABLED).isEmpty()) {
+                    state = MonthLunch.State.ENABLED;
+                } else if (!lunchElement.select("a." + MonthLunch.State.ORDERED).isEmpty()) {
+                    state = MonthLunch.State.ORDERED;
+                } else if (!lunchElement.select("a." + MonthLunch.State.DISABLED).isEmpty()) {
+                    state = MonthLunch.State.DISABLED;
+                } else state = MonthLunch.State.UNKNOWN;
+
+                String onClickText = lunchElement.select("a.btn").attr("onClick");
+                int startIndex = onClickText.indexOf("'") + "'".length();
+                String urlAdd = onClickText.substring(startIndex, onClickText.indexOf("'", startIndex));
+
+                monthLunches.add(new MonthLunch(name, urlAdd, state));
+            }
+
+            try {
+                lunchList.add(new MonthLunchDay(MonthLunchDay.DATE_PARSE_FORMAT.parse(lunchElements.get(0).attr("id").replace("day-", "")),
+                        monthLunches.toArray(new MonthLunch[monthLunches.size()])));
+            } catch (ParseException e) {
+                Log.d("Lunches", "parseMonthLunches", e);
+            }
         }
 
         return lunchList;

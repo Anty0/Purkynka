@@ -1,5 +1,6 @@
 package cz.anty.wifiautologin;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
@@ -22,14 +23,18 @@ public class WifiLoginActivity extends AppCompatActivity {
 
     private OnceRunThreadWithSpinner worker;
 
+    static void save(Context context, String username, String password) {
+        AppDataManager.login(AppDataManager.Type.WIFI, context, username, password);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (worker == null) worker = new OnceRunThreadWithSpinner(this);
         setContentView(R.layout.activity_wifi_login);
 
-        ((EditText) findViewById(R.id.editText)).setText(AppDataManager.getUsername(AppDataManager.Type.WIFI, this));
-        ((EditText) findViewById(R.id.editText2)).setText(AppDataManager.getPassword(AppDataManager.Type.WIFI, this));
+        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.WIFI, this));
+        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.WIFI, this));
     }
 
     @Override
@@ -55,9 +60,8 @@ public class WifiLoginActivity extends AppCompatActivity {
     }
 
     public void onClickSave(@SuppressWarnings("UnusedParameters") View view) {
-        AppDataManager.login(AppDataManager.Type.WIFI, this,
-                ((EditText) findViewById(R.id.editText)).getText().toString(),
-                ((EditText) findViewById(R.id.editText2)).getText().toString());
+        save(this, ((EditText) findViewById(R.id.edit_username)).getText().toString(),
+                ((EditText) findViewById(R.id.edit_password)).getText().toString());
         Toast.makeText(this, R.string.text_login_data_successfully_saved, Toast.LENGTH_LONG).show();
     }
 
@@ -85,8 +89,8 @@ public class WifiLoginActivity extends AppCompatActivity {
                 return;
             }
         }
-        final String username = ((EditText) findViewById(R.id.editText)).getText().toString();
-        final String password = ((EditText) findViewById(R.id.editText2)).getText().toString();
+        final String username = ((EditText) findViewById(R.id.edit_username)).getText().toString();
+        final String password = ((EditText) findViewById(R.id.edit_password)).getText().toString();
         worker.startWorker(new Runnable() {
             @Override
             public void run() {

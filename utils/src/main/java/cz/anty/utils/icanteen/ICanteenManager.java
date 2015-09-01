@@ -7,9 +7,10 @@ import java.util.List;
 
 import cz.anty.utils.Constants;
 import cz.anty.utils.WrongLoginDataException;
-import cz.anty.utils.icanteen.lunch.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.Lunches;
-import cz.anty.utils.icanteen.lunch.MonthLunch;
+import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
+import cz.anty.utils.icanteen.lunch.month.MonthLunch;
+import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 
 /**
  * Created by anty on 17.8.15.
@@ -49,15 +50,14 @@ public class ICanteenManager {
 
     public synchronized void orderMonthLunch(MonthLunch lunch) throws IOException {
         if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
-        //TODO CREATE
-        connector.orderMonthLunch(null);
+        connector.orderMonthLunch(lunch.getOrderUrlAdd());
     }
 
-    public synchronized List<MonthLunch> getMonth() throws IOException {
+    public synchronized List<MonthLunchDay> getMonth() throws IOException {
         return getMonth(0);
     }
 
-    private synchronized List<MonthLunch> getMonth(int depth) throws IOException {
+    private synchronized List<MonthLunchDay> getMonth(int depth) throws IOException {
         if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
         if (depth >= Constants.MAX_TRY) throw new WrongLoginDataException();
         Elements elements;

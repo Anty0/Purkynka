@@ -109,7 +109,7 @@ public class OnceRunThread {
         }
     }
 
-    public boolean stopWorker() {
+    public boolean stopActualWorker() {
         synchronized (workerLock) {
             if (isWorkerRunning()) {
                 worker.interrupt();

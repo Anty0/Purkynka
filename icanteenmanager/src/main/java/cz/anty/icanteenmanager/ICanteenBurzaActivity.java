@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -25,17 +26,19 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cz.anty.utils.AppDataManager;
-import cz.anty.utils.icanteen.lunch.BurzaLunch;
-import cz.anty.utils.icanteen.lunch.BurzaLunchSelector;
+import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
+import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
+import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
-public class BurzaActivity extends AppCompatActivity {
+public class ICanteenBurzaActivity extends AppCompatActivity {
 
     private MultilineAdapter adapter;
     private OnceRunThreadWithSpinner refreshThread;
@@ -43,13 +46,13 @@ public class BurzaActivity extends AppCompatActivity {
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            if (AppDataManager.isDebugMode(BurzaActivity.this))
-                Log.d("BurzaActivity", "onServiceConnected");
-            BurzaActivity.this.binder = (ICanteenService.MyBinder) binder;
+            if (AppDataManager.isDebugMode(ICanteenBurzaActivity.this))
+                Log.d("ICanteenBurzaActivity", "onServiceConnected");
+            ICanteenBurzaActivity.this.binder = (ICanteenService.MyBinder) binder;
             refreshThread.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    BurzaActivity.this.binder.setOnBurzaChangeListener(new Runnable() {
+                    ICanteenBurzaActivity.this.binder.setOnBurzaChangeListener(new Runnable() {
                         @Override
                         public void run() {
                             update();
@@ -66,11 +69,11 @@ public class BurzaActivity extends AppCompatActivity {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            if (AppDataManager.isDebugMode(BurzaActivity.this))
-                Log.d("BurzaActivity", "onServiceDisconnected");
+            if (AppDataManager.isDebugMode(ICanteenBurzaActivity.this))
+                Log.d("ICanteenBurzaActivity", "onServiceDisconnected");
             refreshThread.waitToWorkerStop();
-            BurzaActivity.this.binder.setOnBurzaChangeListener(null);
-            BurzaActivity.this.binder = null;
+            ICanteenBurzaActivity.this.binder.setOnBurzaChangeListener(null);
+            ICanteenBurzaActivity.this.binder = null;
         }
 
     };
@@ -93,7 +96,7 @@ public class BurzaActivity extends AppCompatActivity {
                 final BurzaLunch lunch = item instanceof BurzaLunch ? (BurzaLunch) item : null;
                 if (lunch == null) return;
 
-                new AlertDialog.Builder(BurzaActivity.this)
+                new AlertDialog.Builder(ICanteenBurzaActivity.this)
                         .setTitle(lunch.getName())
                         .setIcon(R.mipmap.ic_launcher)
                         .setMessage(lunch.getLunchNumber()
@@ -103,7 +106,7 @@ public class BurzaActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (binder == null)
-                                    Toast.makeText(BurzaActivity.this, R.string.toast_text_can_not_order_burza_lunch, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ICanteenBurzaActivity.this, R.string.toast_text_can_not_order_burza_lunch, Toast.LENGTH_LONG).show();
                                 else binder.orderBurzaLunch(lunch);
                             }
                         })
@@ -145,7 +148,7 @@ public class BurzaActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (AppDataManager.isDebugMode(this)) Log.d("BurzaActivity", "onStart");
+        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenBurzaActivity", "onStart");
         super.onStart();
         bindService(new Intent(this, ICanteenService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
@@ -153,9 +156,9 @@ public class BurzaActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (AppDataManager.isDebugMode(this)) Log.d("BurzaActivity", "onStop");
-        super.onStop();
+        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenBurzaActivity", "onStop");
         unbindService(mConnection);
+        super.onStop();
     }
 
     @Override
@@ -201,6 +204,35 @@ public class BurzaActivity extends AppCompatActivity {
             datePicker.setMinDate(System.currentTimeMillis());
         mainLinearLayout.addView(datePicker);
 
+        final TextView dateWrongTextView = new TextView(this);
+        dateWrongTextView.setTextColor(Color.RED);
+        dateWrongTextView.setText("You still have got lunch on this day.");//TODO to strings
+        dateWrongTextView.setVisibility(View.GONE);
+        mainLinearLayout.addView(dateWrongTextView);
+
+        View.OnClickListener datePickerOnClickListener =
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (binder != null) {
+                            Calendar calendar = Calendar.getInstance();
+                            for (MonthLunchDay monthLunchDay : binder.getMonth()) {
+                                calendar.setTime(monthLunchDay.getDate());
+                                if (calendar.get(Calendar.DAY_OF_MONTH) == datePicker.getDayOfMonth()
+                                        && calendar.get(Calendar.MONTH) == datePicker.getMonth()
+                                        && calendar.get(Calendar.YEAR) == datePicker.getYear()) {
+                                    if (monthLunchDay.getOrderedLunch() == null)
+                                        dateWrongTextView.setVisibility(View.GONE);
+                                    else dateWrongTextView.setVisibility(View.VISIBLE);
+                                    break;
+                                }
+                            }
+                        } else dateWrongTextView.setVisibility(View.GONE);
+                    }
+                };
+        datePicker.setOnClickListener(datePickerOnClickListener);
+        datePickerOnClickListener.onClick(null);
+
         TextView lunchNumberTextView = new TextView(this);
         lunchNumberTextView.setText(R.string.text_view_text_numbers_to_watch);
         mainLinearLayout.addView(lunchNumberTextView);
@@ -220,7 +252,7 @@ public class BurzaActivity extends AppCompatActivity {
         lunchCheckBox3.setChecked(true);
         mainLinearLayout.addView(lunchCheckBox3);
 
-        new AlertDialog.Builder(BurzaActivity.this)
+        new AlertDialog.Builder(ICanteenBurzaActivity.this)
                 .setTitle(R.string.notify_title_select_to_watch)
                 .setView(mainLinearLayout)
                 .setIcon(R.mipmap.ic_launcher)
@@ -237,15 +269,16 @@ public class BurzaActivity extends AppCompatActivity {
 
                         DecimalFormat format = new DecimalFormat("##");
                         try {
-                            if (binder == null || binder.startBurzaChecker(
-                                    new BurzaLunchSelector[]{
-                                            new BurzaLunchSelector(lunchNumbers.toArray(new BurzaLunch.LunchNumber[lunchNumbers.size()]),
-                                                    BurzaLunch.DATE_FORMAT.parse(format.format(datePicker.getDayOfMonth()) + "."
-                                                            + format.format(datePicker.getMonth()) + "." + datePicker.getYear()))
-                                    }) == null)
-                                Toast.makeText(BurzaActivity.this, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
+                            if (binder == null)
+                                Toast.makeText(ICanteenBurzaActivity.this, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
+                            else
+                                binder.startBurzaChecker(
+                                        new BurzaLunchSelector(lunchNumbers.toArray(new BurzaLunch.LunchNumber[lunchNumbers.size()]),
+                                                BurzaLunch.DATE_FORMAT.parse(format.format(datePicker.getDayOfMonth()) + "."
+                                                        + format.format(datePicker.getMonth()) + "." + datePicker.getYear()))
+                                );
                         } catch (ParseException e) {
-                            Toast.makeText(BurzaActivity.this, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
+                            Toast.makeText(ICanteenBurzaActivity.this, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
                         }
                     }
                 })

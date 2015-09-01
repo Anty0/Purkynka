@@ -2,8 +2,12 @@
 <resources>
     <string name="app_name">Purkynka Manager</string>
 
-    <string name="dialog_title_terms">Terms of use</string>
-    <string name="dialog_text_terms">Using the application is at your own risk.\n\nThe developer has the right at any time without notice to change the terms of use of this application, or any part thereof.</string>
+    <string name="activity_title_first_start_welcome">Welcome</string>
+    <string name="activity_title_first_start_terms">Terms of use</string>
+
+    <string name="text_terms">Failed to load the conditions of use, check your Internet connection.\nTerms of use this app, you can also read on the pages of the application (http://student.sspbrno.cz/~kuchynka.jiri/).\n\nBy clicking on "Accept" you accept that you have read the terms of use and agree with them.</string>
+    <string name="text_welcome">Welcome to Purkynka Manager (use czech language for more details and better strings)</string>
+
     <string name="dialog_message_update_alert">If \"Update\" button don\'t working for you, then download and install update manually from official application web page.</string>
 
     <string name="toast_text_download_successful">Download successful completed</string>
