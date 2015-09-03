@@ -35,7 +35,7 @@ public class UpdateConnector {
 
     public static String getLatestVersionName() throws IOException {
         return Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
-                .execute().body()/*.replace("\n", "")*/.trim();
+                .execute().body().replace("\n", "");
     }
 
     public static String getLatestTerms(String languageShortcut) throws IOException {
