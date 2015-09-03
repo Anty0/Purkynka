@@ -1,10 +1,13 @@
 package cz.anty.utils.icanteen.lunch.burza;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 
 /**
  * Created by anty on 19.8.15.
@@ -19,7 +22,7 @@ public class BurzaLunchSelector {
     private final BurzaLunch.LunchNumber[] lunchNumbers;
     private final Date date;
 
-    public BurzaLunchSelector(@NonNull BurzaLunch.LunchNumber[] lunchNumbers, @NonNull Date date) {
+    public BurzaLunchSelector(@Nullable BurzaLunch.LunchNumber[] lunchNumbers, @NonNull Date date) {
         this.lunchNumbers = lunchNumbers;
         this.date = date;
     }
@@ -42,22 +45,27 @@ public class BurzaLunchSelector {
         return new BurzaLunchSelector(lunchNumbers, new Date(Long.parseLong(data[1])));
     }
 
+    public boolean isSelected(MonthLunchDay lunch) {
+        return date.equals(lunch.getDate());
+    }
+
     public boolean isSelected(BurzaLunch lunch) {
         return date.equals(lunch.getDate())
                 && checkLunchNumber(lunch.getLunchNumber());
     }
 
     private boolean checkLunchNumber(BurzaLunch.LunchNumber lunchNumber) {
-        for (BurzaLunch.LunchNumber lunchNumber1 : this.lunchNumbers) {
-            if (lunchNumber1.equals(lunchNumber)) return true;
-        }
+        if (this.lunchNumbers != null)
+            for (BurzaLunch.LunchNumber lunchNumber1 : this.lunchNumbers) {
+                if (lunchNumber1.equals(lunchNumber)) return true;
+            }
         return false;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        if (lunchNumbers.length > 0) {
+        if (lunchNumbers != null && lunchNumbers.length > 0) {
             builder.append(lunchNumbers[0]);
             for (int i = 1; i < lunchNumbers.length; i++)
                 builder.append(LUNCH_SPLIT_VALUE).append(lunchNumbers[i]);

@@ -60,7 +60,7 @@ public class TrackingReceiver extends BroadcastReceiver {
                                         .replace(Constants.STRINGS_CONST_NAME,
                                                 findMan.getName()) + " (" +
                                         findMan.getLastEnterAsString() + ")")
-                                .setSmallIcon(R.mipmap.ic_launcher) //TODO no default icon
+                                .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
                                 .setContentIntent(PendingIntent.getActivity(context, 0,
                                         new Intent(context, SearchActivity.class)
                                                 .putExtra(SearchActivity.EXTRA_SEARCH, search), 0))

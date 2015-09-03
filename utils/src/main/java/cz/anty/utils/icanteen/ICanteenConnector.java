@@ -46,7 +46,7 @@ public class ICanteenConnector {
         this.loginCookies = login(0, null, username, password);
     }
 
-    private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {//// TODO: 1.9.15 REPAIR (NOT WORKING)
+    private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {//// TODO: 1.9.15 REPAIR (sometimes NOT WORKING)
         if (depth >= Constants.MAX_TRY) throw last;
         try {
             return Jsoup
@@ -85,13 +85,13 @@ public class ICanteenConnector {
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         if (AppDataManager.isDebugMode(null))
-            Log.d("ICanteenConnector", "getMonthElements startElements: " + monthPage);
+            Log.v("ICanteenConnector", "getMonthElements startElements: " + monthPage);
 
         Elements toReturn = monthPage.select("div#mainContext")
                 .select("table")
                 .select("form.objednatJidlo-");
         if (AppDataManager.isDebugMode(null))
-            Log.d("ICanteenConnector", "getMonthElements finalElements: " + toReturn);
+            Log.v("ICanteenConnector", "getMonthElements finalElements: " + toReturn);
         return toReturn;
     }
 
@@ -102,7 +102,7 @@ public class ICanteenConnector {
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         if (AppDataManager.isDebugMode(null))
-            Log.d("ICanteenConnector", "getBurzaElements startElements: " + burzaPage);
+            Log.v("ICanteenConnector", "getBurzaElements startElements: " + burzaPage);
 
         Elements toReturn = burzaPage
                 .select("div#mainContext")
@@ -110,7 +110,7 @@ public class ICanteenConnector {
                 .select("tr");
         toReturn.remove(0);
         if (AppDataManager.isDebugMode(null))
-            Log.d("ICanteenConnector", "getBurzaElements finalElements: " + toReturn);
+            Log.v("ICanteenConnector", "getBurzaElements finalElements: " + toReturn);
         return toReturn;
     }
 

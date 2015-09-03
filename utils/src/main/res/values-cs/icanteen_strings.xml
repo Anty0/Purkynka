@@ -8,7 +8,7 @@
 
     <string name="app_description_icanteen">Správce iCanteen je prográmek, který dokáže spravovat a objednávat školní obědy, také dokáže hlídat burzu a automaticky objednat oběd, jakmile bude dostupný.</string>
     <string name="app_description_icanteen_burza">Hlídač burzy dokáže kontrolovat ve velmi krátkých intervalech obědovou burzu a tak zvyšuje vaši pravděpodobnost na zisk oběda ze školní burzy.</string>
-    <string name="app_description_icanteen_lunch_order">Již brzy</string>
+    <string name="app_description_icanteen_lunch_order">Obědnavač obědů umožňuje pohodlně z mobilního telefonu obědnávat obědy.</string>
 
     <string name="notify_title_can_not_login">Nejde se přihlásit do iCanteen</string>
     <string name="notify_text_can_not_login">Prosím zkuste se odhlásit a zase znovu přihlásit</string>
@@ -20,9 +20,13 @@
     <string name="notify_title_select_to_watch">Zvolte co hlídat</string>
     <string name="text_view_text_date_to_watch">Zvolte hlídané DATUM:</string>
     <string name="text_view_text_numbers_to_watch">Zvolte OBĚDY pro hlídání:</string>
+    <string name="text_view_text_you_still_have_got_lunch">Již máš oběd na tento den.</string>
 
     <string name="menu_item_text_start_burza_checking">Spustit Hlídač burzy</string>
 
-    <string name="toast_text_can_not_start_burza_checker">Nejde spustit Hlídač burzy, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
-    <string name="toast_text_can_not_order_burza_lunch">Nejde objednat jídlo z burzy, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač burzy, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
+    <string name="toast_text_can_not_order_lunch">Nelze objednat jídlo, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_coming_soon">Již brzy</string>
+
+    <string name="text_nothing_ordered">Nic neobědnáno</string>
 </resources>

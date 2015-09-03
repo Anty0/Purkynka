@@ -12,7 +12,14 @@
     <string name="text_view_text_insert_login">Uživatelské jméno:</string>
     <string name="text_view_text_insert_password">Heslo:</string>
 
-    <string name="text_about">Aplikaci vytvořil Anty (Jiří Kuchyňka), pokud máte nějaký problém můžete jej nahlásit na webových stránkách aplikace (http://student.sspbrno.cz/~kuchynka.jiri/), nebo mě osobně v prostorách školy.</string>
+    <string name="text_about">Aplikaci vytvořil Anty, pokud máte nějaký problém můžete jej nahlásit na webových stránkách aplikace (http://anty.crush-team.cz/), nebo mě osobně v prostorách školy.</string>
+
+    <string name="dialog_title_select_language">Zvolte jazyk</string>
+
+    <string name="radio_button_text_czech">Čeština (Czech)</string>
+    <string name="radio_button_text_english">Angličtina (English)</string>
+
+    <string name="toast_text_restart_app_to_change_language">Please restart app, to change language on all screens</string>
 
     <string name="check_box_text_enable_debug">Povolit DEBUG Mode (určeno pouze pro debugging)</string>
     <string name="check_box_text_start_first_start">Spustit průvodce prvním spuštěním, při příštím spuštění aplikace</string>
@@ -45,4 +52,6 @@
     <string name="but_no">Ne</string>
     <string name="but_skip">Přeskočit</string>
     <string name="but_next">Další</string>
+    <string name="but_change_language">Změnit jazyk</string>
+    <string name="but_share">Sdílet</string>
 </resources>

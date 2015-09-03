@@ -47,7 +47,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                 page = pagesManager.get();
             } catch (Exception e) {
                 Log.d("FirstStartActivity", "onCreate", e);
-                Toast.makeText(this, "Can't load first start page, try open application again", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.exception_toast_text_can_not_load_first_start, Toast.LENGTH_LONG).show();
                 finish();
                 return;
             }
@@ -91,6 +91,13 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void run() {
                 doNext(id);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        butSkip.setEnabled(true);
+                        butNext.setEnabled(true);
+                    }
+                });
             }
         }, getString(R.string.wait_text_please_wait));
     }
@@ -125,8 +132,6 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void run() {
                     updateState();
-                    butSkip.setEnabled(true);
-                    butNext.setEnabled(true);
                 }
             });
         }

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cz.anty.utils.AppDataManager;
@@ -53,12 +54,15 @@ public class TrackingMansManager {
             for (String manData : data) {
                 String[] manDataS = manData.split(MAN_SPLIT_VALUE);
                 try {
+                    if (AppDataManager.isDebugMode(context)) Log.d("TrackingMansManager",
+                            "reload txtData: " + txtData
+                                    + "\ndata: " + Arrays.toString(data)
+                                    + "\nmanDataS: " + Arrays.toString(manDataS));
                     mans.add(new Man(manDataS[0], manDataS[1],
                             AttendanceConnector.DATE_FORMAT.parse(manDataS[2]),
                             Man.IsInSchoolState.parseIsInSchoolState(manDataS[3])));
                 } catch (ParseException e) {
-                    if (AppDataManager.isDebugMode(context))
-                        Log.d("TrackingMansManager", "load", e);
+                    Log.d("TrackingMansManager", "reload data: " + txtData, e);
                 }
             }
         }
@@ -103,7 +107,7 @@ public class TrackingMansManager {
         if (contains(man)) {
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
-                    .setIcon(R.mipmap.ic_launcher)
+                            //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
                     .setMessage(context.getString(R.string.dialog_text_attendance_stop_tracking)
                             .replace(Constants.STRINGS_CONST_NAME, man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
@@ -119,7 +123,7 @@ public class TrackingMansManager {
         } else {
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
-                    .setIcon(R.mipmap.ic_launcher)
+                            //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
                     .setMessage(context.getString(R.string.dialog_text_attendance_tracking)
                             .replace(Constants.STRINGS_CONST_NAME, man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
@@ -128,7 +132,7 @@ public class TrackingMansManager {
                             if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_terms_warning)
-                                        .setIcon(R.mipmap.ic_launcher)
+                                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
                                         .setMessage(context.getString(R.string.dialog_text_terms_attendance_tracking)
                                                 .replace(Constants.STRINGS_CONST_NAME, man.getName()))
                                         .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
@@ -144,7 +148,7 @@ public class TrackingMansManager {
                             } else {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_terms_warning)
-                                        .setIcon(R.mipmap.ic_launcher)
+                                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
                                         .setMessage(R.string.dialog_text_attendance_can_not_start_tracking)
                                         .setPositiveButton(R.string.but_cancel, null)
                                         .setCancelable(true)

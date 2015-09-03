@@ -22,32 +22,31 @@ import cz.anty.utils.thread.ProgressReporter;
  */
 public class UpdateConnector {
 
-    private static final String DEFAULT_URL = "http://student.sspbrno.cz/~kuchynka.jiri/purkynkamanager/";
+    private static final String DEFAULT_URL = "http://anty.crush-team.cz/purkynkamanager/";
     private static final String LATEST_VERSION_CODE_URL_ADD = "latestVersionCode";
     private static final String LATEST_VERSION_NAME_URL_ADD = "latestVersionName";
     private static final String LATEST_APK_URL_ADD = "latest.apk";
     private static final String LATEST_TERMS_URL_ADD = "latestTerms";
 
-    public static Integer getLatestVersionCode() throws IOException {
+    public static Integer getLatestVersionCode() throws IOException, NumberFormatException {
         return Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
-                .execute().body().replace("\n", ""));
+                .execute().body()/*.replace("\n", "")*/.trim());
     }
 
     public static String getLatestVersionName() throws IOException {
         return Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
-                .execute().body().replace("\n", "");
+                .execute().body()/*.replace("\n", "")*/.trim();
     }
 
     public static String getLatestTerms(String languageShortcut) throws IOException {
-        String terms = Jsoup.connect(DEFAULT_URL + LATEST_TERMS_URL_ADD
-                + languageShortcut.toUpperCase(Locale.ENGLISH)).execute().body();
-        if (terms.charAt(terms.length() - 1) == '\n') {
+        /*if (terms.charAt(terms.length() - 1) == '\n') {
             terms = terms.substring(0, terms.length() - 1);
             /*char[] chars = terms.toCharArray();
             chars[chars.length - 1] = ' ';
-            terms = new String(chars);*/
-        }
-        return terms;
+            terms = new String(chars);/
+        }*/
+        return Jsoup.connect(DEFAULT_URL + LATEST_TERMS_URL_ADD
+                + languageShortcut.toUpperCase(Locale.ENGLISH)).execute().body().trim();
     }
 
     public static String downloadUpdate(Context context, ProgressReporter reporter, String filename) throws IOException {

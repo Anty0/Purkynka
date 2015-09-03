@@ -78,7 +78,11 @@ public class SASManageActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName className) {
             if (AppDataManager.isDebugMode(SASManageActivity.this))
                 Log.d("SASManageActivity", "onServiceDisconnected");
-            refreshThread.waitToWorkerStop();
+            try {
+                refreshThread.waitToWorkerStop();
+            } catch (InterruptedException e) {
+                Log.d("SASManageActivity", "onServiceDisconnected", e);
+            }
             SASManageActivity.this.binder.setOnMarksChangeListener(null);
             SASManageActivity.this.binder.setOnStateChangedListener(null);
             SASManageActivity.this.binder = null;
@@ -199,24 +203,26 @@ public class SASManageActivity extends AppCompatActivity {
                     }
                 } else
                     builder.append("null").append("\n").append(getString(R.string.marks)).append(":");*/
-                final MultilineItem[] data;
+                MultilineItem[] data;
                 AdapterView.OnItemClickListener onClickListener = null;
-                if (binder != null) {
-                    switch (marksShort) {
-                        case LESSONS:
-                            //final List<Lesson> lessons = Marks.toLessons(Arrays.asList(binder.getMarks(semester)));
-                            //data = lessons.toArray(new MultilineItem[lessons.size()]);
-                            data = binder.getLessons(semester);
+                try {
+                    if (binder != null) {
+                        switch (marksShort) {
+                            case LESSONS:
+                                //final List<Lesson> lessons = Marks.toLessons(Arrays.asList(binder.getMarks(semester)));
+                                //data = lessons.toArray(new MultilineItem[lessons.size()]);
+                                data = binder.getLessons(semester);
                             /*values = new String[lessons.size()];
                             for (int i = 0; i < values.length; i++) {
                                 values[i] = lessons.get(i).toString();
                             }*/
-                            onClickListener = new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    ListView listView = new ListView(SASManageActivity.this);
-                                    Lesson lesson = (Lesson) data[position];
-                                    Mark[] marks = lesson.getMarks();
+                                final MultilineItem[] finalData = data;
+                                onClickListener = new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        ListView listView = new ListView(SASManageActivity.this);
+                                        Lesson lesson = (Lesson) finalData[position];
+                                        Mark[] marks = lesson.getMarks();
                                     /*String[] values = new String[marks.length];
                                     for (int i = 0; i < values.length; i++) {
                                         values[i] = marks[i].toString();
@@ -227,36 +233,40 @@ public class SASManageActivity extends AppCompatActivity {
 
                                     final StableArrayAdapter adapter = new StableArrayAdapter(SASManageActivity.this,
                                             android.R.layout.simple_list_item_1, list);*/
-                                    MultilineAdapter adapter = new MultilineAdapter(SASManageActivity.this,
-                                            R.layout.text_multi_line_list_item, marks);
+                                        MultilineAdapter adapter = new MultilineAdapter(SASManageActivity.this,
+                                                R.layout.text_multi_line_list_item, marks);
 
-                                    listView.setAdapter(adapter);
-                                    listView.setOnItemClickListener(generateMarkOnClickListener(Arrays.asList(marks)
-                                            .toArray(new MultilineItem[marks.length])));
-                                    new AlertDialog.Builder(SASManageActivity.this)
-                                            .setTitle(lesson.getFullName())
-                                            .setIcon(R.mipmap.ic_launcher_sas)
-                                            .setView(listView)
-                                            .setPositiveButton(R.string.but_ok, null)
-                                            .setCancelable(true)
-                                            .show();
-                                }
-                            };
-                            break;
-                        case DATE:
-                        default:
+                                        listView.setAdapter(adapter);
+                                        listView.setOnItemClickListener(generateMarkOnClickListener(Arrays.asList(marks)
+                                                .toArray(new MultilineItem[marks.length])));
+                                        new AlertDialog.Builder(SASManageActivity.this)
+                                                .setTitle(lesson.getFullName())
+                                                .setIcon(R.mipmap.ic_launcher_sas)
+                                                .setView(listView)
+                                                .setPositiveButton(R.string.but_ok, null)
+                                                .setCancelable(true)
+                                                .show();
+                                    }
+                                };
+                                break;
+                            case DATE:
+                            default:
                             /*Mark[] marks*/
-                            if (AppDataManager.isDebugMode(SASManageActivity.this))
-                                Log.d("SASManageActivity", "onUpdate: Loading marks");
-                            data = binder.getMarks(semester);
+                                if (AppDataManager.isDebugMode(SASManageActivity.this))
+                                    Log.d("SASManageActivity", "onUpdate: Loading marks");
+                                data = binder.getMarks(semester);
                             /*values = new String[marks.length];
                             for (int i = 0; i < values.length; i++) {
                                 values[i] = marks[i].toString();
                             }*/
-                            onClickListener = generateMarkOnClickListener(data);
-                            break;
+                                onClickListener = generateMarkOnClickListener(data);
+                                break;
+                        }
+                    } else {
+                        throw new NullPointerException();
                     }
-                } else {
+                } catch (NullPointerException | InterruptedException e) {
+                    Log.d("SASManageActivity", "onUpdate", e);
                     data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
                             getString(R.string.exception_message_sas_manager_binder_null))};
                 }
@@ -369,7 +379,11 @@ public class SASManageActivity extends AppCompatActivity {
                             public void run() {
                                 if (binder != null) {
                                     binder.refresh();
-                                    binder.waitToWorkerStop();
+                                    try {
+                                        binder.waitToWorkerStop();
+                                    } catch (InterruptedException e) {
+                                        Log.d("SASManageActivity", "logInException", e);
+                                    }
                                     if (binder.getState() == SASManagerService.State.LOG_IN_EXCEPTION) {
                                         runOnUiThread(new Runnable() {
                                             @Override

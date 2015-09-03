@@ -56,9 +56,7 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
                         startActivity(new Intent(ICanteenSelectServiceActivity.this, ICanteenBurzaActivity.class));
                         break;
                     case 1:
-                        Toast.makeText(ICanteenSelectServiceActivity.this,
-                                R.string.app_description_icanteen_lunch_order, Toast.LENGTH_LONG).show();
-                        //startActivity(new Intent(ICanteenSelectServiceActivity.this, LunchOrderActivity.class)); //TODO CREATE
+                        startActivity(new Intent(ICanteenSelectServiceActivity.this, ICanteenLunchOrderActivity.class));
                         break;
                 }
             }
@@ -82,6 +80,8 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this, R.string.toast_text_coming_soon,
+                    Toast.LENGTH_LONG).show();
             //TODO open settings
             return true;
         }

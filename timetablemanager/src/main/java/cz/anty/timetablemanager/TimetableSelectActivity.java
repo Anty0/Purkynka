@@ -84,7 +84,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
                     new AlertDialog.Builder(TimetableSelectActivity.this)
                             .setTitle(R.string.dialog_title_new_timetable)
-                                    //TODO add set icon with icon "T"
+                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                             .setMessage(R.string.dialog_text_insert_timetable_name)
                             .setView(layout)
                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
@@ -104,7 +104,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     public void run() {
                                                         new AlertDialog.Builder(TimetableSelectActivity.this)
                                                                 .setTitle(getString(R.string.exception_title_name) + ": " + input.getText())
-                                                                        //TODO add set icon with icon "T"
+                                                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                                                 .setMessage(R.string.exception_message_name)
                                                                 .setPositiveButton(R.string.but_ok, null)
                                                                 .setCancelable(true)
@@ -119,7 +119,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     public void run() {
                                                         new AlertDialog.Builder(TimetableSelectActivity.this)
                                                                 .setTitle(R.string.exception_title_connection)
-                                                                        //TODO add set icon with icon "T"
+                                                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                                                 .setMessage(R.string.exception_message_connection)
                                                                 .setPositiveButton(R.string.but_ok, null)
                                                                 .setCancelable(true)
@@ -134,7 +134,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     public void run() {
                                                         new AlertDialog.Builder(TimetableSelectActivity.this)
                                                                 .setTitle(R.string.dialog_title_timetable_still_exists)
-                                                                        //TODO add set icon with icon "T"
+                                                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                                                 .setMessage(R.string.dialog_message_timetable_still_exists)
                                                                 .setPositiveButton(R.string.but_ok, null)
                                                                 .setCancelable(true)
@@ -170,7 +170,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                 final Timetable timetable = timetables[position];
                 new AlertDialog.Builder(TimetableSelectActivity.this)
                         .setTitle(timetable.getName())
-                                //TODO add set icon with icon "T"
+                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                         .setMessage(R.string.dialog_message_what_to_do)
                         .setPositiveButton(R.string.but_rename, new DialogInterface.OnClickListener() {
                             @Override
@@ -180,7 +180,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
                                 new AlertDialog.Builder(TimetableSelectActivity.this)
                                         .setTitle(getString(R.string.but_rename) + ": " + timetable.getName())
-                                                //TODO add set icon with icon "T"
+                                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                         .setMessage(R.string.dialog_text_insert_timetable_name)
                                         .setView(input)
                                         .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {

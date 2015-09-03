@@ -5,9 +5,13 @@
     <string name="activity_title_first_start_welcome">Welcome</string>
     <string name="activity_title_first_start_terms">Terms of use</string>
 
-    <string name="text_terms">Failed to load the conditions of use, check your Internet connection.\nTerms of use this app, you can also read on the pages of the application (http://student.sspbrno.cz/~kuchynka.jiri/).\n\nBy clicking on "Accept" you accept that you have read the terms of use and agree with them.</string>
-    <string name="text_welcome">Welcome to Purkynka Manager (use czech language for more details and better strings)</string>
+    <string name="text_terms">Failed to load the conditions of use, check your Internet connection.\nTerms of use this app, you can also read on the pages of the application (http://anty.crush-team.cz/).\n\nBy clicking on "Accept" you accept that you have read the terms of use and agree with them.</string>
+    <string name="text_welcome">Welcome to Purkynka Manager\n\n(click here and change to czech language for more details and better strings)</string>
 
+    <string name="exception_toast_text_can_not_load_first_start">Can\'t load first start page, try open application again</string>
+
+    <string name="dialog_title_share">Share app</string>
+    <string name="dialog_message_share">Please share this app to your friends :)</string>
     <string name="dialog_message_update_alert">If \"Update\" button don\'t working for you, then download and install update manually from official application web page.</string>
 
     <string name="toast_text_download_successful">Download successful completed</string>
@@ -20,4 +24,5 @@
     <string name="wait_text_downloading_update">Downloading update</string>
 
     <string name="text_app_apk_name">Latest [NAME] [NUMBER].apk</string>
+    <string name="text_extra_text_share">I am using Purkynka Manager and much simplified my life and you can download it on http://anty.crush-team.cz/</string>
 </resources>

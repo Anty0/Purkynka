@@ -28,9 +28,13 @@
             android:label="@string/app_name_icanteen_burza" />
 
         <service
-            android:name=".BurzaCheckerService"
+            android:name=".ICanteenBurzaCheckerService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".ICanteenLunchOrderActivity"
+            android:label="@string/app_name_icanteen_lunch_order"></activity>
     </application>
 
 </manifest>

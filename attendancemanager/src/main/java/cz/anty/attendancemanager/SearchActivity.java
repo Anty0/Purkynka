@@ -45,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         searchEditText = (EditText) findViewById(R.id.editText);
         if (savedInstanceState != null) {
-            String search = savedInstanceState.getString(EXTRA_SEARCH);
+            String search = savedInstanceState.getString(EXTRA_SEARCH);// TODO: 3.9.15 check if working
             if (search != null) {
                 searchEditText.setText(search);
                 update(true, true, 1, search);

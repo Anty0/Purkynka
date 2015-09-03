@@ -47,7 +47,7 @@ public class SASManagerService extends Service {
                     marks.clear(MarksManager.Semester.SECOND);
                     marks.apply(MarksManager.Semester.FIRST);
                     marks.apply(MarksManager.Semester.SECOND);
-                    initialize();
+                    init();
                 }
             });
         }
@@ -86,17 +86,16 @@ public class SASManagerService extends Service {
             marks = new MarksManager(this);
         AppDataManager.addOnChangeListener(AppDataManager.Type.SAS, onLoginChange);
 
-        worker.waitToWorkerStop(worker.startWorker(
-                new Runnable() {
+        worker.startWorker(new Runnable() {
                     @Override
                     public void run() {
-                        initialize();
+                        init();
                     }
-                }));
+        });
     }
 
-    private void initialize() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "initialize");
+    private void init() {
+        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "init");
         if (sasManager != null && sasManager.isConnected()) {
             sasManager.disconnect();
             setState(State.DISCONNECTED);
@@ -300,7 +299,7 @@ public class SASManagerService extends Service {
             return worker.isWorkerRunning();
         }*/
 
-        public void waitToWorkerStop() {
+        public void waitToWorkerStop() throws InterruptedException {
             worker.waitToWorkerStop();
         }
 
@@ -325,17 +324,17 @@ public class SASManagerService extends Service {
             });
         }
 
-        public Lesson[] getLessons(MarksManager.Semester semester) {
+        public Lesson[] getLessons(MarksManager.Semester semester) throws InterruptedException {
             waitToWorkerStop();
             return marks.getAsLessons(semester);
         }
 
-        public Mark[] getMarks(MarksManager.Semester semester) {
+        public Mark[] getMarks(MarksManager.Semester semester) throws InterruptedException {
             waitToWorkerStop();
             return marks.get(semester);
         }
 
-        public String getMarksAsString(MarksManager.Semester semester) {
+        public String getMarksAsString(MarksManager.Semester semester) throws InterruptedException {
             waitToWorkerStop();
             return marks.toString(semester);
         }

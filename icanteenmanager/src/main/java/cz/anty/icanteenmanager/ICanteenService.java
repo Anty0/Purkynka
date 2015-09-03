@@ -51,13 +51,12 @@ public class ICanteenService extends Service {
         super.onCreate();
         worker.setPowerManager(this);
         AppDataManager.addOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
-        worker.waitToWorkerStop(worker.startWorker(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        initialize();
-                    }
-                }));
+        worker.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                initialize();
+            }
+        });
     }
 
     private void initialize() {
@@ -81,7 +80,7 @@ public class ICanteenService extends Service {
                     Notification n = new NotificationCompat.Builder(this)
                             .setContentTitle(getString(R.string.notify_title_can_not_login))
                             .setContentText(getString(R.string.notify_text_can_not_login))
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                             .setAutoCancel(true)
                             .setDefaults(Notification.DEFAULT_ALL)
                             .build();
@@ -103,6 +102,11 @@ public class ICanteenService extends Service {
     @Override
     public void onDestroy() {
         if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "onDestroy");
+        try {
+            worker.waitToWorkerStop();
+        } catch (InterruptedException e) {
+            Log.d("ICanteenService", "onDestroy", e);
+        }
         AppDataManager.removeOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
         super.onDestroy();
     }
@@ -183,7 +187,7 @@ public class ICanteenService extends Service {
 
     public class MyBinder extends Binder {
 
-        public void waitToWorkerStop() {
+        public void waitToWorkerStop() throws InterruptedException {
             worker.waitToWorkerStop();
         }
 
@@ -234,18 +238,18 @@ public class ICanteenService extends Service {
         }
 
         public void startBurzaChecker(@NonNull final BurzaLunchSelector selector) {
-            startService(new Intent(ICanteenService.this, BurzaCheckerService.class)
-                            .putExtra(BurzaCheckerService.EXTRA_BURZA_CHECKER_STATE, BurzaCheckerService.BURZA_CHECKER_STATE_START)
-                            .putExtra(BurzaCheckerService.EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING, selector.toString())
+            startService(new Intent(ICanteenService.this, ICanteenBurzaCheckerService.class)
+                            .putExtra(ICanteenBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE, ICanteenBurzaCheckerService.BURZA_CHECKER_STATE_START)
+                            .putExtra(ICanteenBurzaCheckerService.EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING, selector.toString())
             );
         }
 
-        public List<BurzaLunch> getBurza() {
+        public List<BurzaLunch> getBurza() throws InterruptedException {
             waitToWorkerStop();
             return mBurzaLunchList;
         }
 
-        public List<MonthLunchDay> getMonth() {
+        public List<MonthLunchDay> getMonth() throws InterruptedException {
             waitToWorkerStop();
             return mMonthLunchList;
         }

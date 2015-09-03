@@ -26,11 +26,10 @@ public class SASSplashActivity extends AppCompatActivity {
                     SASManagerService.MyBinder myBinder = (SASManagerService.MyBinder) binder;
                     try {
                         Thread.sleep(Constants.WAIT_TIME_ON_BIND);
+                        myBinder.waitToWorkerStop();
                     } catch (InterruptedException e) {
-                        if (AppDataManager.isDebugMode(SASSplashActivity.this))
-                            Log.d("SASSplashActivity", "onServiceConnected", e);
+                        Log.d("SASSplashActivity", "onServiceConnected", e);
                     }
-                    myBinder.waitToWorkerStop();
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -100,7 +99,11 @@ public class SASSplashActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        worker.waitToWorkerStop();
+        try {
+            worker.waitToWorkerStop();
+        } catch (InterruptedException e) {
+            Log.d("SASSplashActivity", "onStop", e);
+        }
         super.onStop();
         unbindService(mConnection);
     }

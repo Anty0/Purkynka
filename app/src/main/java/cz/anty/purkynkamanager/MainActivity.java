@@ -2,6 +2,7 @@ package cz.anty.purkynkamanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     UpdateReceiver.checkUpdate(MainActivity.this);
-                } catch (IOException ignored) {
+                } catch (IOException | NumberFormatException e) {
+                    Log.d("MainActivity", "checkUpdate", e);
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -77,17 +79,19 @@ public class MainActivity extends AppCompatActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             downloadInstallUpdate();
                                         }
-                                    }).setNegativeButton(R.string.but_exit, new DialogInterface.OnClickListener() {
+                                    }).setNegativeButton(R.string.but_exit,
+                                    new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             finish();
                                         }
-                                    }).setIcon(R.mipmap.ic_launcher)
+                                    })
+                                    .setIcon(R.mipmap.ic_launcher)
                                     .setCancelable(false)
                                     .setNeutralButton(R.string.but_skip, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            checkTerms();
+                                            checkFirstStart();
                                         }
                                     })
                                     .show();
@@ -101,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                         getString(R.string.notify_but_hours), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        checkTerms();
+                                        checkFirstStart();
                                     }
                                 });
                             }*/
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                             //builder.show();
                             return;
                         }
-                        checkTerms();
+                        checkFirstStart();
                     }
                 });
             }
@@ -257,14 +261,14 @@ public class MainActivity extends AppCompatActivity {
         }, getString(R.string.wait_text_downloading_update) + "…");
     }
 
-    private void checkTerms() {
+    private void checkFirstStart() {
         if (getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                 .getInt(Constants.SETTING_NAME_FIRST_START, -1) != BuildConfig.VERSION_CODE) {
             startActivity(new Intent(this, FirstStartActivity.class));
             finish();
             return;
         }
-        init();
+        checkShare();
         /*worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -306,6 +310,39 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }, getString(R.string.wait_text_loading));*/
+    }
+
+    private void checkShare() {
+        final SharedPreferences preferences = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
+        if (preferences.getBoolean(Constants.SETTING_NAME_SHOW_SHARE, true)) {
+            new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog)
+                    .setTitle(R.string.dialog_title_share)
+                    .setMessage(R.string.dialog_message_share)
+                    .setPositiveButton(R.string.but_share, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND)
+                                            .setType("text/plain")
+                                            .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                                            .putExtra(Intent.EXTRA_TEXT, getString(R.string.text_extra_text_share)),// TODO: 2.9.15 better share text
+                                    null/*"Share via"*/));
+
+                            preferences.edit().putBoolean(Constants.SETTING_NAME_SHOW_SHARE, false).apply();
+                            init();
+                        }
+                    })
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setCancelable(false)
+                    .setNeutralButton(R.string.but_skip, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            init();
+                        }
+                    })
+                    .show();
+            return;
+        }
+        init();
     }
 
     private void init() {

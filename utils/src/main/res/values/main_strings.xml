@@ -12,7 +12,14 @@
     <string name="text_view_text_insert_login">Login:</string>
     <string name="text_view_text_insert_password">Password:</string>
 
-    <string name="text_about">Application created and developed by Anty (Jiří Kuchyňka).\nIf you have a problem you can report on the website of applications (http://student.sspbrno.cz/~kuchynka.jiri/), or me personally at the school.</string>
+    <string name="text_about">Application created and developed by Anty.\nIf you have a problem you can report on the website of applications (http://anty.crush-team.cz/), or me personally at the school.</string>
+
+    <string name="dialog_title_select_language">Select language</string>
+
+    <string name="radio_button_text_czech">Czech</string>
+    <string name="radio_button_text_english">English</string>
+
+    <string name="toast_text_restart_app_to_change_language">Please restart app, to change language on all screens</string>
 
     <string name="check_box_text_enable_debug">Enable DEBUG Mode (use only for debugging)</string>
     <string name="check_box_text_start_first_start">Start application on next start as first start</string>
@@ -45,4 +52,6 @@
     <string name="but_no">No</string>
     <string name="but_skip">Skip</string>
     <string name="but_next">Next</string>
+    <string name="but_change_language">Change language</string>
+    <string name="but_share">Share</string>
 </resources>

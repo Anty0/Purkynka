@@ -4,9 +4,6 @@ import android.content.Context;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
-import cz.anty.utils.AppDataManager;
 
 /**
  * Created by anty on 9.6.15.
@@ -100,7 +97,7 @@ public class OnceRunThread {
         }
     }
 
-    private void setWorker(Thread worker) {
+    private void setWorker(Thread worker) throws InterruptedException {
         synchronized (waitingLock) {
             waitToWorkerStop();
             synchronized (workerLock) {
@@ -125,22 +122,15 @@ public class OnceRunThread {
         }
     }
 
-    public boolean waitToWorkerStop() {
+    public void waitToWorkerStop() throws InterruptedException {
         synchronized (waitingLock) {
             while (isWorkerRunning()) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    if (AppDataManager.isDebugMode(null))
-                        Log.d("OnceRunThread", "waitToWorkerStop", e);
-                    return false;
-                }
+                Thread.sleep(10);
             }
         }
-        return true;
     }
 
-    public void waitToWorkerStop(@NonNull Thread thread) {
+    public void waitToWorkerStop(@NonNull Thread thread) throws InterruptedException {
         while (thread.getState() != Thread.State.TERMINATED)
             waitToWorkerStop();
     }

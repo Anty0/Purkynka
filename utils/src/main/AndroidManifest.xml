@@ -9,6 +9,7 @@
 
     <application
         android:allowBackup="true"
+        android:configChanges="locale|orientation"
         android:fullBackupContent="@xml/backup_scheme">
         <activity
             android:name=".settings.SettingsActivity"

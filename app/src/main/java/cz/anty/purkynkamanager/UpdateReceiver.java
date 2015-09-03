@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ public class UpdateReceiver extends BroadcastReceiver {
     //private static final long DEFER_TIME = 1000 * 60 * 60 * 20;
     private static final OnceRunThread worker = new OnceRunThread();
 
-    public static void checkUpdate(Context context) throws IOException {
+    public static void checkUpdate(Context context) throws IOException, NumberFormatException {
         SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
         Integer latestCode = UpdateConnector.getLatestVersionCode();
         String latestName = UpdateConnector.getLatestVersionName();
@@ -93,7 +94,8 @@ public class UpdateReceiver extends BroadcastReceiver {
             public void run() {
                 try {
                     checkUpdate(context);
-                } catch (IOException ignored) {
+                } catch (IOException | NumberFormatException e) {
+                    Log.d("UpdateReceiver", "onReceive", e);
                 }
             }
         });

@@ -100,7 +100,7 @@ public class Man implements MultilineItem {
         public String toString() {
             switch (this) {
                 case IS_IN_SCHOOL:
-                    return "";
+                    return "j";
                 case IS_NOT_IN_SCHOOL:
                     return "ne";
                 case UNAVAILABLE:

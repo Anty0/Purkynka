@@ -25,11 +25,10 @@ public class ICanteenSplashActivity extends AppCompatActivity {
                     ICanteenService.MyBinder myBinder = (ICanteenService.MyBinder) binder;
                     try {
                         Thread.sleep(Constants.WAIT_TIME_ON_BIND);
+                        myBinder.waitToWorkerStop();
                     } catch (InterruptedException e) {
-                        if (AppDataManager.isDebugMode(ICanteenSplashActivity.this))
-                            Log.d("ICanteenSplashActivity", "onServiceConnected", e);
+                        Log.d("ICanteenSplashActivity", "onServiceConnected", e);
                     }
-                    myBinder.waitToWorkerStop();
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -80,7 +79,11 @@ public class ICanteenSplashActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        worker.waitToWorkerStop();
+        try {
+            worker.waitToWorkerStop();
+        } catch (InterruptedException e) {
+            Log.d("ICanteenSplashActivity", "onStop", e);
+        }
         unbindService(mConnection);
         super.onStop();
     }

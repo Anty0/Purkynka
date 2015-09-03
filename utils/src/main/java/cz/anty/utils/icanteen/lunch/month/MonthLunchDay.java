@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
+import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 
 /**
@@ -60,7 +61,8 @@ public class MonthLunchDay implements MultilineItem {
     @Override
     public String getText(Context context) {
         MonthLunch orderedLunch = getOrderedLunch();
-        return orderedLunch == null ? "Nothing ordered" : orderedLunch.getName();//TODO add to strings
+        return orderedLunch == null ? context.getString(R.string
+                .text_nothing_ordered) : orderedLunch.getName();
     }
 
     @Override

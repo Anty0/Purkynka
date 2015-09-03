@@ -53,17 +53,22 @@ public class TrackingWidget extends AppWidgetProvider {
     private String updateMans(final Context context) {
         OnceRunThread worker = new OnceRunThread(context);
         final StringBuilder builder = new StringBuilder();
-        worker.waitToWorkerStop(worker.startWorker(new Runnable() {
-            @Override
-            public void run() {
-                builder.append(TrackingReceiver.refreshTrackingMans(context, null, false));
-            }
-        }));
+        try {
+            worker.waitToWorkerStop(worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    builder.append(TrackingReceiver.refreshTrackingMans(context, null, false));
+                }
+            }));
+        } catch (InterruptedException e) {
+            Log.d("TrackingWidget", "onUpdate", e);
+        }
         return builder.toString();
     }
 
     @Override
     public synchronized void onReceive(@NonNull Context context, @NonNull Intent intent) {
+        if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "onReceive");
         lastIntent = intent;
         super.onReceive(context, intent);
     }

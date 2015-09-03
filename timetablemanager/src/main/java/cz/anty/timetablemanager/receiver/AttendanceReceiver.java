@@ -90,7 +90,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                             .replace(Constants.STRINGS_CONST_NAME, lesson.getShortName()))
                                     .setContentText(context.getString(R.string.notify_text_teacher_is_not_here)
                                             .replace(Constants.STRINGS_CONST_NAME, man.getName()))
-                                    .setSmallIcon(R.mipmap.ic_launcher) //TODO no default icon
+                                    .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                     .setContentIntent(null)
                                     .setAutoCancel(true)
                                     .setDefaults(Notification.DEFAULT_ALL)

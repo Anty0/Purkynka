@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -49,7 +50,7 @@ public class ICanteenLoginActivity extends AppCompatActivity {
                 .setTitle(R.string.exception_title_validate)
                 .setMessage(message)
                 .setPositiveButton(R.string.but_ok, null)
-                .setIcon(R.mipmap.ic_launcher)
+                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                 .setCancelable(true)
                 .show();
     }
@@ -82,6 +83,8 @@ public class ICanteenLoginActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this, R.string.toast_text_coming_soon,
+                    Toast.LENGTH_LONG).show();
             //TODO open settings
             return true;
         }
