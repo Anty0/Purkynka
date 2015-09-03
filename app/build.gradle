@@ -3,13 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.0'
-
     defaultConfig {
         applicationId "cz.anty.purkynkamanager"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName '1.2'
     }
     buildTypes {
         release {
@@ -28,6 +27,8 @@ android {
             minifyEnabled false
             zipAlignEnabled true
         }
+    }
+    productFlavors {
     }
 }
 

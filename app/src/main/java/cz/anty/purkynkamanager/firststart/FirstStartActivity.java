@@ -1,12 +1,10 @@
 package cz.anty.purkynkamanager.firststart;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -69,12 +67,12 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         contentFrameLayout.removeAllViews();
         page.doUpdate(this, getLayoutInflater(), contentFrameLayout);
 
-        if (Build.VERSION.SDK_INT >= 12) {
+        /*if (Build.VERSION.SDK_INT >= 12) {
             ViewPropertyAnimator animator = contentFrameLayout.animate().scaleX(10);
             if (Build.VERSION.SDK_INT >= 14) {
                 animator.start();
             }
-        }
+        }*/
 
         butNext.setText(page.getButNextText(this));
         butSkip.setText(page.getButSkipText(this));
