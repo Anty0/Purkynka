@@ -12,6 +12,7 @@ import java.util.Map;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.WrongLoginDataException;
 
 /**
  * Created by anty on 17.8.15.
@@ -70,13 +71,17 @@ public class ICanteenConnector {
     }
 
     public synchronized void orderBurzaLunch(String urlAdd) throws IOException {
-        Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
+        Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
+        if (AppDataManager.isDebugMode(null))
+            Log.v("ICanteenConnector", "orderBurzaLunch response: " + response.body());
     }
 
     public synchronized void orderMonthLunch(String urlAdd) throws IOException {
-        Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
+        Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
+        if (AppDataManager.isDebugMode(null))
+            Log.v("ICanteenConnector", "orderMonthLunch response: " + response.body());
     }
 
     public synchronized Elements getMonthElements() throws IOException {
@@ -84,12 +89,17 @@ public class ICanteenConnector {
         if (!isLoggedIn(monthPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
-        if (AppDataManager.isDebugMode(null))
-            Log.v("ICanteenConnector", "getMonthElements startElements: " + monthPage);
+        //if (AppDataManager.isDebugMode(null))
+        //System.out.println("ICanteenConnector getMonthElements startElements:\n" + monthPage);
+        //Log.v("ICanteenConnector", "getMonthElements startElements:\n" + monthPage);
 
-        Elements toReturn = monthPage.select("div#mainContext")
+        if (!isLoggedIn(monthPage))
+            throw new WrongLoginDataException();
+
+        Elements toReturn = monthPage
+                .select("div#mainContext")
                 .select("table")
-                .select("form.objednatJidlo-");
+                .select("form[name=objednatJidlo-]");
         if (AppDataManager.isDebugMode(null))
             Log.v("ICanteenConnector", "getMonthElements finalElements: " + toReturn);
         return toReturn;
@@ -101,8 +111,12 @@ public class ICanteenConnector {
         if (!isLoggedIn(burzaPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
-        if (AppDataManager.isDebugMode(null))
-            Log.v("ICanteenConnector", "getBurzaElements startElements: " + burzaPage);
+        //if (AppDataManager.isDebugMode(null))
+        //System.out.println("ICanteenConnector getBurzaElements startElements:\n" + burzaPage);
+        //Log.v("ICanteenConnector", "getBurzaElements startElements:\n" + burzaPage);
+
+        if (!isLoggedIn(burzaPage))
+            throw new WrongLoginDataException();
 
         Elements toReturn = burzaPage
                 .select("div#mainContext")

@@ -2,6 +2,7 @@ package cz.anty.utils;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,7 @@ public class AppDataManager {
     }
 
     public static synchronized void login(Type type, Context context, String username, String password) {
+        if (isDebugMode(context)) Log.d("AppDataManager", "login");
         context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE).edit()
                 .putString(Constants.SETTING_NAME_LOGIN, ByteEncryption.xor(username))
                 .putString(Constants.SETTING_NAME_PASSWORD, ByteEncryption.xor(password))
@@ -69,6 +71,7 @@ public class AppDataManager {
     }
 
     public static synchronized void logout(Type type, Context context) {
+        if (isDebugMode(context)) Log.d("AppDataManager", "logout");
         context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE).edit()
                 .putBoolean(Constants.SETTING_NAME_LOGGED_IN, false)
                 .apply();
@@ -76,16 +79,19 @@ public class AppDataManager {
     }
 
     public static synchronized boolean isLoggedIn(Type type, Context context) {
+        if (isDebugMode(context)) Log.d("AppDataManager", "isLoggedIn");
         return context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_LOGGED_IN, false);
     }
 
     public static synchronized String getUsername(Type type, Context context) {
+        if (isDebugMode(context)) Log.d("AppDataManager", "getUsername");
         return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getString(Constants.SETTING_NAME_LOGIN, ""));
     }
 
     public static synchronized String getPassword(Type type, Context context) {
+        if (isDebugMode(context)) Log.d("AppDataManager", "getPassword");
         return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getString(Constants.SETTING_NAME_PASSWORD, ""));
     }

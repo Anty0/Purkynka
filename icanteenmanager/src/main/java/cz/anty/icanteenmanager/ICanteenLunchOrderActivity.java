@@ -114,16 +114,21 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
                     radioButtonLunch.setId(R.id.txtTitle + 1 + i);
                     radioGroup.addView(radioButtonLunch);
 
-                    MonthLunch.State state = monthLunch.getState();
-                    if (state.equals(MonthLunch.State.ORDERED)) {
-                        radioButtonNoLunch.setTag(monthLunch);
-                        //radioButtonNoLunch.setChecked(false);
-                        radioButtonLunch.setTag(null);
-                        toCheck = radioButtonLunch.getId();
-                        //radioButtonLunch.setChecked(true);
+                    switch (monthLunch.getState()) {
+                        case ORDERED:
+                            radioButtonNoLunch.setTag(monthLunch);
+                        case DISABLED_ORDERED:
+                            radioButtonLunch.setTag(null);
+                            toCheck = radioButtonLunch.getId();
+                            break;
+                        case DISABLED:
+                            radioButtonLunch.setEnabled(false);
+                            break;
                     }
-                    radioButtonLunch.setEnabled(!state.equals(MonthLunch.State.DISABLED));
                 }
+                if (radioButtonNoLunch.getTag() == null
+                        && radioButtonNoLunch.getId() != toCheck)
+                    radioButtonNoLunch.setEnabled(false);
                 radioGroup.check(toCheck);
 
                 new AlertDialog.Builder(ICanteenLunchOrderActivity.this)
@@ -140,6 +145,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
                                             radioGroup.findViewById(radioGroup.getCheckedRadioButtonId()).getTag();
                                     if (monthLunchToOrder != null)
                                         binder.orderMonthLunch(monthLunchToOrder);
+                                    update();
                                 }
                             }
                         })

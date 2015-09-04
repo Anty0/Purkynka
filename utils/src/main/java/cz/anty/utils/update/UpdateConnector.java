@@ -2,6 +2,7 @@ package cz.anty.utils.update;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import org.jsoup.Jsoup;
 
@@ -13,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
 
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.thread.ProgressReporter;
 
 /**
@@ -29,13 +31,19 @@ public class UpdateConnector {
     private static final String LATEST_TERMS_URL_ADD = "latestTerms";
 
     public static Integer getLatestVersionCode() throws IOException, NumberFormatException {
-        return Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
+        Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
                 .execute().body()/*.replace("\n", "")*/.trim());
+        if (AppDataManager.isDebugMode(null)) Log.d("UpdateConnector",
+                "getLatestVersionCode versionCode:" + toReturn);
+        return toReturn;
     }
 
     public static String getLatestVersionName() throws IOException {
-        return Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
+        String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
                 .execute().body().replace("\n", "");
+        if (AppDataManager.isDebugMode(null)) Log.d("UpdateConnector",
+                "getLatestVersionName versionName:" + toReturn);
+        return toReturn;
     }
 
     public static String getLatestTerms(String languageShortcut) throws IOException {

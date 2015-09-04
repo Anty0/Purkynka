@@ -76,18 +76,8 @@ public class ICanteenService extends Service {
             } catch (IOException e) {
                 manager.disconnect();
                 manager = null;
-                if (e instanceof WrongLoginDataException) {
-                    Notification n = new NotificationCompat.Builder(this)
-                            .setContentTitle(getString(R.string.notify_title_can_not_login))
-                            .setContentText(getString(R.string.notify_text_can_not_login))
-                            .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
-                            .setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_ALL)
-                            .build();
-
-                    ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                            .notify(Constants.NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION, n);
-                }
+                if (e instanceof WrongLoginDataException)
+                    onWrongLoginData();
                 stopSelf();
                 return;
             }
@@ -97,6 +87,20 @@ public class ICanteenService extends Service {
             manager = null;
             stopSelf();
         }
+    }
+
+    private void onWrongLoginData() {
+        Notification n = new NotificationCompat.Builder(this)
+                .setContentTitle(getString(R.string.notify_title_can_not_login))
+                .setContentText(getString(R.string.notify_text_can_not_login))
+                .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .build();
+
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                .notify(Constants.NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION, n);
+
     }
 
     @Override
@@ -124,6 +128,8 @@ public class ICanteenService extends Service {
             return true;
         } catch (IOException | IndexOutOfBoundsException e) {
             Log.d("ICanteenService", "refreshBurza", e);
+            if (e instanceof WrongLoginDataException)
+                onWrongLoginData();
             return false;
         }
     }
@@ -141,6 +147,8 @@ public class ICanteenService extends Service {
             return true;
         } catch (IOException e) {
             Log.d("ICanteenService", "refreshMonth", e);
+            if (e instanceof WrongLoginDataException)
+                onWrongLoginData();
             return false;
         }
     }
@@ -152,6 +160,8 @@ public class ICanteenService extends Service {
             return true;
         } catch (IOException e) {
             Log.d("ICanteenService", "orderBurza", e);
+            if (e instanceof WrongLoginDataException)
+                onWrongLoginData();
             return false;
         }
     }
@@ -163,6 +173,8 @@ public class ICanteenService extends Service {
             return true;
         } catch (IOException e) {
             Log.d("ICanteenService", "orderMonth", e);
+            if (e instanceof WrongLoginDataException)
+                onWrongLoginData();
             return false;
         }
     }

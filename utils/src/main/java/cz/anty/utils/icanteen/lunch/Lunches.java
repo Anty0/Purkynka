@@ -66,6 +66,12 @@ public class Lunches {
                     state = MonthLunch.State.DISABLED;
                 } else state = MonthLunch.State.UNKNOWN;
 
+                if (state.equals(MonthLunch.State.DISABLED)
+                        && lunchElement.select("a." + MonthLunch.State.DISABLED)
+                        .get(0).child(0).text().contains("nelze zrušit")) {
+                    state = MonthLunch.State.DISABLED_ORDERED;
+                }
+
                 String onClickText = lunchElement.select("a.btn").attr("onClick");
                 int startIndex = onClickText.indexOf("'") + "'".length();
                 String urlAdd = onClickText.substring(startIndex, onClickText.indexOf("'", startIndex));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name_timetable">Správce ROZVRHŮ</string>
+    <string name="app_name_timetable">Správce ROZVRHŮ (BETA)</string>
 
     <string name="activity_title_timetable_select">Vyber ROZVRH hodin k zobrazení</string>
     <string name="activity_title_timetable_manage">ROZVRH hodin</string>

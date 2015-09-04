@@ -17,8 +17,8 @@ import cz.anty.utils.listItem.MultilineItem;
  */
 public class MonthLunchDay implements MultilineItem {
 
-    public static final SimpleDateFormat DATE_PARSE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-    private static final SimpleDateFormat DATE_SHOW_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+    public static final SimpleDateFormat DATE_PARSE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private static final SimpleDateFormat DATE_SHOW_FORMAT = new SimpleDateFormat("dd. MM. yyyy", Locale.getDefault());
 
     private final Date date;
     private final MonthLunch[] lunches;
@@ -38,11 +38,14 @@ public class MonthLunchDay implements MultilineItem {
 
     public MonthLunch getOrderedLunch() {
         MonthLunch orderedLunch = null;
-        for (MonthLunch lunch : getLunches())
-            if (lunch.getState().equals(MonthLunch.State.ORDERED)) {
+        for (MonthLunch lunch : getLunches()) {
+            MonthLunch.State state = lunch.getState();
+            if (state.equals(MonthLunch.State.ORDERED) ||
+                    state.equals(MonthLunch.State.DISABLED_ORDERED)) {
                 orderedLunch = lunch;
                 break;
             }
+        }
         return orderedLunch;
     }
 

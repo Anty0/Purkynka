@@ -39,7 +39,7 @@ public class MonthLunch {
     }
 
     public enum State {
-        ENABLED, DISABLED, ORDERED, UNKNOWN;
+        ENABLED, DISABLED, DISABLED_ORDERED, ORDERED, UNKNOWN;
 
         @Override
         public String toString() {

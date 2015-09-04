@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name_timetable">TIMETABLE Manager</string>
+    <string name="app_name_timetable">TIMETABLE Manager (BETA)</string>
 
     <string name="activity_title_timetable_select">Select TIMETABLE</string>
     <string name="activity_title_timetable_manage">TIMETABLE</string>

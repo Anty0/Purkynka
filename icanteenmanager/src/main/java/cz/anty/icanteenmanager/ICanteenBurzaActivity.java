@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
@@ -96,8 +95,6 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
         mainLinearLayout.addView(dateTextView);
 
         final DatePicker datePicker = new DatePicker(context);
-        if (Build.VERSION.SDK_INT >= 11)
-            datePicker.setMinDate(System.currentTimeMillis());
         mainLinearLayout.addView(datePicker);
 
         final TextView dateWrongTextView = new TextView(context);
@@ -125,10 +122,10 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
         lunchCheckBox3.setChecked(true);
         mainLinearLayout.addView(lunchCheckBox3);
 
-        View.OnClickListener datePickerOnClickListener =
-                new View.OnClickListener() {
+        DatePicker.OnDateChangedListener datePickerOnDateChangedListener =
+                new DatePicker.OnDateChangedListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         dateWrongTextView.setVisibility(View.GONE);
                         lunchCheckBox1.setText(BurzaLunch.LunchNumber.LUNCH_1.toString());
                         lunchCheckBox2.setText(BurzaLunch.LunchNumber.LUNCH_2.toString());
@@ -142,11 +139,11 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                             try {
                                 for (MonthLunchDay monthLunchDay : binder.getMonth()) {
                                     calendar.setTime(monthLunchDay.getDate());
-                                    if (calendar.get(Calendar.DAY_OF_MONTH) == datePicker.getDayOfMonth()
-                                            && calendar.get(Calendar.MONTH) == datePicker.getMonth()
-                                            && calendar.get(Calendar.YEAR) == datePicker.getYear()) {
-                                        if (monthLunchDay.getOrderedLunch() == null)
-                                            dateWrongTextView.setVisibility(View.GONE);
+                                    if (calendar.get(Calendar.DAY_OF_MONTH) == dayOfMonth
+                                            && calendar.get(Calendar.MONTH) == monthOfYear
+                                            && calendar.get(Calendar.YEAR) == year) {
+                                        if (monthLunchDay.getOrderedLunch() != null)
+                                            dateWrongTextView.setVisibility(View.VISIBLE);
 
                                         MonthLunch[] monthLunches = monthLunchDay.getLunches();
 
@@ -175,13 +172,13 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                                     }
                                 }
                             } catch (InterruptedException e) {
-                                Log.d("ICanteenBurzaActivity", "startBurzaChecker datePickerOnClickListener:", e);
+                                Log.d("ICanteenBurzaActivity", "startBurzaChecker datePickerOnDateChangedListener:", e);
                             }
                         }
                     }
                 };
-        datePicker.setOnClickListener(datePickerOnClickListener);
-        datePickerOnClickListener.onClick(null);
+        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), datePickerOnDateChangedListener);
+        datePickerOnDateChangedListener.onDateChanged(datePicker, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
         new AlertDialog.Builder(context)
                 .setTitle(R.string.notify_title_select_to_watch)
