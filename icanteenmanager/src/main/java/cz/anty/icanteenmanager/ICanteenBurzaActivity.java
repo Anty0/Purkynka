@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
@@ -95,6 +96,10 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
         mainLinearLayout.addView(dateTextView);
 
         final DatePicker datePicker = new DatePicker(context);
+        if (Build.VERSION.SDK_INT >= 11) {
+            datePicker.setCalendarViewShown(false);
+            datePicker.setSpinnersShown(true);
+        }
         mainLinearLayout.addView(datePicker);
 
         final TextView dateWrongTextView = new TextView(context);
@@ -137,7 +142,9 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                         if (binder != null) {
                             Calendar calendar = Calendar.getInstance();
                             try {
-                                for (MonthLunchDay monthLunchDay : binder.getMonth()) {
+                                List<MonthLunchDay> monthLunchDays = binder.getMonth();
+                                if (monthLunchDays == null) monthLunchDays = new ArrayList<>();
+                                for (MonthLunchDay monthLunchDay : monthLunchDays) {
                                     calendar.setTime(monthLunchDay.getDate());
                                     if (calendar.get(Calendar.DAY_OF_MONTH) == dayOfMonth
                                             && calendar.get(Calendar.MONTH) == monthOfYear

@@ -78,6 +78,7 @@ public class ICanteenService extends Service {
                 manager = null;
                 if (e instanceof WrongLoginDataException)
                     onWrongLoginData();
+                else cancelWrongLoginDataNotification();
                 stopSelf();
                 return;
             }
@@ -100,6 +101,12 @@ public class ICanteenService extends Service {
 
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                 .notify(Constants.NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION, n);
+
+    }
+
+    private void cancelWrongLoginDataNotification() {
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                .cancel(Constants.NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION);
 
     }
 
