@@ -61,7 +61,7 @@ public class AppDataManager {
     }
 
     public static synchronized void login(Type type, Context context, String username, String password) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "login");
+        if (isDebugMode(context)) Log.d("AppDataManager", "login type: " + type);
         context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE).edit()
                 .putString(Constants.SETTING_NAME_LOGIN, ByteEncryption.xor(username))
                 .putString(Constants.SETTING_NAME_PASSWORD, ByteEncryption.xor(password))
@@ -71,7 +71,7 @@ public class AppDataManager {
     }
 
     public static synchronized void logout(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "logout");
+        if (isDebugMode(context)) Log.d("AppDataManager", "logout type: " + type);
         context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE).edit()
                 .putBoolean(Constants.SETTING_NAME_LOGGED_IN, false)
                 .apply();
@@ -79,19 +79,19 @@ public class AppDataManager {
     }
 
     public static synchronized boolean isLoggedIn(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "isLoggedIn");
+        if (isDebugMode(context)) Log.d("AppDataManager", "isLoggedIn type: " + type);
         return context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_LOGGED_IN, false);
     }
 
     public static synchronized String getUsername(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "getUsername");
+        if (isDebugMode(context)) Log.d("AppDataManager", "getUsername type: " + type);
         return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getString(Constants.SETTING_NAME_LOGIN, ""));
     }
 
     public static synchronized String getPassword(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "getPassword");
+        if (isDebugMode(context)) Log.d("AppDataManager", "getPassword type: " + type);
         return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
                 .getString(Constants.SETTING_NAME_PASSWORD, ""));
     }

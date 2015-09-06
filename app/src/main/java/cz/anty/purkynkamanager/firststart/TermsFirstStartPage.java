@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -64,23 +64,39 @@ public class TermsFirstStartPage implements FirstStartPage {
     }
 
     @Override
-    public void doUpdate(final Context context, LayoutInflater layoutInflater, FrameLayout contentFrameLayout) {
-        layoutInflater.inflate(R.layout.activity_first_start_welcome_terms, contentFrameLayout);
-        final TextView contentTextView = (TextView) contentFrameLayout.findViewById(R.id.contentTextView);
+    public View getView(final Context context, LayoutInflater layoutInflater, ViewGroup rootView) {
+        View view = layoutInflater.inflate(R.layout.activity_first_start_welcome_terms, rootView, false);
+        updateTerms(context, (TextView) view.findViewById(R.id.contentTextView));
+        return view;
+    }
+
+    private void updateTerms(final Context context, final TextView contentTextView) {
+        contentTextView.setText(R.string.wait_text_please_wait);
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
                 String terms;
+                boolean error = false;
                 try {
                     terms = UpdateConnector.getLatestTerms(context.getString(R.string.language));
                 } catch (IOException e) {
                     terms = context.getString(R.string.text_terms);
+                    error = true;
                 }
                 final String finalTerms = terms;
+                final boolean finalError = error;
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         contentTextView.setText(finalTerms);
+                        if (finalError) contentTextView
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        contentTextView.setOnClickListener(null);
+                                        updateTerms(context, contentTextView);
+                                    }
+                                });
                     }
                 });
             }

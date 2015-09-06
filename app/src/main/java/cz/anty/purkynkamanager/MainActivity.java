@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode(this));
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_list);
 
         worker = new OnceRunThreadWithProgress(this);
         listView = (ListView) findViewById(R.id.listView);
@@ -346,12 +346,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        boolean showDescription = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
+                .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
         MultilineItem[] data = new MultilineItem[]{
-                new TextMultilineItem(getString(R.string.app_name_sas), getString(R.string.app_description_sas)),
-                new TextMultilineItem(getString(R.string.app_name_wifi), getString(R.string.app_description_wifi)),
-                new TextMultilineItem(getString(R.string.app_name_icanteen), getString(R.string.app_description_icanteen)),
-                new TextMultilineItem(getString(R.string.app_name_timetable), getString(R.string.app_description_timetable)),
-                new TextMultilineItem(getString(R.string.app_name_attendance), getString(R.string.app_description_attendance))};
+                new TextMultilineItem(getString(R.string.app_name_sas), showDescription ? getString(R.string.app_description_sas) : null),
+                new TextMultilineItem(getString(R.string.app_name_wifi), showDescription ? getString(R.string.app_description_wifi) : null),
+                new TextMultilineItem(getString(R.string.app_name_icanteen), showDescription ? getString(R.string.app_description_icanteen) : null),
+                new TextMultilineItem(getString(R.string.app_name_timetable), showDescription ? getString(R.string.app_description_timetable) : null),
+                new TextMultilineItem(getString(R.string.app_name_attendance), showDescription ? getString(R.string.app_description_attendance) : null)};
 
         adapter.setNotifyOnChange(false);
         adapter.clear();

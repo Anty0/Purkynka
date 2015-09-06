@@ -7,8 +7,8 @@ android {
         applicationId "cz.anty.purkynkamanager"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 4
-        versionName '1.4beta'
+        versionCode 5
+        versionName '1.5beta'
     }
     buildTypes {
         release {
@@ -34,7 +34,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.1'
     compile project(':sasmanager')
     compile project(':wifiautologin')
     compile project(':icanteenmanager')

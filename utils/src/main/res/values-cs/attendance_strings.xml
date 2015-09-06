@@ -27,5 +27,5 @@
     <string name="notify_text_tracked_is_in_school">[NAME] právě přišel do školy</string>
     <string name="notify_text_tracked_is_in_not_school">[NAME] právě opustil školu</string>
 
-    <string name="check_box_text_alert_tracked">Zobrazit upozornění, když sledovaný člověk opustí nebo příjde do školy.</string>
+    <string name="check_box_text_alert_tracked">Zobrazit upozornění, když sledovaný člověk opustí nebo příjde do školy. (může zvýšit spotřebu energie)</string>
 </resources>

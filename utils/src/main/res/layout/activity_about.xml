@@ -24,6 +24,14 @@
         android:text="@string/check_box_text_start_first_start" />
 
     <CheckBox
+        android:id="@+id/check_box_show_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:onClick="onCheckBoxShowDescriptionClick"
+        android:text="Show tools description in main menu" />
+
+    <CheckBox
         android:id="@+id/check_box_debug"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

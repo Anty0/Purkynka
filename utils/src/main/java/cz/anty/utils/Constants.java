@@ -46,6 +46,7 @@ public class Constants {
 
     public static final String SETTINGS_NAME_MAIN = "MainData";
     public static final String SETTING_NAME_SHOW_SHARE = "SHOW_SHARE";
+    public static final String SETTING_NAME_SHOW_DESCRIPTION = "SHOW_DESCRIPTION";
     public static final String SETTING_NAME_FIRST_START = "FIRST_START";
     public static final String SETTING_NAME_LATEST_CODE = "LATEST_CODE";
     public static final String SETTING_NAME_LATEST_NAME = "LATEST_NAME";

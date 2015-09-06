@@ -13,7 +13,7 @@
         <activity
             android:name=".ICanteenSplashActivity"
             android:label="@string/app_name_icanteen"
-            android:theme="@style/AppTheme_Splash" />
+            android:theme="@style/AppTheme.Splash" />
         <activity
             android:name=".ICanteenSelectServiceActivity"
             android:label="@string/app_name_icanteen" />

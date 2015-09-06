@@ -27,5 +27,5 @@
     <string name="notify_text_tracked_is_in_school">[NAME] came to school now</string>
     <string name="notify_text_tracked_is_in_not_school">[NAME] leave school now</string>
 
-    <string name="check_box_text_alert_tracked">Alert me when tracked person leaves or comes to school.</string>
+    <string name="check_box_text_alert_tracked">Alert me when tracked person leaves or comes to school. (can increase power consumption)</string>
 </resources>

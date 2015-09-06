@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -92,8 +93,11 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
                 final MonthLunchDay lunch = item instanceof MonthLunchDay ? (MonthLunchDay) item : null;
                 if (lunch == null) return;
 
+                ScrollView mainScrollView = new ScrollView(ICanteenLunchOrderActivity.this);
+
                 final RadioGroup radioGroup = new RadioGroup(ICanteenLunchOrderActivity.this);
                 radioGroup.setOrientation(LinearLayout.VERTICAL);
+                mainScrollView.addView(radioGroup);
 
                 RadioButton radioButtonNoLunch = new RadioButton(ICanteenLunchOrderActivity.this);
                 radioButtonNoLunch.setTag(null);
@@ -134,7 +138,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
                 new AlertDialog.Builder(ICanteenLunchOrderActivity.this)
                         .setTitle(MonthLunchDay.DATE_PARSE_FORMAT.format(lunch.getDate()))
                                 //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
-                        .setView(radioGroup)
+                        .setView(mainScrollView)
                         .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

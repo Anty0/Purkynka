@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cz.anty.purkynkamanager.R;
@@ -60,9 +60,9 @@ public class WelcomeFirstStartPage implements FirstStartPage {
     }
 
     @Override
-    public void doUpdate(final Context context, LayoutInflater layoutInflater, FrameLayout contentFrameLayout) {
-        layoutInflater.inflate(R.layout.activity_first_start_welcome_terms, contentFrameLayout);
-        TextView textView = ((TextView) contentFrameLayout.findViewById(R.id.contentTextView));
+    public View getView(final Context context, LayoutInflater layoutInflater, ViewGroup rootView) {
+        View view = layoutInflater.inflate(R.layout.activity_first_start_welcome_terms, rootView, false);
+        TextView textView = ((TextView) view.findViewById(R.id.contentTextView));
         textView.setText(R.string.text_welcome);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +76,7 @@ public class WelcomeFirstStartPage implements FirstStartPage {
                 });
             }
         });
+        return view;
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import cz.anty.icanteenmanager.ICanteenFirstStartPage;
@@ -22,7 +22,7 @@ import cz.anty.wifiautologin.WifiFirstStartPage;
 public class FirstStartActivity extends AppCompatActivity implements View.OnClickListener {
 
     private OnceRunThreadWithSpinner worker;
-    private FrameLayout contentFrameLayout;
+    private ScrollView contentScrollView;
     private Button butSkip, butNext;
     private PagesManager pagesManager;
     private FirstStartPage page;
@@ -34,14 +34,13 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
 
         if (pagesManager == null) {
             try {
-                FirstStartPage[] firstStartPages = new FirstStartPage[]{
+                pagesManager = new PagesManager(this, new FirstStartPage[]{
                         WelcomeFirstStartPage.class.newInstance(),
                         TermsFirstStartPage.class.newInstance(),
                         SASFirstStartPage.class.newInstance(),
                         WifiFirstStartPage.class.newInstance(),
                         ICanteenFirstStartPage.class.newInstance()
-                };
-                pagesManager = new PagesManager(this, firstStartPages);
+                });
                 page = pagesManager.get();
             } catch (Exception e) {
                 Log.d("FirstStartActivity", "onCreate", e);
@@ -52,7 +51,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         }
 
         worker = new OnceRunThreadWithSpinner(this);
-        contentFrameLayout = (FrameLayout) findViewById(R.id.contentFrameLayout);
+        contentScrollView = (ScrollView) findViewById(R.id.contentScrollView);
         butSkip = (Button) findViewById(R.id.butSkip);
         butNext = (Button) findViewById(R.id.butNext);
         butSkip.setOnClickListener(this);
@@ -64,11 +63,11 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
     private synchronized void updateState() {
         setTitle(page.getTitle(this));
 
-        contentFrameLayout.removeAllViews();
-        page.doUpdate(this, getLayoutInflater(), contentFrameLayout);
+        contentScrollView.removeAllViews();
+        contentScrollView.addView(page.getView(this, getLayoutInflater(), contentScrollView));
 
         /*if (Build.VERSION.SDK_INT >= 12) {
-            ViewPropertyAnimator animator = contentFrameLayout.animate().scaleX(10);
+            ViewPropertyAnimator animator = contentScrollView.animate().scaleX(10);
             if (Build.VERSION.SDK_INT >= 14) {
                 animator.start();
             }

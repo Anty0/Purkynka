@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import cz.anty.sasmanager.receiver.StartServiceReceiver;
@@ -73,8 +73,8 @@ public class SASFirstStartPage implements FirstStartPage {
     }
 
     @Override
-    public void doUpdate(Context context, LayoutInflater layoutInflater, FrameLayout contentFrameLayout) {
-        contentFrameLayout.addView(linearLayout);
+    public View getView(Context context, LayoutInflater layoutInflater, ViewGroup rootView) {
+        return linearLayout;
     }
 
     @Override

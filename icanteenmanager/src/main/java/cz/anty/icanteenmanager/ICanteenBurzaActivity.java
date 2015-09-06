@@ -20,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,9 +88,12 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
         if (AppDataManager.isDebugMode(context))
             Log.d("ICanteenBurzaActivity", "startBurzaChecker");
 
+        ScrollView mainScrollView = new ScrollView(context);
+
         LinearLayout mainLinearLayout = new LinearLayout(context);
         mainLinearLayout.setOrientation(LinearLayout.VERTICAL);
         //mainLinearLayout.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+        mainScrollView.addView(mainLinearLayout);
 
         TextView dateTextView = new TextView(context);
         dateTextView.setText(R.string.text_view_text_date_to_watch);
@@ -189,7 +193,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(context)
                 .setTitle(R.string.notify_title_select_to_watch)
-                .setView(mainLinearLayout)
+                .setView(mainScrollView)
                         //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                 .setPositiveButton(R.string.but_start, new DialogInterface.OnClickListener() {
                     @Override
@@ -237,7 +241,15 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MultilineItem item = adapter.getItem(position);
-                final BurzaLunch lunch = item instanceof BurzaLunch ? (BurzaLunch) item : null;
+
+                if (item instanceof TextMultilineItem &&
+                        ((TextMultilineItem) item).getTag() == null) {
+                    startBurzaChecker(ICanteenBurzaActivity.this, binder);
+                    return;
+                }
+
+                final BurzaLunch lunch = item instanceof BurzaLunch
+                        ? (BurzaLunch) item : null;
                 if (lunch == null) return;
 
                 new AlertDialog.Builder(ICanteenBurzaActivity.this)
@@ -268,10 +280,12 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                 MultilineItem[] data;
                 try {
                     List<BurzaLunch> dataList = binder.getBurza();
-                    data = dataList.toArray(new BurzaLunch[dataList.size()]);
+                    data = dataList.toArray(new MultilineItem[dataList.size() + 1]);
+                    data[data.length - 1] = new TextMultilineItem(getString(
+                            R.string.menu_item_text_start_burza_checking), null);
                 } catch (NullPointerException | InterruptedException e) {
                     data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
-                            getString(R.string.exception_message_sas_manager_binder_null))};
+                            getString(R.string.exception_message_sas_manager_binder_null)).setTag("EXCEPTION")};
                 }
 
                 adapter.setNotifyOnChange(false);

@@ -68,8 +68,10 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
         holder.text1.setText(item.getTitle(context));
         String text = item.getText(context);
         if (text == null) {
+            holder.text1.setPadding(1, 8, 1, 8);
             holder.text2.setVisibility(View.GONE);
         } else {
+            holder.text1.setPadding(1, 1, 1, 1);
             holder.text2.setVisibility(View.VISIBLE);
             holder.text2.setText(text);
             //holder.imgIcon.setImageResource(item.icon);

@@ -5,7 +5,7 @@
     <string name="activity_title_first_start_welcome">Welcome</string>
     <string name="activity_title_first_start_terms">Terms of use</string>
 
-    <string name="text_terms">Failed to load the conditions of use, check your Internet connection.\nTerms of use this app, you can also read on the pages of the application (http://anty.crush-team.cz/).\n\nBy clicking on "Accept" you accept that you have read the terms of use and agree with them.</string>
+    <string name="text_terms">Failed to load the terms of use (click here for try again), check your Internet connection.\nTerms of use this app, you can also read on the pages of the application (http://anty.crush-team.cz/).\n\nBy clicking on "Accept" you accept that you have read the terms of use and agree with them.</string>
     <string name="text_welcome">Welcome to Purkynka Manager\n\n(click here and change to czech language for more details and better strings)</string>
 
     <string name="exception_toast_text_can_not_load_first_start">Can\'t load first start page, try open application again</string>

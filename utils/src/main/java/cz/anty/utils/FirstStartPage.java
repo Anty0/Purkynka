@@ -3,7 +3,8 @@ package cz.anty.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by anty on 28.8.15.
@@ -26,7 +27,7 @@ public interface FirstStartPage {
 
     String getButNextText(Context context);
 
-    void doUpdate(Context context, LayoutInflater layoutInflater, FrameLayout contentFrameLayout);
+    View getView(Context context, LayoutInflater layoutInflater, ViewGroup rootView);
 
     boolean doSkip(Context context);
 

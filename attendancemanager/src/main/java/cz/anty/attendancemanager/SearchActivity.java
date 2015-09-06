@@ -28,7 +28,7 @@ import cz.anty.utils.listItem.AutoLoadMultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.settings.AttendanceSettingsActivity;
-import cz.anty.utils.thread.OnceRunThreadWithSpinner;
+import cz.anty.utils.thread.OnceRunThread;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -37,20 +37,19 @@ public class SearchActivity extends AppCompatActivity {
     private final AttendanceConnector connector = new AttendanceConnector();
     private EditText searchEditText;
     private AutoLoadMultilineAdapter adapter;
-    private OnceRunThreadWithSpinner worker;
+    private OnceRunThread worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         searchEditText = (EditText) findViewById(R.id.editText);
-        if (savedInstanceState != null) {
-            String search = savedInstanceState.getString(EXTRA_SEARCH);// TODO: 3.9.15 check if working
-            if (search != null) {
-                searchEditText.setText(search);
-                update(true, true, 1, search);
-            }
+
+        String search = getIntent().getStringExtra(EXTRA_SEARCH);
+        if (search != null) {
+            searchEditText.setText(search);
         }
+
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -64,17 +63,20 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                update(false, true, 1, s.toString());
+                update(true, 1, s.toString());
             }
         });
+
+        if (adapter == null)
+            adapter = new AutoLoadMultilineAdapter(this, R.layout.text_multi_line_list_item,
+                    new AutoLoadMultilineAdapter.OnLoadNextListListener() {
+                        @Override
+                        public void onLoadNextList(AutoLoadMultilineAdapter multilineAdapter, int page) {
+                            update(false, page, null);
+                        }
+                    });
+
         ListView resultListView = ((ListView) findViewById(R.id.listView));
-        adapter = new AutoLoadMultilineAdapter(this, R.layout.text_multi_line_list_item,
-                new AutoLoadMultilineAdapter.OnLoadNextListListener() {
-                    @Override
-                    public void onLoadNextList(AutoLoadMultilineAdapter multilineAdapter, int page) {
-                        update(false, false, page, null);
-                    }
-                });
         resultListView.setAdapter(adapter);
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,9 +96,9 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         if (worker == null)
-            worker = new OnceRunThreadWithSpinner(this);
-        if (adapter.isEmpty())
-            update(false, true, 1, null);
+            worker = new OnceRunThread(this);
+
+        update(true, 1, search);
     }
 
     @Override
@@ -125,16 +127,16 @@ public class SearchActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void update(final boolean showMessage, final boolean clearData, final int page, @Nullable String search) {
+    private void update(final boolean clearData, final int page, @Nullable String search) {
         if (AppDataManager.isDebugMode(this)) Log.d("SearchActivity",
-                "update showMessage: " + showMessage + " clearData: " + clearData + " page: " + page + " search: " + search);
+                "update clearData: " + clearData + " page: " + page + " search: " + search);
         final String toSearch = search == null ? searchEditText.getText().toString() : search;
         if (AppDataManager.isDebugMode(this))
             Log.d("SearchActivity", "update toSearch: " + toSearch);
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                if (!showMessage && clearData && worker.getWaitingThreadsLength() > 0) return;
+                if (clearData && worker.getWaitingThreadsLength() > 0) return;
                 //String[] values;
                 MultilineItem[] data;
                 try {
@@ -177,6 +179,6 @@ public class SearchActivity extends AppCompatActivity {
                 });
 
             }
-        }, showMessage ? getString(R.string.wait_text_searching) : null);
+        });
     }
 }

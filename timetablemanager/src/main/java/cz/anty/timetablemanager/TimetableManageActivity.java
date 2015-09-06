@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -254,12 +255,15 @@ public class TimetableManageActivity extends AppCompatActivity {
                     linearLayout.addView(teacherTextView);
                     linearLayout.addView(teacherEditText);
 
+                    ScrollView mainScrollView = new ScrollView(context);
+                    mainScrollView.addView(linearLayout);
+
                     new AlertDialog.Builder(context)
                             .setTitle(context.getString(R.string.dialog_title_lesson)
                                     .replace(Constants.STRINGS_CONST_NAME, context.getString(Timetable.DAYS_STRINGS_IDS[day]))
                                     .replace(Constants.STRINGS_CONST_NUMBER, Integer.toString(lessonIndex)))
                                     //TODO add set icon with icon "T"
-                            .setView(linearLayout)
+                            .setView(mainScrollView)
                             .setCancelable(false)
                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                 @Override

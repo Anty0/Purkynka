@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,8 +72,12 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                     int position, long id) {
                 //final String item = (String) parent.getItemAtPosition(position);
                 if (position >= timetables.length) {
+
+                    ScrollView mainScrollView = new ScrollView(TimetableSelectActivity.this);
+
                     final LinearLayout layout = new LinearLayout(TimetableSelectActivity.this);
                     layout.setOrientation(LinearLayout.VERTICAL);
+                    mainScrollView.addView(layout);
 
                     final EditText input = new EditText(TimetableSelectActivity.this);
                     layout.addView(input);
@@ -86,7 +91,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                             .setTitle(R.string.dialog_title_new_timetable)
                                     //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                             .setMessage(R.string.dialog_text_insert_timetable_name)
-                            .setView(layout)
+                            .setView(mainScrollView)
                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     worker.startWorker(new Runnable() {

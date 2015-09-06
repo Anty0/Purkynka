@@ -12,6 +12,7 @@ public class TextMultilineItem implements MultilineItem {
     private final String title;
     private final String text;
     private final Integer layoutResourceId;
+    private Object tag;
 
     public TextMultilineItem(String title, String text) {
         this(title, text, null);
@@ -36,5 +37,14 @@ public class TextMultilineItem implements MultilineItem {
     @Override
     public Integer getLayoutResourceId(Context context) {
         return layoutResourceId;
+    }
+
+    public Object getTag() {
+        return tag;
+    }
+
+    public TextMultilineItem setTag(Object tag) {
+        this.tag = tag;
+        return this;
     }
 }

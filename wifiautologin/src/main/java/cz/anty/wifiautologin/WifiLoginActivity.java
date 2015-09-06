@@ -33,8 +33,10 @@ public class WifiLoginActivity extends AppCompatActivity {
         if (worker == null) worker = new OnceRunThreadWithSpinner(this);
         setContentView(R.layout.activity_wifi_login);
 
-        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.WIFI, this));
-        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.WIFI, this));
+        ((EditText) findViewById(R.id.edit_username))
+                .setText(AppDataManager.getUsername(AppDataManager.Type.WIFI, this));
+        ((EditText) findViewById(R.id.edit_password))
+                .setText(AppDataManager.getPassword(AppDataManager.Type.WIFI, this));
     }
 
     @Override

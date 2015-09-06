@@ -3,6 +3,7 @@ package cz.anty.utils.settings;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -70,18 +71,29 @@ public class AboutActivity extends AppCompatActivity {
         res.updateConfiguration(conf, res.getDisplayMetrics());
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        SharedPreferences preferences = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
         ((CheckBox) findViewById(R.id.check_box_debug)).setChecked(AppDataManager.isDebugMode(this));
+        ((CheckBox) findViewById(R.id.check_box_show_description)).setChecked(
+                preferences.getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true));
         ((CheckBox) findViewById(R.id.check_box_first_start)).setChecked(
-                getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
-                        .getInt(Constants.SETTING_NAME_FIRST_START, -1) == -1);
+                preferences.getInt(Constants.SETTING_NAME_FIRST_START, -1) == -1);
     }
 
     public void onCheckBoxDebugClick(View view) {
         AppDataManager.setDebugMode(this, ((CheckBox) findViewById(R.id.check_box_debug)).isChecked());
+    }
+
+    public void onCheckBoxShowDescriptionClick(View view) {
+        getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE).edit()
+                .putBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION,
+                        ((CheckBox) findViewById(R.id.check_box_show_description))
+                                .isChecked())
+                .apply();
     }
 
     public void onCheckBoxFirstStartClick(View view) {
