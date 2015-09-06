@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -33,9 +34,11 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
     }
 
     private void init() {
+        boolean showDescription = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
+                .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
         MultilineItem[] data = new MultilineItem[]{
-                new TextMultilineItem(getString(R.string.app_name_icanteen_burza), getString(R.string.app_description_icanteen_burza)),
-                new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order), getString(R.string.app_description_icanteen_lunch_order))
+                new TextMultilineItem(getString(R.string.app_name_icanteen_burza), showDescription ? getString(R.string.app_description_icanteen_burza) : null),
+                new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order), showDescription ? getString(R.string.app_description_icanteen_lunch_order) : null)
         };
 
         adapter.setNotifyOnChange(false);
