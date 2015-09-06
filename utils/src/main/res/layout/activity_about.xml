@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:checked="true"
         android:onClick="onCheckBoxShowDescriptionClick"
-        android:text="Show tools description in main menu" />
+        android:text="@string/check_box_text_show_description" />
 
     <CheckBox
         android:id="@+id/check_box_debug"

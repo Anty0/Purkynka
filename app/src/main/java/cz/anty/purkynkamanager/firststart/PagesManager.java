@@ -15,7 +15,7 @@ class PagesManager {
     private final FirstStartPage[] firstStartPages;
     private int page = 0;
 
-    PagesManager(Activity activity, FirstStartPage[] firstStartPages) throws IllegalAccessException, InstantiationException {
+    PagesManager(Activity activity, FirstStartPage[] firstStartPages) {
         this.activity = activity;
         this.firstStartPages = firstStartPages;
         for (FirstStartPage page : this.firstStartPages)

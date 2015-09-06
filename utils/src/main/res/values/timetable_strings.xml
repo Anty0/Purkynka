@@ -6,7 +6,7 @@
     <string name="activity_title_timetable_manage">TIMETABLE</string>
     <string name="activity_title_timetable_settings">TIMETABLE Settings</string>
 
-    <string name="app_description_timetable">The administrator timetables a program designed to manage and create timetables, can also download the timetable for the class of school Web sites and point out that the teacher written schedule for the next hour is not in school and therefore it is very likely that the next hour substitutions.</string>
+    <string name="app_description_timetable">The administrator timetables a tool designed to manage and create timetables, can also download the timetable for the class of school Web sites and point out that the teacher written schedule for the next hour is not in school and therefore it is very likely that the next hour substitutions.</string>
 
     <string name="list_item_text_add_timetable">" + ADD new TIMETABLE"</string>
     <string name="list_item_text_click_to_edit">Click to edit</string>

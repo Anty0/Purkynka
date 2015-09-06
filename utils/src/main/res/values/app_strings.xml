@@ -25,4 +25,6 @@
 
     <string name="text_app_apk_name">Latest [NAME] [NUMBER].apk</string>
     <string name="text_extra_text_share">I am using Purkynka Manager and much simplified my life and you can download it on http://anty.crush-team.cz/</string>
+
+    <string name="check_box_text_show_description">Show tools description in main menu</string>
 </resources>
