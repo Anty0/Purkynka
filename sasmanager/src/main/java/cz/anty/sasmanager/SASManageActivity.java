@@ -129,6 +129,15 @@ public class SASManageActivity extends AppCompatActivity {
         Log.d("SASManageActivity", "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_manage, menu);
+
+        switch (semester) {
+            case FIRST:
+                menu.findItem(R.id.action_semester_first).setChecked(true);
+                break;
+            case SECOND:
+                menu.findItem(R.id.action_semester_second).setChecked(true);
+                break;
+        }
         return true;
     }
 
@@ -151,18 +160,22 @@ public class SASManageActivity extends AppCompatActivity {
             return true;
         } else if (i == R.id.action_sort_date) {
             marksShort = MarksShort.DATE;
+            item.setChecked(true);
             onUpdate(true);
             return true;
         } else if (i == R.id.action_sort_lesson) {
             marksShort = MarksShort.LESSONS;
+            item.setChecked(true);
             onUpdate(true);
             return true;
         } else if (i == R.id.action_semester_first) {
             semester = MarksManager.Semester.FIRST;
+            item.setChecked(true);
             onUpdate(true);
             return true;
         } else if (i == R.id.action_semester_second) {
             semester = MarksManager.Semester.SECOND;
+            item.setChecked(true);
             onUpdate(true);
             return true;
         }

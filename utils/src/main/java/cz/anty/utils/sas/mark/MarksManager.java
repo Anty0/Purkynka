@@ -202,7 +202,7 @@ public class MarksManager {
                     Calendar calendar = Calendar.getInstance(Locale.getDefault());
                     calendar.setTime(new Date(System.currentTimeMillis()));
                     int month = calendar.get(Calendar.MONTH);
-                    return month > 1 && month < 9 ? 2 : 1;
+                    return month > Calendar.JANUARY && month < Calendar.JULY ? 2 : 1;
             }
         }
 
