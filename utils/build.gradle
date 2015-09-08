@@ -36,4 +36,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'org.jsoup:jsoup:1.8.2'
     compile 'ch.acra:acra:4.6.2'
+    compile 'org.apache:apache:17'
 }

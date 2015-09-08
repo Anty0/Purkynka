@@ -21,5 +21,9 @@ public *;
 -keep public class cz.anty.utils.** {
 public *;
 }
+-keep public class org.apache.http.** { *; }
+-dontwarn org.apache.http.**
+-keep public class org.arca.ErrorReporter { *; }
+-dontwarn org.arca.ErrorReporter
 -keep public interface cz.anty.utils.** {*;}
 -keep public enum cz.anty.utils.** {**[] $VALUES;*;}
