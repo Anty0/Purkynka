@@ -122,10 +122,7 @@ public class MainActivity extends AppCompatActivity {
         worker.startWorker(new RunnableWithProgress() {
             @Override
             public String run(ProgressReporter reporter) {
-                String filename = getString(R.string.text_app_apk_name)
-                        .replace(Constants.STRINGS_CONST_NAME, getString(R.string.app_name))
-                        .replace(Constants.STRINGS_CONST_NUMBER,
-                                Integer.toString(UpdateReceiver.getLatestCode(MainActivity.this)));
+                String filename = "latest.apk";
 
                 Intent intent = null;
                 String toReturn;

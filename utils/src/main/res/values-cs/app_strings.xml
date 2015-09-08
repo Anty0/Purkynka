@@ -23,7 +23,6 @@
 
     <string name="wait_text_downloading_update">Stahuji aktualizaci</string>
 
-    <string name="text_app_apk_name">Nejnovější [NAME] [NUMBER].apk</string>
     <string name="text_extra_text_share">Používám aplikaci Purkyňka Manager a hodně mi zjednodušila život i ty si ji můžeš stáhnout na stránkách http://anty.crush-team.cz/</string>
 
     <string name="check_box_text_show_description">Zobrazovat popis k jednotlivým prográmkům v hlavním menu</string>

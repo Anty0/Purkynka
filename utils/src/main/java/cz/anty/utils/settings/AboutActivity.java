@@ -75,7 +75,7 @@ public class AboutActivity extends AppCompatActivity {
                 .apply();
     }
 
-    public static void setLocale(Context context) {
+    public static void restoreLocale(Context context) {
         String lang = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                 .getString(Constants.SETTING_NAME_LANGUAGE, null);
         if (lang != null) {
