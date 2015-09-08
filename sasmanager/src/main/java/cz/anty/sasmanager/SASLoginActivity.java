@@ -42,7 +42,7 @@ public class SASLoginActivity extends AppCompatActivity {
             return false;
         }
 
-        AppDataManager.login(AppDataManager.Type.SAS, activity, username, password);
+        AppDataManager.login(AppDataManager.Type.SAS, username, password);
         return true;
     }
 
@@ -68,8 +68,8 @@ public class SASLoginActivity extends AppCompatActivity {
         }*/
         setContentView(R.layout.activity_sas_login);
 
-        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS, this));
-        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS, this));
+        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS));
+        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS));
 
         if (saveThread == null)
             saveThread = new OnceRunThreadWithSpinner(this);

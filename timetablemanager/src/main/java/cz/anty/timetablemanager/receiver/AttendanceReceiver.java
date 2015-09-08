@@ -6,14 +6,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
 
 import cz.anty.timetablemanager.R;
-import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -33,8 +32,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("AttendanceReceiver", "onReceive");
+        Log.d("AttendanceReceiver", "onReceive");
         int day = intent.getIntExtra(DAY, -1);
         int lessonIndex = intent.getIntExtra(LESSON_INDEX, -1);
         if (day != -1 && lessonIndex != -1 && context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
@@ -46,8 +44,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
     }
 
     private void testSupplementation(final Context context, final int day, final int lessonIndex) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("AttendanceReceiver", "testSupplementation");
+        Log.d("AttendanceReceiver", "testSupplementation");
         Timetable[] timetables = new TimetableManager(context).getTimetables();
         final AttendanceConnector connector = new AttendanceConnector();
         for (final Timetable timetable : timetables) {
@@ -102,8 +99,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                     .putLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, System.currentTimeMillis()).apply();
                         }
                     } catch (IOException | IndexOutOfBoundsException e) {
-                        if (AppDataManager.isDebugMode(context))
-                            Log.d("AttendanceReceiver", "testSupplementation", e);
+                        Log.d("AttendanceReceiver", "testSupplementation", e);
                     }
                 }
             });

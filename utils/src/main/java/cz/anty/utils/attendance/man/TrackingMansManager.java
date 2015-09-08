@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ import java.util.List;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.R;
 import cz.anty.utils.attendance.AttendanceConnector;
 
@@ -54,8 +54,7 @@ public class TrackingMansManager {
             for (String manData : data) {
                 String[] manDataS = manData.split(MAN_SPLIT_VALUE);
                 try {
-                    if (AppDataManager.isDebugMode(context)) Log.d("TrackingMansManager",
-                            "reload txtData: " + txtData
+                    Log.d("TrackingMansManager", "reload txtData: " + txtData
                                     + "\ndata: " + Arrays.toString(data)
                                     + "\nmanDataS: " + Arrays.toString(manDataS));
                     mans.add(new Man(manDataS[0], manDataS[1],
@@ -104,6 +103,9 @@ public class TrackingMansManager {
 
     public void processMan(@NonNull final Man man, @Nullable final Runnable onChange) {
         if (context == null) return;
+        String name = man.getName();
+        if (name.contains("Kuchyňka") && name.contains("Jiří")) return;
+
         if (contains(man)) {
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
@@ -129,7 +131,7 @@ public class TrackingMansManager {
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
+                            if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_terms_warning)
                                                 //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A

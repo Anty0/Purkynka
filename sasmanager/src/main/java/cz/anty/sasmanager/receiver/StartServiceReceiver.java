@@ -11,7 +11,7 @@ public class StartServiceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
             Intent service = new Intent(context, SASManagerService.class);
             context.startService(service);
         }

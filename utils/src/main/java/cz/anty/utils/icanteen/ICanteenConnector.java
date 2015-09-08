@@ -1,7 +1,5 @@
 package cz.anty.utils.icanteen;
 
-import android.util.Log;
-
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,8 +8,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.Map;
 
-import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 
 /**
@@ -73,15 +71,13 @@ public class ICanteenConnector {
     public synchronized void orderBurzaLunch(String urlAdd) throws IOException {
         Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
-        if (AppDataManager.isDebugMode(null))
-            Log.v("ICanteenConnector", "orderBurzaLunch response: " + response.body());
+        Log.v("ICanteenConnector", "orderBurzaLunch response: " + response.body());
     }
 
     public synchronized void orderMonthLunch(String urlAdd) throws IOException {
         Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
-        if (AppDataManager.isDebugMode(null))
-            Log.v("ICanteenConnector", "orderMonthLunch response: " + response.body());
+        Log.v("ICanteenConnector", "orderMonthLunch response: " + response.body());
     }
 
     public synchronized Elements getMonthElements() throws IOException {
@@ -100,8 +96,7 @@ public class ICanteenConnector {
                 .select("div#mainContext")
                 .select("table")
                 .select("form[name=objednatJidlo-]");
-        if (AppDataManager.isDebugMode(null))
-            Log.v("ICanteenConnector", "getMonthElements finalElements: " + toReturn);
+        Log.v("ICanteenConnector", "getMonthElements finalElements: " + toReturn);
         return toReturn;
     }
 
@@ -123,8 +118,7 @@ public class ICanteenConnector {
                 .select("table")
                 .select("tr");
         toReturn.remove(0);
-        if (AppDataManager.isDebugMode(null))
-            Log.v("ICanteenConnector", "getBurzaElements finalElements: " + toReturn);
+        Log.v("ICanteenConnector", "getBurzaElements finalElements: " + toReturn);
         return toReturn;
     }
 

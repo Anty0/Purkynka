@@ -41,7 +41,7 @@ public class ICanteenLoginActivity extends AppCompatActivity {
             return false;
         }
 
-        AppDataManager.login(AppDataManager.Type.I_CANTEEN, activity, username, password);
+        AppDataManager.login(AppDataManager.Type.I_CANTEEN, username, password);
         return true;
     }
 
@@ -60,8 +60,8 @@ public class ICanteenLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_icanteen_login);
 
-        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN, this));
-        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN, this));
+        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN));
+        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
 
         if (saveThread == null)
             saveThread = new OnceRunThreadWithSpinner(this);

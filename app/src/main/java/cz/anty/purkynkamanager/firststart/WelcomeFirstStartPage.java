@@ -17,51 +17,47 @@ import cz.anty.utils.settings.AboutActivity;
  *
  * @author anty
  */
-public class WelcomeFirstStartPage implements FirstStartPage {
+public class WelcomeFirstStartPage extends FirstStartPage {
 
-    private Activity activity;
-
-    public WelcomeFirstStartPage() {
+    public WelcomeFirstStartPage(Context context) {
+        super(context);
     }
 
     @Override
-    public void initialize(Activity activity) {
-        this.activity = activity;
-    }
-
-    @Override
-    public boolean showThisPage(Context context) {
+    public boolean showThisPage() {
         return true;
     }
 
     @Override
-    public String getTitle(Context context) {
-        return context.getString(R.string.activity_title_first_start_welcome);
+    public String getTitle() {
+        return getContext().getString(R.string.activity_title_first_start_welcome);
     }
 
     @Override
-    public int getButSkipVisibility(Context context) {
+    public int getButSkipVisibility() {
         return View.GONE;
     }
 
     @Override
-    public int getButNextVisibility(Context context) {
+    public int getButNextVisibility() {
         return View.VISIBLE;
     }
 
     @Override
-    public String getButSkipText(Context context) {
-        return context.getString(R.string.but_skip);
+    public String getButSkipText() {
+        return getContext().getString(R.string.but_skip);
     }
 
     @Override
-    public String getButNextText(Context context) {
-        return context.getString(R.string.but_next);
+    public String getButNextText() {
+        return getContext().getString(R.string.but_next);
     }
 
     @Override
-    public View getView(final Context context, LayoutInflater layoutInflater, ViewGroup rootView) {
-        View view = layoutInflater.inflate(R.layout.activity_first_start_welcome_terms, rootView, false);
+    public View getView(ViewGroup rootView) {
+        final Context context = getContext();
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.activity_first_start_welcome_terms, rootView, false);
         TextView textView = ((TextView) view.findViewById(R.id.contentTextView));
         textView.setText(R.string.text_welcome);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +66,7 @@ public class WelcomeFirstStartPage implements FirstStartPage {
                 AboutActivity.generateLanguageChangeDialog(context, new Runnable() {
                     @Override
                     public void run() {
-                        activity.finish();
+                        ((Activity) context).finish();
                         context.startActivity(new Intent(context, FirstStartActivity.class));
                     }
                 });
@@ -80,12 +76,12 @@ public class WelcomeFirstStartPage implements FirstStartPage {
     }
 
     @Override
-    public boolean doSkip(Context context) {
+    public boolean doSkip() {
         return false;
     }
 
     @Override
-    public boolean doFinish(Context context) {
+    public boolean doFinish() {
         return true;
     }
 }

@@ -69,6 +69,22 @@ public class AboutActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, res.getDisplayMetrics());
+
+        context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE).edit()
+                .putString(Constants.SETTING_NAME_LANGUAGE, lang)
+                .apply();
+    }
+
+    public static void setLocale(Context context) {
+        String lang = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
+                .getString(Constants.SETTING_NAME_LANGUAGE, null);
+        if (lang != null) {
+            Locale myLocale = new Locale(lang);
+            Resources res = context.getResources();
+            Configuration conf = res.getConfiguration();
+            conf.locale = myLocale;
+            res.updateConfiguration(conf, res.getDisplayMetrics());
+        }
     }
 
 
@@ -77,7 +93,7 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         SharedPreferences preferences = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
-        ((CheckBox) findViewById(R.id.check_box_debug)).setChecked(AppDataManager.isDebugMode(this));
+        ((CheckBox) findViewById(R.id.check_box_debug)).setChecked(AppDataManager.isDebugMode());
         ((CheckBox) findViewById(R.id.check_box_show_description)).setChecked(
                 preferences.getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true));
         ((CheckBox) findViewById(R.id.check_box_first_start)).setChecked(
@@ -85,7 +101,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     public void onCheckBoxDebugClick(View view) {
-        AppDataManager.setDebugMode(this, ((CheckBox) findViewById(R.id.check_box_debug)).isChecked());
+        AppDataManager.setDebugMode(((CheckBox) findViewById(R.id.check_box_debug)).isChecked());
     }
 
     public void onCheckBoxShowDescriptionClick(View view) {

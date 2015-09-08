@@ -1,8 +1,7 @@
 package cz.anty.utils;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,10 @@ import java.util.List;
  */
 public class AppDataManager {
 
+    private static final int SAVE_VERSION = 1;
+
     private static final List<Runnable> onChangeSAS = new ArrayList<>();
     private static final List<Runnable> onChangeWIFI = new ArrayList<>();
-    private static Boolean DEBUG = null;
 
     public static synchronized void addOnChangeListener(Type type, Runnable onChange) {
         switch (type) {
@@ -60,93 +60,139 @@ public class AppDataManager {
         }
     }
 
-    public static synchronized void login(Type type, Context context, String username, String password) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "login type: " + type);
-        context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE).edit()
-                .putString(Constants.SETTING_NAME_LOGIN, ByteEncryption.xor(username))
-                .putString(Constants.SETTING_NAME_PASSWORD, ByteEncryption.xor(password))
+    static synchronized void init(Context context) {
+        Type.init(context);
+        Log.d("AppDataManager", "init");
+        SharedPreferences preferences = Type.DEBUG.getSharedPreferences();
+        if (preferences.getInt(Constants.SETTING_NAME_DATA_SAVE_VERSION, -1)
+                != SAVE_VERSION) {
+            Type.clearSettings();
+            preferences.edit()
+                    .putInt(Constants.SETTING_NAME_DATA_SAVE_VERSION, SAVE_VERSION)
+                    .apply();
+        }
+    }
+
+    public static synchronized void login(Type type, String username, String password) {
+        Log.d("AppDataManager", "login type: " + type);
+        type.getSharedPreferences().edit()
+                .putString(Constants.SETTING_NAME_LOGIN, ByteEncryption.xorToByte(username))
+                .putString(Constants.SETTING_NAME_PASSWORD, ByteEncryption.xorToByte(password))
                 .putBoolean(Constants.SETTING_NAME_LOGGED_IN, true)
                 .apply();
         onChange(type);
     }
 
-    public static synchronized void logout(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "logout type: " + type);
-        context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE).edit()
+    public static synchronized void logout(Type type) {
+        Log.d("AppDataManager", "logout type: " + type);
+        type.getSharedPreferences().edit()
                 .putBoolean(Constants.SETTING_NAME_LOGGED_IN, false)
                 .apply();
         onChange(type);
     }
 
-    public static synchronized boolean isLoggedIn(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "isLoggedIn type: " + type);
-        return context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
+    public static synchronized boolean isLoggedIn(Type type) {
+        Log.d("AppDataManager", "isLoggedIn type: " + type);
+        return type.getSharedPreferences()
                 .getBoolean(Constants.SETTING_NAME_LOGGED_IN, false);
     }
 
-    public static synchronized String getUsername(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "getUsername type: " + type);
-        return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
+    public static synchronized String getUsername(Type type) {
+        Log.d("AppDataManager", "getUsername type: " + type);
+        return ByteEncryption.xorFromByte(type.getSharedPreferences()
                 .getString(Constants.SETTING_NAME_LOGIN, ""));
     }
 
-    public static synchronized String getPassword(Type type, Context context) {
-        if (isDebugMode(context)) Log.d("AppDataManager", "getPassword type: " + type);
-        return ByteEncryption.xor(context.getSharedPreferences(type.toString(), Context.MODE_PRIVATE)
+    public static synchronized String getPassword(Type type) {
+        Log.d("AppDataManager", "getPassword type: " + type);
+        return ByteEncryption.xorFromByte(type.getSharedPreferences()
                 .getString(Constants.SETTING_NAME_PASSWORD, ""));
     }
 
-    public static synchronized void setSASMarksAutoUpdate(Context context, boolean toSet) {
-        context.getSharedPreferences(Type.SAS.toString(), Context.MODE_PRIVATE).edit()
+    public static synchronized boolean isSASMarksAutoUpdate() {
+        Log.d("AppDataManager", "isSASMarksAutoUpdate");
+        return Type.SAS.getSharedPreferences()
+                .getBoolean(Constants.SETTING_NAME_MARKS_UPDATE, true);
+    }
+
+    public static synchronized void setSASMarksAutoUpdate(boolean toSet) {
+        Log.d("AppDataManager", "setSASMarksAutoUpdate toSet: " + toSet);
+        Type.SAS.getSharedPreferences().edit()
                 .putBoolean(Constants.SETTING_NAME_MARKS_UPDATE, toSet)
                 .apply();
     }
 
-    public static synchronized boolean isSASMarksAutoUpdate(Context context) {
-        return context.getSharedPreferences(Type.SAS.toString(), Context.MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_MARKS_UPDATE, true);
+    public static synchronized boolean isWifiAutoLogin() {
+        Log.d("AppDataManager", "isWifiAutoLogin");
+        return Type.WIFI.getSharedPreferences()
+                .getBoolean(Constants.SETTING_NAME_AUTO_LOGIN, true);
     }
 
-    public static synchronized void setWifiAutoLogin(Context context, boolean toSet) {
-        context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE).edit()
+    public static synchronized void setWifiAutoLogin(boolean toSet) {
+        Log.d("AppDataManager", "setWifiAutoLogin toSet: " + toSet);
+        Type.WIFI.getSharedPreferences().edit()
                 .putBoolean(Constants.SETTING_NAME_AUTO_LOGIN, toSet)
                 .apply();
     }
 
-    public static synchronized boolean isWifiAutoLogin(Context context) {
-        return context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_AUTO_LOGIN, true);
+    public static synchronized boolean isWifiWaitLogin() {
+        Log.d("AppDataManager", "isWifiWaitLogin");
+        return Type.WIFI.getSharedPreferences()
+                .getBoolean(Constants.SETTING_NAME_WAIT_LOGIN, true);
     }
 
-    public static synchronized void setWifiWaitLogin(Context context, boolean toSet) {
-        context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE).edit()
+    public static synchronized void setWifiWaitLogin(boolean toSet) {
+        Log.d("AppDataManager", "setWifiWaitLogin toSet: " + toSet);
+        Type.WIFI.getSharedPreferences().edit()
                 .putBoolean(Constants.SETTING_NAME_WAIT_LOGIN, toSet)
                 .apply();
     }
 
-    public static synchronized boolean isWifiWaitLogin(Context context) {
-        return context.getSharedPreferences(Type.WIFI.toString(), Context.MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_WAIT_LOGIN, true);
+    public static synchronized boolean isDebugMode() {
+        return Type.DEBUG.getSharedPreferences()
+                .getBoolean(Constants.SETTING_NAME_DEBUG_MODE, false);
     }
 
-    public static synchronized void setDebugMode(Context context, boolean toSet) {
-        context.getSharedPreferences(Type.DEBUG.toString(), Context.MODE_PRIVATE).edit()
+    public static synchronized void setDebugMode(boolean toSet) {
+        Type.DEBUG.getSharedPreferences().edit()
                 .putBoolean(Constants.SETTING_NAME_DEBUG_MODE, toSet)
                 .apply();
-        DEBUG = toSet;
-    }
-
-    public static synchronized boolean isDebugMode(@Nullable Context context) {
-        if (DEBUG == null)
-            if (context != null)
-                DEBUG = context.getSharedPreferences(Type.DEBUG.toString(), Context.MODE_PRIVATE)
-                        .getBoolean(Constants.SETTING_NAME_DEBUG_MODE, false);
-            else return false;
-        return DEBUG;
+        Log.setDebug(toSet);
     }
 
     public enum Type {
         SAS, WIFI, I_CANTEEN, DEBUG;
+
+        private static SharedPreferences SAS_PREFS, WIFI_PREFS, I_CANTEEN_PREFS, DEBUG_PREFS;
+
+        static void init(Context context) {
+            SAS_PREFS = context.getSharedPreferences(SAS.toString(), Context.MODE_PRIVATE);
+            WIFI_PREFS = context.getSharedPreferences(WIFI.toString(), Context.MODE_PRIVATE);
+            I_CANTEEN_PREFS = context.getSharedPreferences(I_CANTEEN.toString(), Context.MODE_PRIVATE);
+            DEBUG_PREFS = context.getSharedPreferences(DEBUG.toString(), Context.MODE_PRIVATE);
+            Log.setDebug(isDebugMode());
+        }
+
+        static void clearSettings() {
+            SAS_PREFS.edit().clear().apply();
+            WIFI_PREFS.edit().clear().apply();
+            I_CANTEEN_PREFS.edit().clear().apply();
+            DEBUG_PREFS.edit().clear().apply();
+        }
+
+        SharedPreferences getSharedPreferences() {
+            switch (this) {
+                case DEBUG:
+                    return DEBUG_PREFS;
+                case I_CANTEEN:
+                    return I_CANTEEN_PREFS;
+                case WIFI:
+                    return WIFI_PREFS;
+                case SAS:
+                default:
+                    return SAS_PREFS;
+            }
+        }
 
         @Override
         public String toString() {

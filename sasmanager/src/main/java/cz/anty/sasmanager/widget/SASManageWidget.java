@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -21,6 +20,7 @@ import cz.anty.sasmanager.R;
 import cz.anty.sasmanager.SASManagerService;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.WidgetMultilineAdapter;
 import cz.anty.utils.listItem.WidgetService;
@@ -37,13 +37,13 @@ public class SASManageWidget extends AppWidgetProvider {
     private Intent lastIntent = null;
 
     public static void callUpdate(Context context, @Nullable String marks) {
-        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "callUpdate");
+        Log.d("SASManageWidget", "callUpdate");
         //context.sendBroadcast(new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, SASManageWidget.class));
         context.sendBroadcast(getUpdateIntent(context, marks, false));
     }
 
     private static Intent getUpdateIntent(Context context, @Nullable String marks, boolean requestUpdateMarks) {
-        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "getUpdateIntent");
+        Log.d("SASManageWidget", "getUpdateIntent");
         int[] allWidgetIds = AppWidgetManager.getInstance(context)
                 .getAppWidgetIds(new ComponentName(context, SASManageWidget.class));
 
@@ -64,12 +64,12 @@ public class SASManageWidget extends AppWidgetProvider {
     @SuppressLint("NewApi")
     @Override
     public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "onUpdate");
+        Log.d("SASManageWidget", "onUpdate");
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
                 context.getPackageName(), R.layout.sasmanage_widget_loading));
 
         if (lastIntent.getBooleanExtra(REQUEST_UPDATE, false) &&
-                AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
+                AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
             context.startService(new Intent(context, SASManagerService.class)
                     .putExtra(SASManagerService.FORCE_UPDATE_WIDGET, true));
             return;
@@ -99,7 +99,7 @@ public class SASManageWidget extends AppWidgetProvider {
                         new Intent(context, SASSplashActivity.class), 0));
 
         //Log.d("UPDATE", "onUpdate checking if is logged in");
-        if (!AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
+        if (!AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
             //Log.d("UPDATE", "onUpdate not logged in");
             remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE);
         } else if (Build.VERSION.SDK_INT >= 11) {
@@ -163,18 +163,18 @@ public class SASManageWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "onEnabled");
+        Log.d("SASManageWidget", "onEnabled");
         // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "onDisabled");
+        Log.d("SASManageWidget", "onDisabled");
         // Enter relevant functionality for when the last widget is disabled
     }
 
     private String updateMarks(Context context) {
-        if (AppDataManager.isDebugMode(context)) Log.d("SASManageWidget", "updateMarks");
+        Log.d("SASManageWidget", "updateMarks");
         return new MarksManager(context).toString();
     }
 }

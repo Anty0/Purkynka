@@ -1,13 +1,12 @@
 package cz.anty.utils.wifi;
 
-import android.util.Log;
-
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 
 /**
  * Created by anty on 11.6.15.

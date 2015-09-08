@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,8 +15,8 @@ import java.util.List;
 import cz.anty.attendancemanager.R;
 import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.attendancemanager.widget.TrackingWidget;
-import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -75,8 +74,7 @@ public class TrackingReceiver extends BroadcastReceiver {
                             .putLong(man.getName() + Constants.SETTING_NAME_ADD_LAST_UPDATE, System.currentTimeMillis()).apply();
                 }
             } catch (IOException e) {
-                if (AppDataManager.isDebugMode(context))
-                    Log.d("TrackingReceiver", "onReceive", e);
+                Log.d("TrackingReceiver", "onReceive", e);
             }
 
         }

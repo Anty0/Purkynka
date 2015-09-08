@@ -98,7 +98,7 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
 
 
     private void logOut() {
-        AppDataManager.logout(AppDataManager.Type.I_CANTEEN, this);
+        AppDataManager.logout(AppDataManager.Type.I_CANTEEN);
         startActivity(new Intent(this, ICanteenSplashActivity.class));
         finish();
     }

@@ -4,7 +4,7 @@
 
     <string name="activity_title_timetable_select">Vyber ROZVRH hodin k zobrazení</string>
     <string name="activity_title_timetable_manage">ROZVRH hodin</string>
-    <string name="activity_title_timetable_settings">Nastavení správce rozvrhů</string>
+    <string name="activity_title_timetable_settings">Nastavení Správce ROZVRHŮ</string>
 
     <string name="app_description_timetable">Správce rozvrhů je prográmek určený ke správě a vytváření rozvrhů hodin, dokáže také stáhnout rozvrh hodin dané třídy z webových stránek školy a upozornit na to, že učitel zapsaný rozvrhu na další hodinu není ve škole a je proto velmi pravděpodobné, že bude následující hodina suplovaná.</string>
 

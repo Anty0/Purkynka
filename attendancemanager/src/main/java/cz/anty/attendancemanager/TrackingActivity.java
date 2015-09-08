@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +15,8 @@ import java.util.Arrays;
 
 import cz.anty.attendancemanager.receiver.TrackingReceiver;
 import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
-import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
 import cz.anty.utils.listItem.MultilineAdapter;
@@ -104,7 +103,7 @@ public class TrackingActivity extends AppCompatActivity {
     }
 
     private void update() {
-        if (AppDataManager.isDebugMode(this)) Log.d("TrackingActivity", "update");
+        Log.d("TrackingActivity", "update");
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -118,8 +117,7 @@ public class TrackingActivity extends AppCompatActivity {
                         values[i] = mans.get(i).toString();
                     }*/
 
-                if (AppDataManager.isDebugMode(TrackingActivity.this))
-                    Log.d("SearchActivity", "update data: " + Arrays.toString(data));
+                Log.d("SearchActivity", "update data: " + Arrays.toString(data));
 
                 /*final ArrayList<String> list = new ArrayList<>();
                 Collections.addAll(list, values);

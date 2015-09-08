@@ -26,8 +26,8 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (AppDataManager.isSASMarksAutoUpdate(context) && activeNetInfo != null && activeNetInfo.isConnected() &&
-                AppDataManager.isLoggedIn(AppDataManager.Type.SAS, context)) {
+        if (AppDataManager.isSASMarksAutoUpdate() && activeNetInfo != null && activeNetInfo.isConnected() &&
+                AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
             cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);

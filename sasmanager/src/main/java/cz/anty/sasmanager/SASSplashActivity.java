@@ -7,11 +7,11 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import cz.anty.sasmanager.receiver.StartServiceScheduleReceiver;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class SASSplashActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class SASSplashActivity extends AppCompatActivity {
 
     private void startDefaultActivity() {
         Intent activity;
-        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, this)) {
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
             activity = new Intent(this, SASManageActivity.class);
         } else {
             activity = new Intent(this, SASLoginActivity.class);

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import java.util.Arrays;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -40,8 +40,7 @@ public class SASManageActivity extends AppCompatActivity {
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            if (AppDataManager.isDebugMode(SASManageActivity.this))
-                Log.d("SASManageActivity", "onServiceConnected");
+            Log.d("SASManageActivity", "onServiceConnected");
             SASManageActivity.this.binder = (SASManagerService.MyBinder) binder;
             refreshThread.startWorker(new Runnable() {
                 @Override
@@ -76,8 +75,7 @@ public class SASManageActivity extends AppCompatActivity {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            if (AppDataManager.isDebugMode(SASManageActivity.this))
-                Log.d("SASManageActivity", "onServiceDisconnected");
+            Log.d("SASManageActivity", "onServiceDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
@@ -92,7 +90,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onCreate");
+        Log.d("SASManageActivity", "onCreate");
         super.onCreate(savedInstanceState);
 
         /*SharedPreferences preferences = getSharedPreferences("LoginData", MODE_PRIVATE);
@@ -113,7 +111,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onStart");
+        Log.d("SASManageActivity", "onStart");
         super.onStart();
         Intent intent = new Intent(this, SASManagerService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -121,14 +119,14 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onStop");
+        Log.d("SASManageActivity", "onStop");
         super.onStop();
         unbindService(mConnection);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onCreateOptionsMenu");
+        Log.d("SASManageActivity", "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_manage, menu);
         return true;
@@ -136,7 +134,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onOptionsItemSelected");
+        Log.d("SASManageActivity", "onOptionsItemSelected");
         int i = item.getItemId();
 
         if (i == R.id.action_settings) {
@@ -173,7 +171,7 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     private void onStateChanged() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "onStateChanged");
+        Log.d("SASManageActivity", "onStateChanged");
         if (binder == null) return;
         //onUpdate();
         switch (binder.getState()) {
@@ -184,16 +182,13 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     private void onUpdate(boolean showProgressBar) {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("SASManageActivity", "onUpdate: " + showProgressBar);
-        if (AppDataManager.isDebugMode(this))
-            Log.d("SASManageActivity", "onUpdate: Starting thread");
+        Log.d("SASManageActivity", "onUpdate: " + showProgressBar);
+        Log.d("SASManageActivity", "onUpdate: Starting thread");
         //((TextView) findViewById(R.id.textView3)).setText(R.string.loading);
         refreshThread.startWorker(new Runnable() {
             @Override
             public void run() {
-                if (AppDataManager.isDebugMode(SASManageActivity.this))
-                    Log.d("SASManageActivity", "onUpdate: Thread running");
+                Log.d("SASManageActivity", "onUpdate: Thread running");
                 /*final StringBuilder builder = new StringBuilder(getString(R.string.state) + ": ");
                 if (binder != null) {
                     Mark[] marks = binder.getMarks(MarksManager.Semester.AUTO);
@@ -252,8 +247,7 @@ public class SASManageActivity extends AppCompatActivity {
                             case DATE:
                             default:
                             /*Mark[] marks*/
-                                if (AppDataManager.isDebugMode(SASManageActivity.this))
-                                    Log.d("SASManageActivity", "onUpdate: Loading marks");
+                                Log.d("SASManageActivity", "onUpdate: Loading marks");
                                 data = binder.getMarks(semester);
                             /*values = new String[marks.length];
                             for (int i = 0; i < values.length; i++) {
@@ -277,8 +271,7 @@ public class SASManageActivity extends AppCompatActivity {
                         android.R.layout.simple_list_item_1, list);*/
 
                 final AdapterView.OnItemClickListener finalOnClickListener = onClickListener;
-                if (AppDataManager.isDebugMode(SASManageActivity.this))
-                    Log.d("SASManageActivity", "onUpdate: Starting list update");
+                Log.d("SASManageActivity", "onUpdate: Starting list update");
                 adapter.setNotifyOnChange(false);
                 adapter.clear();
                 for (MultilineItem item : data) {
@@ -287,12 +280,10 @@ public class SASManageActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (AppDataManager.isDebugMode(SASManageActivity.this))
-                            Log.d("SASManageActivity", "onUpdate: Updating list");
+                        Log.d("SASManageActivity", "onUpdate: Updating list");
                         adapter.notifyDataSetChanged();
                         listView.setOnItemClickListener(finalOnClickListener);
-                        if (AppDataManager.isDebugMode(SASManageActivity.this))
-                            Log.d("SASManageActivity", "onUpdate: List updated");
+                        Log.d("SASManageActivity", "onUpdate: List updated");
                     }
                 });
                 /*runOnUiThread(new Runnable() {
@@ -326,8 +317,7 @@ public class SASManageActivity extends AppCompatActivity {
                 });*/
             }
         }, showProgressBar ? getString(R.string.wait_text_loading) : null);
-        if (AppDataManager.isDebugMode(this))
-            Log.d("SASManageActivity", "onUpdate: Thread started");
+        Log.d("SASManageActivity", "onUpdate: Thread started");
     }
 
     private AdapterView.OnItemClickListener generateMarkOnClickListener(final MultilineItem[] data) {
@@ -355,8 +345,8 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     private void logOut() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "logOut");
-        AppDataManager.logout(AppDataManager.Type.SAS, this);
+        Log.d("SASManageActivity", "logOut");
+        AppDataManager.logout(AppDataManager.Type.SAS);
         //binder.waitToWorkerStop();
         //sendBroadcast(new Intent(this, StartActivityReceiver.class));
         //new StartActivityReceiver().onReceive(this, null);
@@ -365,11 +355,11 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     private void logInException() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManageActivity", "logInException");
+        Log.d("SASManageActivity", "logInException");
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
                 .setTitle(getString(R.string.exception_title_login)
                         .replace(Constants.STRINGS_CONST_NAME,
-                                AppDataManager.getUsername(AppDataManager.Type.SAS, this)))
+                                AppDataManager.getUsername(AppDataManager.Type.SAS)))
                 .setMessage(R.string.exception_message_login)
                 .setPositiveButton(R.string.but_retry, new DialogInterface.OnClickListener() {
                     @Override

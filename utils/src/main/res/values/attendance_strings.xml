@@ -3,7 +3,7 @@
     <string name="app_name_attendance">Attendance Browser</string>
 
     <string name="activity_title_attendance_search">Search in attendance</string>
-    <string name="activity_title_attendance_settings">Attendance Settings</string>
+    <string name="activity_title_attendance_settings">Attendance Browser Settings</string>
     <string name="activity_title_tracking">Tracking people</string>
 
     <string name="widget_label_tracking">Tracking people Widget</string>
@@ -18,7 +18,7 @@
 
     <string name="menu_item_text_show_tracked_people">Show tracked people</string>
 
-    <string name="dialog_title_terms_warning">!!!WARNING!!!</string>
+    <string name="dialog_title_terms_warning">WARNING</string>
     <string name="dialog_text_attendance_tracking">Start tracking attendance a man named \"[NAME]\"?</string>
     <string name="dialog_text_terms_attendance_tracking">If you want to watch a man must have him on the warrant!\n\nClicking agree you acknowledge that you have permission to track attendance using this application from the selected person named \"[NAME]\" (hereinafter \"selected person\"), and bear all responsibility for all legal and other problems caused by tracking the selected person.</string>
     <string name="dialog_text_attendance_stop_tracking">Are you sere you want to remove \"[NAME]\" from tracked?</string>

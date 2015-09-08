@@ -11,11 +11,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
-import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
@@ -33,14 +32,12 @@ public class ICanteenBurzaCheckerService extends Service {
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            if (AppDataManager.isDebugMode(ICanteenBurzaCheckerService.this))
-                Log.d("BurzaCheckerService", "onServiceConnected");
+            Log.d("BurzaCheckerService", "onServiceConnected");
             ICanteenBurzaCheckerService.this.binder = (ICanteenService.MyBinder) binder;
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            if (AppDataManager.isDebugMode(ICanteenBurzaCheckerService.this))
-                Log.d("BurzaCheckerService", "onServiceDisconnected");
+            Log.d("BurzaCheckerService", "onServiceDisconnected");
             ICanteenBurzaCheckerService.this.binder = null;
         }
 
@@ -48,8 +45,7 @@ public class ICanteenBurzaCheckerService extends Service {
 
     @Override
     public void onCreate() {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("BurzaCheckerService", "onCreate");
+        Log.d("BurzaCheckerService", "onCreate");
         super.onCreate();
 
         worker.setPowerManager(this);
@@ -63,8 +59,7 @@ public class ICanteenBurzaCheckerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("BurzaCheckerService", "onStartCommand");
+        Log.d("BurzaCheckerService", "onStartCommand");
 
         if (intent != null)
             switch (intent.getStringExtra(EXTRA_BURZA_CHECKER_STATE)) {
@@ -108,7 +103,7 @@ public class ICanteenBurzaCheckerService extends Service {
     }
 
     private void burzaChecker(@NonNull BurzaLunchSelector selector) {
-        if (AppDataManager.isDebugMode(this)) Log.d("BurzaCheckerService", "burzaChecker");
+        Log.d("BurzaCheckerService", "burzaChecker");
 
         NotificationManager notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
         notificationManager.cancel(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA_RESULT);
@@ -171,8 +166,7 @@ public class ICanteenBurzaCheckerService extends Service {
 
     @Override
     public void onDestroy() {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("BurzaCheckerService", "onDestroy");
+        Log.d("BurzaCheckerService", "onDestroy");
 
         if (worker.isWorkerRunning())
             worker.stopActualWorker();
@@ -183,8 +177,7 @@ public class ICanteenBurzaCheckerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("BurzaCheckerService", "onBind");
+        Log.d("BurzaCheckerService", "onBind");
         //throw new UnsupportedOperationException("Not yet implemented");
         return null;
     }

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
-import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
@@ -128,11 +127,10 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void update(final boolean clearData, final int page, @Nullable String search) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SearchActivity",
+        Log.d("SearchActivity",
                 "update clearData: " + clearData + " page: " + page + " search: " + search);
         final String toSearch = search == null ? searchEditText.getText().toString() : search;
-        if (AppDataManager.isDebugMode(this))
-            Log.d("SearchActivity", "update toSearch: " + toSearch);
+        Log.d("SearchActivity", "update toSearch: " + toSearch);
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -148,15 +146,13 @@ public class SearchActivity extends AppCompatActivity {
                         values[i] = mans.get(i).toString();
                     }*/
                 } catch (IOException e) {
-                    if (AppDataManager.isDebugMode(SearchActivity.this))
-                        Log.d("SearchActivity", "update", e);
+                    Log.d("SearchActivity", "update", e);
                     //values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
                     data = new MultilineItem[]{new TextMultilineItem(getString(R.string.list_item_title_connection_exception),
                             getString(R.string.list_item_text_connection_exception) + ": " + e.getMessage())/*,
                             new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page)*/};
                 }
-                if (AppDataManager.isDebugMode(SearchActivity.this))
-                    Log.d("SearchActivity", "update data: " + Arrays.toString(data));
+                Log.d("SearchActivity", "update data: " + Arrays.toString(data));
 
                 /*final ArrayList<String> list = new ArrayList<>();
                 Collections.addAll(list, values);

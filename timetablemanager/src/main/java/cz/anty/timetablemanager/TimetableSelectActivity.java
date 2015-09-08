@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
-import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.StableArrayAdapter;
 import cz.anty.utils.settings.TimetableSettingsActivity;
@@ -37,8 +36,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("TimetableSelectActivity", "onCreate");
+        Log.d("TimetableSelectActivity", "onCreate");
         super.onCreate(savedInstanceState);
         sendBroadcast(new Intent(this, TimetableScheduleReceiver.class));
         setContentView(R.layout.activity_timetable_select);
@@ -50,8 +48,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("TimetableSelectActivity", "initialize");
+        Log.d("TimetableSelectActivity", "initialize");
         ListView listView = ((ListView) findViewById(R.id.listView));
         final Timetable[] timetables = timetableManager.getTimetables();
         String[] values = new String[timetables.length + 1];
@@ -102,8 +99,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                 if (autoLoadCheckBox.isChecked())
                                                     TimetableConnector.tryLoadTimetable(newTimetable);
                                             } catch (WrongLoginDataException e) {
-                                                if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
-                                                    Log.d("TimetableSelectActivity", "initialize", e);
+                                                Log.d("TimetableSelectActivity", "initialize", e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -117,8 +113,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     }
                                                 });
                                             } catch (IOException e) {
-                                                if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
-                                                    Log.d("TimetableSelectActivity", "initialize", e);
+                                                Log.d("TimetableSelectActivity", "initialize", e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -132,8 +127,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                     }
                                                 });
                                             } catch (Exception e) {
-                                                if (AppDataManager.isDebugMode(TimetableSelectActivity.this))
-                                                    Log.d("TimetableSelectActivity", "initialize", e);
+                                                Log.d("TimetableSelectActivity", "initialize", e);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {

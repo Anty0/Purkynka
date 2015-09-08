@@ -7,21 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.timetable.Timetable;
 
 public class TimetableScheduleReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("TScheduleReceiver", "onReceive");
+        Log.d("TScheduleReceiver", "onReceive");
         AlarmManager service = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
         Intent defaultIntent = new Intent(context, AttendanceReceiver.class);

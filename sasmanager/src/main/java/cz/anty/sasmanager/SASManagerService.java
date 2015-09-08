@@ -9,7 +9,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
 import cz.anty.sasmanager.widget.SASManageWidget;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
 import cz.anty.utils.sas.mark.Lesson;
@@ -54,7 +54,7 @@ public class SASManagerService extends Service {
     };
 
     private void setState(State state) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "setState: " + state);
+        Log.d("SASManagerService", "setState: " + state);
         if (state != this.state) {
             if (state.isException() || this.state.isException()) {
                 updateState(state);
@@ -70,7 +70,7 @@ public class SASManagerService extends Service {
     }
 
     private void updateState(State state) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "updateState: " + state);
+        Log.d("SASManagerService", "updateState: " + state);
         this.state = state;
         if (onStateChangedListener != null)
             onStateChangedListener.run();
@@ -78,7 +78,7 @@ public class SASManagerService extends Service {
 
     @Override
     public void onCreate() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onCreate");
+        Log.d("SASManagerService", "onCreate");
         super.onCreate();
         worker.setPowerManager(this);
 
@@ -95,15 +95,15 @@ public class SASManagerService extends Service {
     }
 
     private void init() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "init");
+        Log.d("SASManagerService", "init");
         if (sasManager != null && sasManager.isConnected()) {
             sasManager.disconnect();
             setState(State.DISCONNECTED);
         }
 
-        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS, this)) {
-            sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS, this),
-                    AppDataManager.getPassword(AppDataManager.Type.SAS, this));
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
+            sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS),
+                    AppDataManager.getPassword(AppDataManager.Type.SAS));
             refreshMarks(false, true, false);
             //setState(State.CONNECTED);
         } else {
@@ -115,7 +115,7 @@ public class SASManagerService extends Service {
 
     @Override
     public void onDestroy() {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onDestroy");
+        Log.d("SASManagerService", "onDestroy");
         AppDataManager.removeOnChangeListener(AppDataManager.Type.SAS, onLoginChange);
         setState(State.STOPPED);
         super.onDestroy();
@@ -123,7 +123,7 @@ public class SASManagerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onStartCommand");
+        Log.d("SASManagerService", "onStartCommand");
         if (intent != null) {
             final boolean updateWidget = intent.getBooleanExtra(FORCE_UPDATE_WIDGET, false);
             worker.startWorker(new Runnable() {
@@ -139,8 +139,7 @@ public class SASManagerService extends Service {
     }
 
     private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget) {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("SASManagerService", "refreshMarks: force=" + force + " deep=" + deepRefresh + " updateWidget=" + updateWidget);
+        Log.d("SASManagerService", "refreshMarks: force=" + force + " deep=" + deepRefresh + " updateWidget=" + updateWidget);
         if (sasManager == null) return updateWidget;
         if (System.currentTimeMillis() - getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE)
                 .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) < Constants.WAIT_TIME_SAS_MARKS_REFRESH) {
@@ -181,24 +180,23 @@ public class SASManagerService extends Service {
                 getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE).edit()
                         .putLong(Constants.SETTING_NAME_LAST_REFRESH, System.currentTimeMillis()).apply();
             } catch (WrongLoginDataException e) {
-                if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "refreshMarks", e);
+                Log.d("SASManagerService", "refreshMarks", e);
                 setState(State.LOG_IN_EXCEPTION);
             }
         } catch (IOException e) {
-            if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "refreshMarks", e);
+            Log.d("SASManagerService", "refreshMarks", e);
             setState(State.CONNECT_EXCEPTION);
         }
         return updateWidget;
     }
 
     private void onMarksChange(MarksManager.Semester semester, int newMarks) {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("SASManagerService", "onMarksChange: " + semester + " - " + newMarks);
+        Log.d("SASManagerService", "onMarksChange: " + semester + " - " + newMarks);
         if (onMarksChange != null)
             onMarksChange.run();
         SASManageWidget.callUpdate(this, marks.toString());
 
-        if (!AppDataManager.isSASMarksAutoUpdate(this))
+        if (!AppDataManager.isSASMarksAutoUpdate())
             return;
 
         Mark[] marks = this.marks.get(semester);
@@ -243,7 +241,7 @@ public class SASManagerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        if (AppDataManager.isDebugMode(this)) Log.d("SASManagerService", "onBind");
+        Log.d("SASManagerService", "onBind");
         return mBinder;
     }
 

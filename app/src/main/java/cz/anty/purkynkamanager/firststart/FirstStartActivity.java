@@ -3,11 +3,9 @@ package cz.anty.purkynkamanager.firststart;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import cz.anty.icanteenmanager.ICanteenFirstStartPage;
 import cz.anty.purkynkamanager.BuildConfig;
@@ -33,21 +31,14 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_first_start);
 
         if (pagesManager == null) {
-            try {
-                pagesManager = new PagesManager(this, new FirstStartPage[]{
-                        WelcomeFirstStartPage.class.newInstance(),
-                        TermsFirstStartPage.class.newInstance(),
-                        SASFirstStartPage.class.newInstance(),
-                        WifiFirstStartPage.class.newInstance(),
-                        ICanteenFirstStartPage.class.newInstance()
-                });
-                page = pagesManager.get();
-            } catch (Exception e) {
-                Log.d("FirstStartActivity", "onCreate", e);
-                Toast.makeText(this, R.string.exception_toast_text_can_not_load_first_start, Toast.LENGTH_LONG).show();
-                finish();
-                return;
-            }
+            pagesManager = new PagesManager(new FirstStartPage[]{
+                    new WelcomeFirstStartPage(this),
+                    new TermsFirstStartPage(this),
+                    new SASFirstStartPage(this),
+                    new WifiFirstStartPage(this),
+                    new ICanteenFirstStartPage(this)
+            });
+            page = pagesManager.get();
         }
 
         worker = new OnceRunThreadWithSpinner(this);
@@ -61,10 +52,10 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
 
     @SuppressWarnings("ResourceType")
     private synchronized void updateState() {
-        setTitle(page.getTitle(this));
+        setTitle(page.getTitle());
 
         contentScrollView.removeAllViews();
-        contentScrollView.addView(page.getView(this, getLayoutInflater(), contentScrollView));
+        contentScrollView.addView(page.getView(contentScrollView));
 
         /*if (Build.VERSION.SDK_INT >= 12) {
             ViewPropertyAnimator animator = contentScrollView.animate().scaleX(10);
@@ -73,10 +64,10 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
             }
         }*/
 
-        butNext.setText(page.getButNextText(this));
-        butSkip.setText(page.getButSkipText(this));
-        butNext.setVisibility(page.getButNextVisibility(this));
-        butSkip.setVisibility(page.getButSkipVisibility(this));
+        butNext.setText(page.getButNextText());
+        butSkip.setText(page.getButSkipText());
+        butNext.setVisibility(page.getButNextVisibility());
+        butSkip.setVisibility(page.getButSkipVisibility());
     }
 
     @Override
@@ -102,11 +93,11 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
     private synchronized void doNext(int id) {
         switch (id) {
             case R.id.butSkip:
-                if (!page.doSkip(this))
+                if (!page.doSkip())
                     return;
                 break;
             case R.id.butNext:
-                if (!page.doFinish(this))
+                if (!page.doFinish())
                     return;
                 break;
         }

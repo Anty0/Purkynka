@@ -17,72 +17,68 @@ import cz.anty.utils.FirstStartPage;
  *
  * @author anty
  */
-public class ICanteenFirstStartPage implements FirstStartPage {
+public class ICanteenFirstStartPage extends FirstStartPage {
 
-    private Activity activity;
     private LinearLayout linearLayout;
 
-    public ICanteenFirstStartPage() {
-    }
-
-    @Override
-    public void initialize(Activity activity) {
-        this.activity = activity;
-        linearLayout = new LinearLayout(activity);
+    public ICanteenFirstStartPage(Context context) {
+        super(context);
+        linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        activity.getLayoutInflater().inflate(R.layout.activity_icanteen_login, linearLayout);
+        LayoutInflater.from(context).inflate(R.layout.activity_icanteen_login, linearLayout);
         //activity.getLayoutInflater().inflate(R.layout.activity_icanteen_settings, linearLayout);
 
-        ((EditText) linearLayout.findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS, activity));
-        ((EditText) linearLayout.findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS, activity));
+        ((EditText) linearLayout.findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS));
+        ((EditText) linearLayout.findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS));
         linearLayout.findViewById(R.id.but_login).setVisibility(View.GONE);
         //((CheckBox) linearLayout.findViewById(R.id.check_box_sas_marks_update)).setChecked(AppDataManager.isSASMarksAutoUpdate(activity));
     }
 
     @Override
-    public boolean showThisPage(Context context) {
-        return !AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN, context);
+    public boolean showThisPage() {
+        return !AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN);
     }
 
     @Override
-    public String getTitle(Context context) {
-        return context.getString(R.string.app_name_icanteen);
+    public String getTitle() {
+        return getContext().getString(R.string.app_name_icanteen);
     }
 
     @Override
-    public int getButSkipVisibility(Context context) {
+    public int getButSkipVisibility() {
         return View.VISIBLE;
     }
 
     @Override
-    public int getButNextVisibility(Context context) {
+    public int getButNextVisibility() {
         return View.VISIBLE;
     }
 
     @Override
-    public String getButSkipText(Context context) {
-        return context.getString(R.string.but_skip);
+    public String getButSkipText() {
+        return getContext().getString(R.string.but_skip);
     }
 
     @Override
-    public String getButNextText(Context context) {
-        return context.getString(R.string.but_next);
+    public String getButNextText() {
+        return getContext().getString(R.string.but_next);
     }
 
     @Override
-    public View getView(Context context, LayoutInflater layoutInflater, ViewGroup rootView) {
+    public View getView(ViewGroup rootView) {
         return linearLayout;
     }
 
     @Override
-    public boolean doSkip(Context context) {
+    public boolean doSkip() {
         return true;
     }
 
     @Override
-    public boolean doFinish(Context context) {
-        if (ICanteenLoginActivity.login(activity,
+    public boolean doFinish() {
+        Context context = getContext();
+        if (ICanteenLoginActivity.login((Activity) context,
                 ((EditText) linearLayout.findViewById(R.id.edit_username)).getText().toString(),
                 ((EditText) linearLayout.findViewById(R.id.edit_password)).getText().toString())) {
 

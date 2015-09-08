@@ -3,7 +3,7 @@
     <string name="app_name_attendance">Prohlížeč docházky</string>
 
     <string name="activity_title_attendance_search">Vyhledávat v docházkovém systému</string>
-    <string name="activity_title_attendance_settings">Nastavení správce docházky</string>
+    <string name="activity_title_attendance_settings">Nastavení Prohlížeče docházky</string>
     <string name="activity_title_tracking">Sledovaní lidé</string>
 
     <string name="widget_label_tracking">Widget Sledovaných lidí</string>
@@ -18,7 +18,7 @@
 
     <string name="menu_item_text_show_tracked_people">Zobraz sledované lidi</string>
 
-    <string name="dialog_title_terms_warning">!!!POZOR!!!</string>
+    <string name="dialog_title_terms_warning">POZOR</string>
     <string name="dialog_text_attendance_tracking">Začít sledovat docházku člověka jménem "[NAME]"?</string>
     <string name="dialog_text_terms_attendance_tracking">Pokud chcete sledovat nějakého člověka musíte mít od něj na to povolení!\n\nKliknutím na tlačítko souhlasím stvrzujete, že máte povolení sledovat docházku pomocí této aplikace od zvolené osoby jménem "[NAME]" (dále jen "zvolená osoba") a nesete veškerou zodpovědnost za veškeré právní i jiné problémy způsobené sledováním zvolené osoby.</string>
     <string name="dialog_text_attendance_stop_tracking">Opravdu si přejete odebrat "[NAME]" ze sledovaných?</string>

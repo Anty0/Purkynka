@@ -1,7 +1,5 @@
 package cz.anty.purkynkamanager.firststart;
 
-import android.app.Activity;
-
 import cz.anty.utils.FirstStartPage;
 
 /**
@@ -11,22 +9,18 @@ import cz.anty.utils.FirstStartPage;
  */
 class PagesManager {
 
-    private final Activity activity;
     private final FirstStartPage[] firstStartPages;
     private int page = 0;
 
-    PagesManager(Activity activity, FirstStartPage[] firstStartPages) {
-        this.activity = activity;
+    PagesManager(FirstStartPage[] firstStartPages) {
         this.firstStartPages = firstStartPages;
-        for (FirstStartPage page : this.firstStartPages)
-            page.initialize(activity);
     }
 
     public void next() {
         do {
             page++;
         } while (page < firstStartPages.length
-                && !firstStartPages[page].showThisPage(activity));
+                && !firstStartPages[page].showThisPage());
     }
 
     public FirstStartPage get() {

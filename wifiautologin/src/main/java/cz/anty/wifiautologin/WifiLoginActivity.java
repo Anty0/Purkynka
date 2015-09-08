@@ -24,7 +24,7 @@ public class WifiLoginActivity extends AppCompatActivity {
     private OnceRunThreadWithSpinner worker;
 
     static void save(Context context, String username, String password) {
-        AppDataManager.login(AppDataManager.Type.WIFI, context, username, password);
+        AppDataManager.login(AppDataManager.Type.WIFI, username, password);
     }
 
     @Override
@@ -34,9 +34,9 @@ public class WifiLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wifi_login);
 
         ((EditText) findViewById(R.id.edit_username))
-                .setText(AppDataManager.getUsername(AppDataManager.Type.WIFI, this));
+                .setText(AppDataManager.getUsername(AppDataManager.Type.WIFI));
         ((EditText) findViewById(R.id.edit_password))
-                .setText(AppDataManager.getPassword(AppDataManager.Type.WIFI, this));
+                .setText(AppDataManager.getPassword(AppDataManager.Type.WIFI));
     }
 
     @Override

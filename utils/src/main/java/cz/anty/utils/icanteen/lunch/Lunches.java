@@ -1,7 +1,5 @@
 package cz.anty.utils.icanteen.lunch;
 
-import android.util.Log;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -9,7 +7,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
@@ -22,8 +20,7 @@ import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 public class Lunches {
 
     public static List<BurzaLunch> parseBurzaLunches(Elements lunches) {
-        if (AppDataManager.isDebugMode(null))
-            Log.d("Lunches", "parseBurzaLunches lunches: " + lunches.toString());
+        Log.d("Lunches", "parseBurzaLunches lunches: " + lunches.toString());
 
         List<BurzaLunch> lunchList = new ArrayList<>();
 

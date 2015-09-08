@@ -1,8 +1,6 @@
 package cz.anty.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,25 +9,33 @@ import android.view.ViewGroup;
  *
  * @author anty
  */
-public interface FirstStartPage {
+public abstract class FirstStartPage {
 
-    void initialize(Activity activity);
+    private final Context context;
 
-    boolean showThisPage(Context context);
+    public FirstStartPage(Context context) {
+        this.context = context;
+    }
 
-    String getTitle(Context context);
+    public Context getContext() {
+        return context;
+    }
 
-    int getButSkipVisibility(Context context);
+    public abstract boolean showThisPage();
 
-    int getButNextVisibility(Context context);
+    public abstract String getTitle();
 
-    String getButSkipText(Context context);
+    public abstract int getButSkipVisibility();
 
-    String getButNextText(Context context);
+    public abstract int getButNextVisibility();
 
-    View getView(Context context, LayoutInflater layoutInflater, ViewGroup rootView);
+    public abstract String getButSkipText();
 
-    boolean doSkip(Context context);
+    public abstract String getButNextText();
 
-    boolean doFinish(Context context);
+    public abstract View getView(ViewGroup rootView);
+
+    public abstract boolean doSkip();
+
+    public abstract boolean doFinish();
 }

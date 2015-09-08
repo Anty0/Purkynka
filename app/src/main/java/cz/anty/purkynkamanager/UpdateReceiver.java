@@ -8,11 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import java.io.IOException;
 
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.update.UpdateConnector;
 

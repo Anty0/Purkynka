@@ -11,14 +11,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.anty.attendancemanager.R;
 import cz.anty.attendancemanager.TrackingActivity;
 import cz.anty.attendancemanager.receiver.TrackingReceiver;
-import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
 import cz.anty.utils.listItem.MultilineItem;
@@ -34,13 +33,13 @@ public class TrackingWidget extends AppWidgetProvider {
     private Intent lastIntent = null;
 
     public static void callUpdate(Context context, @Nullable String mans) {
-        if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "callUpdate");
+        Log.d("TrackingWidget", "callUpdate");
         //context.sendBroadcast(new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, SASManageWidget.class));
         context.sendBroadcast(getUpdateIntent(context, mans));
     }
 
     private static Intent getUpdateIntent(Context context, @Nullable String mans) {
-        if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "getUpdateIntent");
+        Log.d("TrackingWidget", "getUpdateIntent");
         int[] allWidgetIds = AppWidgetManager.getInstance(context)
                 .getAppWidgetIds(new ComponentName(context, TrackingWidget.class));
 
@@ -68,7 +67,7 @@ public class TrackingWidget extends AppWidgetProvider {
 
     @Override
     public synchronized void onReceive(@NonNull Context context, @NonNull Intent intent) {
-        if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "onReceive");
+        Log.d("TrackingWidget", "onReceive");
         lastIntent = intent;
         super.onReceive(context, intent);
     }
@@ -76,7 +75,7 @@ public class TrackingWidget extends AppWidgetProvider {
     @SuppressLint("NewApi")
     @Override
     public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "onUpdate");
+        Log.d("TrackingWidget", "onUpdate");
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
                 context.getPackageName(), R.layout.tracking_widget_loading));
 
@@ -167,13 +166,13 @@ public class TrackingWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "onEnabled");
+        Log.d("TrackingWidget", "onEnabled");
         // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "onDisabled");
+        Log.d("TrackingWidget", "onDisabled");
         // Enter relevant functionality for when the last widget is disabled
     }
 }

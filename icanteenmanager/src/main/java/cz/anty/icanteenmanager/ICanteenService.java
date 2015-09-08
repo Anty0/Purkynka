@@ -9,13 +9,13 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.icanteen.ICanteenManager;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
@@ -47,7 +47,7 @@ public class ICanteenService extends Service {
 
     @Override
     public void onCreate() {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "onCreate");
+        Log.d("ICanteenService", "onCreate");
         super.onCreate();
         worker.setPowerManager(this);
         AppDataManager.addOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
@@ -60,14 +60,14 @@ public class ICanteenService extends Service {
     }
 
     private void initialize() {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "initialize");
+        Log.d("ICanteenService", "initialize");
         if (manager != null && manager.isConnected()) {
             manager.disconnect();
         }
 
-        if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN, this)) {
-            manager = new ICanteenManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN, this),
-                    AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN, this));
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
+            manager = new ICanteenManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN),
+                    AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
             try {
                 manager.connect();
                 if (!manager.isLoggedIn()) {
@@ -112,7 +112,7 @@ public class ICanteenService extends Service {
 
     @Override
     public void onDestroy() {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "onDestroy");
+        Log.d("ICanteenService", "onDestroy");
         try {
             worker.waitToWorkerStop();
         } catch (InterruptedException e) {
@@ -123,15 +123,13 @@ public class ICanteenService extends Service {
     }
 
     private boolean refreshBurza() {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("ICanteenService", "refreshBurza startStage: " + mBurzaLunchList);
+        Log.d("ICanteenService", "refreshBurza startStage: " + mBurzaLunchList);
         try {
             List<BurzaLunch> burzaLunchList = mBurzaLunchList;
             mBurzaLunchList = manager.getBurza();
             if (!listEquals(mBurzaLunchList, burzaLunchList) && onBurzaChange != null)
                 onBurzaChange.run();
-            if (AppDataManager.isDebugMode(this))
-                Log.d("ICanteenService", "refreshBurza finalStage: " + mBurzaLunchList);
+            Log.d("ICanteenService", "refreshBurza finalStage: " + mBurzaLunchList);
             return true;
         } catch (IOException | IndexOutOfBoundsException e) {
             Log.d("ICanteenService", "refreshBurza", e);
@@ -142,15 +140,13 @@ public class ICanteenService extends Service {
     }
 
     private boolean refreshMonth() {
-        if (AppDataManager.isDebugMode(this))
-            Log.d("ICanteenService", "refreshMonth startStage: " + mMonthLunchList);
+        Log.d("ICanteenService", "refreshMonth startStage: " + mMonthLunchList);
         try {
             List<MonthLunchDay> monthLunchList = mMonthLunchList;
             mMonthLunchList = manager.getMonth();
             if (!listEquals(mMonthLunchList, monthLunchList) && onMonthChange != null)
                 onMonthChange.run();
-            if (AppDataManager.isDebugMode(this))
-                Log.d("ICanteenService", "refreshMonth finalStage: " + mMonthLunchList);
+            Log.d("ICanteenService", "refreshMonth finalStage: " + mMonthLunchList);
             return true;
         } catch (IOException e) {
             Log.d("ICanteenService", "refreshMonth", e);
@@ -161,7 +157,7 @@ public class ICanteenService extends Service {
     }
 
     private boolean orderBurza(BurzaLunch lunch) {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "orderBurza");
+        Log.d("ICanteenService", "orderBurza");
         try {
             manager.orderBurzaLunch(lunch);
             return true;
@@ -174,7 +170,7 @@ public class ICanteenService extends Service {
     }
 
     private boolean orderMonth(MonthLunch lunch) {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "orderMonth");
+        Log.d("ICanteenService", "orderMonth");
         try {
             manager.orderMonthLunch(lunch);
             return true;
@@ -187,7 +183,7 @@ public class ICanteenService extends Service {
     }
 
     private boolean listEquals(List<?> list, List<?> list1) {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "listEquals");
+        Log.d("ICanteenService", "listEquals");
         if (list == null) return list1 == null;
         if (list1 == null) return false;
         if (list.size() != list1.size()) return false;
@@ -200,7 +196,7 @@ public class ICanteenService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenService", "onBind");
+        Log.d("ICanteenService", "onBind");
         return mBinder;
     }
 

@@ -3,7 +3,7 @@
     <string name="app_name_sas">iSAS Manager</string>
 
     <string name="activity_title_login">Přihlášení do iSAS</string>
-    <string name="activity_title_sas_settings">Nastavení správce iSASu</string>
+    <string name="activity_title_sas_settings">Nastavení iSAS Manageru</string>
 
     <string name="widget_label_sas_manage">Správce iSASu (poslední známky)</string>
 

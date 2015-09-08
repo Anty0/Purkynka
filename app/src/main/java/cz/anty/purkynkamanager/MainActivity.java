@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +21,8 @@ import cz.anty.icanteenmanager.ICanteenSplashActivity;
 import cz.anty.purkynkamanager.firststart.FirstStartActivity;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
-import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode(this));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 

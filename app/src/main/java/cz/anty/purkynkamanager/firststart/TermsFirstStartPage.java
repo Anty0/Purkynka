@@ -2,6 +2,7 @@ package cz.anty.purkynkamanager.firststart;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,7 @@ import java.io.IOException;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.utils.FirstStartPage;
-import cz.anty.utils.thread.OnceRunThreadWithSpinner;
+import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.update.UpdateConnector;
 
 /**
@@ -19,53 +20,50 @@ import cz.anty.utils.update.UpdateConnector;
  *
  * @author anty
  */
-public class TermsFirstStartPage implements FirstStartPage {
+public class TermsFirstStartPage extends FirstStartPage {
 
-    private Activity activity;
-    private OnceRunThreadWithSpinner worker;
+    private final OnceRunThread worker;
 
-    public TermsFirstStartPage() {
+    public TermsFirstStartPage(Context context) {
+        super(context);
+        this.worker = new OnceRunThread(context);
     }
 
     @Override
-    public void initialize(Activity activity) {
-        this.activity = activity;
-        this.worker = new OnceRunThreadWithSpinner(activity);
-    }
-
-    @Override
-    public boolean showThisPage(Context context) {
+    public boolean showThisPage() {
         return true;
     }
 
     @Override
-    public String getTitle(Context context) {
-        return context.getString(R.string.activity_title_first_start_terms);
+    public String getTitle() {
+        return getContext().getString(R.string.activity_title_first_start_terms);
     }
 
     @Override
-    public int getButSkipVisibility(Context context) {
+    public int getButSkipVisibility() {
         return View.VISIBLE;
     }
 
     @Override
-    public int getButNextVisibility(Context context) {
+    public int getButNextVisibility() {
         return View.VISIBLE;
     }
 
     @Override
-    public String getButSkipText(Context context) {
-        return context.getString(R.string.but_exit);
+    public String getButSkipText() {
+        return getContext().getString(R.string.but_exit);
     }
 
     @Override
-    public String getButNextText(Context context) {
-        return context.getString(R.string.but_accept);
+    public String getButNextText() {
+        return getContext().getString(R.string.but_accept);
     }
 
     @Override
-    public View getView(final Context context, LayoutInflater layoutInflater, ViewGroup rootView) {
-        View view = layoutInflater.inflate(R.layout.activity_first_start_welcome_terms, rootView, false);
+    public View getView(ViewGroup rootView) {
+        Context context = getContext();
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.activity_first_start_welcome_terms, rootView, false);
         updateTerms(context, (TextView) view.findViewById(R.id.contentTextView));
         return view;
     }
@@ -85,7 +83,7 @@ public class TermsFirstStartPage implements FirstStartPage {
                 }
                 final String finalTerms = terms;
                 final boolean finalError = error;
-                activity.runOnUiThread(new Runnable() {
+                new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         contentTextView.setText(finalTerms);
@@ -104,18 +102,18 @@ public class TermsFirstStartPage implements FirstStartPage {
     }
 
     @Override
-    public boolean doSkip(Context context) {
-        activity.runOnUiThread(new Runnable() {
+    public boolean doSkip() {
+        new Handler(getContext().getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                activity.finish();
+                ((Activity) getContext()).finish();
             }
         });
         return false;
     }
 
     @Override
-    public boolean doFinish(Context context) {
+    public boolean doFinish() {
         return true;
     }
 }

@@ -2,11 +2,10 @@ package cz.anty.utils.listItem;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.R;
 
 /**
@@ -16,7 +15,6 @@ import cz.anty.utils.R;
  */
 public class AutoLoadMultilineAdapter extends MultilineAdapter {
 
-    private Context context;
     private MultilineItem loadingItem;
     private OnLoadNextListListener onLoadNextListListener;
     private int page = 1;
@@ -34,8 +32,7 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter {
     }
 
     private void init(Context context, @Nullable OnLoadNextListListener onLoadNextListListener) {
-        if (AppDataManager.isDebugMode(context)) Log.d("ALMultilineAdapter", "init");
-        this.context = context;
+        Log.d("ALMultilineAdapter", "init");
         this.loadingItem = new TextMultilineItem(context.getString(R.string.wait_text_loading),
                 context.getString(R.string.wait_text_please_wait), R.layout.loading_multi_line_list_item);
         this.onLoadNextListListener = onLoadNextListListener;
@@ -43,15 +40,14 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter {
 
     @Override
     public void clear() {
-        if (AppDataManager.isDebugMode(context)) Log.d("ALMultilineAdapter", "clear");
+        Log.d("ALMultilineAdapter", "clear");
         super.clear();
         page = 1;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("ALMultilineAdapter", "getView: " + position);
+        Log.d("ALMultilineAdapter", "getView: " + position);
         if (super.getCount() == position) {
             page++;
             if (onLoadNextListListener != null)
@@ -62,8 +58,7 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter {
 
     @Override
     public MultilineItem getItem(int position) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("ALMultilineAdapter", "getItem: " + position);
+        Log.d("ALMultilineAdapter", "getItem: " + position);
         if (position == super.getCount()) {
             return loadingItem;
         } else {
@@ -73,30 +68,27 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter {
 
     @Override
     public int getCount() {
-        if (AppDataManager.isDebugMode(context)) Log.d("ALMultilineAdapter", "getCount start");
+        Log.d("ALMultilineAdapter", "getCount start");
         int count = super.getCount();
-        if (AppDataManager.isDebugMode(context))
-            Log.d("ALMultilineAdapter", "getCount orig: " + count + " result: " + (autoLoad ? count + 1 : count));
+        Log.d("ALMultilineAdapter", "getCount orig: " + count + " result: " + (autoLoad ? count + 1 : count));
         return autoLoad ? count + 1 : count;
     }
 
     @Override
     public void setNotifyOnChange(boolean notifyOnChange) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("ALMultilineAdapter", "setNotifyOnChange: " + notifyOnChange);
+        Log.d("ALMultilineAdapter", "setNotifyOnChange: " + notifyOnChange);
         super.setNotifyOnChange(notifyOnChange);
         this.notifyOnChange = notifyOnChange;
     }
 
     @Override
     public void notifyDataSetChanged() {
-        if (AppDataManager.isDebugMode(context)) Log.d("ALMultilineAdapter", "notifyDataSetChange");
+        Log.d("ALMultilineAdapter", "notifyDataSetChange");
         super.notifyDataSetChanged();
     }
 
     public void setAutoLoad(boolean autoLoad) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("ALMultilineAdapter", "setAutoLoad: " + autoLoad);
+        Log.d("ALMultilineAdapter", "setAutoLoad: " + autoLoad);
         this.autoLoad = autoLoad;
         if (notifyOnChange)
             notifyDataSetChanged();

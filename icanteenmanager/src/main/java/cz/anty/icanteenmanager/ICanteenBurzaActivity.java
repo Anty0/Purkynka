@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
@@ -48,8 +47,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            if (AppDataManager.isDebugMode(ICanteenBurzaActivity.this))
-                Log.d("ICanteenBurzaActivity", "onServiceConnected");
+            Log.d("ICanteenBurzaActivity", "onServiceConnected");
             ICanteenBurzaActivity.this.binder = (ICanteenService.MyBinder) binder;
             refreshThread.startWorker(new Runnable() {
                 @Override
@@ -71,8 +69,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            if (AppDataManager.isDebugMode(ICanteenBurzaActivity.this))
-                Log.d("ICanteenBurzaActivity", "onServiceDisconnected");
+            Log.d("ICanteenBurzaActivity", "onServiceDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
@@ -85,8 +82,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
     };
 
     static void startBurzaChecker(final Context context, final ICanteenService.MyBinder binder) {
-        if (AppDataManager.isDebugMode(context))
-            Log.d("ICanteenBurzaActivity", "startBurzaChecker");
+        Log.d("ICanteenBurzaActivity", "startBurzaChecker");
 
         ScrollView mainScrollView = new ScrollView(context);
 
@@ -306,7 +302,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenBurzaActivity", "onStart");
+        Log.d("ICanteenBurzaActivity", "onStart");
         super.onStart();
         bindService(new Intent(this, ICanteenService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
@@ -314,7 +310,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (AppDataManager.isDebugMode(this)) Log.d("ICanteenBurzaActivity", "onStop");
+        Log.d("ICanteenBurzaActivity", "onStop");
         unbindService(mConnection);
         super.onStop();
     }

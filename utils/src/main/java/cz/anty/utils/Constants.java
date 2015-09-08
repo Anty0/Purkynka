@@ -45,6 +45,7 @@ public class Constants {
     public static final String SETTING_NAME_ADD_LAST_NOTIFY = " LAST_NOTIFY";
 
     public static final String SETTINGS_NAME_MAIN = "MainData";
+    public static final String SETTING_NAME_LANGUAGE = "LANGUAGE";
     public static final String SETTING_NAME_SHOW_SHARE = "SHOW_SHARE";
     public static final String SETTING_NAME_SHOW_DESCRIPTION = "SHOW_DESCRIPTION";
     public static final String SETTING_NAME_FIRST_START = "FIRST_START";
@@ -77,5 +78,6 @@ public class Constants {
     public static final String SETTINGS_NAME_I_CANTEEN = "iCanteenLoginData";
 
     public static final String SETTINGS_NAME_DEBUG = "DEBUGSettingsData";
+    public static final String SETTING_NAME_DATA_SAVE_VERSION = "DATA_SAVE_VERSION";
     public static final String SETTING_NAME_DEBUG_MODE = "DEBUG_MODE";
 }

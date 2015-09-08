@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.wifi.WifiLogin;
 
@@ -20,26 +20,29 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        if (!AppDataManager.isWifiAutoLogin(context) || !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI, context))
+        if (!AppDataManager.isWifiAutoLogin() || !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI))
             return;
 
         final WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
-        if (wifiInfo.getSSID().contains(WifiLogin.WIFI_NAME) &&
-                WifiLogin.tryLogin(AppDataManager.getUsername(AppDataManager.Type.WIFI, context),
-                        AppDataManager.getPassword(AppDataManager.Type.WIFI, context))) {
+        if (wifiInfo == null) return;
+        String SSID = wifiInfo.getSSID();
+        if (SSID == null || !SSID.contains(WifiLogin.WIFI_NAME)) return;
 
-            worker.setPowerManager(context);
-            worker.startWorker(new Runnable() {
-                @Override
-                public void run() {
-                    if (AppDataManager.isWifiWaitLogin(context)) {
-                        try {
-                            Thread.sleep(Constants.WAIT_TIME_WIFI_LOGIN);
-                        } catch (InterruptedException e) {
-                            if (AppDataManager.isDebugMode(context))
-                                Log.d("WifiStateReceiver", "onReceive", e);
-                        }
+        worker.setPowerManager(context);
+        worker.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                if (!WifiLogin.tryLogin(AppDataManager.getUsername(AppDataManager.Type.WIFI),
+                        AppDataManager.getPassword(AppDataManager.Type.WIFI)))
+                    return;
+
+                if (AppDataManager.isWifiWaitLogin()) {
+                    try {
+                        Thread.sleep(Constants.WAIT_TIME_WIFI_LOGIN);
+                    } catch (InterruptedException e) {
+                        Log.d("WifiStateReceiver", "onReceive", e);
                     }
+                }
 
 
                     /*Notification n = new NotificationCompat.Builder(context)
@@ -51,14 +54,14 @@ public class WifiStateReceiver extends BroadcastReceiver {
                                     //.setDefaults(Notification.DEFAULT_ALL)
                                     //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                             .build();*/
-                    new Handler(context.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, context.getString(R.string.toast_text_logged_in_wifi)
-                                    .replace(Constants.STRINGS_CONST_NAME, wifiInfo.getSSID())
-                                    , Toast.LENGTH_LONG).show();
-                        }
-                    });
+                new Handler(context.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, context.getString(R.string.toast_text_logged_in_wifi)
+                                        .replace(Constants.STRINGS_CONST_NAME, wifiInfo.getSSID()),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
                     /*NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(3, n);
                     try {
@@ -67,8 +70,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
                         Log.d(null, null, e);
                     }
                     notificationManager.cancel(3);*/
-                }
-            });
-        }
+            }
+        });
+
     }
 }

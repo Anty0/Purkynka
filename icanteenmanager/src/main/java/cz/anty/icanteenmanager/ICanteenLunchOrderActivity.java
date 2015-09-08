@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +22,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.listItem.MultilineAdapter;
@@ -39,8 +38,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            if (AppDataManager.isDebugMode(ICanteenLunchOrderActivity.this))
-                Log.d("LunchOrderActivity", "onServiceConnected");
+            Log.d("LunchOrderActivity", "onServiceConnected");
             ICanteenLunchOrderActivity.this.binder = (ICanteenService.MyBinder) binder;
             refreshThread.startWorker(new Runnable() {
                 @Override
@@ -62,8 +60,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            if (AppDataManager.isDebugMode(ICanteenLunchOrderActivity.this))
-                Log.d("LunchOrderActivity", "onServiceDisconnected");
+            Log.d("LunchOrderActivity", "onServiceDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
@@ -191,7 +188,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (AppDataManager.isDebugMode(this)) Log.d("LunchOrderActivity", "onStart");
+        Log.d("LunchOrderActivity", "onStart");
         super.onStart();
         bindService(new Intent(this, ICanteenService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
@@ -199,7 +196,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (AppDataManager.isDebugMode(this)) Log.d("LunchOrderActivity", "onStop");
+        Log.d("LunchOrderActivity", "onStop");
         unbindService(mConnection);
         super.onStop();
     }
