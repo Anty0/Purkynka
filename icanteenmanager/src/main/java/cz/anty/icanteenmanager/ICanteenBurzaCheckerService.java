@@ -122,12 +122,13 @@ public class ICanteenBurzaCheckerService extends Service {
 
         startForeground(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA, n);
 
+        boolean completed = false;
         while (!Thread.interrupted() && binder != null) {
             try {
-                binder.refreshBurza();
-                for (BurzaLunch lunch : binder.getBurza())
+                for (BurzaLunch lunch : binder.getBurza(binder.refreshBurza()))
                     if (selector.isSelected(lunch)) {
                         binder.orderBurzaLunch(lunch);
+                        completed = true;
                         Thread.currentThread().interrupt();
                         break;
                     }
@@ -138,10 +139,10 @@ public class ICanteenBurzaCheckerService extends Service {
 
         stopForeground(true);
 
+        boolean successfully = false;
         if (binder != null) {
-            binder.refreshMonth();
             try {
-                for (MonthLunchDay lunchDay : binder.getMonth()) {
+                for (MonthLunchDay lunchDay : binder.getMonth(binder.refreshMonth())) {
                     if (selector.isSelected(lunchDay)
                             && lunchDay.getOrderedLunch() != null) {
                         Notification n1 = new NotificationCompat.Builder(this)
@@ -153,6 +154,7 @@ public class ICanteenBurzaCheckerService extends Service {
                                 .build();
 
                         notificationManager.notify(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA_RESULT, n1);
+                        successfully = true;
                         break;
                     }
                 }
@@ -161,7 +163,8 @@ public class ICanteenBurzaCheckerService extends Service {
             }
         }
 
-        stopSelf();
+        if (!completed || successfully) stopSelf();
+        else burzaChecker(selector);
     }
 
     @Override

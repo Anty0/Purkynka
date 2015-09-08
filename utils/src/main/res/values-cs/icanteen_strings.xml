@@ -15,7 +15,7 @@
     <string name="notify_title_burza_checker_running">Hlídač BURZY běží</string>
     <string name="notify_text_burza_checker_running">Klikněte pro ukončení</string>
     <string name="notify_title_burza_checker_completed">Požadavek na objednávku úspěšně odeslán</string>
-    <string name="notify_text_burza_checker_completed">Prosím zkontrolujte, jestli proběhlo objednání úspěšně na webové stránce iCanteen</string>
+    <string name="notify_text_burza_checker_completed">Prosím zkontrolujte, jestli proběhlo objednání úspěšně.</string>
 
     <string name="notify_title_select_to_watch">Zvolte co hlídat</string>
     <string name="text_view_text_date_to_watch">Zvolte hlídané DATUM:</string>

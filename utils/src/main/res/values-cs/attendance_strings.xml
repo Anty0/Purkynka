@@ -24,8 +24,8 @@
     <string name="dialog_text_attendance_stop_tracking">Opravdu si přejete odebrat "[NAME]" ze sledovaných?</string>
     <string name="dialog_text_attendance_can_not_start_tracking">Pokud chcete začít někoho sledovat, musíte být (z důvodů bezpečnosti) nejprve přihlášený do Správce SAS.</string>
 
-    <string name="notify_text_tracked_is_in_school">[NAME] právě přišel do školy</string>
-    <string name="notify_text_tracked_is_in_not_school">[NAME] právě opustil školu</string>
+    <string name="notify_text_tracked_is_in_school">[NAME] přišel do školy</string>
+    <string name="notify_text_tracked_is_in_not_school">[NAME] opustil školu</string>
 
     <string name="check_box_text_alert_tracked">Zobrazit upozornění, když sledovaný člověk opustí nebo příjde do školy. (může zvýšit spotřebu energie)</string>
 </resources>

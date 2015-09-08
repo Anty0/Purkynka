@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v7.app.NotificationCompat;
 
 import java.io.IOException;
@@ -98,6 +99,6 @@ public class UpdateReceiver extends BroadcastReceiver {
                     Log.d("UpdateReceiver", "onReceive", e);
                 }
             }
-        });
+        }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
     }
 }

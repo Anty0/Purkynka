@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
@@ -101,6 +102,6 @@ public class TrackingReceiver extends BroadcastReceiver {
             public void run() {
                 refreshTrackingMans(context, null, true);
             }
-        });
+        }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
     }
 }

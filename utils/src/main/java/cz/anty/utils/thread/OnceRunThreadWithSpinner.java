@@ -79,7 +79,7 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
         }
 
         try {
-            super.start(thread);
+            super.start(thread, null);
         } finally {
             if (message != null) {
                 synchronized (messages) {

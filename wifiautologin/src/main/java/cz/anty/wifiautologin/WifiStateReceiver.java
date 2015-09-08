@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.widget.Toast;
 
@@ -25,17 +26,13 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
         final WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         if (wifiInfo == null) return;
-        String SSID = wifiInfo.getSSID();
-        if (SSID == null || !SSID.contains(WifiLogin.WIFI_NAME)) return;
+        String wifiSSID = wifiInfo.getSSID();
+        if (wifiSSID == null || !wifiSSID.contains(WifiLogin.WIFI_NAME)) return;
 
         worker.setPowerManager(context);
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                if (!WifiLogin.tryLogin(AppDataManager.getUsername(AppDataManager.Type.WIFI),
-                        AppDataManager.getPassword(AppDataManager.Type.WIFI)))
-                    return;
-
                 if (AppDataManager.isWifiWaitLogin()) {
                     try {
                         Thread.sleep(Constants.WAIT_TIME_WIFI_LOGIN);
@@ -43,6 +40,10 @@ public class WifiStateReceiver extends BroadcastReceiver {
                         Log.d("WifiStateReceiver", "onReceive", e);
                     }
                 }
+
+                if (!WifiLogin.tryLogin(AppDataManager.getUsername(AppDataManager.Type.WIFI),
+                        AppDataManager.getPassword(AppDataManager.Type.WIFI)))
+                    return;
 
 
                     /*Notification n = new NotificationCompat.Builder(context)
@@ -71,7 +72,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     }
                     notificationManager.cancel(3);*/
             }
-        });
+        }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
 
     }
 }

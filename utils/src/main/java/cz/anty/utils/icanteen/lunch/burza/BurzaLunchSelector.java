@@ -1,9 +1,9 @@
 package cz.anty.utils.icanteen.lunch.burza;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class BurzaLunchSelector {
     private final BurzaLunch.LunchNumber[] lunchNumbers;
     private final Date date;
 
-    public BurzaLunchSelector(@Nullable BurzaLunch.LunchNumber[] lunchNumbers, @NonNull Date date) {
+    public BurzaLunchSelector(@NonNull BurzaLunch.LunchNumber[] lunchNumbers, @NonNull Date date) {
         this.lunchNumbers = lunchNumbers;
         this.date = date;
     }
@@ -55,17 +55,23 @@ public class BurzaLunchSelector {
     }
 
     private boolean checkLunchNumber(BurzaLunch.LunchNumber lunchNumber) {
-        if (this.lunchNumbers != null)
-            for (BurzaLunch.LunchNumber lunchNumber1 : this.lunchNumbers) {
-                if (lunchNumber1.equals(lunchNumber)) return true;
-            }
+        for (BurzaLunch.LunchNumber lunchNumber1 : this.lunchNumbers) {
+            if (lunchNumber1.equals(lunchNumber)) return true;
+        }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) || o instanceof BurzaLunchSelector
+                && date.equals(((BurzaLunchSelector) o).date)
+                && Arrays.equals(lunchNumbers, ((BurzaLunchSelector) o).lunchNumbers);
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        if (lunchNumbers != null && lunchNumbers.length > 0) {
+        if (lunchNumbers.length > 0) {
             builder.append(lunchNumbers[0]);
             for (int i = 1; i < lunchNumbers.length; i++)
                 builder.append(LUNCH_SPLIT_VALUE).append(lunchNumbers[i]);

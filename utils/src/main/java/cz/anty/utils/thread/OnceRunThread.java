@@ -1,6 +1,8 @@
 package cz.anty.utils.thread;
 
+import android.content.BroadcastReceiver.PendingResult;
 import android.content.Context;
+import android.os.Build;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,11 +51,15 @@ public class OnceRunThread {
         }
     }
 
-    public Thread startWorker(final Runnable runnable) {
-        return startWorker(new Thread(runnable));
+    public Thread startWorker(Runnable runnable) {
+        return startWorker(new Thread(runnable), null);
     }
 
-    public Thread startWorker(@NonNull final Thread thread) {
+    public Thread startWorker(Runnable runnable, @Nullable PendingResult broadcastResult) {
+        return startWorker(new Thread(runnable), broadcastResult);
+    }
+
+    public Thread startWorker(@NonNull final Thread thread, @Nullable final PendingResult broadcastResult) {
         Thread.State state = thread.getState();
         if (state != Thread.State.NEW && state != Thread.State.RUNNABLE)
             throw new IllegalStateException("Thread must by NEW or RUNNABLE");
@@ -61,7 +67,7 @@ public class OnceRunThread {
             @Override
             public void run() {
                 try {
-                    start(thread);
+                    start(thread, broadcastResult);
                 } catch (InterruptedException ignored) {
                 }
             }
@@ -69,7 +75,7 @@ public class OnceRunThread {
         return thread;
     }
 
-    void start(Thread thread) throws InterruptedException {
+    void start(Thread thread, @Nullable PendingResult broadcastResult) throws InterruptedException {
         //waitToWorkerStop();
         synchronized (waitingThreadsLock) {
             waitingThreads++;
@@ -89,6 +95,9 @@ public class OnceRunThread {
             if (wakeLock != null)
                 wakeLock.release();
         }
+        if (broadcastResult != null
+                && Build.VERSION.SDK_INT >= 11)
+            broadcastResult.finish();
     }
 
     public int getWaitingThreadsLength() {

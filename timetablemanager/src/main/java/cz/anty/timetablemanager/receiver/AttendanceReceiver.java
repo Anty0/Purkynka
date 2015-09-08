@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import java.io.IOException;
@@ -102,7 +103,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         Log.d("AttendanceReceiver", "testSupplementation", e);
                     }
                 }
-            });
+            }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
         }
     }
 }

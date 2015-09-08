@@ -23,11 +23,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
@@ -202,15 +203,15 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                         if (lunchCheckBox3.isChecked())
                             lunchNumbers.add(BurzaLunch.LunchNumber.LUNCH_3);
 
-                        DecimalFormat format = new DecimalFormat("##");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy", Locale.getDefault());
                         try {
                             if (binder == null)
                                 Toast.makeText(context, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
                             else
                                 binder.startBurzaChecker(
                                         new BurzaLunchSelector(lunchNumbers.toArray(new BurzaLunch.LunchNumber[lunchNumbers.size()]),
-                                                BurzaLunch.DATE_FORMAT.parse(format.format(datePicker.getDayOfMonth()) + "."
-                                                        + format.format(datePicker.getMonth()) + "." + datePicker.getYear()))
+                                                BurzaLunch.DATE_FORMAT.parse(datePicker.getDayOfMonth() + "."
+                                                        + datePicker.getMonth() + "." + datePicker.getYear()))
                                 );
                         } catch (ParseException e) {
                             Toast.makeText(context, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();

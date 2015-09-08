@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import cz.anty.utils.Log;
+
 /**
  * Created by anty on 8.6.15.
  *
@@ -50,7 +52,11 @@ public class Marks {
         }
 
         for (Element mark : elementMarks) {
-            marks.add(parseMark(mark));
+            try {
+                marks.add(parseMark(mark));
+            } catch (IllegalArgumentException e) {
+                Log.d("Marks", "parseMarks", e);
+            }
         }
         return marks;
     }

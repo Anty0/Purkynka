@@ -259,13 +259,23 @@ public class ICanteenService extends Service {
             );
         }
 
-        public List<BurzaLunch> getBurza() throws InterruptedException {
-            waitToWorkerStop();
+        public List<BurzaLunch> getBurza(Thread refreshTread) throws InterruptedException {
+            worker.waitToWorkerStop(refreshTread);
             return mBurzaLunchList;
         }
 
+        public List<BurzaLunch> getBurza() throws InterruptedException {
+            worker.waitToWorkerStop();
+            return mBurzaLunchList;
+        }
+
+        public List<MonthLunchDay> getMonth(Thread refreshTread) throws InterruptedException {
+            worker.waitToWorkerStop(refreshTread);
+            return mMonthLunchList;
+        }
+
         public List<MonthLunchDay> getMonth() throws InterruptedException {
-            waitToWorkerStop();
+            worker.waitToWorkerStop();
             return mMonthLunchList;
         }
     }

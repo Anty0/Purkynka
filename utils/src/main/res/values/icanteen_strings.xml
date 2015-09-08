@@ -15,7 +15,7 @@
     <string name="notify_title_burza_checker_running">Burza watcher running</string>
     <string name="notify_text_burza_checker_running">Click to stop</string>
     <string name="notify_title_burza_checker_completed">Order request for your lunch successfully send to burza</string>
-    <string name="notify_text_burza_checker_completed">Please check, if you have your lunch on iCanteen web page</string>
+    <string name="notify_text_burza_checker_completed">Please check, if you have your lunch.</string>
 
     <string name="notify_title_select_to_watch">Select what to watch</string>
     <string name="text_view_text_date_to_watch">Set DATE to watch:</string>
