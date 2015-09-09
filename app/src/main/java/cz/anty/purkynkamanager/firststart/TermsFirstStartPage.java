@@ -11,7 +11,9 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import cz.anty.purkynkamanager.R;
+import cz.anty.utils.Constants;
 import cz.anty.utils.FirstStartPage;
+import cz.anty.utils.Log;
 import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.update.UpdateConnector;
 
@@ -23,6 +25,7 @@ import cz.anty.utils.update.UpdateConnector;
 public class TermsFirstStartPage extends FirstStartPage {
 
     private final OnceRunThread worker;
+    private Integer latestCode = null;
 
     public TermsFirstStartPage(Context context) {
         super(context);
@@ -31,7 +34,15 @@ public class TermsFirstStartPage extends FirstStartPage {
 
     @Override
     public boolean showThisPage() {
-        return true;
+        try {
+            latestCode = UpdateConnector.getLatestTermsVersionCode();
+            return getContext().getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                    .getInt(Constants.SETTING_NAME_LATEST_TERMS_CODE, -1) != latestCode;
+        } catch (IOException | NumberFormatException e) {
+            Log.d(getClass().getSimpleName(), "showThisPage", e);
+            latestCode = null;
+            return true;
+        }
     }
 
     @Override
@@ -77,10 +88,17 @@ public class TermsFirstStartPage extends FirstStartPage {
                 boolean error = false;
                 try {
                     terms = UpdateConnector.getLatestTerms(context.getString(R.string.language));
+                    if (terms.contains("<html>"))
+                        throw new IOException("Wrong page loaded");
                 } catch (IOException e) {
+                    Log.d(getClass().getSimpleName(), "updateTerms", e);
                     terms = context.getString(R.string.text_terms);
                     error = true;
                 }
+
+                if (!error && latestCode == null)
+                    showThisPage();
+
                 final String finalTerms = terms;
                 final boolean finalError = error;
                 new Handler(context.getMainLooper()).post(new Runnable() {
@@ -114,6 +132,9 @@ public class TermsFirstStartPage extends FirstStartPage {
 
     @Override
     public boolean doFinish() {
+        if (latestCode != null)
+            getContext().getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                    .edit().putInt(Constants.SETTING_NAME_LATEST_TERMS_CODE, latestCode).apply();
         return true;
     }
 }

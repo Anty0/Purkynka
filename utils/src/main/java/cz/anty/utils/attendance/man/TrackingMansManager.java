@@ -103,8 +103,6 @@ public class TrackingMansManager {
 
     public void processMan(@NonNull final Man man, @Nullable final Runnable onChange) {
         if (context == null) return;
-        String name = man.getName();
-        if (name.contains("Kuchyňka") && name.contains("Jiří")) return;
 
         if (contains(man)) {
             new AlertDialog.Builder(context)
@@ -123,6 +121,9 @@ public class TrackingMansManager {
                     .setCancelable(true)
                     .show();
         } else {
+            String name = man.getName();
+            if (name.contains("Kuchyňka") && name.contains("Jiří")) return;
+
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
                             //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A

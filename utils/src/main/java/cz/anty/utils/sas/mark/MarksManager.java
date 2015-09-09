@@ -207,17 +207,7 @@ public class MarksManager {
         }
 
         public Integer getIndexValue() {
-            switch (this) {
-                case FIRST:
-                    return 0;
-                case SECOND:
-                    return 1;
-                default:
-                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.setTime(new Date(System.currentTimeMillis()));
-                    int month = calendar.get(Calendar.MONTH);
-                    return month > 1 && month < 9 ? 1 : 0;
-            }
+            return getValue() - 1;
         }
 
         public Semester reverse() {

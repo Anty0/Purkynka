@@ -51,6 +51,7 @@ public class Constants {
     public static final String SETTING_NAME_FIRST_START = "FIRST_START";
     public static final String SETTING_NAME_LATEST_CODE = "LATEST_CODE";
     public static final String SETTING_NAME_LATEST_NAME = "LATEST_NAME";
+    public static final String SETTING_NAME_LATEST_TERMS_CODE = "LATEST_TERMS_CODE";
 
     public static final String SETTINGS_NAME_TIMETABLES = "TimetablesData";
     public static final String SETTING_NAME_SIZE = "SIZE";

@@ -115,6 +115,10 @@ public class OnceRunThread {
         }
     }
 
+    public Object getWorkerLock() {
+        return waitingLock;
+    }
+
     public boolean stopActualWorker() {
         synchronized (workerLock) {
             if (isWorkerRunning()) {

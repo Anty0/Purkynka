@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     UpdateReceiver.checkUpdate(MainActivity.this);
                 } catch (IOException | NumberFormatException e) {
-                    Log.d("MainActivity", "checkUpdate", e);
+                    Log.d(getClass().getSimpleName(), "checkUpdate", e);
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -93,22 +93,6 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     })
                                     .show();
-
-                            /*long deferTime = UpdateReceiver.getDeferTime(MainActivity.this);
-                            if (deferTime > 0) {
-                                Calendar calendar = Calendar.getInstance();
-                                calendar.setTimeInMillis(deferTime);
-                                builder.setNeutralButton(getString(R.string.notify_but_defer_for) +
-                                        " " + calendar.get(Calendar.HOUR_OF_DAY) +
-                                        getString(R.string.notify_but_hours), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkFirstStart();
-                                    }
-                                });
-                            }*/
-
-                            //builder.show();
                             return;
                         }
                         checkFirstStart();
@@ -149,150 +133,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 return toReturn;
-
-                /*DownloadManager manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                int status;
-
-                boolean pending = true;
-                while (true) {
-                    DownloadManager.Query q = new DownloadManager.Query();
-                    q.setFilterById(id);
-
-                    Cursor cursor = manager.query(q);
-                    cursor.moveToFirst();
-
-                    status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
-
-                    if (pending) {
-                        if (status != DownloadManager.STATUS_PENDING) {
-                            reporter.startShowingProgress();
-                            pending = false;
-                        }
-                    } else {
-                        reporter.setMaxProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)));
-                        reporter.reportProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)));
-                    }
-
-                    if (AppDataManager.isDebugMode(MainActivity.this)) {
-                        Log.d("STATUS", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))));
-                        Log.d("MAX", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))));
-                        Log.d("COMPLETED", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))));
-                    }
-
-                    cursor.close();
-                    if (status == DownloadManager.STATUS_SUCCESSFUL || status == DownloadManager.STATUS_FAILED || Thread.interrupted())
-                        break;
-
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                }*/
-
-                    /*DownloadManager.Query q = new DownloadManager.Query();
-                    q.setFilterById(id);
-
-                    cursor = manager.query(q);
-                    cursor.moveToFirst();
-
-                    while (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) ==
-                            DownloadManager.STATUS_PENDING) {
-                        if (Thread.interrupted()) {
-                            Thread.currentThread().interrupt();
-                            break;
-                        }
-                    }
-
-                    reporter.startShowingProgress();
-
-                    while (true) {
-                        int status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
-                        if (status == DownloadManager.STATUS_SUCCESSFUL ||
-                                status == DownloadManager.STATUS_FAILED ||
-                                Thread.interrupted()) break;
-
-                        reporter.setMaxProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)));
-                        reporter.reportProgress(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)));
-
-                        if (AppDataManager.isDebugMode(MainActivity.this)) {
-                            Log.d("STATUS", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))));
-                            Log.d("MAX", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))));
-                            Log.d("COMPLETED", Integer.toString(cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))));
-                        }
-
-                        try {
-                            Thread.sleep(250);
-                        } catch (InterruptedException e) {
-                            break;
-                        }
-                    }*/
-                /*String toReturn;
-                if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                    //manager.openDownloadedFile(id);
-                    final Intent target = new Intent(Intent.ACTION_VIEW);
-                    target.setData(Uri.parse(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                            + File.separator + filename));
-                    /*target.setDataAndType(Uri.parse(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                            + "/" + filename), "application/vnd.android.package-archive");//
-                    target.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    if (AppDataManager.isDebugMode(MainActivity.this))
-                        Log.v("OPEN_FILE_PATH", getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + File.separator + filename);
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            startActivity(target);
-                        }
-                    });
-
-                    toReturn = getString(R.string.download_successful);
-                } else
-                    toReturn = getString(R.string.download_failed);*/
-
-                //return toReturn;
             }
         }, getString(R.string.wait_text_downloading_update) + "…");
     }
 
     private void checkFirstStart() {
-        if (getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
-                .getInt(Constants.SETTING_NAME_FIRST_START, -1) != BuildConfig.VERSION_CODE) {
-            startActivity(new Intent(this, FirstStartActivity.class));
-            finish();
-            return;
-        }
-        checkShare();
-        /*worker.startWorker(new Runnable() {
+        worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                final SharedPreferences preferences = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
-                if (preferences.getInt(Constants.SETTING_NAME_FIRST_START, -1) != BuildConfig.VERSION_CODE) {
-                    final String terms = getTerms();
+                if (getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
+                        .getInt(Constants.SETTING_NAME_FIRST_START, -1)
+                        != BuildConfig.VERSION_CODE || isNewTerms()) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog)
-                                    .setTitle(R.string.dialog_title_terms)
-                                    .setMessage(terms)
-                                    .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            preferences.edit().putInt(Constants.SETTING_NAME_FIRST_START,
-                                                    BuildConfig.VERSION_CODE).apply();
-                                            init();
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.but_exit, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            finish();
-                                        }
-                                    })
-                                    .setIcon(R.mipmap.ic_launcher)
-                                    .setCancelable(false)
-                                    .show();
+                            startActivity(new Intent(MainActivity.this, FirstStartActivity.class));
+                            finish();
                         }
                     });
                     return;
@@ -300,11 +156,22 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        init();
+                        checkShare();
                     }
                 });
             }
-        }, getString(R.string.wait_text_loading));*/
+        }, getString(R.string.wait_text_loading));
+    }
+
+    private boolean isNewTerms() {
+        try {
+            return getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
+                    .getInt(Constants.SETTING_NAME_LATEST_TERMS_CODE, -1)
+                    != UpdateConnector.getLatestTermsVersionCode();
+        } catch (IOException | NumberFormatException e) {
+            Log.d(getClass().getSimpleName(), "showThisPage", e);
+            return false;
+        }
     }
 
     private void checkShare() {
@@ -320,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                                             .setType("text/plain")
                                             .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                                             .putExtra(Intent.EXTRA_TEXT, getString(R.string.text_extra_text_share)),// TODO: 2.9.15 better share text
-                                    null/*"Share via"*/));
+                                    null));
 
                             preferences.edit().putBoolean(Constants.SETTING_NAME_SHOW_SHARE, false).apply();
                             init();

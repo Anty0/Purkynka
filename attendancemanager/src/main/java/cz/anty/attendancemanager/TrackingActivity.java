@@ -1,9 +1,7 @@
 package cz.anty.attendancemanager;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +13,6 @@ import java.util.Arrays;
 
 import cz.anty.attendancemanager.receiver.TrackingReceiver;
 import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
-import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
@@ -41,57 +38,17 @@ public class TrackingActivity extends AppCompatActivity {
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Man man = adapter.getItem(position) instanceof Man
-                        ? (Man) adapter.getItem(position) : null;
+                MultilineItem item = adapter.getItem(position);
+                final Man man = item instanceof Man
+                        ? (Man) item : null;
                 if (man != null) {
-                    if (mansManager.contains(man)) {
-                        new AlertDialog.Builder(TrackingActivity.this)
-                                .setTitle(man.getName())
-                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
-                                .setMessage(getString(R.string.dialog_text_attendance_stop_tracking)
-                                        .replace(Constants.STRINGS_CONST_NAME, man.getName()))
-                                .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mansManager.remove(man).apply();
-                                        update();
-                                        sendBroadcast(new Intent(TrackingActivity.this, TrackingScheduleReceiver.class));
-                                    }
-                                })
-                                .setNegativeButton(R.string.but_no, null)
-                                .setCancelable(true)
-                                .show();
-                    } else {
-                        new AlertDialog.Builder(TrackingActivity.this)
-                                .setTitle(man.getName())
-                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
-                                .setMessage(getString(R.string.dialog_text_attendance_tracking)
-                                        .replace(Constants.STRINGS_CONST_NAME, man.getName()))
-                                .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        new AlertDialog.Builder(TrackingActivity.this)
-                                                .setTitle(R.string.dialog_title_terms_warning)
-                                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
-                                                .setMessage(getString(R.string.dialog_text_terms_attendance_tracking)
-                                                        .replace(Constants.STRINGS_CONST_NAME, man.getName()))
-                                                .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        mansManager.add(man).apply();
-                                                        update();
-                                                        sendBroadcast(new Intent(TrackingActivity.this, TrackingScheduleReceiver.class));
-                                                    }
-                                                })
-                                                .setNegativeButton(R.string.but_cancel, null)
-                                                .setCancelable(true)
-                                                .show();
-                                    }
-                                })
-                                .setNegativeButton(R.string.but_no, null)
-                                .setCancelable(true)
-                                .show();
-                    }
+                    mansManager.processMan(man, new Runnable() {
+                        @Override
+                        public void run() {
+                            sendBroadcast(new Intent(TrackingActivity.this,
+                                    TrackingScheduleReceiver.class));
+                        }
+                    });
                 }
             }
         });

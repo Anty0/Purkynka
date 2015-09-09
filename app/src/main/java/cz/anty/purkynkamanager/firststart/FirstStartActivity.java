@@ -38,16 +38,17 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                     new WifiFirstStartPage(this),
                     new ICanteenFirstStartPage(this)
             });
-            page = pagesManager.get();
         }
 
-        worker = new OnceRunThreadWithSpinner(this);
-        contentScrollView = (ScrollView) findViewById(R.id.contentScrollView);
-        butSkip = (Button) findViewById(R.id.butSkip);
-        butNext = (Button) findViewById(R.id.butNext);
-        butSkip.setOnClickListener(this);
-        butNext.setOnClickListener(this);
-        updateState();
+        if (validatePage(pagesManager.get())) {
+            worker = new OnceRunThreadWithSpinner(this);
+            contentScrollView = (ScrollView) findViewById(R.id.contentScrollView);
+            butSkip = (Button) findViewById(R.id.butSkip);
+            butNext = (Button) findViewById(R.id.butNext);
+            butSkip.setOnClickListener(this);
+            butNext.setOnClickListener(this);
+            updateState();
+        }
     }
 
     @SuppressWarnings("ResourceType")
@@ -103,25 +104,25 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         }
 
         pagesManager.next();
-        page = pagesManager.get();
-        if (page == null) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (validatePage(pagesManager.get()))
+                    updateState();
+            }
+        });
+    }
+
+    private synchronized boolean validatePage(FirstStartPage page) {
+        this.page = page;
+        if (this.page == null) {
             getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                     .edit().putInt(Constants.SETTING_NAME_FIRST_START,
                     BuildConfig.VERSION_CODE).apply();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
-                    finish();
-                }
-            });
-        } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    updateState();
-                }
-            });
+            startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
+            finish();
+            return false;
         }
+        return true;
     }
 }

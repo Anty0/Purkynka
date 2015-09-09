@@ -26,9 +26,9 @@ import cz.anty.utils.thread.OnceRunThread;
 
 public class ICanteenService extends Service {
 
-    private final IBinder mBinder = new MyBinder();
+    private final MyBinder mBinder = new MyBinder();
     private final OnceRunThread worker = new OnceRunThread();
-    private ICanteenManager manager;
+    private ICanteenManager mManager;
     private List<BurzaLunch> mBurzaLunchList = null;
     private List<MonthLunchDay> mMonthLunchList = null;
     private Runnable onBurzaChange = null;
@@ -61,31 +61,32 @@ public class ICanteenService extends Service {
 
     private void initialize() {
         Log.d("ICanteenService", "initialize");
-        if (manager != null && manager.isConnected()) {
-            manager.disconnect();
+        if (mManager != null && mManager.isConnected()) {
+            mManager.disconnect();
         }
 
         if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
-            manager = new ICanteenManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN),
+            mManager = new ICanteenManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN),
                     AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
             try {
-                manager.connect();
-                if (!manager.isLoggedIn()) {
+                mManager.connect();
+                if (!mManager.isLoggedIn()) {
                     throw new WrongLoginDataException();
                 }
+                cancelWrongLoginDataNotification();
             } catch (IOException e) {
-                manager.disconnect();
-                manager = null;
-                if (e instanceof WrongLoginDataException)
+                mManager.disconnect();
+                mManager = null;
+                if (e instanceof WrongLoginDataException) {
                     onWrongLoginData();
-                else cancelWrongLoginDataNotification();
-                stopSelf();
-                return;
+                    stopSelf();
+                    return;
+                }
             }
             refreshBurza();
             refreshMonth();
         } else {
-            manager = null;
+            mManager = null;
             stopSelf();
         }
     }
@@ -113,12 +114,25 @@ public class ICanteenService extends Service {
     @Override
     public void onDestroy() {
         Log.d("ICanteenService", "onDestroy");
-        try {
-            worker.waitToWorkerStop();
-        } catch (InterruptedException e) {
-            Log.d("ICanteenService", "onDestroy", e);
-        }
         AppDataManager.removeOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
+        synchronized (worker.getWorkerLock()) {
+            try {
+                worker.waitToWorkerStop();
+            } catch (InterruptedException e) {
+                Log.d("ICanteenService", "onDestroy", e);
+            }
+
+            if (mManager != null) {
+                mManager.disconnect();
+                mManager = null;
+            }
+            mBurzaLunchList = null;
+            mMonthLunchList = null;
+            if (onBurzaChange != null)
+                onBurzaChange.run();
+            if (onMonthChange != null)
+                onMonthChange.run();
+        }
         super.onDestroy();
     }
 
@@ -126,8 +140,9 @@ public class ICanteenService extends Service {
         Log.d("ICanteenService", "refreshBurza startStage: " + mBurzaLunchList);
         try {
             List<BurzaLunch> burzaLunchList = mBurzaLunchList;
-            mBurzaLunchList = manager.getBurza();
-            if (!listEquals(mBurzaLunchList, burzaLunchList) && onBurzaChange != null)
+            mBurzaLunchList = mManager != null ? mManager.getBurza() : mBurzaLunchList;
+            if (onBurzaChange != null && (mBurzaLunchList != null
+                    ? mBurzaLunchList.equals(burzaLunchList) : burzaLunchList != null))
                 onBurzaChange.run();
             Log.d("ICanteenService", "refreshBurza finalStage: " + mBurzaLunchList);
             return true;
@@ -143,8 +158,9 @@ public class ICanteenService extends Service {
         Log.d("ICanteenService", "refreshMonth startStage: " + mMonthLunchList);
         try {
             List<MonthLunchDay> monthLunchList = mMonthLunchList;
-            mMonthLunchList = manager.getMonth();
-            if (!listEquals(mMonthLunchList, monthLunchList) && onMonthChange != null)
+            mMonthLunchList = mManager != null ? mManager.getMonth() : mMonthLunchList;
+            if (onMonthChange != null && (mMonthLunchList != null
+                    ? mMonthLunchList.equals(monthLunchList) : monthLunchList != null))
                 onMonthChange.run();
             Log.d("ICanteenService", "refreshMonth finalStage: " + mMonthLunchList);
             return true;
@@ -159,39 +175,31 @@ public class ICanteenService extends Service {
     private boolean orderBurza(BurzaLunch lunch) {
         Log.d("ICanteenService", "orderBurza");
         try {
-            manager.orderBurzaLunch(lunch);
-            return true;
+            if (mManager != null) {
+                mManager.orderBurzaLunch(lunch);
+                return true;
+            }
         } catch (IOException e) {
             Log.d("ICanteenService", "orderBurza", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
-            return false;
         }
+        return false;
     }
 
     private boolean orderMonth(MonthLunch lunch) {
         Log.d("ICanteenService", "orderMonth");
         try {
-            manager.orderMonthLunch(lunch);
-            return true;
+            if (mManager != null) {
+                mManager.orderMonthLunch(lunch);
+                return true;
+            }
         } catch (IOException e) {
             Log.d("ICanteenService", "orderMonth", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
-            return false;
         }
-    }
-
-    private boolean listEquals(List<?> list, List<?> list1) {
-        Log.d("ICanteenService", "listEquals");
-        if (list == null) return list1 == null;
-        if (list1 == null) return false;
-        if (list.size() != list1.size()) return false;
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            if (!list.get(i).equals(list1.get(i))) return false;
-        }
-        return true;
+        return false;
     }
 
     @Override

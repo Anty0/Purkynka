@@ -28,10 +28,11 @@ public class UpdateConnector {
     private static final String LATEST_VERSION_NAME_URL_ADD = "latestVersionName";
     private static final String LATEST_APK_URL_ADD = "latest.apk";
     private static final String LATEST_TERMS_URL_ADD = "latestTerms";
+    private static final String LATEST_TERMS_VERSION_CODE_URL_ADD = "latestTermsVersionCode";
 
     public static Integer getLatestVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
-                .execute().body()/*.replace("\n", "")*/.trim());
+                .execute().body().trim());
         Log.d("UpdateConnector", "getLatestVersionCode versionCode:" + toReturn);
         return toReturn;
     }
@@ -43,15 +44,17 @@ public class UpdateConnector {
         return toReturn;
     }
 
+    public static Integer getLatestTermsVersionCode() throws IOException, NumberFormatException {
+        Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_TERMS_VERSION_CODE_URL_ADD)
+                .execute().body().trim());
+        Log.d("UpdateConnector", "getLatestTermsVersionCode versionCode:" + toReturn);
+        return toReturn;
+    }
+
     public static String getLatestTerms(String languageShortcut) throws IOException {
-        /*if (terms.charAt(terms.length() - 1) == '\n') {
-            terms = terms.substring(0, terms.length() - 1);
-            /*char[] chars = terms.toCharArray();
-            chars[chars.length - 1] = ' ';
-            terms = new String(chars);/
-        }*/
         return Jsoup.connect(DEFAULT_URL + LATEST_TERMS_URL_ADD
-                + languageShortcut.toUpperCase(Locale.ENGLISH)).execute().body().trim();
+                + languageShortcut.toUpperCase(Locale.ENGLISH))
+                .execute().body().trim();
     }
 
     public static String downloadUpdate(Context context, ProgressReporter reporter, String filename) throws IOException {
