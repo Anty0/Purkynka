@@ -68,7 +68,7 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
                     synchronized (progressDialog) {
                         progressDialog.setMessage(getMessage());
                         synchronized (depthLock) {
-                            if (depth == 0)
+                            if (depth == 0 && !activity.isDestroyed())
                                 progressDialog.show();
 
                             depth++;

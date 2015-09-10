@@ -14,6 +14,12 @@ class PagesManager {
 
     PagesManager(FirstStartPage[] firstStartPages) {
         this.firstStartPages = firstStartPages;
+        for (FirstStartPage page : firstStartPages) {
+            if (!(page instanceof WelcomeFirstStartPage) && page.showThisPage()) {
+                return;
+            }
+        }
+        page = firstStartPages.length;
     }
 
     public void next() {
