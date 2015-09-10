@@ -14,6 +14,7 @@ import cz.anty.purkynkamanager.R;
 import cz.anty.sasmanager.SASFirstStartPage;
 import cz.anty.utils.Constants;
 import cz.anty.utils.FirstStartPage;
+import cz.anty.utils.Log;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.wifiautologin.WifiFirstStartPage;
 
@@ -26,7 +27,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
     private FirstStartPage page;
 
     @Override
-    protected synchronized void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_start);
         worker = new OnceRunThreadWithSpinner(this);
@@ -34,29 +35,58 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         butSkip = (Button) findViewById(R.id.butSkip);
         butNext = (Button) findViewById(R.id.butNext);
 
+        Thread initThread = null;
         if (pagesManager == null) {
-            pagesManager = new PagesManager(new FirstStartPage[]{
-                    new WelcomeFirstStartPage(this),
-                    new TermsFirstStartPage(this),
-                    new SASFirstStartPage(this),
-                    new WifiFirstStartPage(this),
-                    new ICanteenFirstStartPage(this)
-            });
+            final FirstStartPage[] firstStartPages = new FirstStartPage[]{
+                    new WelcomeFirstStartPage(FirstStartActivity.this),
+                    new TermsFirstStartPage(FirstStartActivity.this),
+                    new SASFirstStartPage(FirstStartActivity.this),
+                    new WifiFirstStartPage(FirstStartActivity.this),
+                    new ICanteenFirstStartPage(FirstStartActivity.this)
+            };
+            initThread = worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    pagesManager = new PagesManager(firstStartPages);
+                }
+            }, getString(R.string.wait_text_please_wait));
         }
 
-        if (validatePage(pagesManager.get())) {
-            butSkip.setOnClickListener(this);
-            butNext.setOnClickListener(this);
-            updateState();
-        }
+        final Thread finalInitThread = initThread;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (finalInitThread != null)
+                        worker.waitToWorkerStop(finalInitThread);
+                    else worker.waitToWorkerStop();
+                } catch (InterruptedException e) {
+                    Log.d(FirstStartActivity.this.getClass()
+                            .getSimpleName(), "onCreate", e);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        synchronized (worker.getWorkerLock()) {
+                            if (validatePage(pagesManager.get())) {
+                                butSkip.setOnClickListener(FirstStartActivity.this);
+                                butNext.setOnClickListener(FirstStartActivity.this);
+                                updateState();
+                            }
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
     @SuppressWarnings("ResourceType")
-    private synchronized void updateState() {
-        setTitle(page.getTitle());
+    private void updateState() {
+        synchronized (worker.getWorkerLock()) {
+            setTitle(page.getTitle());
 
-        contentScrollView.removeAllViews();
-        contentScrollView.addView(page.getView(contentScrollView));
+            contentScrollView.removeAllViews();
+            contentScrollView.addView(page.getView(contentScrollView));
 
         /*if (Build.VERSION.SDK_INT >= 12) {
             ViewPropertyAnimator animator = contentScrollView.animate().scaleX(10);
@@ -65,64 +95,75 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
             }
         }*/
 
-        butNext.setText(page.getButNextText());
-        butSkip.setText(page.getButSkipText());
-        butNext.setVisibility(page.getButNextVisibility());
-        butSkip.setVisibility(page.getButSkipVisibility());
+            butNext.setText(page.getButNextText());
+            butSkip.setText(page.getButSkipText());
+            butNext.setVisibility(page.getButNextVisibility());
+            butSkip.setVisibility(page.getButSkipVisibility());
+        }
     }
 
     @Override
-    public synchronized void onClick(View v) {
-        butSkip.setEnabled(false);
-        butNext.setEnabled(false);
-        final int id = v.getId();
-        worker.startWorker(new Runnable() {
-            @Override
-            public void run() {
-                doNext(id);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        butSkip.setEnabled(true);
-                        butNext.setEnabled(true);
+    public void onClick(View v) {
+        synchronized (worker.getWorkerLock()) {
+            butSkip.setEnabled(false);
+            butNext.setEnabled(false);
+            final int id = v.getId();
+            worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    doNext(id);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            synchronized (worker.getWorkerLock()) {
+                                butSkip.setEnabled(true);
+                                butNext.setEnabled(true);
+                            }
+                        }
+                    });
+                }
+            }, getString(R.string.wait_text_please_wait));
+        }
+    }
+
+    private void doNext(int id) {
+        synchronized (worker.getWorkerLock()) {
+            switch (id) {
+                case R.id.butSkip:
+                    if (!page.doSkip())
+                        return;
+                    break;
+                case R.id.butNext:
+                    if (!page.doFinish())
+                        return;
+                    break;
+            }
+
+            pagesManager.next();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (worker.getWorkerLock()) {
+                        if (validatePage(pagesManager.get()))
+                            updateState();
                     }
-                });
-            }
-        }, getString(R.string.wait_text_please_wait));
+                }
+            });
+        }
     }
 
-    private synchronized void doNext(int id) {
-        switch (id) {
-            case R.id.butSkip:
-                if (!page.doSkip())
-                    return;
-                break;
-            case R.id.butNext:
-                if (!page.doFinish())
-                    return;
-                break;
-        }
-
-        pagesManager.next();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (validatePage(pagesManager.get()))
-                    updateState();
+    private boolean validatePage(FirstStartPage page) {
+        synchronized (worker.getWorkerLock()) {
+            this.page = page;
+            if (this.page == null) {
+                getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
+                        .edit().putInt(Constants.SETTING_NAME_FIRST_START,
+                        BuildConfig.VERSION_CODE).apply();
+                startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
+                finish();
+                return false;
             }
-        });
-    }
-
-    private synchronized boolean validatePage(FirstStartPage page) {
-        this.page = page;
-        if (this.page == null) {
-            getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
-                    .edit().putInt(Constants.SETTING_NAME_FIRST_START,
-                    BuildConfig.VERSION_CODE).apply();
-            startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
-            finish();
-            return false;
+            return true;
         }
-        return true;
     }
 }

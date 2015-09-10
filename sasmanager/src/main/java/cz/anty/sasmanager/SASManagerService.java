@@ -141,7 +141,7 @@ public class SASManagerService extends Service {
     private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget) {
         Log.d("SASManagerService", "refreshMarks: force=" + force + " deep=" + deepRefresh + " updateWidget=" + updateWidget);
         if (sasManager == null) return updateWidget;
-        if (System.currentTimeMillis() - getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE)
+        if (!force && System.currentTimeMillis() - getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE)
                 .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) < Constants.WAIT_TIME_SAS_MARKS_REFRESH) {
             setState(State.LOGGED_IN);
             return updateWidget;
@@ -165,8 +165,8 @@ public class SASManagerService extends Service {
                     onMarksChange(semester, numberOfNewMarks);
                     updateWidget = false;
                 }
-                semester = semester.reverse();
-                if (deepRefresh || marks.get(semester).length == 0) {
+                if (deepRefresh) {
+                    semester = semester.reverse();
                     List<Mark> newMarks2 = sasManager.getMarks(semester);
                     //int numberOfNewMarks2 = newMarks2.size() - marks.get(semester).length;
                     marks.clear(semester);

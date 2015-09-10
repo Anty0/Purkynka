@@ -1,6 +1,7 @@
 package cz.anty.utils.thread;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -68,7 +69,8 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
                     synchronized (progressDialog) {
                         progressDialog.setMessage(getMessage());
                         synchronized (depthLock) {
-                            if (depth == 0 && !activity.isDestroyed())
+                            if (depth == 0 && (Build.VERSION.SDK_INT < 17
+                                    || !activity.isDestroyed()))
                                 progressDialog.show();
 
                             depth++;
