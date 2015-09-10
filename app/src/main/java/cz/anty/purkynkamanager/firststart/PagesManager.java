@@ -1,6 +1,7 @@
 package cz.anty.purkynkamanager.firststart;
 
 import cz.anty.utils.FirstStartPage;
+import cz.anty.utils.thread.OnceRunThread;
 
 /**
  * Created by anty on 30.8.15.
@@ -14,6 +15,15 @@ class PagesManager {
 
     PagesManager(FirstStartPage[] firstStartPages) {
         this.firstStartPages = firstStartPages;
+        new OnceRunThread().startWorker(new Runnable() {
+            @Override
+            public void run() {
+                validateStart();
+            }
+        });
+    }
+
+    private synchronized void validateStart() {
         for (FirstStartPage page : firstStartPages) {
             if (!(page instanceof WelcomeFirstStartPage) && page.showThisPage()) {
                 return;
@@ -22,14 +32,14 @@ class PagesManager {
         page = firstStartPages.length;
     }
 
-    public void next() {
+    public synchronized void next() {
         do {
             page++;
         } while (page < firstStartPages.length
                 && !firstStartPages[page].showThisPage());
     }
 
-    public FirstStartPage get() {
+    public synchronized FirstStartPage get() {
         return page < firstStartPages.length ? firstStartPages[page] : null;
     }
 }

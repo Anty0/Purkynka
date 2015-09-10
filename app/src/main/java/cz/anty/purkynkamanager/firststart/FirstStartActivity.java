@@ -29,6 +29,10 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
     protected synchronized void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_start);
+        worker = new OnceRunThreadWithSpinner(this);
+        contentScrollView = (ScrollView) findViewById(R.id.contentScrollView);
+        butSkip = (Button) findViewById(R.id.butSkip);
+        butNext = (Button) findViewById(R.id.butNext);
 
         if (pagesManager == null) {
             pagesManager = new PagesManager(new FirstStartPage[]{
@@ -41,10 +45,6 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         }
 
         if (validatePage(pagesManager.get())) {
-            worker = new OnceRunThreadWithSpinner(this);
-            contentScrollView = (ScrollView) findViewById(R.id.contentScrollView);
-            butSkip = (Button) findViewById(R.id.butSkip);
-            butNext = (Button) findViewById(R.id.butNext);
             butSkip.setOnClickListener(this);
             butNext.setOnClickListener(this);
             updateState();
