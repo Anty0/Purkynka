@@ -35,9 +35,13 @@ public class ICanteenFirstStartPage extends FirstStartPage {
         //((CheckBox) linearLayout.findViewById(R.id.check_box_sas_marks_update)).setChecked(AppDataManager.isSASMarksAutoUpdate(activity));
     }
 
+    public static boolean available() {
+        return !AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN);
+    }
+
     @Override
     public boolean showThisPage() {
-        return !AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN);
+        return available();
     }
 
     @Override

@@ -8,9 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import cz.anty.icanteenmanager.ICanteenFirstStartPage;
 import cz.anty.purkynkamanager.R;
+import cz.anty.sasmanager.SASFirstStartPage;
 import cz.anty.utils.FirstStartPage;
 import cz.anty.utils.settings.AboutActivity;
+import cz.anty.wifiautologin.WifiFirstStartPage;
 
 /**
  * Created by anty on 28.8.15.
@@ -25,7 +28,9 @@ public class WelcomeFirstStartPage extends FirstStartPage {
 
     @Override
     public boolean showThisPage() {
-        return true;
+        return SASFirstStartPage.available()
+                || WifiFirstStartPage.available()
+                || ICanteenFirstStartPage.available();
     }
 
     @Override

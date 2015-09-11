@@ -38,9 +38,13 @@ public class SASFirstStartPage extends FirstStartPage {
         ((CheckBox) linearLayout.findViewById(R.id.check_box_sas_marks_update)).setChecked(AppDataManager.isSASMarksAutoUpdate());
     }
 
+    public static boolean available() {
+        return !AppDataManager.isLoggedIn(AppDataManager.Type.SAS);
+    }
+
     @Override
     public boolean showThisPage() {
-        return !AppDataManager.isLoggedIn(AppDataManager.Type.SAS);
+        return available();
     }
 
     @Override

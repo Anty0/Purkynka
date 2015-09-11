@@ -43,9 +43,13 @@ public class WifiFirstStartPage extends FirstStartPage {
                 .setChecked(AppDataManager.isWifiWaitLogin());
     }
 
+    public static boolean available() {
+        return !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI);
+    }
+
     @Override
     public boolean showThisPage() {
-        return !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI);
+        return available();
     }
 
     @Override

@@ -10,20 +10,11 @@ import cz.anty.utils.FirstStartPage;
 class PagesManager {
 
     private final FirstStartPage[] firstStartPages;
-    private int page = 0;
+    private int page = -1;
 
     PagesManager(FirstStartPage[] firstStartPages) {
         this.firstStartPages = firstStartPages;
-        validateStart();
-    }
-
-    private synchronized void validateStart() {
-        for (FirstStartPage page : firstStartPages) {
-            if (!(page instanceof WelcomeFirstStartPage) && page.showThisPage()) {
-                return;
-            }
-        }
-        page = firstStartPages.length;
+        next();
     }
 
     public synchronized void next() {
