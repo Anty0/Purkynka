@@ -69,11 +69,25 @@ public class Lunches {
                     state = MonthLunch.State.DISABLED_ORDERED;
                 }
 
-                String onClickText = lunchElement.select("a.btn").attr("onClick");
-                int startIndex = onClickText.indexOf("'") + "'".length();
-                String urlAdd = onClickText.substring(startIndex, onClickText.indexOf("'", startIndex));
+                Elements buttons = lunchElement.select("a.btn");
+                String toBurzaUrlAdd = null;
+                MonthLunch.BurzaState burzaState = null;
+                String orderUrlAdd = null;
+                switch (buttons.size()) {
+                    case 2:
+                        String onClickText1 = buttons.get(1).attr("onClick");
+                        int startIndex1 = onClickText1.indexOf("'") + "'".length();
+                        toBurzaUrlAdd = onClickText1.substring(startIndex1, onClickText1.indexOf("'", startIndex1));
+                        burzaState = buttons.get(1).text().contains(MonthLunch.BurzaState.TO_BURZA.toString())
+                                ? MonthLunch.BurzaState.TO_BURZA : MonthLunch.BurzaState.FROM_BURZA;
+                    case 1:
+                        String onClickText = buttons.get(0).attr("onClick");
+                        int startIndex = onClickText.indexOf("'") + "'".length();
+                        orderUrlAdd = onClickText.substring(startIndex, onClickText.indexOf("'", startIndex));
+                        break;
+                }
 
-                monthLunches.add(new MonthLunch(name, urlAdd, state));
+                monthLunches.add(new MonthLunch(name, orderUrlAdd, state, toBurzaUrlAdd, burzaState));
             }
 
             try {

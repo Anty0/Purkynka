@@ -68,16 +68,10 @@ public class ICanteenConnector {
         return page.select("div.login_menu").isEmpty();
     }
 
-    public synchronized void orderBurzaLunch(String urlAdd) throws IOException {
+    public synchronized void orderLunch(String urlAdd) throws IOException {
         Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
         Log.v("ICanteenConnector", "orderBurzaLunch response: " + response.body());
-    }
-
-    public synchronized void orderMonthLunch(String urlAdd) throws IOException {
-        Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
-                .cookies(loginCookies).execute();
-        Log.v("ICanteenConnector", "orderMonthLunch response: " + response.body());
     }
 
     public synchronized Elements getMonthElements() throws IOException {

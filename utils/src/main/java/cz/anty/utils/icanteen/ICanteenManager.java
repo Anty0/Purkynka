@@ -50,7 +50,16 @@ public class ICanteenManager {
 
     public synchronized void orderMonthLunch(MonthLunch lunch) throws IOException {
         if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
-        connector.orderMonthLunch(lunch.getOrderUrlAdd());
+        String urlAdd = lunch.getOrderUrlAdd();
+        if (urlAdd == null) throw new NullPointerException("urlAdd is null");
+        connector.orderLunch(urlAdd);
+    }
+
+    public synchronized void toBurzaMonthLunch(MonthLunch lunch) throws IOException {
+        if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
+        String urlAdd = lunch.getToBurzaUrlAdd();
+        if (urlAdd == null) throw new NullPointerException("urlAdd is null");
+        connector.orderLunch(urlAdd);
     }
 
     public synchronized List<MonthLunchDay> getMonth() throws IOException {
@@ -77,7 +86,7 @@ public class ICanteenManager {
 
     public synchronized void orderBurzaLunch(BurzaLunch lunch) throws IOException {
         if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
-        connector.orderBurzaLunch(lunch.getOrderUrlAdd());
+        connector.orderLunch(lunch.getOrderUrlAdd());
     }
 
     public synchronized List<BurzaLunch> getBurza() throws IOException {

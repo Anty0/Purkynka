@@ -97,14 +97,24 @@ public class Timetable implements MultilineItem {
     }
 
     public synchronized Lesson getNextLesson(int day, int lessonIndex) {
-        int index = lessonIndex + 1;
-        Lesson[] day1 = getDay(day);
-        if (index < day1.length) return day1[index];
+        Lesson toReturn = null;
+        int depth = 0;
+        int maxDepth = DAYS_STRINGS_IDS.length;
+        lessonIndex++;
+        while (toReturn == null && depth < maxDepth) {
+            while (toReturn == null && lessonIndex < MAX_LESSONS) {
+                toReturn = getLesson(day, lessonIndex);
+                lessonIndex++;
+            }
 
-        int newDay = day + 1;
-        day1 = getDay(newDay);
-        if (newDay < day1.length) return day1[0];
-        return getLesson(0, 0);
+            lessonIndex = 0;
+            day++;
+            if (day >= DAYS_STRINGS_IDS.length)
+                day = 0;
+
+            depth++;
+        }
+        return toReturn;
     }
 
     public synchronized Lesson[] getDay(int day) {

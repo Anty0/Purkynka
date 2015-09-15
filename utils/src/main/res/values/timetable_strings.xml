@@ -11,6 +11,8 @@
     <string name="list_item_text_add_timetable">" + ADD new TIMETABLE"</string>
     <string name="list_item_text_click_to_edit">Click to edit</string>
     <string name="list_item_text_lesson">[NAME] in [CLASS]</string>
+    <string name="list_item_text_no_actual_lesson">You are free now :)</string>
+    <string name="list_item_text_no_next_lesson">No next lesson</string>
 
     <string name="dialog_title_new_timetable">New TIMETABLE</string>
     <string name="dialog_title_lesson_info">Lesson info</string>

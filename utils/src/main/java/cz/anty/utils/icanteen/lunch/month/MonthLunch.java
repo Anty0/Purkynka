@@ -1,5 +1,7 @@
 package cz.anty.utils.icanteen.lunch.month;
 
+import android.support.annotation.Nullable;
+
 import java.util.Locale;
 
 /**
@@ -9,25 +11,36 @@ import java.util.Locale;
  */
 public class MonthLunch {
 
-    private final String name, orderUrlAdd;
+    private final String name, orderUrlAdd, toBurzaUrlAdd;
+    private final BurzaState burzaState;
     private final State state;
 
-    public MonthLunch(String name, String orderUrlAdd, State state) {//TODO add map alergeny
+    public MonthLunch(String name, @Nullable String orderUrlAdd, State state, @Nullable String toBurzaUrlAdd, @Nullable BurzaState burzaState) {
         this.name = name;
         this.orderUrlAdd = orderUrlAdd;
         this.state = state;
+        this.toBurzaUrlAdd = toBurzaUrlAdd;
+        this.burzaState = burzaState;
     }
 
     public String getName() {
         return name;
     }
 
+    public String getOrderUrlAdd() {
+        return orderUrlAdd;
+    }
+
     public State getState() {
         return state;
     }
 
-    public String getOrderUrlAdd() {
-        return orderUrlAdd;
+    public String getToBurzaUrlAdd() {
+        return toBurzaUrlAdd;
+    }
+
+    public BurzaState getBurzaState() {
+        return burzaState;
     }
 
     @Override
@@ -44,17 +57,21 @@ public class MonthLunch {
         @Override
         public String toString() {
             return super.toString().toLowerCase(Locale.ENGLISH);
-            /*switch (this) {
-                case UNKNOWN:
-                    return "unknown";
-                case ORDERED:
-                    return "ordered";
-                case DISABLED:
-                    return "disabled";
-                case ENABLED:
-                default:
-                    return "enabled";
-            }*/
+        }
+    }
+
+    public enum BurzaState {
+        TO_BURZA, FROM_BURZA;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case TO_BURZA:
+                    return "do burzy";
+                case FROM_BURZA:
+                    return "z burzy";
+            }
+            return super.toString().toLowerCase(Locale.ENGLISH);
         }
     }
 }

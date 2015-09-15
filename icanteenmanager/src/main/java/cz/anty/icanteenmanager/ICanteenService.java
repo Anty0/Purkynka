@@ -47,7 +47,7 @@ public class ICanteenService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d("ICanteenService", "onCreate");
+        Log.d(getClass().getSimpleName(), "onCreate");
         super.onCreate();
         worker.setPowerManager(this);
         AppDataManager.addOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
@@ -60,7 +60,7 @@ public class ICanteenService extends Service {
     }
 
     private void initialize() {
-        Log.d("ICanteenService", "initialize");
+        Log.d(getClass().getSimpleName(), "initialize");
         if (mManager != null && mManager.isConnected()) {
             mManager.disconnect();
         }
@@ -113,13 +113,13 @@ public class ICanteenService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d("ICanteenService", "onDestroy");
+        Log.d(getClass().getSimpleName(), "onDestroy");
         AppDataManager.removeOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
         synchronized (worker.getWorkerLock()) {
             try {
                 worker.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d("ICanteenService", "onDestroy", e);
+                Log.d(getClass().getSimpleName(), "onDestroy", e);
             }
 
             if (mManager != null) {
@@ -137,17 +137,17 @@ public class ICanteenService extends Service {
     }
 
     private boolean refreshBurza() {
-        Log.d("ICanteenService", "refreshBurza startStage: " + mBurzaLunchList);
+        Log.d(getClass().getSimpleName(), "refreshBurza startStage: " + mBurzaLunchList);
         try {
             List<BurzaLunch> burzaLunchList = mBurzaLunchList;
             mBurzaLunchList = mManager != null ? mManager.getBurza() : mBurzaLunchList;
             if (onBurzaChange != null && !(mBurzaLunchList != null
                     ? mBurzaLunchList.equals(burzaLunchList) : burzaLunchList == null))
                 onBurzaChange.run();
-            Log.d("ICanteenService", "refreshBurza finalStage: " + mBurzaLunchList);
+            Log.d(getClass().getSimpleName(), "refreshBurza finalStage: " + mBurzaLunchList);
             return true;
-        } catch (IOException e) {
-            Log.d("ICanteenService", "refreshBurza", e);
+        } catch (Exception e) {
+            Log.d(getClass().getSimpleName(), "refreshBurza", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
             return false;
@@ -155,17 +155,17 @@ public class ICanteenService extends Service {
     }
 
     private boolean refreshMonth() {
-        Log.d("ICanteenService", "refreshMonth startStage: " + mMonthLunchList);
+        Log.d(getClass().getSimpleName(), "refreshMonth startStage: " + mMonthLunchList);
         try {
             List<MonthLunchDay> monthLunchList = mMonthLunchList;
             mMonthLunchList = mManager != null ? mManager.getMonth() : mMonthLunchList;
             if (onMonthChange != null && !(mMonthLunchList != null
                     ? mMonthLunchList.equals(monthLunchList) : monthLunchList == null))
                 onMonthChange.run();
-            Log.d("ICanteenService", "refreshMonth finalStage: " + mMonthLunchList);
+            Log.d(getClass().getSimpleName(), "refreshMonth finalStage: " + mMonthLunchList);
             return true;
-        } catch (IOException e) {
-            Log.d("ICanteenService", "refreshMonth", e);
+        } catch (Exception e) {
+            Log.d(getClass().getSimpleName(), "refreshMonth", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
             return false;
@@ -173,14 +173,14 @@ public class ICanteenService extends Service {
     }
 
     private boolean orderBurza(BurzaLunch lunch) {
-        Log.d("ICanteenService", "orderBurza");
+        Log.d(getClass().getSimpleName(), "orderBurza");
         try {
             if (mManager != null) {
                 mManager.orderBurzaLunch(lunch);
                 return true;
             }
-        } catch (IOException e) {
-            Log.d("ICanteenService", "orderBurza", e);
+        } catch (Exception e) {
+            Log.d(getClass().getSimpleName(), "orderBurza", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
         }
@@ -188,14 +188,29 @@ public class ICanteenService extends Service {
     }
 
     private boolean orderMonth(MonthLunch lunch) {
-        Log.d("ICanteenService", "orderMonth");
+        Log.d(getClass().getSimpleName(), "orderMonth");
         try {
             if (mManager != null) {
                 mManager.orderMonthLunch(lunch);
                 return true;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.d("ICanteenService", "orderMonth", e);
+            if (e instanceof WrongLoginDataException)
+                onWrongLoginData();
+        }
+        return false;
+    }
+
+    private boolean toBurzaMonth(MonthLunch lunch) {
+        Log.d(getClass().getSimpleName(), "toBurzaMonth");
+        try {
+            if (mManager != null) {
+                mManager.toBurzaMonthLunch(lunch);
+                return true;
+            }
+        } catch (Exception e) {
+            Log.d(getClass().getSimpleName(), "toBurzaMonth", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
         }
@@ -204,7 +219,7 @@ public class ICanteenService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d("ICanteenService", "onBind");
+        Log.d(getClass().getSimpleName(), "onBind");
         return mBinder;
     }
 
@@ -255,6 +270,16 @@ public class ICanteenService extends Service {
                 @Override
                 public void run() {
                     orderMonth(lunch);
+                    ICanteenService.this.refreshMonth();
+                }
+            });
+        }
+
+        public Thread toBurzaMonthLunch(final MonthLunch lunch) {
+            return worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    toBurzaMonth(lunch);
                     ICanteenService.this.refreshMonth();
                 }
             });

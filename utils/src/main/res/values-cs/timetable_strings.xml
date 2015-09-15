@@ -11,6 +11,8 @@
     <string name="list_item_text_add_timetable">" + PŘIDAT nový ROZVRH hodin"</string>
     <string name="list_item_text_click_to_edit">Klikněte pro  změnu</string>
     <string name="list_item_text_lesson">[NAME] v [CLASS]</string>
+    <string name="list_item_text_no_actual_lesson">Jsi volný :)</string>
+    <string name="list_item_text_no_next_lesson">Žádná další hodina</string>
 
     <string name="dialog_title_new_timetable">Nový ROZVRH hodin</string>
     <string name="dialog_title_lesson_info">Informace o předmětu</string>

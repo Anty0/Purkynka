@@ -15,6 +15,7 @@ import java.util.List;
 
 import cz.anty.timetablemanager.R;
 import cz.anty.timetablemanager.TimetableSelectActivity;
+import cz.anty.timetablemanager.widget.TimetableLessonWidget;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
@@ -37,6 +38,8 @@ public class AttendanceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(getClass().getSimpleName(), "onReceive");
+        TimetableLessonWidget.callUpdate(context);
+
         int day = intent.getIntExtra(DAY, -1);
         int lessonIndex = intent.getIntExtra(LESSON_INDEX, -1);
         if (day != -1 && lessonIndex != -1) {

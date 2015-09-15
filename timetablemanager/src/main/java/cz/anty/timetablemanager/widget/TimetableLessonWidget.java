@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -72,10 +73,26 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                     if (minuteTime < requestedTime) {
                         Lesson actualLesson = timetable.getLesson(day - 2, i);
                         Lesson nextLesson = timetable.getNextLesson(day - 2, i);
-                        remoteViews.setTextViewText(R.id.widget_text_view_title, actualLesson.getTitle(context, i));
-                        remoteViews.setTextViewText(R.id.widget_text_view_text, actualLesson.getText(context, i));
-                        remoteViews.setTextViewText(R.id.text_view_title, nextLesson.getTitle(context, i + 1).substring(3));
-                        remoteViews.setTextViewText(R.id.text_view_text, nextLesson.getText(context, i + 1).substring(3));
+
+                        if (actualLesson == null) {
+                            remoteViews.setTextViewText(R.id.widget_text_view_title, context.getString(R.string.list_item_text_no_actual_lesson));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                                remoteViews.setViewPadding(R.id.widget_text_view_title, 1, 8, 1, 8);
+                            remoteViews.setViewVisibility(R.id.widget_text_view_text, View.GONE);
+                        } else {
+                            remoteViews.setTextViewText(R.id.widget_text_view_title, actualLesson.getTitle(context, i));
+                            remoteViews.setTextViewText(R.id.widget_text_view_text, actualLesson.getText(context, i));
+                        }
+
+                        if (nextLesson == null) {
+                            remoteViews.setTextViewText(R.id.text_view_title, context.getString(R.string.list_item_text_no_next_lesson));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                                remoteViews.setViewPadding(R.id.text_view_title, 1, 8, 1, 8);
+                            remoteViews.setViewVisibility(R.id.text_view_text, View.GONE);
+                        } else {
+                            remoteViews.setTextViewText(R.id.text_view_title, nextLesson.getTitle(context, i + 1).substring(3));
+                            remoteViews.setTextViewText(R.id.text_view_text, nextLesson.getText(context, i + 1).substring(3));
+                        }
                         return;
                     }
                 }
