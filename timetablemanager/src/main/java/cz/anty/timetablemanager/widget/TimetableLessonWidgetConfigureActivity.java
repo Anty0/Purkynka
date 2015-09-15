@@ -21,7 +21,7 @@ public class TimetableLessonWidgetConfigureActivity extends Activity {
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Spinner mTimetableSpinner;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = TimetableLessonWidgetConfigureActivity.this;
 

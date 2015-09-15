@@ -203,16 +203,17 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                         if (lunchCheckBox3.isChecked())
                             lunchNumbers.add(BurzaLunch.LunchNumber.LUNCH_3);
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy", Locale.getDefault());
                         try {
                             if (binder == null)
                                 Toast.makeText(context, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
-                            else
+                            else {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy", Locale.getDefault());
                                 binder.startBurzaChecker(
                                         new BurzaLunchSelector(lunchNumbers.toArray(new BurzaLunch.LunchNumber[lunchNumbers.size()]),
-                                                BurzaLunch.DATE_FORMAT.parse(datePicker.getDayOfMonth() + "."
+                                                dateFormat.parse(datePicker.getDayOfMonth() + "."
                                                         + datePicker.getMonth() + "." + datePicker.getYear()))
                                 );
+                            }
                         } catch (ParseException e) {
                             Toast.makeText(context, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
                         }

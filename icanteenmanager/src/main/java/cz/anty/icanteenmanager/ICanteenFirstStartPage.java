@@ -19,7 +19,7 @@ import cz.anty.utils.FirstStartPage;
  */
 public class ICanteenFirstStartPage extends FirstStartPage {
 
-    private LinearLayout linearLayout;
+    private final LinearLayout linearLayout;
 
     public ICanteenFirstStartPage(Context context) {
         super(context);

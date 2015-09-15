@@ -18,7 +18,7 @@ import cz.anty.utils.FirstStartPage;
  */
 public class WifiFirstStartPage extends FirstStartPage {
 
-    private LinearLayout linearLayout;
+    private final LinearLayout linearLayout;
 
     public WifiFirstStartPage(Context context) {
         super(context);
