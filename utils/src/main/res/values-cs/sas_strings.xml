@@ -24,7 +24,7 @@
     <string name="text_from">Z</string>
     <string name="text_free_list">Nic k zobrazení</string>
     <string name="text_marks">[NUMBER] Známek</string>
-    <string name="text_mark_with_weight">[NAME] [NUMBER] s vahou [WEIGHT]</string>
+    <string name="text_mark_with_weight">[NAME]: [NUMBER] s vahou [WEIGHT]</string>
     <string name="text_value">Známka</string>
     <string name="text_weight">Váha</string>
     <string name="text_type">Typ</string>

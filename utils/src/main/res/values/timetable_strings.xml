@@ -24,7 +24,8 @@
     <string name="dialog_message_timetable_still_exists">TIMETABLE with this name still exists</string>
     <string name="dialog_message_what_to_do">What are you want to do?</string>
 
-    <string name="check_box_text_display_attendance_warnings">Display a warning when it is likely to be a substitute teacher. (!!!BETA!!!) (can increase power consumption)</string>
+    <string name="check_box_text_display_attendance_warnings">Display a warning when it is likely to be a substitute teacher. (BETA)</string>
+    <string name="check_box_text_display_lessons_warnings">Show notification before lesson start. (BETA)</string>
     <string name="check_box_text_auto_load">Auto load Timetable from SPSEIT web page (timetable name must equals to class name)</string>
 
     <string name="notify_title_substitution">[NAME] Substitution</string>

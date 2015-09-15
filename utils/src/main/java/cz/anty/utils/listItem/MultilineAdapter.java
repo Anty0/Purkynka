@@ -19,6 +19,10 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
     private final Context context;
     private final int layoutResourceId;
 
+    public MultilineAdapter(Context context) {
+        this(context, R.layout.text_multi_line_list_item);
+    }
+
     public MultilineAdapter(Context context, int layoutResourceId) {
         super(context, layoutResourceId);
         this.context = context;
@@ -37,8 +41,17 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        return generateView(position, convertView, parent);
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        return generateView(position, convertView, parent);
+    }
+
+    protected View generateView(int position, View convertView, ViewGroup parent) {
         MultilineItem item = getItem(position);
-        Integer layoutResourceId = item.getLayoutResourceId(context);
+        Integer layoutResourceId = item.getLayoutResourceId(context, position);
         layoutResourceId = layoutResourceId == null ?
                 this.layoutResourceId : layoutResourceId;
 
@@ -56,8 +69,8 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
             convertView = inflater.inflate(layoutResourceId, parent, false);
             //convertView.setMinimumHeight(200);
             holder = new ItemDataHolder();
-            holder.text1 = (TextView) convertView.findViewById(R.id.txtTitle);
-            holder.text2 = (TextView) convertView.findViewById(R.id.txtTitle2);
+            holder.text1 = (TextView) convertView.findViewById(R.id.text_view_title);
+            holder.text2 = (TextView) convertView.findViewById(R.id.text_view_text);
             holder.layoutResourceId = layoutResourceId;
             //holder.imgIcon = (ImageView)convertView.findViewById(R.id.imgIcon);
 
@@ -65,8 +78,8 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
         }
 
         holder = (ItemDataHolder) convertView.getTag();
-        holder.text1.setText(item.getTitle(context));
-        String text = item.getText(context);
+        holder.text1.setText(item.getTitle(context, position));
+        String text = item.getText(context, position);
         if (text == null) {
             holder.text1.setPadding(1, 8, 1, 8);
             holder.text2.setVisibility(View.GONE);

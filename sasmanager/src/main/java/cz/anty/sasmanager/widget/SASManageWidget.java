@@ -140,8 +140,8 @@ public class SASManageWidget extends AppWidgetProvider {
                     MultilineItem multilineItem = itemList.get(i);
                     RemoteViews itemRemoteViews = new RemoteViews(
                             context.getPackageName(), R.layout.text_widget_multi_line_list_item);
-                    itemRemoteViews.setTextViewText(R.id.txtTitle, multilineItem.getTitle(context));
-                    itemRemoteViews.setTextViewText(R.id.txtTitle2, multilineItem.getText(context));
+                    itemRemoteViews.setTextViewText(R.id.widget_text_view_title, multilineItem.getTitle(context, i));
+                    itemRemoteViews.setTextViewText(R.id.widget_text_view_text, multilineItem.getText(context, i));
                     remoteViews.addView(R.id.widget_main_layout, itemRemoteViews);
                 }
             }

@@ -2,6 +2,7 @@ package cz.anty.timetablemanager.receiver;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +10,11 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import cz.anty.timetablemanager.R;
+import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
@@ -33,33 +36,75 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("AttendanceReceiver", "onReceive");
+        Log.d(getClass().getSimpleName(), "onReceive");
         int day = intent.getIntExtra(DAY, -1);
         int lessonIndex = intent.getIntExtra(LESSON_INDEX, -1);
-        if (day != -1 && lessonIndex != -1 && context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)) {
-            testSupplementation(context, day, lessonIndex);
+        if (day != -1 && lessonIndex != -1) {
+            if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
+                    .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)) {
+                testSupplementation(context, day, lessonIndex);
+            }
+            if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
+                    .getBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS, false)) {
+                showLessonNotification(context, day, lessonIndex);
+            }
         }
 
         context.sendBroadcast(new Intent(context, TimetableScheduleReceiver.class));
     }
 
+    private void showLessonNotification(Context context, int day, int lessonIndex) {
+        Log.d(getClass().getSimpleName(), "showLessonNotification day: " + day + " lessonIndex: " + lessonIndex);
+        Timetable[] timetables = new TimetableManager(context).getTimetables();
+        DecimalFormat format = new DecimalFormat("##");
+
+        int i = 0;
+        for (Timetable timetable : timetables) {
+            Lesson lesson = timetable.getLesson(day, lessonIndex);
+            if (lesson == null) continue;
+
+            Notification n = new NotificationCompat.Builder(context)
+                    .setContentTitle(lesson.getShortName() + " "
+                            + Timetable.START_TIMES_HOURS[lessonIndex] +
+                            ":" + format.format(Timetable.START_TIMES_MINUTES[lessonIndex]))
+                    .setContentText(lesson.getTeacher())
+                    .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                    .setContentIntent(PendingIntent.getActivity(context, 0,
+                            new Intent(context, TimetableSelectActivity.class), 0))
+                    .setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_VIBRATE)
+                            //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
+                    .build();
+
+            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
+                    .notify(Constants.NOTIFICATION_ID_TIMETABLE_LESSON + i, n);
+
+            if (i < 10) i++;
+            else return;
+        }
+
+    }
+
     private void testSupplementation(final Context context, final int day, final int lessonIndex) {
-        Log.d("AttendanceReceiver", "testSupplementation");
+        Log.d(getClass().getSimpleName(), "testSupplementation day: " + day + " lessonIndex: " + lessonIndex);
         Timetable[] timetables = new TimetableManager(context).getTimetables();
         final AttendanceConnector connector = new AttendanceConnector();
-        for (final Timetable timetable : timetables) {
+        worker.setPowerManager(context);
+
+        for (int i = 0, timetablesLength = timetables.length; i < timetablesLength; i++) {
+            final Timetable timetable = timetables[i];
             if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE)
                     .getLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, 0) +
                     Constants.WAIT_TIME_TEACHERS_ATTENDANCE > System.currentTimeMillis())
                 continue;
-            worker.setPowerManager(context);
+            final Lesson lesson = timetable.getLesson(day, lessonIndex);
+            if (lesson == null) continue;
+
+            final int finalI = i < 10 ? i : 9;
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Lesson lesson = timetable.getLesson(day, lessonIndex);
-                        if (lesson == null) return;
                         String teacherName = lesson.getTeacher();
                         if (teacherName.length() != 4) {
                             String[] name = teacherName.split(" ");
@@ -82,22 +127,27 @@ public class AttendanceReceiver extends BroadcastReceiver {
                             if (man.getClassString().length() > 4) break;
                             else man = null;
                         }
-                        if (man != null && Man.IsInSchoolState.IS_NOT_IN_SCHOOL.equals(man.isInSchool())) {
+                        if (man != null && Man.IsInSchoolState.NOT_IN_SCHOOL.equals(man.isInSchool())) {
                             Notification n = new NotificationCompat.Builder(context)
                                     .setContentTitle(context.getString(R.string.notify_title_substitution)
                                             .replace(Constants.STRINGS_CONST_NAME, lesson.getShortName()))
                                     .setContentText(context.getString(R.string.notify_text_teacher_is_not_here)
                                             .replace(Constants.STRINGS_CONST_NAME, man.getName()))
                                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
-                                    .setContentIntent(null)
+                                    .setContentIntent(PendingIntent.getActivity(context, 0,
+                                            new Intent(context, TimetableSelectActivity.class), 0))
                                     .setAutoCancel(true)
                                     .setDefaults(Notification.DEFAULT_ALL)
                                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                                     .build();
 
-                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID_TEACHERS_ATTENDANCE, n);
-                            context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE).edit()
-                                    .putLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, System.currentTimeMillis()).apply();
+                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
+                                    .notify(Constants.NOTIFICATION_ID_TEACHERS_ATTENDANCE + finalI, n);
+
+                            context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE,
+                                    Context.MODE_PRIVATE).edit().putLong(timetable.getName()
+                                    + Constants.SETTING_NAME_ADD_LAST_NOTIFY, System.currentTimeMillis())
+                                    .apply();
                         }
                     } catch (IOException | IndexOutOfBoundsException e) {
                         Log.d("AttendanceReceiver", "testSupplementation", e);

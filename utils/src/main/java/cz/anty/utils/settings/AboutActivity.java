@@ -32,18 +32,18 @@ public class AboutActivity extends AppCompatActivity {
         RadioButton radioButtonEnglish = new RadioButton(context);
         radioButtonEnglish.setTag("en");
         radioButtonEnglish.setText(R.string.radio_button_text_english);
-        radioButtonEnglish.setId(R.id.txtTitle);
+        radioButtonEnglish.setId(R.id.text_view_title);
         radioGroup.addView(radioButtonEnglish);
         //radioButtonEnglish.setChecked(context.getString(R.string.language).equals("EN"));
 
         RadioButton radioButtonCzech = new RadioButton(context);
         radioButtonCzech.setTag("cs");
         radioButtonCzech.setText(R.string.radio_button_text_czech);
-        radioButtonCzech.setId(R.id.txtTitle2);
+        radioButtonCzech.setId(R.id.text_view_text);
         radioGroup.addView(radioButtonCzech);
         //radioButtonCzech.setChecked(context.getString(R.string.language).equals("CS"));
 
-        radioGroup.check(context.getString(R.string.language).equals("CS") ? R.id.txtTitle2 : R.id.txtTitle);
+        radioGroup.check(context.getString(R.string.language).equals("CS") ? R.id.text_view_text : R.id.text_view_title);
 
         new AlertDialog.Builder(context, R.style.AppTheme_Dialog)
                 .setTitle(R.string.dialog_title_select_language)

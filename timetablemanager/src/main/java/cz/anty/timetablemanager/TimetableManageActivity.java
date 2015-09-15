@@ -24,11 +24,9 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import cz.anty.utils.Constants;
-import cz.anty.utils.listItem.StableArrayAdapter;
+import cz.anty.utils.listItem.MultilineAdapter;
+import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
 
@@ -85,7 +83,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                         textView.setTranslationX(newWidth - offset);
                     }
                 } else {
-                    textView.setTextColor(Color.argb((int) ((positionOffset < 0.5f ? Math.abs(1f - positionOffset) : positionOffset) * 255f), 255, 255, 255));
+                    textView.setTextColor(Color.argb((int) ((positionOffset < 0.5f ? Math.abs(1f - positionOffset) : positionOffset) * 1.5f * 255f), 255, 255, 255));
                 }
             }
 
@@ -135,6 +133,8 @@ public class TimetableManageActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        private MultilineAdapter adapter;
+
         public PlaceholderFragment() {
         }
 
@@ -153,38 +153,35 @@ public class TimetableManageActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            ListView rootView = new ListView(container.getContext()); //inflater.inflate(R.layout.fragment_timetable_manage, container, false);
-            initializeListView(rootView);
+            Context context = container.getContext();
+            ListView rootView = new ListView(context); //inflater.inflate(R.layout.fragment_timetable_manage, container, false);
+            adapter = new MultilineAdapter(context);
+            rootView.setAdapter(adapter);
+            initializeListView(context, rootView);
             return rootView;
         }
 
-        private void initializeListView(final ListView rootView) {
+        private void initializeListView(final Context context, final ListView rootView) {
             final int day = getArguments().getInt(ARG_SECTION_NUMBER, 0);
-            Context context = rootView.getContext();
-
             Lesson[] lessons = toShow == null ? new Lesson[0] : toShow.getDay(day);
-            String[] values = new String[lessons.length];
-            for (int i = 0; i < values.length; i++) {
-                Lesson lesson = lessons[i];
-                if (lesson != null)
-                    values[i] = i + ". " + context.getString(R.string.list_item_text_lesson)
-                            .replace(Constants.STRINGS_CONST_NAME, lesson.getShortName())
-                            .replace(Constants.STRINGS_CONST_CLASS, lesson.getClassString());
-                else
-                    values[i] = i + ". " + context.getString(R.string.list_item_text_click_to_edit);
-            }
 
-            final ArrayList<String> list = new ArrayList<>();
-            Collections.addAll(list, values);
-            final StableArrayAdapter adapter = new StableArrayAdapter(context,
-                    android.R.layout.simple_list_item_1, list);
-            rootView.setAdapter(adapter);
+            adapter.setNotifyOnChange(false);
+            adapter.clear();
+            for (int i = 0; i < lessons.length; i++) {
+                Lesson lesson = lessons[i];
+                if (lesson != null) {
+                    adapter.add(lesson);
+                    continue;
+                }
+                adapter.add(new TextMultilineItem(i + ". " + context
+                        .getString(R.string.list_item_text_click_to_edit), null));
+            }
+            adapter.notifyDataSetChanged();
 
             rootView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                     if (toShow == null) return;
-                    final Context context = view.getContext();
                     final Lesson lesson = toShow.getLesson(day, position);
                     if (lesson == null) {
                         edit(context, null, day, position);
@@ -201,7 +198,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         toShow.setLesson(null, day, position);
-                                        initializeListView(rootView);
+                                        initializeListView(context, rootView);
                                     }
                                 })
                                 .setNeutralButton(R.string.but_edit, new DialogInterface.OnClickListener() {
@@ -271,13 +268,13 @@ public class TimetableManageActivity extends AppCompatActivity {
                                     toShow.setLesson(new Lesson(nameEditText.getText().toString(),
                                             shortNameEditText.getText().toString(), classEditText.getText().toString(),
                                             teacherEditText.getText().toString()), day, lessonIndex);
-                                    initializeListView(rootView);
+                                    initializeListView(context, rootView);
                                 }
                             })
                             .setNegativeButton(R.string.but_cancel, null)
                             .show();
 
-                    initializeListView(rootView);
+                    initializeListView(context, rootView);
                 }
             });
         }
@@ -302,17 +299,12 @@ public class TimetableManageActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return Timetable.DAYS_STRINGS_IDS.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            try {
-                return getString(Timetable.DAYS_STRINGS_IDS[position]);
-            } catch (Exception ignored) {
-                return null;
-            }
+            return getString(Timetable.DAYS_STRINGS_IDS[position]);
         }
     }
 

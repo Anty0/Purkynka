@@ -1,11 +1,17 @@
 package cz.anty.utils.timetable;
 
+import android.content.Context;
+
+import cz.anty.utils.Constants;
+import cz.anty.utils.R;
+import cz.anty.utils.listItem.MultilineItem;
+
 /**
  * Created by anty on 13.6.15.
  *
  * @author anty
  */
-public class Lesson {
+public class Lesson implements MultilineItem {
 
     private static final String PARSE_CHARS = ":;L;:";
     private final String name, shortName, classString, teacher;
@@ -46,5 +52,22 @@ public class Lesson {
                 + getShortName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getClassString().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getTeacher().replace(PARSE_CHARS, "?????");
+    }
+
+    @Override
+    public String getTitle(Context context, int position) {
+        return position + ". " + context.getString(R.string.list_item_text_lesson)
+                .replace(Constants.STRINGS_CONST_NAME, getShortName())
+                .replace(Constants.STRINGS_CONST_CLASS, getClassString());
+    }
+
+    @Override
+    public String getText(Context context, int position) {
+        return getTeacher();
+    }
+
+    @Override
+    public Integer getLayoutResourceId(Context context, int position) {
+        return null;
     }
 }

@@ -96,6 +96,7 @@ public class OnceRunThread {
                 wakeLock.release();
         }
         if (broadcastResult != null
+                && getWaitingThreadsLength() == 0
                 && Build.VERSION.SDK_INT >= 11)
             broadcastResult.finish();
     }

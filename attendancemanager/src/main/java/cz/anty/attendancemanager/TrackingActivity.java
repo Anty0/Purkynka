@@ -32,7 +32,7 @@ public class TrackingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         findViewById(R.id.editText).setVisibility(View.GONE);
         ListView resultListView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
+        adapter = new MultilineAdapter(this);
         mansManager = new TrackingMansManager(this);
         resultListView.setAdapter(adapter);
         resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,29 +64,18 @@ public class TrackingActivity extends AppCompatActivity {
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                //String[] values;
-
                 TrackingReceiver.refreshTrackingMans(TrackingActivity.this, mansManager, true);
                 MultilineItem[] data = mansManager.get();
-                //data[data.length - 1] = new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page);
-                    /*values = new String[mans.size()];
-                    for (int i = 0; i < values.length; i++) {
-                        values[i] = mans.get(i).toString();
-                    }*/
 
                 Log.d("SearchActivity", "update data: " + Arrays.toString(data));
 
-                /*final ArrayList<String> list = new ArrayList<>();
-                Collections.addAll(list, values);
-                final StableArrayAdapter adapter = new StableArrayAdapter(SearchActivity.this,
-                        android.R.layout.simple_list_item_1, list);*/
 
                 adapter.setNotifyOnChange(false);
                 adapter.clear();
                 for (MultilineItem item : data) {
                     adapter.add(item);
                 }
-                //final MultilineItem[] finalData = data;
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

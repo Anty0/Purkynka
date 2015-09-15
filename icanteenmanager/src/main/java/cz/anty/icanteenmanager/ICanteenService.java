@@ -141,12 +141,12 @@ public class ICanteenService extends Service {
         try {
             List<BurzaLunch> burzaLunchList = mBurzaLunchList;
             mBurzaLunchList = mManager != null ? mManager.getBurza() : mBurzaLunchList;
-            if (onBurzaChange != null && (mBurzaLunchList != null
-                    ? mBurzaLunchList.equals(burzaLunchList) : burzaLunchList != null))
+            if (onBurzaChange != null && !(mBurzaLunchList != null
+                    ? mBurzaLunchList.equals(burzaLunchList) : burzaLunchList == null))
                 onBurzaChange.run();
             Log.d("ICanteenService", "refreshBurza finalStage: " + mBurzaLunchList);
             return true;
-        } catch (IOException | IndexOutOfBoundsException e) {
+        } catch (IOException e) {
             Log.d("ICanteenService", "refreshBurza", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
@@ -159,8 +159,8 @@ public class ICanteenService extends Service {
         try {
             List<MonthLunchDay> monthLunchList = mMonthLunchList;
             mMonthLunchList = mManager != null ? mManager.getMonth() : mMonthLunchList;
-            if (onMonthChange != null && (mMonthLunchList != null
-                    ? mMonthLunchList.equals(monthLunchList) : monthLunchList != null))
+            if (onMonthChange != null && !(mMonthLunchList != null
+                    ? mMonthLunchList.equals(monthLunchList) : monthLunchList == null))
                 onMonthChange.run();
             Log.d("ICanteenService", "refreshMonth finalStage: " + mMonthLunchList);
             return true;

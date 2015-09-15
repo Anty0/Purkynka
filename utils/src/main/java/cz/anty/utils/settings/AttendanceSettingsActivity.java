@@ -14,7 +14,7 @@ public class AttendanceSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_settings);
-        ((CheckBox) findViewById(R.id.checkBox))
+        ((CheckBox) findViewById(R.id.check_box_display_tracking_warnings))
                 .setChecked(getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE)
                         .getBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS, true));
     }

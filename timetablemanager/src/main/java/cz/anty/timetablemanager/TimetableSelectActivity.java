@@ -16,13 +16,12 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
 import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
-import cz.anty.utils.listItem.StableArrayAdapter;
+import cz.anty.utils.listItem.MultilineAdapter;
+import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.settings.TimetableSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.timetable.Timetable;
@@ -33,6 +32,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
     private TimetableManager timetableManager;
     private OnceRunThreadWithSpinner worker;
+    private MultilineAdapter adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +46,23 @@ public class TimetableSelectActivity extends AppCompatActivity {
             worker = new OnceRunThreadWithSpinner(this);
         if (timetableManager == null)
             timetableManager = new TimetableManager(this);
+
+        listView = ((ListView) findViewById(R.id.listView));
+        adapter = new MultilineAdapter(this);
+        listView.setAdapter(adapter);
     }
 
     private void initialize() {
         Log.d("TimetableSelectActivity", "initialize");
-        ListView listView = ((ListView) findViewById(R.id.listView));
         final Timetable[] timetables = timetableManager.getTimetables();
-        String[] values = new String[timetables.length + 1];
-        for (int i = 0; i < timetables.length; i++) {
-            values[i] = timetables[i].toString();
+        adapter.setNotifyOnChange(false);
+        adapter.clear();
+        for (Timetable timetable : timetables) {
+            adapter.add(timetable);
         }
-        values[timetables.length] = getString(R.string.list_item_text_add_timetable);
-
-        final ArrayList<String> list = new ArrayList<>();
-        Collections.addAll(list, values);
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(adapter);
+        adapter.add(new TextMultilineItem(getString(R.string
+                .list_item_text_add_timetable), null));
+        adapter.notifyDataSetChanged();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -98,43 +99,26 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                 Timetable newTimetable = timetableManager.addTimetable(input.getText().toString());
                                                 if (autoLoadCheckBox.isChecked())
                                                     TimetableConnector.tryLoadTimetable(newTimetable);
-                                            } catch (WrongLoginDataException e) {
-                                                Log.d("TimetableSelectActivity", "initialize", e);
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        new AlertDialog.Builder(TimetableSelectActivity.this)
-                                                                .setTitle(getString(R.string.exception_title_name) + ": " + input.getText())
-                                                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
-                                                                .setMessage(R.string.exception_message_name)
-                                                                .setPositiveButton(R.string.but_ok, null)
-                                                                .setCancelable(true)
-                                                                .show();
-                                                    }
-                                                });
-                                            } catch (IOException e) {
-                                                Log.d("TimetableSelectActivity", "initialize", e);
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        new AlertDialog.Builder(TimetableSelectActivity.this)
-                                                                .setTitle(R.string.exception_title_connection)
-                                                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
-                                                                .setMessage(R.string.exception_message_connection)
-                                                                .setPositiveButton(R.string.but_ok, null)
-                                                                .setCancelable(true)
-                                                                .show();
-                                                    }
-                                                });
                                             } catch (Exception e) {
                                                 Log.d("TimetableSelectActivity", "initialize", e);
+                                                final String title, message;
+                                                if (e instanceof WrongLoginDataException) {
+                                                    title = getString(R.string.exception_title_name) + ": " + input.getText();
+                                                    message = getString(R.string.exception_message_name);
+                                                } else if (e instanceof IOException) {
+                                                    title = getString(R.string.exception_title_connection);
+                                                    message = getString(R.string.exception_message_connection);
+                                                } else {
+                                                    title = getString(R.string.dialog_title_timetable_still_exists);
+                                                    message = getString(R.string.dialog_message_timetable_still_exists);
+                                                }
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
                                                         new AlertDialog.Builder(TimetableSelectActivity.this)
-                                                                .setTitle(R.string.dialog_title_timetable_still_exists)
+                                                                .setTitle(title)
                                                                         //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
-                                                                .setMessage(R.string.dialog_message_timetable_still_exists)
+                                                                .setMessage(message)
                                                                 .setPositiveButton(R.string.but_ok, null)
                                                                 .setCancelable(true)
                                                                 .show();

@@ -21,6 +21,11 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter {
     private boolean autoLoad = true;
     private boolean notifyOnChange = true;
 
+    public AutoLoadMultilineAdapter(Context context, @Nullable OnLoadNextListListener onLoadNextListListener) {
+        super(context);
+        init(context, onLoadNextListListener);
+    }
+
     public AutoLoadMultilineAdapter(Context context, int layoutResourceId, @Nullable OnLoadNextListListener onLoadNextListListener) {
         super(context, layoutResourceId);
         init(context, onLoadNextListListener);
@@ -46,14 +51,14 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d("ALMultilineAdapter", "getView: " + position);
+    public View generateView(int position, View convertView, ViewGroup parent) {
+        Log.d("ALMultilineAdapter", "generateView: " + position);
         if (super.getCount() == position) {
             page++;
             if (onLoadNextListListener != null)
                 onLoadNextListListener.onLoadNextList(this, page);
         }
-        return super.getView(position, convertView, parent);
+        return super.generateView(position, convertView, parent);
     }
 
     @Override

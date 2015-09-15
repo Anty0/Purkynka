@@ -22,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
+        adapter = new MultilineAdapter(this);
         listView.setAdapter(adapter);
 
         initialize();

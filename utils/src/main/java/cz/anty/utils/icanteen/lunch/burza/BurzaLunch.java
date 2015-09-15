@@ -70,17 +70,17 @@ public class BurzaLunch implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context) {
+    public String getTitle(Context context, int position) {
         return DATE_FORMAT.format(getDate()) + " " + getPieces() + " x " + getLunchNumber().toString();
     }
 
     @Override
-    public String getText(Context context) {
+    public String getText(Context context, int position) {
         return getName();
     }
 
     @Override
-    public Integer getLayoutResourceId(Context context) {
+    public Integer getLayoutResourceId(Context context, int position) {
         return null;
     }
 

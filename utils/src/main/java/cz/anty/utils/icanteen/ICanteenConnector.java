@@ -45,7 +45,7 @@ public class ICanteenConnector {
         this.loginCookies = login(0, null, username, password);
     }
 
-    private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {//// TODO: 1.9.15 REPAIR (sometimes NOT WORKING)
+    private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {
         if (depth >= Constants.MAX_TRY) throw last;
         try {
             return Jsoup

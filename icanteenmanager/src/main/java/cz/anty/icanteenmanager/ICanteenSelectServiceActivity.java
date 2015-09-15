@@ -27,7 +27,7 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
+        adapter = new MultilineAdapter(this);
         listView.setAdapter(adapter);
 
         init();

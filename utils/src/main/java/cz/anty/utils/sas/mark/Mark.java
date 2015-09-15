@@ -85,7 +85,7 @@ public class Mark implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context) {
+    public String getTitle(Context context, int position) {
         return context.getString(R.string.text_mark_with_weight)
                 .replace(Constants.STRINGS_CONST_NAME, getShortLesson())
                 .replace(Constants.STRINGS_CONST_NUMBER, getValueToShow())
@@ -93,12 +93,12 @@ public class Mark implements MultilineItem {
     }
 
     @Override
-    public String getText(Context context) {
+    public String getText(Context context, int position) {
         return getDateAsString() + " " + getNote();
     }
 
     @Override
-    public Integer getLayoutResourceId(Context context) {
+    public Integer getLayoutResourceId(Context context, int position) {
         return null;
     }
 }

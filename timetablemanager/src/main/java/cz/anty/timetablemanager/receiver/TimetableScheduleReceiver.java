@@ -32,8 +32,10 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
 
         service.cancel(defaultPending);
 
-        if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
+        if ((context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)
+                || context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
+                .getBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS, false))
                 && activeNetInfo != null && activeNetInfo.isConnected()) {
 
             /*Calendar cal = Calendar.getInstance();
@@ -55,7 +57,10 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
                         if (minuteTime < requestedTime - 10) {
                             intent.putExtra(AttendanceReceiver.DAY, day - 2)
                                     .putExtra(AttendanceReceiver.LESSON_INDEX, i);
-                            service.set(AlarmManager.RTC_WAKEUP, 0l, PendingIntent
+                            calendar.set(Calendar.HOUR_OF_DAY, Timetable.START_TIMES_HOURS[i]);
+                            calendar.set(Calendar.MINUTE, Timetable.START_TIMES_MINUTES[i] - 10);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                            service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), PendingIntent
                                     .getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT));
                             //testSupplementation(context, day, i);
                             return;

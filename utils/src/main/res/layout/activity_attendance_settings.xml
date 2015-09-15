@@ -10,7 +10,7 @@
     tools:context="cz.anty.utils.settings.TimetableSettingsActivity">
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/check_box_display_tracking_warnings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="true"

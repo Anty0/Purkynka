@@ -53,7 +53,7 @@ public class TrackingReceiver extends BroadcastReceiver {
                     if (man.isInSchool() != findMan.isInSchool()) {
                         Notification n = new NotificationCompat.Builder(context)
                                 .setContentTitle(findMan.getName() + " " + findMan.getClassString())
-                                .setContentText((Man.IsInSchoolState.IS_IN_SCHOOL
+                                .setContentText((Man.IsInSchoolState.IN_SCHOOL
                                         .equals(findMan.isInSchool()) ?
                                         context.getString(R.string.notify_text_tracked_is_in_school) :
                                         context.getString(R.string.notify_text_tracked_is_in_not_school))

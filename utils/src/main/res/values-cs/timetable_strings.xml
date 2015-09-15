@@ -24,7 +24,8 @@
     <string name="dialog_message_timetable_still_exists">ROZVRH s tímto jménem již existuje</string>
     <string name="dialog_message_what_to_do">Co máš v plánu udělat?</string>
 
-    <string name="check_box_text_display_attendance_warnings">Zobraz upozornění, když bude pravděpodobné, že bude suplování. (!!!BETA!!!) (může zvýšit spotřebu energie)</string>
+    <string name="check_box_text_display_attendance_warnings">Zobraz upozornění, když bude pravděpodobné, že bude suplování. (BETA) (může zvýšit spotřebu energie)</string>
+    <string name="check_box_text_display_lessons_warnings">Zobraz upozornění před začátkem vyučovací hodiny (zobrazí název hodiny a třídu v liště telefou :)). (BETA)</string>
     <string name="check_box_text_auto_load">Automaticky načti rozvrh hodin ze stránek SPSEIT (jméno rozvrhu musí obsahovat jméno třídy)</string>
 
     <string name="notify_title_substitution">[NAME] Suplování</string>

@@ -77,19 +77,19 @@ public class Lesson implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context) {
+    public String getTitle(Context context, int position) {
         return getShortName() + ": " + FORMAT.format(getDiameter());
     }
 
     @Override
-    public String getText(Context context) {
+    public String getText(Context context, int position) {
         return context.getString(R.string.text_marks)
                 .replace(Constants.STRINGS_CONST_NUMBER
                         , Integer.toString(getMarks().length));
     }
 
     @Override
-    public Integer getLayoutResourceId(Context context) {
+    public Integer getLayoutResourceId(Context context, int position) {
         return null;
     }
 }

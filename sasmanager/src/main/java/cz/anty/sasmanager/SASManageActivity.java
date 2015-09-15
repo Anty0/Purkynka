@@ -93,16 +93,9 @@ public class SASManageActivity extends AppCompatActivity {
         Log.d("SASManageActivity", "onCreate");
         super.onCreate(savedInstanceState);
 
-        /*SharedPreferences preferences = getSharedPreferences("LoginData", MODE_PRIVATE);
-        if (preferences.getString("LOGIN", "").equals("") || preferences.getString("PASSWORD", "").equals("")) {
-            this.finish();
-            startActivity(new Intent(this, SASLoginActivity.class));
-            return;
-        }*/
-
         setContentView(R.layout.activity_list);
         listView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
+        adapter = new MultilineAdapter(this);
         listView.setAdapter(adapter);
 
         if (refreshThread == null)
@@ -202,28 +195,14 @@ public class SASManageActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Log.d("SASManageActivity", "onUpdate: Thread running");
-                /*final StringBuilder builder = new StringBuilder(getString(R.string.state) + ": ");
-                if (binder != null) {
-                    Mark[] marks = binder.getMarks(MarksManager.Semester.AUTO);
-                    builder.append(binder.getState()).append("\n").append(getString(R.string.marks)).append(":");
-                    for (Mark mark : marks) {
-                        builder.append("\n").append(mark.toString());
-                    }
-                } else
-                    builder.append("null").append("\n").append(getString(R.string.marks)).append(":");*/
                 MultilineItem[] data;
                 AdapterView.OnItemClickListener onClickListener = null;
                 try {
                     if (binder != null) {
                         switch (marksShort) {
                             case LESSONS:
-                                //final List<Lesson> lessons = Marks.toLessons(Arrays.asList(binder.getMarks(semester)));
-                                //data = lessons.toArray(new MultilineItem[lessons.size()]);
                                 data = binder.getLessons(semester);
-                            /*values = new String[lessons.size()];
-                            for (int i = 0; i < values.length; i++) {
-                                values[i] = lessons.get(i).toString();
-                            }*/
+
                                 final MultilineItem[] finalData = data;
                                 onClickListener = new AdapterView.OnItemClickListener() {
                                     @Override
@@ -231,16 +210,7 @@ public class SASManageActivity extends AppCompatActivity {
                                         ListView listView = new ListView(SASManageActivity.this);
                                         Lesson lesson = (Lesson) finalData[position];
                                         Mark[] marks = lesson.getMarks();
-                                    /*String[] values = new String[marks.length];
-                                    for (int i = 0; i < values.length; i++) {
-                                        values[i] = marks[i].toString();
-                                    }
 
-                                    ArrayList<String> list = new ArrayList<>();
-                                    Collections.addAll(list, values);
-
-                                    final StableArrayAdapter adapter = new StableArrayAdapter(SASManageActivity.this,
-                                            android.R.layout.simple_list_item_1, list);*/
                                         MultilineAdapter adapter = new MultilineAdapter(SASManageActivity.this,
                                                 R.layout.text_multi_line_list_item, marks);
 
@@ -259,13 +229,9 @@ public class SASManageActivity extends AppCompatActivity {
                                 break;
                             case DATE:
                             default:
-                            /*Mark[] marks*/
                                 Log.d("SASManageActivity", "onUpdate: Loading marks");
                                 data = binder.getMarks(semester);
-                            /*values = new String[marks.length];
-                            for (int i = 0; i < values.length; i++) {
-                                values[i] = marks[i].toString();
-                            }*/
+
                                 onClickListener = generateMarkOnClickListener(data);
                                 break;
                         }
@@ -277,11 +243,6 @@ public class SASManageActivity extends AppCompatActivity {
                     data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
                             getString(R.string.exception_message_sas_manager_binder_null))};
                 }
-                /*ArrayList<String> list = new ArrayList<>();
-                Collections.addAll(list, values);
-
-                final StableArrayAdapter adapter = new StableArrayAdapter(SASManageActivity.this,
-                        android.R.layout.simple_list_item_1, list);*/
 
                 final AdapterView.OnItemClickListener finalOnClickListener = onClickListener;
                 Log.d("SASManageActivity", "onUpdate: Starting list update");
@@ -299,35 +260,6 @@ public class SASManageActivity extends AppCompatActivity {
                         Log.d("SASManageActivity", "onUpdate: List updated");
                     }
                 });
-                /*runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //String [] values = new String[] {getString(R.string.sas_app_name), getString(R.string.wifi_app_name)};
-                        //listView.setAdapter(adapter);
-
-                        //adapter.notifyDataSetChanged();
-
-                        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, final View view,
-                                                    int position, long id) {
-                                //final String item = (String) parent.getItemAtPosition(position);
-                                switch (position) {
-                                    case 1:
-                                        startActivity(new Intent(SASManageActivity.this, WifiLoginActivity.class));
-                                        break;
-                                    case 0:
-                                    default:
-                                        startActivity(new Intent(SASManageActivity.this, SASSplashActivity.class));
-                                        break;
-                                }
-                            }
-
-                        });
-                        //((TextView) findViewById(R.id.textView3)).setText(builder);
-                    }
-                });*/
             }
         }, showProgressBar ? getString(R.string.wait_text_loading) : null);
         Log.d("SASManageActivity", "onUpdate: Thread started");

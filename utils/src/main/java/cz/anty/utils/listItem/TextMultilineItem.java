@@ -25,17 +25,17 @@ public class TextMultilineItem implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context) {
+    public String getTitle(Context context, int position) {
         return title;
     }
 
     @Override
-    public String getText(Context context) {
+    public String getText(Context context, int position) {
         return text;
     }
 
     @Override
-    public Integer getLayoutResourceId(Context context) {
+    public Integer getLayoutResourceId(Context context, int position) {
         return layoutResourceId;
     }
 

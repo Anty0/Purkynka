@@ -230,7 +230,7 @@ public class SASManagerService extends Service {
                 .setDefaults(Notification.DEFAULT_ALL)
                         //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(builderBig).setSummaryText(builder))//TODO Check if working SummaryText
+                        .bigText(builderBig).setSummaryText(builder))
                 .build();
 
         //Calendar calendar = Calendar.getInstance(Locale.getDefault());

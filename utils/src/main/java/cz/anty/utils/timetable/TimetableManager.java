@@ -37,4 +37,16 @@ public class TimetableManager {
     public synchronized Timetable[] getTimetables() {
         return timetables.toArray(new Timetable[timetables.size()]);
     }
+
+    public synchronized Timetable getTimetableByName(String name) {
+        for (Timetable timetable : timetables) {
+            if (timetable.getName().equals(name))
+                return timetable;
+        }
+        return null;
+    }
+
+    public synchronized int getIndexOf(Timetable timetable) {
+        return timetables.indexOf(timetable);
+    }
 }

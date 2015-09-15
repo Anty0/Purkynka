@@ -24,7 +24,7 @@
     <string name="text_from">From</string>
     <string name="text_free_list">Nothing to show</string>
     <string name="text_marks">[NUMBER] Marks</string>
-    <string name="text_mark_with_weight">[NAME] [NUMBER] with weight [WEIGHT]</string>
+    <string name="text_mark_with_weight">[NAME]: [NUMBER] with weight [WEIGHT]</string>
     <string name="text_value">Value</string>
     <string name="text_weight">Weight</string>
     <string name="text_type">Type</string>

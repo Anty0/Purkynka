@@ -67,7 +67,7 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         if (adapter == null)
-            adapter = new AutoLoadMultilineAdapter(this, R.layout.text_multi_line_list_item,
+            adapter = new AutoLoadMultilineAdapter(this,
                     new AutoLoadMultilineAdapter.OnLoadNextListListener() {
                         @Override
                         public void onLoadNextList(AutoLoadMultilineAdapter multilineAdapter, int page) {
@@ -135,16 +135,10 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (clearData && worker.getWaitingThreadsLength() > 0) return;
-                //String[] values;
                 MultilineItem[] data;
                 try {
                     List<Man> mans = Mans.parseMans(connector.getSupElements(toSearch, page));
-                    data = mans.toArray(new MultilineItem[mans.size()/* + 1*/]);
-                    //data[data.length - 1] = new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page);
-                    /*values = new String[mans.size()];
-                    for (int i = 0; i < values.length; i++) {
-                        values[i] = mans.get(i).toString();
-                    }*/
+                    data = mans.toArray(new MultilineItem[mans.size()]);
                 } catch (IOException e) {
                     Log.d("SearchActivity", "update", e);
                     //values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
@@ -154,11 +148,6 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 Log.d("SearchActivity", "update data: " + Arrays.toString(data));
 
-                /*final ArrayList<String> list = new ArrayList<>();
-                Collections.addAll(list, values);
-                final StableArrayAdapter adapter = new StableArrayAdapter(SearchActivity.this,
-                        android.R.layout.simple_list_item_1, list);*/
-
                 adapter.setNotifyOnChange(false);
                 if (clearData) adapter.clear();
                 adapter.setAutoLoad(data.length != 0
@@ -166,7 +155,7 @@ public class SearchActivity extends AppCompatActivity {
                 for (MultilineItem item : data) {
                     adapter.add(item);
                 }
-                //final MultilineItem[] finalData = data;
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

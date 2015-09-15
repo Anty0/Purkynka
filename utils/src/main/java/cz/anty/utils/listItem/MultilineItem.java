@@ -9,10 +9,10 @@ import android.content.Context;
  */
 public interface MultilineItem {
 
-    String getTitle(Context context);
+    String getTitle(Context context, int position);
 
-    String getText(Context context);
+    String getText(Context context, int position);
 
-    Integer getLayoutResourceId(Context context);
+    Integer getLayoutResourceId(Context context, int position);
 
 }

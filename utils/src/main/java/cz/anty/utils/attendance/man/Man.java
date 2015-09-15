@@ -64,44 +64,44 @@ public class Man implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context) {
+    public String getTitle(Context context, int position) {
         String classString = getClassString();
         IsInSchoolState schoolState = isInSchool();
         return (IsInSchoolState.UNAVAILABLE.equals(schoolState) ? Constants.STRINGS_CONST_NAME :
-                (IsInSchoolState.IS_IN_SCHOOL.equals(schoolState)
+                (IsInSchoolState.IN_SCHOOL.equals(schoolState)
                         ? context.getString(R.string.text_is_in_school) : context.getString(R.string.text_isnt_in_school)))
                 .replace(Constants.STRINGS_CONST_NAME, getName() +
                         (classString.length() > 4 ? "" : " " + classString));
     }
 
     @Override
-    public String getText(Context context) {
+    public String getText(Context context, int position) {
         return getLastEnterAsString();
     }
 
     @Override
-    public Integer getLayoutResourceId(Context context) {
+    public Integer getLayoutResourceId(Context context, int position) {
         return null;
     }
 
     public enum IsInSchoolState {
-        IS_IN_SCHOOL, IS_NOT_IN_SCHOOL, UNAVAILABLE;
+        IN_SCHOOL, NOT_IN_SCHOOL, UNAVAILABLE;
 
         public static IsInSchoolState parseIsInSchoolState(String toParse) {
             toParse = toParse.toLowerCase(Locale.getDefault());
             if (toParse.equals("nezjištěn"))
                 return UNAVAILABLE;
             if (toParse.contains("ne"))
-                return IS_NOT_IN_SCHOOL;
-            return IS_IN_SCHOOL;
+                return NOT_IN_SCHOOL;
+            return IN_SCHOOL;
         }
 
         @Override
         public String toString() {
             switch (this) {
-                case IS_IN_SCHOOL:
+                case IN_SCHOOL:
                     return "j";
-                case IS_NOT_IN_SCHOOL:
+                case NOT_IN_SCHOOL:
                     return "ne";
                 case UNAVAILABLE:
                     return "nezjištěn";

@@ -4,13 +4,14 @@ import android.content.Context;
 
 import cz.anty.utils.Constants;
 import cz.anty.utils.R;
+import cz.anty.utils.listItem.MultilineItem;
 
 /**
  * Created by anty on 13.6.15.
  *
  * @author anty
  */
-public class Timetable {
+public class Timetable implements MultilineItem {
 
     public static final int[] DAYS_STRINGS_IDS = new int[]{R.string.text_monday,
             R.string.text_tuesday, R.string.text_wednesday,
@@ -95,6 +96,17 @@ public class Timetable {
         return lessons[day][lessonIndex];
     }
 
+    public synchronized Lesson getNextLesson(int day, int lessonIndex) {
+        int index = lessonIndex + 1;
+        Lesson[] day1 = getDay(day);
+        if (index < day1.length) return day1[index];
+
+        int newDay = day + 1;
+        day1 = getDay(newDay);
+        if (newDay < day1.length) return day1[0];
+        return getLesson(0, 0);
+    }
+
     public synchronized Lesson[] getDay(int day) {
         return lessons[day];
     }
@@ -127,5 +139,20 @@ public class Timetable {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public String getTitle(Context context, int position) {
+        return toString();
+    }
+
+    @Override
+    public String getText(Context context, int position) {
+        return null;
+    }
+
+    @Override
+    public Integer getLayoutResourceId(Context context, int position) {
+        return null;
     }
 }

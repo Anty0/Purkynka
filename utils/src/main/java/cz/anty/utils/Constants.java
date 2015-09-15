@@ -9,13 +9,14 @@ public class Constants {
 
     public static final int MAX_TRY = 3;
 
-    public static final int NOTIFICATION_ID_SAS_MANAGER_SERVICE = 1;
-    public static final int NOTIFICATION_ID_TEACHERS_ATTENDANCE = 2;
-    public static final int NOTIFICATION_ID_UPDATE = 3;
-    public static final int NOTIFICATION_ID_TRACKING = 4;
-    public static final int NOTIFICATION_ID_I_CANTEEN_BURZA = 5;
-    public static final int NOTIFICATION_ID_I_CANTEEN_BURZA_RESULT = 6;
-    public static final int NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION = 7;
+    public static final int NOTIFICATION_ID_SAS_MANAGER_SERVICE = 10;
+    public static final int NOTIFICATION_ID_TEACHERS_ATTENDANCE = 20;
+    public static final int NOTIFICATION_ID_TIMETABLE_LESSON = 80;
+    public static final int NOTIFICATION_ID_UPDATE = 30;
+    public static final int NOTIFICATION_ID_TRACKING = 40;
+    public static final int NOTIFICATION_ID_I_CANTEEN_BURZA = 50;
+    public static final int NOTIFICATION_ID_I_CANTEEN_BURZA_RESULT = 60;
+    public static final int NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION = 70;
 
     public static final int WAIT_TIME_ON_BIND = 100;
     public static final int WAIT_TIME_FIRST_REPEAT = 10;
@@ -54,6 +55,8 @@ public class Constants {
     public static final String SETTING_NAME_LATEST_TERMS_CODE = "LATEST_TERMS_CODE";
 
     public static final String SETTINGS_NAME_TIMETABLES = "TimetablesData";
+    public static final String SETTING_NAME_DISPLAY_LESSON_WARNINGS = "DISPLAY_TRACKING_WARNING";
+    public static final String SETTING_NAME_APP_WIDGET = "appwidget_";
     public static final String SETTING_NAME_SIZE = "SIZE";
     public static final String SETTING_NAME_TIMETABLE = "TIMETABLE ";
 

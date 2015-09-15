@@ -81,7 +81,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
             refreshThread = new OnceRunThreadWithSpinner(this);
 
         ListView listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter(this, R.layout.text_multi_line_list_item);
+        adapter = new MultilineAdapter(this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,7 +99,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
                 RadioButton radioButtonNoLunch = new RadioButton(ICanteenLunchOrderActivity.this);
                 radioButtonNoLunch.setTag(null);
                 radioButtonNoLunch.setText("No lunch");
-                radioButtonNoLunch.setId(R.id.txtTitle);
+                radioButtonNoLunch.setId(R.id.text_view_title);
                 radioGroup.addView(radioButtonNoLunch);
                 //radioButtonNoLunch.setChecked(true);
 
@@ -112,7 +112,7 @@ public class ICanteenLunchOrderActivity extends AppCompatActivity {
                     RadioButton radioButtonLunch = new RadioButton(ICanteenLunchOrderActivity.this);
                     radioButtonLunch.setTag(monthLunch);
                     radioButtonLunch.setText(monthLunch.getName());
-                    radioButtonLunch.setId(R.id.txtTitle + 1 + i);
+                    radioButtonLunch.setId(R.id.text_view_title + 1 + i);
                     radioGroup.addView(radioButtonLunch);
 
                     switch (monthLunch.getState()) {
