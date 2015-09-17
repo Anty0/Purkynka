@@ -1,14 +1,11 @@
 package cz.anty.icanteenmanager;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -31,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.anty.utils.Log;
+import cz.anty.utils.ServiceManager;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
@@ -40,20 +38,21 @@ import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
-public class ICanteenBurzaActivity extends AppCompatActivity {
+public class ICBurzaActivity extends AppCompatActivity {
 
-    private MultilineAdapter adapter;
+    private MultilineAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
-    private ICanteenService.MyBinder binder = null;
-    private final ServiceConnection mConnection = new ServiceConnection() {
-
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-            Log.d("ICanteenBurzaActivity", "onServiceConnected");
-            ICanteenBurzaActivity.this.binder = (ICanteenService.MyBinder) binder;
+    private ICService.ICanteenBinder binder = null;
+    private ServiceManager.BinderConnection<ICService.ICanteenBinder> binderConnection
+            = new ServiceManager.BinderConnection<ICService.ICanteenBinder>() {
+        @Override
+        public void onBinderConnected(ICService.ICanteenBinder iCanteenBinder) {
+            Log.d("ICBurzaActivity", "onBinderConnected");
+            binder = iCanteenBinder;
             refreshThread.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    ICanteenBurzaActivity.this.binder.setOnBurzaChangeListener(new Runnable() {
+                    binder.setOnBurzaChangeListener(new Runnable() {
                         @Override
                         public void run() {
                             update();
@@ -69,21 +68,22 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
             });
         }
 
-        public void onServiceDisconnected(ComponentName className) {
-            Log.d("ICanteenBurzaActivity", "onServiceDisconnected");
+        @Override
+        public void onBinderDisconnected() {
+            Log.d("ICBurzaActivity", "onBinderDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d("ICanteenBurzaActivity", "onServiceDisconnected", e);
+                Log.d("ICBurzaActivity", "onBinderDisconnected", e);
             }
-            ICanteenBurzaActivity.this.binder.setOnBurzaChangeListener(null);
-            ICanteenBurzaActivity.this.binder = null;
-        }
+            binder.setOnBurzaChangeListener(null);
+            binder = null;
 
+        }
     };
 
-    static void startBurzaChecker(final Context context, final ICanteenService.MyBinder binder) {
-        Log.d("ICanteenBurzaActivity", "startBurzaChecker");
+    static void startBurzaChecker(final Context context, final ICService.ICanteenBinder binder) {
+        Log.d("ICBurzaActivity", "startBurzaChecker");
 
         ScrollView mainScrollView = new ScrollView(context);
 
@@ -180,7 +180,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                                     }
                                 }
                             } catch (InterruptedException e) {
-                                Log.d("ICanteenBurzaActivity", "startBurzaChecker datePickerOnDateChangedListener:", e);
+                                Log.d("ICBurzaActivity", "startBurzaChecker datePickerOnDateChangedListener:", e);
                             }
                         }
                     }
@@ -227,13 +227,21 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (ICSplashActivity.serviceManager == null
+                || !ICSplashActivity.serviceManager.isConnected()) {
+            startActivity(new Intent(this, ICSplashActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_list);
 
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
         ListView listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter(this);
+        adapter = new MultilineAdapter<>(this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -242,7 +250,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
 
                 if (item instanceof TextMultilineItem &&
                         ((TextMultilineItem) item).getTag() == null) {
-                    startBurzaChecker(ICanteenBurzaActivity.this, binder);
+                    startBurzaChecker(ICBurzaActivity.this, binder);
                     return;
                 }
 
@@ -250,7 +258,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                         ? (BurzaLunch) item : null;
                 if (lunch == null) return;
 
-                new AlertDialog.Builder(ICanteenBurzaActivity.this)
+                new AlertDialog.Builder(ICBurzaActivity.this)
                         .setTitle(lunch.getName())
                                 //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                         .setMessage(lunch.getLunchNumber()
@@ -260,7 +268,7 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (binder == null)
-                                    Toast.makeText(ICanteenBurzaActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ICBurzaActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
                                 else binder.orderBurzaLunch(lunch);
                             }
                         })
@@ -269,6 +277,20 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                         .show();
             }
         });
+
+        if (ICSplashActivity.serviceManager != null) {
+            ICSplashActivity.serviceManager
+                    .addBinderConnection(binderConnection);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (ICSplashActivity.serviceManager != null) {
+            ICSplashActivity.serviceManager
+                    .removeBinderConnection(binderConnection);
+        }
+        super.onDestroy();
     }
 
     private void update() {
@@ -300,21 +322,6 @@ public class ICanteenBurzaActivity extends AppCompatActivity {
                 });
             }
         }, getString(R.string.wait_text_loading));
-    }
-
-    @Override
-    protected void onStart() {
-        Log.d("ICanteenBurzaActivity", "onStart");
-        super.onStart();
-        bindService(new Intent(this, ICanteenService.class),
-                mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d("ICanteenBurzaActivity", "onStop");
-        unbindService(mConnection);
-        super.onStop();
     }
 
     @Override

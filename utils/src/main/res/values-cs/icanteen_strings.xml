@@ -24,6 +24,8 @@
 
     <string name="menu_item_text_start_burza_checking">Spustit Hlídač burzy</string>
 
+    <string name="radio_button_text_no_lunch">Žádný oběd</string>
+
     <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač BURZY, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
     <string name="toast_text_can_not_order_lunch">Nelze objednat jídlo, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_coming_soon">Již brzy</string>

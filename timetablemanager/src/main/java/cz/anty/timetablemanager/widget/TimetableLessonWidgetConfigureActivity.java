@@ -1,10 +1,10 @@
 package cz.anty.timetablemanager.widget;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -17,7 +17,7 @@ import cz.anty.utils.timetable.TimetableManager;
 /**
  * The configuration screen for the {@link TimetableLessonWidget TimetableLessonWidget} AppWidget.
  */
-public class TimetableLessonWidgetConfigureActivity extends Activity {
+public class TimetableLessonWidgetConfigureActivity extends AppCompatActivity {
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Spinner mTimetableSpinner;
@@ -43,7 +43,7 @@ public class TimetableLessonWidgetConfigureActivity extends Activity {
             }
         }
     };
-    private MultilineAdapter adapter;
+    private MultilineAdapter<Timetable> adapter;
     private TimetableManager timetableManager;
 
     public TimetableLessonWidgetConfigureActivity() {
@@ -91,7 +91,7 @@ public class TimetableLessonWidgetConfigureActivity extends Activity {
         }
 
         timetableManager = new TimetableManager(this);
-        adapter = new MultilineAdapter(this);
+        adapter = new MultilineAdapter<>(this);
         mTimetableSpinner.setAdapter(adapter);
         init();
     }

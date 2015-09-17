@@ -13,7 +13,7 @@ import cz.anty.utils.R;
  *
  * @author anty
  */
-public class AutoLoadMultilineAdapter extends MultilineAdapter {
+public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
     private MultilineItem loadingItem;
     private OnLoadNextListListener onLoadNextListListener;

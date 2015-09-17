@@ -28,7 +28,7 @@ public class SASManagerService extends Service {
 
     public static final String FORCE_UPDATE_WIDGET = "UPDATE_WIDGET";
 
-    private final IBinder mBinder = new MyBinder();
+    private final IBinder mBinder = new SASBinder();
     private final OnceRunThread worker = new OnceRunThread();
     private State state = State.STOPPED;
     private SASManager sasManager;
@@ -116,6 +116,15 @@ public class SASManagerService extends Service {
     @Override
     public void onDestroy() {
         Log.d("SASManagerService", "onDestroy");
+        if (SASSplashActivity.serviceManager != null)
+            SASSplashActivity.serviceManager.forceDisconnect();
+
+        if (sasManager != null && sasManager.isConnected()) {
+            sasManager.disconnect();
+            setState(State.DISCONNECTED);
+        }
+        sasManager = null;
+
         AppDataManager.removeOnChangeListener(AppDataManager.Type.SAS, onLoginChange);
         setState(State.STOPPED);
         super.onDestroy();
@@ -129,13 +138,13 @@ public class SASManagerService extends Service {
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    if (refreshMarks(true, false, updateWidget)) {
+                    if (refreshMarks(false, false, updateWidget)) {
                         SASManageWidget.callUpdate(SASManagerService.this, marks.toString());
                     }
                 }
             });
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget) {
@@ -291,7 +300,7 @@ public class SASManagerService extends Service {
         }
     }
 
-    public class MyBinder extends Binder {
+    public class SASBinder extends Binder {
 
         /*public boolean isWorkerRunning() {
             return worker.isWorkerRunning();

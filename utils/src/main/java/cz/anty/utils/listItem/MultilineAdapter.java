@@ -14,7 +14,7 @@ import cz.anty.utils.R;
  *
  * @author anty
  */
-public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
+public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
 
     private final Context context;
     private final int layoutResourceId;
@@ -29,7 +29,7 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
         this.layoutResourceId = layoutResourceId;
     }
 
-    public MultilineAdapter(Context context, int layoutResourceId, MultilineItem[] data) {
+    public MultilineAdapter(Context context, int layoutResourceId, M[] data) {
         super(context, layoutResourceId, data);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
@@ -50,7 +50,7 @@ public class MultilineAdapter extends ArrayAdapter<MultilineItem> {
     }
 
     protected View generateView(int position, View convertView, ViewGroup parent) {
-        MultilineItem item = getItem(position);
+        M item = getItem(position);
         Integer layoutResourceId = item.getLayoutResourceId(context, position);
         layoutResourceId = layoutResourceId == null ?
                 this.layoutResourceId : layoutResourceId;

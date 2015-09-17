@@ -1,27 +1,26 @@
-package cz.anty.sasmanager;
+package cz.anty.icanteenmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import cz.anty.sasmanager.receiver.StartServiceScheduleReceiver;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.ServiceManager;
 import cz.anty.utils.thread.OnceRunThread;
 
-public class SASSplashActivity extends AppCompatActivity {
+public class ICSplashActivity extends AppCompatActivity {
 
-    static ServiceManager<SASManagerService.SASBinder> serviceManager;
+    static ServiceManager<ICService.ICanteenBinder> serviceManager;
     private final OnceRunThread worker = new OnceRunThread();
 
     private void startDefaultActivity() {
         Intent activity;
-        if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
-            activity = new Intent(this, SASManageActivity.class);
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
+            activity = new Intent(this, ICSelectServiceActivity.class);
         } else {
-            activity = new Intent(this, SASLoginActivity.class);
+            activity = new Intent(this, ICLoginActivity.class);
         }
         /*if (Build.VERSION.SDK_INT > 10)
             activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -37,14 +36,14 @@ public class SASSplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         worker.setPowerManager(this);
-        sendBroadcast(new Intent(this, StartServiceScheduleReceiver.class));
+        //sendBroadcast(new Intent(this, StartServiceScheduleReceiver.class));
 
         if (serviceManager == null || !serviceManager.isConnected()) {
-            serviceManager = new ServiceManager<>(this, SASManagerService.class);
+            serviceManager = new ServiceManager<>(this, ICService.class);
             serviceManager.addBinderConnection(
-                    new ServiceManager.BinderConnection<SASManagerService.SASBinder>() {
+                    new ServiceManager.BinderConnection<ICService.ICanteenBinder>() {
                         @Override
-                        public void onBinderConnected(final SASManagerService.SASBinder binder) {
+                        public void onBinderConnected(final ICService.ICanteenBinder binder) {
                             worker.startWorker(new Runnable() {
                                 @Override
                                 public void run() {
@@ -52,7 +51,7 @@ public class SASSplashActivity extends AppCompatActivity {
                                         Thread.sleep(Constants.WAIT_TIME_ON_BIND);
                                         binder.waitToWorkerStop();
                                     } catch (InterruptedException e) {
-                                        Log.d("SASSplashActivity", "onBinderConnected", e);
+                                        Log.d("ICSplashActivity", "onBinderConnected", e);
                                     }
 
                                     runOnUiThread(new Runnable() {
@@ -73,5 +72,11 @@ public class SASSplashActivity extends AppCompatActivity {
                     });
             serviceManager.connect();
         } else startDefaultActivity();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        serviceManager.connect();
     }
 }

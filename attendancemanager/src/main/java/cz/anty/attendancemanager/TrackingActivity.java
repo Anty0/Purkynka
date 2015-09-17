@@ -17,13 +17,12 @@ import cz.anty.utils.Log;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
 import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class TrackingActivity extends AppCompatActivity {
 
     private TrackingMansManager mansManager;
-    private MultilineAdapter adapter;
+    private MultilineAdapter<Man> adapter;
     private OnceRunThreadWithSpinner worker;
 
     @Override
@@ -32,15 +31,14 @@ public class TrackingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         findViewById(R.id.editText).setVisibility(View.GONE);
         ListView resultListView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter(this);
+        adapter = new MultilineAdapter<>(this);
         mansManager = new TrackingMansManager(this);
         resultListView.setAdapter(adapter);
-        resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        resultListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MultilineItem item = adapter.getItem(position);
-                final Man man = item instanceof Man
-                        ? (Man) item : null;
+                final Man man = adapter.getItem(position);
                 if (man != null) {
                     mansManager.processMan(man, new Runnable() {
                         @Override
@@ -65,14 +63,13 @@ public class TrackingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 TrackingReceiver.refreshTrackingMans(TrackingActivity.this, mansManager, true);
-                MultilineItem[] data = mansManager.get();
+                Man[] data = mansManager.get();
 
                 Log.d("SearchActivity", "update data: " + Arrays.toString(data));
 
-
                 adapter.setNotifyOnChange(false);
                 adapter.clear();
-                for (MultilineItem item : data) {
+                for (Man item : data) {
                     adapter.add(item);
                 }
 

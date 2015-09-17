@@ -101,6 +101,12 @@ public class TrackingMansManager {
         }
     }
 
+    public int indexOf(Man man) {
+        synchronized (mans) {
+            return mans.indexOf(man);
+        }
+    }
+
     public void processMan(@NonNull final Man man, @Nullable final Runnable onChange) {
         if (context == null) return;
 

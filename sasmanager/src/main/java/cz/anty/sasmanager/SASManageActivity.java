@@ -1,12 +1,8 @@
 package cz.anty.sasmanager;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -20,6 +16,7 @@ import java.util.Arrays;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
+import cz.anty.utils.ServiceManager;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -32,20 +29,21 @@ import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 public class SASManageActivity extends AppCompatActivity {
 
     private ListView listView;
-    private MultilineAdapter adapter;
-    private SASManagerService.MyBinder binder = null;
+    private MultilineAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
     private MarksShort marksShort = MarksShort.DATE;
     private MarksManager.Semester semester = MarksManager.Semester.AUTO.getStableSemester();
-    private final ServiceConnection mConnection = new ServiceConnection() {
-
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-            Log.d("SASManageActivity", "onServiceConnected");
-            SASManageActivity.this.binder = (SASManagerService.MyBinder) binder;
+    private SASManagerService.SASBinder binder = null;
+    private ServiceManager.BinderConnection<SASManagerService.SASBinder> binderConnection
+            = new ServiceManager.BinderConnection<SASManagerService.SASBinder>() {
+        @Override
+        public void onBinderConnected(final SASManagerService.SASBinder sasBinder) {
+            Log.d("SASManageActivity", "onBinderConnected");
+            binder = sasBinder;
             refreshThread.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    SASManageActivity.this.binder.setOnStateChangedListener(new Runnable() {
+                    sasBinder.setOnStateChangedListener(new Runnable() {
                         @Override
                         public void run() {
                             runOnUiThread(new Runnable() {
@@ -63,7 +61,7 @@ public class SASManageActivity extends AppCompatActivity {
                         }
                     });
 
-                    SASManageActivity.this.binder.setOnMarksChangeListener(new Runnable() {
+                    sasBinder.setOnMarksChangeListener(new Runnable() {
                         @Override
                         public void run() {
                             onUpdate(false);
@@ -71,21 +69,21 @@ public class SASManageActivity extends AppCompatActivity {
                     });
                     onUpdate(true);
                 }
-            });
+            }, getString(R.string.wait_text_loading));
         }
 
-        public void onServiceDisconnected(ComponentName className) {
-            Log.d("SASManageActivity", "onServiceDisconnected");
+        @Override
+        public void onBinderDisconnected() {
+            Log.d("SASManageActivity", "onBinderDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d("SASManageActivity", "onServiceDisconnected", e);
+                Log.d("SASManageActivity", "onBinderDisconnected", e);
             }
-            SASManageActivity.this.binder.setOnMarksChangeListener(null);
-            SASManageActivity.this.binder.setOnStateChangedListener(null);
-            SASManageActivity.this.binder = null;
+            binder.setOnMarksChangeListener(null);
+            binder.setOnStateChangedListener(null);
+            binder = null;
         }
-
     };
 
     @Override
@@ -93,28 +91,36 @@ public class SASManageActivity extends AppCompatActivity {
         Log.d("SASManageActivity", "onCreate");
         super.onCreate(savedInstanceState);
 
+        if (SASSplashActivity.serviceManager == null
+                || !SASSplashActivity.serviceManager.isConnected()) {
+            startActivity(new Intent(this, SASSplashActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_list);
-        listView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter(this);
-        listView.setAdapter(adapter);
 
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
+
+        listView = ((ListView) findViewById(R.id.listView));
+        adapter = new MultilineAdapter<>(this);
+        listView.setAdapter(adapter);
+
+        if (SASSplashActivity.serviceManager != null) {
+            SASSplashActivity.serviceManager
+                    .addBinderConnection(binderConnection);
+        }
     }
 
     @Override
-    protected void onStart() {
-        Log.d("SASManageActivity", "onStart");
-        super.onStart();
-        Intent intent = new Intent(this, SASManagerService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d("SASManageActivity", "onStop");
-        super.onStop();
-        unbindService(mConnection);
+    protected void onDestroy() {
+        Log.d("SASManageActivity", "onDestroy");
+        if (SASSplashActivity.serviceManager != null) {
+            SASSplashActivity.serviceManager
+                    .removeBinderConnection(binderConnection);
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -179,7 +185,7 @@ public class SASManageActivity extends AppCompatActivity {
     private void onStateChanged() {
         Log.d("SASManageActivity", "onStateChanged");
         if (binder == null) return;
-        //onUpdate();
+
         switch (binder.getState()) {
             case LOG_IN_EXCEPTION:
                 logInException();
@@ -211,7 +217,7 @@ public class SASManageActivity extends AppCompatActivity {
                                         Lesson lesson = (Lesson) finalData[position];
                                         Mark[] marks = lesson.getMarks();
 
-                                        MultilineAdapter adapter = new MultilineAdapter(SASManageActivity.this,
+                                        MultilineAdapter<Mark> adapter = new MultilineAdapter<>(SASManageActivity.this,
                                                 R.layout.text_multi_line_list_item, marks);
 
                                         listView.setAdapter(adapter);

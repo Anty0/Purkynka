@@ -14,7 +14,7 @@
     <string name="text_login_data_successfully_validated">Uživatelské JMÉNO a HESLO bylo úspěšně OVĚŘENO</string>
 
     <string name="check_box_text_auto_login">Automaticky přihlašovat k ISSWF1</string>
-    <string name="check_box_text_wait_login">Počkej 3s před pokusem o přihlášení (přihlášení může fungovat i bez tohoto nastavení, ale většina nových zařízení vyžaduje tuto možnost)</string>
+    <string name="check_box_text_wait_login">Počkat 1.5s před pokusem o přihlášení (přihlášení může fungovat i bez tohoto nastavení, ale většina nových zařízení vyžaduje tuto možnost)</string>
 
     <string name="toast_text_logged_in_wifi">Přihlášen k [NAME]</string>
     <string name="toast_text_wifi_login_successful">Požadavek na přihlášení byl úspěšně odeslán.</string>

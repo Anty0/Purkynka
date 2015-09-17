@@ -24,9 +24,9 @@ import cz.anty.utils.icanteen.lunch.month.MonthLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.thread.OnceRunThread;
 
-public class ICanteenService extends Service {
+public class ICService extends Service {
 
-    private final MyBinder mBinder = new MyBinder();
+    private final ICanteenBinder mBinder = new ICanteenBinder();
     private final OnceRunThread worker = new OnceRunThread();
     private ICanteenManager mManager;
     private List<BurzaLunch> mBurzaLunchList = null;
@@ -112,8 +112,16 @@ public class ICanteenService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_NOT_STICKY;
+    }
+
+    @Override
     public void onDestroy() {
         Log.d(getClass().getSimpleName(), "onDestroy");
+        if (ICSplashActivity.serviceManager != null)
+            ICSplashActivity.serviceManager.forceDisconnect();
+
         AppDataManager.removeOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
         synchronized (worker.getWorkerLock()) {
             try {
@@ -195,7 +203,7 @@ public class ICanteenService extends Service {
                 return true;
             }
         } catch (Exception e) {
-            Log.d("ICanteenService", "orderMonth", e);
+            Log.d("ICService", "orderMonth", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
         }
@@ -223,25 +231,25 @@ public class ICanteenService extends Service {
         return mBinder;
     }
 
-    public class MyBinder extends Binder {
+    public class ICanteenBinder extends Binder {
 
         public void waitToWorkerStop() throws InterruptedException {
             worker.waitToWorkerStop();
         }
 
         public void setOnBurzaChangeListener(@Nullable Runnable onBurzaChange) {
-            ICanteenService.this.onBurzaChange = onBurzaChange;
+            ICService.this.onBurzaChange = onBurzaChange;
         }
 
         public void setOnMonthChangeListener(@Nullable Runnable onMonthChange) {
-            ICanteenService.this.onMonthChange = onMonthChange;
+            ICService.this.onMonthChange = onMonthChange;
         }
 
         public Thread refreshBurza() {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    ICanteenService.this.refreshBurza();
+                    ICService.this.refreshBurza();
                 }
             });
         }
@@ -250,7 +258,7 @@ public class ICanteenService extends Service {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    ICanteenService.this.refreshMonth();
+                    ICService.this.refreshMonth();
                 }
             });
         }
@@ -260,7 +268,7 @@ public class ICanteenService extends Service {
                 @Override
                 public void run() {
                     orderBurza(lunch);
-                    ICanteenService.this.refreshBurza();
+                    ICService.this.refreshBurza();
                 }
             });
         }
@@ -270,7 +278,7 @@ public class ICanteenService extends Service {
                 @Override
                 public void run() {
                     orderMonth(lunch);
-                    ICanteenService.this.refreshMonth();
+                    ICService.this.refreshMonth();
                 }
             });
         }
@@ -280,15 +288,15 @@ public class ICanteenService extends Service {
                 @Override
                 public void run() {
                     toBurzaMonth(lunch);
-                    ICanteenService.this.refreshMonth();
+                    ICService.this.refreshMonth();
                 }
             });
         }
 
         public void startBurzaChecker(@NonNull final BurzaLunchSelector selector) {
-            startService(new Intent(ICanteenService.this, ICanteenBurzaCheckerService.class)
-                            .putExtra(ICanteenBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE, ICanteenBurzaCheckerService.BURZA_CHECKER_STATE_START)
-                            .putExtra(ICanteenBurzaCheckerService.EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING, selector.toString())
+            startService(new Intent(ICService.this, ICBurzaCheckerService.class)
+                            .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE, ICBurzaCheckerService.BURZA_CHECKER_STATE_START)
+                            .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING, selector.toString())
             );
         }
 

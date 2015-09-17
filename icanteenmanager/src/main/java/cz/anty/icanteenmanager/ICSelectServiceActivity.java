@@ -13,12 +13,11 @@ import android.widget.Toast;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 
-public class ICanteenSelectServiceActivity extends AppCompatActivity {
+public class ICSelectServiceActivity extends AppCompatActivity {
 
-    private MultilineAdapter adapter;
+    private MultilineAdapter<TextMultilineItem> adapter;
     private ListView listView;
 
     @Override
@@ -27,7 +26,7 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter(this);
+        adapter = new MultilineAdapter<>(this);
         listView.setAdapter(adapter);
 
         init();
@@ -36,14 +35,14 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
     private void init() {
         boolean showDescription = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
-        MultilineItem[] data = new MultilineItem[]{
+        TextMultilineItem[] data = new TextMultilineItem[]{
                 new TextMultilineItem(getString(R.string.app_name_icanteen_burza), showDescription ? getString(R.string.app_description_icanteen_burza) : null),
                 new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order), showDescription ? getString(R.string.app_description_icanteen_lunch_order) : null)
         };
 
         adapter.setNotifyOnChange(false);
         adapter.clear();
-        for (MultilineItem item : data) {
+        for (TextMultilineItem item : data) {
             adapter.add(item);
         }
         adapter.notifyDataSetChanged();
@@ -56,10 +55,10 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
                 //final String item = (String) parent.getItemAtPosition(position);
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(ICanteenSelectServiceActivity.this, ICanteenBurzaActivity.class));
+                        startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(ICanteenSelectServiceActivity.this, ICanteenLunchOrderActivity.class));
+                        startActivity(new Intent(ICSelectServiceActivity.this, ICLunchOrderActivity.class));
                         break;
                 }
             }
@@ -99,7 +98,7 @@ public class ICanteenSelectServiceActivity extends AppCompatActivity {
 
     private void logOut() {
         AppDataManager.logout(AppDataManager.Type.I_CANTEEN);
-        startActivity(new Intent(this, ICanteenSplashActivity.class));
+        startActivity(new Intent(this, ICSplashActivity.class));
         finish();
     }
 }

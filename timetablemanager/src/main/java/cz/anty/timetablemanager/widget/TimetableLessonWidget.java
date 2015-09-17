@@ -91,7 +91,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                             remoteViews.setViewVisibility(R.id.text_view_text, View.GONE);
                         } else {
                             remoteViews.setTextViewText(R.id.text_view_title, nextLesson.getTitle(context, i + 1).substring(3));
-                            remoteViews.setTextViewText(R.id.text_view_text, nextLesson.getText(context, i + 1).substring(3));
+                            remoteViews.setTextViewText(R.id.text_view_text, nextLesson.getText(context, i + 1));
                         }
                         return;
                     }

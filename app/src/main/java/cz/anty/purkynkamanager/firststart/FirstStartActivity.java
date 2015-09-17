@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 
-import cz.anty.icanteenmanager.ICanteenFirstStartPage;
+import cz.anty.icanteenmanager.ICFirstStartPage;
 import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.MainActivity;
 import cz.anty.purkynkamanager.R;
@@ -42,7 +42,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                     new TermsFirstStartPage(FirstStartActivity.this),
                     new SASFirstStartPage(FirstStartActivity.this),
                     new WifiFirstStartPage(FirstStartActivity.this),
-                    new ICanteenFirstStartPage(FirstStartActivity.this)
+                    new ICFirstStartPage(FirstStartActivity.this)
             };
             initThread = worker.startWorker(new Runnable() {
                 @Override

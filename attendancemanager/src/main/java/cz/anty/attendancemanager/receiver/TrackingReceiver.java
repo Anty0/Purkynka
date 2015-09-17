@@ -69,7 +69,8 @@ public class TrackingReceiver extends BroadcastReceiver {
                                         //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                                 .build();
 
-                        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID_TRACKING, n);
+                        int index = mansManager.indexOf(findMan);
+                        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID_TRACKING + (index < 10 ? index : 9), n);
                     }
                     context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE).edit()
                             .putLong(man.getName() + Constants.SETTING_NAME_ADD_LAST_UPDATE, System.currentTimeMillis()).apply();

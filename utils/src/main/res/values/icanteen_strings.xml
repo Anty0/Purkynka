@@ -24,6 +24,8 @@
 
     <string name="menu_item_text_start_burza_checking">Start Burza watcher</string>
 
+    <string name="radio_button_text_no_lunch">No lunch</string>
+
     <string name="toast_text_can_not_start_burza_checker">Can\'t start Burza watcher, maybe still running, please try stop it or restart application</string>
     <string name="toast_text_can_not_order_lunch">Can\'t order Lunch, please try restart application</string>
     <string name="toast_text_coming_soon">Coming soon</string>

@@ -4,10 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
@@ -15,32 +12,36 @@ import android.widget.Toast;
 
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
+import cz.anty.utils.ServiceManager;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.thread.OnceRunThread;
 
-public class ICanteenBurzaCheckerService extends Service {
+public class ICBurzaCheckerService extends Service {
 
     public static final String EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING = "BURZA_CHECKER_SELECTOR";
 
     public static final String EXTRA_BURZA_CHECKER_STATE = "BURZA_CHECKER_STATE";
     public static final String BURZA_CHECKER_STATE_START = "START";
     public static final String BURZA_CHECKER_STATE_STOP = "STOP";
+
     private final OnceRunThread worker = new OnceRunThread();
-    private ICanteenService.MyBinder binder = null;
-    private final ServiceConnection mConnection = new ServiceConnection() {
+    private ICService.ICanteenBinder binder = null;
+    private ServiceManager.BinderConnection<ICService.ICanteenBinder> binderConnection
+            = new ServiceManager.BinderConnection<ICService.ICanteenBinder>() {
+        @Override
+        public void onBinderConnected(ICService.ICanteenBinder iCanteenBinder) {
+            Log.d("BurzaCheckerService", "onBinderConnected");
+            binder = iCanteenBinder;
 
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-            Log.d("BurzaCheckerService", "onServiceConnected");
-            ICanteenBurzaCheckerService.this.binder = (ICanteenService.MyBinder) binder;
         }
 
-        public void onServiceDisconnected(ComponentName className) {
-            Log.d("BurzaCheckerService", "onServiceDisconnected");
-            ICanteenBurzaCheckerService.this.binder = null;
+        @Override
+        public void onBinderDisconnected() {
+            Log.d("BurzaCheckerService", "onBinderDisconnected");
+            binder = null;
         }
-
     };
 
     @Override
@@ -53,8 +54,10 @@ public class ICanteenBurzaCheckerService extends Service {
             ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                     .cancel(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA);
 
-        bindService(new Intent(this, ICanteenService.class),
-                mConnection, Context.BIND_AUTO_CREATE);
+        if (ICSplashActivity.serviceManager != null) {
+            ICSplashActivity.serviceManager
+                    .addBinderConnection(binderConnection);
+        }
     }
 
     @Override
@@ -99,7 +102,7 @@ public class ICanteenBurzaCheckerService extends Service {
                     break;
             }
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     private void burzaChecker(@NonNull BurzaLunchSelector selector) {
@@ -113,7 +116,7 @@ public class ICanteenBurzaCheckerService extends Service {
                 .setContentText(getString(R.string.notify_text_burza_checker_running))
                 .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                 .setContentIntent(PendingIntent.getService(this, 0,
-                        new Intent(this, ICanteenBurzaCheckerService.class)
+                        new Intent(this, ICBurzaCheckerService.class)
                                 .putExtra(EXTRA_BURZA_CHECKER_STATE, BURZA_CHECKER_STATE_STOP), 0))
                 .setAutoCancel(false)
                 .setOngoing(true)
@@ -174,7 +177,10 @@ public class ICanteenBurzaCheckerService extends Service {
         if (worker.isWorkerRunning())
             worker.stopActualWorker();
 
-        unbindService(mConnection);
+        if (ICSplashActivity.serviceManager != null) {
+            ICSplashActivity.serviceManager
+                    .removeBinderConnection(binderConnection);
+        }
         super.onDestroy();
     }
 

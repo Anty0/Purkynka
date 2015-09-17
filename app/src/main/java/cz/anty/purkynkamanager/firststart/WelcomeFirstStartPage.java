@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import cz.anty.icanteenmanager.ICanteenFirstStartPage;
+import cz.anty.icanteenmanager.ICFirstStartPage;
 import cz.anty.purkynkamanager.R;
 import cz.anty.sasmanager.SASFirstStartPage;
 import cz.anty.utils.FirstStartPage;
@@ -30,7 +30,7 @@ public class WelcomeFirstStartPage extends FirstStartPage {
     public boolean showThisPage() {
         return SASFirstStartPage.available()
                 || WifiFirstStartPage.available()
-                || ICanteenFirstStartPage.available();
+                || ICFirstStartPage.available();
     }
 
     @Override

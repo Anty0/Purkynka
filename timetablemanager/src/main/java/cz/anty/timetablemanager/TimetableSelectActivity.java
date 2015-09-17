@@ -21,6 +21,7 @@ import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
 import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.MultilineAdapter;
+import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.settings.TimetableSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
@@ -32,7 +33,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
     private TimetableManager timetableManager;
     private OnceRunThreadWithSpinner worker;
-    private MultilineAdapter adapter;
+    private MultilineAdapter<MultilineItem> adapter;
     private ListView listView;
 
     @Override
@@ -48,7 +49,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
             timetableManager = new TimetableManager(this);
 
         listView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter(this);
+        adapter = new MultilineAdapter<>(this);
         listView.setAdapter(adapter);
     }
 

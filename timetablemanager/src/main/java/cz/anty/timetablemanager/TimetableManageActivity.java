@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import cz.anty.utils.Constants;
 import cz.anty.utils.listItem.MultilineAdapter;
+import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
@@ -83,7 +84,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                         textView.setTranslationX(newWidth - offset);
                     }
                 } else {
-                    textView.setTextColor(Color.argb((int) ((positionOffset < 0.5f ? Math.abs(1f - positionOffset) : positionOffset) * 1.5f * 255f), 255, 255, 255));
+                    textView.setTextColor(Color.argb((int) ((positionOffset < 0.5f ? Math.abs(1f - positionOffset) : positionOffset) * 255f), 255, 255, 255));
                 }
             }
 
@@ -133,7 +134,7 @@ public class TimetableManageActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        private MultilineAdapter adapter;
+        private MultilineAdapter<MultilineItem> adapter;
 
         public PlaceholderFragment() {
         }
@@ -155,7 +156,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             Context context = container.getContext();
             ListView rootView = new ListView(context); //inflater.inflate(R.layout.fragment_timetable_manage, container, false);
-            adapter = new MultilineAdapter(context);
+            adapter = new MultilineAdapter<>(context);
             rootView.setAdapter(adapter);
             initializeListView(context, rootView);
             return rootView;

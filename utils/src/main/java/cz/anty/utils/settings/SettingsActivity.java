@@ -9,12 +9,11 @@ import android.widget.ListView;
 
 import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private MultilineAdapter adapter;
+    private MultilineAdapter<TextMultilineItem> adapter;
     private ListView listView;
 
     @Override
@@ -22,14 +21,14 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter(this);
+        adapter = new MultilineAdapter<>(this);
         listView.setAdapter(adapter);
 
         initialize();
     }
 
     private void initialize() {
-        MultilineItem[] data = new MultilineItem[]{
+        TextMultilineItem[] data = new TextMultilineItem[]{
                 new TextMultilineItem(getString(R.string.activity_title_sas_settings), null),
                 new TextMultilineItem(getString(R.string.activity_title_wifi_settings), null),
                 new TextMultilineItem(getString(R.string.activity_title_timetable_settings), null),
@@ -37,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
                 new TextMultilineItem(getString(R.string.activity_title_about), null)};
 
         adapter.clear();
-        for (MultilineItem item : data) {
+        for (TextMultilineItem item : data) {
             adapter.add(item);
         }
         adapter.notifyDataSetChanged();

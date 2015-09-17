@@ -17,11 +17,11 @@ import cz.anty.utils.FirstStartPage;
  *
  * @author anty
  */
-public class ICanteenFirstStartPage extends FirstStartPage {
+public class ICFirstStartPage extends FirstStartPage {
 
     private final LinearLayout linearLayout;
 
-    public ICanteenFirstStartPage(Context context) {
+    public ICFirstStartPage(Context context) {
         super(context);
         linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -82,11 +82,11 @@ public class ICanteenFirstStartPage extends FirstStartPage {
     @Override
     public boolean doFinish() {
         Context context = getContext();
-        if (ICanteenLoginActivity.login((Activity) context,
+        if (ICLoginActivity.login((Activity) context,
                 ((EditText) linearLayout.findViewById(R.id.edit_username)).getText().toString(),
                 ((EditText) linearLayout.findViewById(R.id.edit_password)).getText().toString())) {
 
-            context.startService(new Intent(context, ICanteenService.class));
+            context.startService(new Intent(context, ICService.class));
             return true;
         }
         return false;

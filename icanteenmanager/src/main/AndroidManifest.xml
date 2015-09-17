@@ -8,32 +8,34 @@
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_scheme">
         <activity
-            android:name=".ICanteenLoginActivity"
+            android:name=".ICLoginActivity"
             android:label="@string/activity_title_login_icanteen" />
         <activity
-            android:name=".ICanteenSplashActivity"
+            android:name=".ICSplashActivity"
             android:label="@string/app_name_icanteen"
             android:theme="@style/AppTheme.Splash" />
         <activity
-            android:name=".ICanteenSelectServiceActivity"
+            android:name=".ICSelectServiceActivity"
             android:label="@string/app_name_icanteen" />
 
         <service
-            android:name=".ICanteenService"
+            android:name=".ICService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/app_name_icanteen" />
 
         <activity
-            android:name=".ICanteenBurzaActivity"
+            android:name=".ICBurzaActivity"
             android:label="@string/app_name_icanteen_burza" />
 
         <service
-            android:name=".ICanteenBurzaCheckerService"
+            android:name=".ICBurzaCheckerService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/app_name_icanteen_burza" />
 
         <activity
-            android:name=".ICanteenLunchOrderActivity"
+            android:name=".ICLunchOrderActivity"
             android:label="@string/app_name_icanteen_lunch_order" />
     </application>
 

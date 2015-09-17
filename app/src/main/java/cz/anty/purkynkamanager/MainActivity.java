@@ -17,14 +17,13 @@ import java.io.File;
 import java.io.IOException;
 
 import cz.anty.attendancemanager.SearchActivity;
-import cz.anty.icanteenmanager.ICanteenSplashActivity;
+import cz.anty.icanteenmanager.ICSplashActivity;
 import cz.anty.purkynkamanager.firststart.FirstStartActivity;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.settings.SettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithProgress;
@@ -36,7 +35,7 @@ import cz.anty.wifiautologin.WifiLoginActivity;
 public class MainActivity extends AppCompatActivity {
 
     private OnceRunThreadWithProgress worker;
-    private MultilineAdapter adapter;
+    private MultilineAdapter<TextMultilineItem> adapter;
     private ListView listView;
 
     @Override
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         worker = new OnceRunThreadWithProgress(this);
         listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter(this);
+        adapter = new MultilineAdapter<>(this);
         listView.setAdapter(adapter);
 
         checkUpdate();
@@ -210,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         boolean showDescription = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
-        MultilineItem[] data = new MultilineItem[]{
+        TextMultilineItem[] data = new TextMultilineItem[]{
                 new TextMultilineItem(getString(R.string.app_name_sas), showDescription ? getString(R.string.app_description_sas) : null),
                 new TextMultilineItem(getString(R.string.app_name_wifi), showDescription ? getString(R.string.app_description_wifi) : null),
                 new TextMultilineItem(getString(R.string.app_name_icanteen), showDescription ? getString(R.string.app_description_icanteen) : null),
@@ -219,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setNotifyOnChange(false);
         adapter.clear();
-        for (MultilineItem item : data) {
+        for (TextMultilineItem item : data) {
             adapter.add(item);
         }
         adapter.notifyDataSetChanged();
@@ -238,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, WifiLoginActivity.class));
                         break;
                     case 2:
-                        startActivity(new Intent(MainActivity.this, ICanteenSplashActivity.class));
+                        startActivity(new Intent(MainActivity.this, ICSplashActivity.class));
                         break;
                     case 3:
                         startActivity(new Intent(MainActivity.this, TimetableSelectActivity.class));

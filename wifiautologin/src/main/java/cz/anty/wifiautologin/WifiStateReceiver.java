@@ -21,7 +21,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        if (!AppDataManager.isWifiAutoLogin() || !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI))
+        if (!AppDataManager.isWifiAutoLogin()
+                || !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI))
             return;
 
         final WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();

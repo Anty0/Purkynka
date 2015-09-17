@@ -19,7 +19,7 @@ import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.icanteen.ICanteenManager;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
-public class ICanteenLoginActivity extends AppCompatActivity {
+public class ICLoginActivity extends AppCompatActivity {
 
     private OnceRunThreadWithSpinner saveThread;
 
@@ -98,12 +98,12 @@ public class ICanteenLoginActivity extends AppCompatActivity {
         saveThread.startWorker(new Runnable() {
             @Override
             public void run() {
-                if (login(ICanteenLoginActivity.this, username, password))
+                if (login(ICLoginActivity.this, username, password))
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //sendBroadcast(new Intent(SASLoginActivity.this, StartActivityReceiver.class));
-                            startActivity(new Intent(ICanteenLoginActivity.this, ICanteenSplashActivity.class));
+                            startActivity(new Intent(ICLoginActivity.this, ICSplashActivity.class));
                             finish();
                         }
                     });
