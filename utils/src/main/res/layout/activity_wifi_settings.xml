@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:checked="true"
         android:enabled="true"
-        android:onClick="onAutoCheckBoxClick"
         android:text="@string/check_box_text_auto_login" />
 
     <CheckBox
@@ -24,6 +23,5 @@
         android:layout_height="wrap_content"
         android:checked="true"
         android:enabled="true"
-        android:onClick="onWaitCheckBoxClick"
         android:text="@string/check_box_text_wait_login" />
 </LinearLayout>

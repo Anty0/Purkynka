@@ -106,15 +106,17 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
             @Override
             public void run() {
                 synchronized (progressDialog) {
+                    boolean show = false;
+                    if (progressDialog.isShowing()) {
+                        progressDialog.hide();
+                        show = true;
+                    }
                     progressDialog.setProgressStyle(AppCompatProgressDialog.STYLE_HORIZONTAL);
                     progressDialog.setCancelable(true);
                     /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                     if (but != null)
                         but.setVisibility(View.VISIBLE);*/
-                    if (progressDialog.isShowing()) {
-                        progressDialog.hide();
-                        progressDialog.show();
-                    }
+                    if (show) progressDialog.show();
                 }
             }
         });
@@ -126,15 +128,17 @@ public class OnceRunThreadWithProgress extends OnceRunThreadWithSpinner implemen
             @Override
             public void run() {
                 synchronized (progressDialog) {
+                    boolean show = false;
+                    if (progressDialog.isShowing()) {
+                        progressDialog.hide();
+                        show = true;
+                    }
                     progressDialog.setProgressStyle(AppCompatProgressDialog.STYLE_SPINNER);
                     progressDialog.setCancelable(false);
                     /*Button but = progressDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
                     if (but != null)
                         but.setVisibility(View.GONE);*/
-                    if (progressDialog.isShowing()) {
-                        progressDialog.hide();
-                        progressDialog.show();
-                    }
+                    if (show) progressDialog.show();
                 }
             }
         });

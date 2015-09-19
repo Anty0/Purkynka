@@ -39,6 +39,7 @@ public class Constants {
     public static final String SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS = "DISPLAY_TEACHERS_WARNING";
     public static final String SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS = "DISPLAY_TRACKING_WARNING";
     public static final String SETTING_NAME_TRACKING_MANS_SAVE = "TRACKING_MANS";
+    public static final String SETTING_NAME_MANS_SAVE_VERSION = "MANS_SAVE_VERSION";
     public static final String SETTING_NAME_ADD_LAST_UPDATE = " LAST_UPDATE";
 
 
@@ -58,7 +59,8 @@ public class Constants {
     public static final String SETTING_NAME_DISPLAY_LESSON_WARNINGS = "DISPLAY_TRACKING_WARNING";
     public static final String SETTING_NAME_APP_WIDGET = "appwidget_";
     public static final String SETTING_NAME_SIZE = "SIZE";
-    public static final String SETTING_NAME_TIMETABLE = "TIMETABLE ";
+    public static final String SETTING_NAME_ADD_TIMETABLE = "TIMETABLE_";
+    public static final String SETTING_NAME_ADD_TIMETABLE_SAVE_VERSION = "SAVE_VERSION_";
 
     public static final String SETTINGS_NAME_TEACHERS = "TeachersData";
     public static final String SETTING_NAME_TEACHERS_SAVE_VERSION = "TEACHERS_SAVE_VERSION";

@@ -6,16 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 
-import java.text.ParseException;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
-import cz.anty.utils.Log;
 import cz.anty.utils.R;
-import cz.anty.utils.attendance.AttendanceConnector;
 
 /**
  * Created by anty on 27.7.15.
@@ -24,8 +23,9 @@ import cz.anty.utils.attendance.AttendanceConnector;
  */
 public class TrackingMansManager {
 
-    private static final String MAIN_SPLIT_VALUE = ":;MM;:";
-    private static final String MAN_SPLIT_VALUE = ":;M;:";
+    private static final int MANS_SAVE_VERSION = 1;
+    //private static final String MAIN_SPLIT_VALUE = ":;MM;:";
+    //private static final String MAN_SPLIT_VALUE = ":;M;:";
 
     private final Context context;
     private final List<Man> mans = new ArrayList<>();
@@ -42,15 +42,26 @@ public class TrackingMansManager {
 
     public TrackingMansManager reload(String txtData) {
         if (txtData == null)
-            if (context == null) txtData = "";
+            if (context == null) return this;
             else txtData = context
                     .getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                     .getString(Constants.SETTING_NAME_TRACKING_MANS_SAVE, "");
 
-        String[] data = txtData.split(MAIN_SPLIT_VALUE);
-        if (data[0].equals("")) return this;
+        if (context != null) {
+            if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
+                    .getInt(Constants.SETTING_NAME_MANS_SAVE_VERSION, -1) != MANS_SAVE_VERSION) {
+                apply();
+                return this;
+            }
+        }
+
+        //String[] data = txtData.split(MAIN_SPLIT_VALUE);
+        if (txtData.equals("")) return this;
         synchronized (mans) {
             mans.clear();
+            mans.addAll(Arrays.asList(new Gson()
+                    .fromJson(txtData, Man[].class)));
+            /*mans.clear();
             for (String manData : data) {
                 String[] manDataS = manData.split(MAN_SPLIT_VALUE);
                 try {
@@ -63,7 +74,7 @@ public class TrackingMansManager {
                 } catch (ParseException e) {
                     Log.d("TrackingMansManager", "reload data: " + txtData, e);
                 }
-            }
+            }*/
         }
         return this;
     }
@@ -71,7 +82,8 @@ public class TrackingMansManager {
     public TrackingMansManager apply() {
         if (context != null)
             context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE).edit()
-                    .putString(Constants.SETTING_NAME_TRACKING_MANS_SAVE, toString()).apply();
+                    .putString(Constants.SETTING_NAME_TRACKING_MANS_SAVE, toString())
+                    .putInt(Constants.SETTING_NAME_MANS_SAVE_VERSION, MANS_SAVE_VERSION).apply();
         return this;
     }
 
@@ -173,9 +185,10 @@ public class TrackingMansManager {
 
     @Override
     public String toString() {
-        StringBuilder data = new StringBuilder();
+        //StringBuilder data = new StringBuilder();
         synchronized (mans) {
-            if (!mans.isEmpty()) {
+            return new Gson().toJson(mans.toArray(new Man[mans.size()]));
+            /*if (!mans.isEmpty()) {
                 Man man2 = mans.get(0);
                 data.append(man2.getName().replace(MAN_SPLIT_VALUE, "?????"))
                         .append(MAN_SPLIT_VALUE)
@@ -195,8 +208,8 @@ public class TrackingMansManager {
                             .append(MAN_SPLIT_VALUE)
                             .append(man.isInSchool());
                 }
-            }
+            }*/
         }
-        return data.toString();
+        //return data.toString();
     }
 }

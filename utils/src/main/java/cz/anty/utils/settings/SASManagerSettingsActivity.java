@@ -14,10 +14,14 @@ public class SASManagerSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sasmanager_settings);
-        ((CheckBox) findViewById(R.id.check_box_sas_marks_update)).setChecked(AppDataManager.isSASMarksAutoUpdate());
-    }
 
-    public void onCheckBoxSASMarksUpdateClick(View view) {
-        AppDataManager.setSASMarksAutoUpdate(((CheckBox) findViewById(R.id.check_box_sas_marks_update)).isChecked());
+        final CheckBox marksUpdateCheckBox = (CheckBox) findViewById(R.id.check_box_sas_marks_update);
+        marksUpdateCheckBox.setChecked(AppDataManager.isSASMarksAutoUpdate());
+        marksUpdateCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppDataManager.setSASMarksAutoUpdate(marksUpdateCheckBox.isChecked());
+            }
+        });
     }
 }

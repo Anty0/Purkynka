@@ -1,6 +1,9 @@
 package cz.anty.utils.timetable;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
 
 import cz.anty.utils.Constants;
 import cz.anty.utils.R;
@@ -25,8 +28,9 @@ public class Timetable implements MultilineItem {
     public static final int[] START_TIMES_MINUTES = new int[]{
             10, 0, 55, 0, 55, 50, 45, 40, 35, 30, 25};
     public static final int MAX_LESSONS = 11;
-    private static final String PARSE_CONST_DAY = ":;TD;:";
-    private static final String PARSE_CONST_OBJECT = ":;TO;:";
+    private static final int TIMETABLE_SAVE_VERSION = 2;
+    //private static final String PARSE_CONST_DAY = ":;TD;:";
+    //private static final String PARSE_CONST_OBJECT = ":;TO;:";
     /*private static final int MONDAY = 0;
     private static final int TUESDAY = 1;
     private static final int WEDNESDAY = 2;
@@ -54,23 +58,35 @@ public class Timetable implements MultilineItem {
     }
 
     static Timetable loadTimetable(Context context, String key) {
-        String[] days = context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
-                .getString(Constants.SETTING_NAME_TIMETABLE + key, "").split(PARSE_CONST_DAY);
+        SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE);
+        if (preferences.getInt(Constants.SETTING_NAME_ADD_TIMETABLE_SAVE_VERSION + key, -1) != TIMETABLE_SAVE_VERSION) {
+            Timetable timetable = new Timetable(context, key, new Lesson[DAYS_STRINGS_IDS.length][MAX_LESSONS]);
+            timetable.apply();
+            return timetable;
+        }
+
+        String data = preferences.getString(Constants.SETTING_NAME_ADD_TIMETABLE + key, "");
+        if (!data.equals(""))
+            return new Timetable(context, key, new Gson().fromJson(data, Lesson[][].class));
+        return new Timetable(context, key, new Lesson[DAYS_STRINGS_IDS.length][MAX_LESSONS]);
+
+        /*String[] days = context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
+                .getString(Constants.SETTING_NAME_ADD_TIMETABLE + key, "").split(PARSE_CONST_DAY);
         Lesson[][] lessons = new Lesson[DAYS_STRINGS_IDS.length][MAX_LESSONS];
         for (int i = 0; i < days.length; i++) {
             lessons[i] = parseDay(days[i]);
         }
-        return new Timetable(context, key, lessons);
+        return new Timetable(context, key, lessons);*/
     }
 
-    private static Lesson[] parseDay(String day) {
+    /*private static Lesson[] parseDay(String day) {
         Lesson[] lessons = new Lesson[MAX_LESSONS];
         String[] dayData = day.split(PARSE_CONST_OBJECT);
         for (int i = 0; i < dayData.length; i++) {
             lessons[i] = Lesson.parse(dayData[i]);
         }
         return lessons;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -126,34 +142,37 @@ public class Timetable implements MultilineItem {
     }
 
     private synchronized void apply() {
-        StringBuilder builder = new StringBuilder(dayToString(0).replace(PARSE_CONST_DAY, "??????"));
+        String data = new Gson().toJson(lessons);
+
+        /*StringBuilder builder = new StringBuilder(dayToString(0).replace(PARSE_CONST_DAY, "??????"));
         for (int i = 1; i < lessons.length; i++) {
             builder.append(PARSE_CONST_DAY).append(dayToString(i).replace(PARSE_CONST_DAY, "??????"));
             //builder.append(Arrays.toString(lessons.get(i).toArray()));
-        }
+        }*/
 
         context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE).edit()
-                .putString(Constants.SETTING_NAME_TIMETABLE + name, builder.toString())
+                .putString(Constants.SETTING_NAME_ADD_TIMETABLE + name, data/*builder.toString()*/)
+                .putInt(Constants.SETTING_NAME_ADD_TIMETABLE_SAVE_VERSION + name, TIMETABLE_SAVE_VERSION)
                 .apply();
     }
 
-    private synchronized String dayToString(int day) {
+    /*private synchronized String dayToString(int day) {
         Lesson[] lessonsDay = lessons[day];
         StringBuilder builder = new StringBuilder().append(lessonsDay[0] == null ? "null" : lessonsDay[0].toString().replace(PARSE_CONST_OBJECT, "??????"));
         for (int i = 1; i < lessonsDay.length; i++) {
             builder.append(PARSE_CONST_OBJECT).append(lessonsDay[i] == null ? "null" : lessonsDay[i].toString().replace(PARSE_CONST_OBJECT, "??????"));
         }
         return builder.toString();
-    }
+    }*/
 
     @Override
     public String toString() {
-        return name;
+        return getName();
     }
 
     @Override
     public String getTitle(Context context, int position) {
-        return toString();
+        return getName();
     }
 
     @Override

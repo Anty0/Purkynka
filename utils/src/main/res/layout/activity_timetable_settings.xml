@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="true"
-        android:onClick="onCheckBoxTeachersWarningsClick"
         android:text="@string/check_box_text_display_attendance_warnings" />
 
     <CheckBox
@@ -22,6 +21,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="true"
-        android:onClick="onCheckBoxLessonWarningsClick"
         android:text="@string/check_box_text_display_lessons_warnings" />
 </LinearLayout>

@@ -9,12 +9,17 @@ import cz.anty.utils.FirstStartPage;
  */
 class PagesManager {
 
+    private static int page = -1;
     private final FirstStartPage[] firstStartPages;
-    private int page = -1;
 
     PagesManager(FirstStartPage[] firstStartPages) {
         this.firstStartPages = firstStartPages;
-        next();
+        if (page == -1)
+            next();
+    }
+
+    public static void reset() {
+        page = -1;
     }
 
     public synchronized void next() {

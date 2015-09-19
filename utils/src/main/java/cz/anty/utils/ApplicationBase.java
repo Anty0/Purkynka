@@ -22,9 +22,9 @@ public class ApplicationBase extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ACRA.init(this);
         AboutActivity.restoreLocale(this);
         AppDataManager.init(this);
         Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode());
-        ACRA.init(this);
     }
 }

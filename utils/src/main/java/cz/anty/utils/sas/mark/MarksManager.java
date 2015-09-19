@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
-import java.text.ParseException;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,8 +22,8 @@ import cz.anty.utils.Constants;
  */
 public class MarksManager {
 
-    private static final int MARKS_SAVE_VERSION = 5;
-    private static final String SPLIT_VALUE = ":;M;:";
+    private static final int MARKS_SAVE_VERSION = 6;
+    //private static final String SPLIT_VALUE = ":;M;:";
 
     private final Context context;
     private final List<List<Mark>> marks = new ArrayList<>(2);
@@ -42,18 +44,19 @@ public class MarksManager {
         load();
     }
 
-    private static String marksToString(Mark[] marks) {
-        StringBuilder builder = new StringBuilder();
+    private static String marksToString(Mark... marks) {
+        return new Gson().toJson(marks);
+        /*StringBuilder builder = new StringBuilder();
         if (marks.length > 0) {
             builder.append(markToString(marks[0]));
             for (int i = 1; i < marks.length; i++) {
                 builder.append("\n").append(markToString(marks[i]).replace('\n', '?'));
             }
         }
-        return builder.toString();
+        return builder.toString();*/
     }
 
-    private static String markToString(Mark mark) {
+    /*private static String markToString(Mark mark) {
         return mark.getDateAsString().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getShortLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getLongLesson().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
@@ -63,19 +66,22 @@ public class MarksManager {
                 + mark.getWeight() + SPLIT_VALUE
                 + mark.getNote().replace(SPLIT_VALUE, "?????") + SPLIT_VALUE
                 + mark.getTeacher().replace(SPLIT_VALUE, "?????");
-    }
+    }*/
 
     public static List<Mark> parseMarks(String toParse) {
-        String[] marksData = toParse.split("\n");
+        if (toParse.equals("")) return new ArrayList<>();
+        return Arrays.asList(new Gson().fromJson(toParse, Mark[].class));
+
+        /*String[] marksData = toParse.split("\n");
         List<Mark> marks = new ArrayList<>();
         if (marksData[0].equals("")) return marks;
         for (String string : marksData) {
             marks.add(parseMark(string));
         }
-        return marks;
+        return marks;*/
     }
 
-    private static Mark parseMark(String string) {
+    /*private static Mark parseMark(String string) {
         String[] markData = string.split(SPLIT_VALUE);
         Date date;
         try {
@@ -86,13 +92,13 @@ public class MarksManager {
         return new Mark(date,
                 markData[1], markData[2], markData[3], Double.parseDouble(markData[4]),
                 markData[5], Integer.parseInt(markData[6]), markData[7], markData[8]);
-    }
+    }*/
 
     public synchronized void add(Mark mark, Semester semester) {
         marks.get(semester.getIndexValue()).add(mark);
     }
 
-    public void addAll(List<Mark> marks, Semester semester) {
+    public synchronized void addAll(List<Mark> marks, Semester semester) {
         this.marks.get(semester.getIndexValue()).addAll(marks);
     }
 
@@ -119,7 +125,7 @@ public class MarksManager {
         clear(Semester.SECOND);
 
         SharedPreferences preferences = context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE);
-        if (preferences.getInt(Constants.SETTING_NAME_MARKS_SAVE_VERSION, 0) != MARKS_SAVE_VERSION) {
+        if (preferences.getInt(Constants.SETTING_NAME_MARKS_SAVE_VERSION, -1) != MARKS_SAVE_VERSION) {
             apply(Semester.FIRST);
             apply(Semester.SECOND);
             context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE).edit()

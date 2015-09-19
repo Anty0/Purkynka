@@ -15,15 +15,22 @@ public class WifiSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_settings);
 
-        ((CheckBox) findViewById(R.id.auto_login_checkbox)).setChecked(AppDataManager.isWifiAutoLogin());
-        ((CheckBox) findViewById(R.id.wait_login_checkbox)).setChecked(AppDataManager.isWifiWaitLogin());
-    }
+        final CheckBox autoLoginCheckBox = (CheckBox) findViewById(R.id.auto_login_checkbox);
+        autoLoginCheckBox.setChecked(AppDataManager.isWifiAutoLogin());
+        autoLoginCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppDataManager.setWifiAutoLogin(autoLoginCheckBox.isChecked());
+            }
+        });
 
-    public void onAutoCheckBoxClick(@SuppressWarnings("UnusedParameters") View view) {
-        AppDataManager.setWifiAutoLogin(((CheckBox) findViewById(R.id.auto_login_checkbox)).isChecked());
-    }
-
-    public void onWaitCheckBoxClick(@SuppressWarnings("UnusedParameters") View view) {
-        AppDataManager.setWifiWaitLogin(((CheckBox) findViewById(R.id.wait_login_checkbox)).isChecked());
+        final CheckBox waitLoginCheckBox = (CheckBox) findViewById(R.id.wait_login_checkbox);
+        waitLoginCheckBox.setChecked(AppDataManager.isWifiWaitLogin());
+        waitLoginCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppDataManager.setWifiWaitLogin(waitLoginCheckBox.isChecked());
+            }
+        });
     }
 }

@@ -39,9 +39,9 @@ public class TrackingReceiver extends BroadcastReceiver {
                 List<Man> manList = Mans.parseMans(connector
                         .getSupElements(search, 1));
                 Man findMan = null;
-
-                for (int i = 0; i < manList.size(); i++) {
-                    findMan = manList.get(i);
+                int index;
+                for (index = 0; index < manList.size(); index++) {
+                    findMan = manList.get(index);
                     if (findMan.equals(man)) break;
                     else findMan = null;
                 }
@@ -69,7 +69,6 @@ public class TrackingReceiver extends BroadcastReceiver {
                                         //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                                 .build();
 
-                        int index = mansManager.indexOf(findMan);
                         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID_TRACKING + (index < 10 ? index : 9), n);
                     }
                     context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE).edit()

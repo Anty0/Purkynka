@@ -16,8 +16,8 @@ import cz.anty.utils.Log;
 public class WifiLogin {
 
     public static final String WIFI_NAME = "ISSWF";
-    private static final String LOGIN_URL = "https://wifi.sspbrno.cz/login.html";
-    //private static final String LOGOUT_URL = "https://wifi.sspbrno.cz/logout.html";
+    private static final String LOGIN_URL = "http://wifi.sspbrno.cz/login.html";
+    //private static final String LOGOUT_URL = "http://wifi.sspbrno.cz/logout.html";
     private static final String LOGIN_FIELD = "username";
     private static final String PASS_FIELD = "password";
     private static final String SUBMIT = "Submit";
@@ -30,7 +30,7 @@ public class WifiLogin {
                         .data("buttonClicked", "4", "err_flag", "0", "err_msg", "", "info_flag", "0", "redirect_url", ""
                                 , LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
                         .method(Connection.Method.POST)
-                        .validateTLSCertificates(false)
+                                //.validateTLSCertificates(false)
                         .execute();
                 return true;
             } catch (IOException e) {

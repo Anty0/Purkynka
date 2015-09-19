@@ -17,7 +17,7 @@ public class Timetables {
         int size = preferences.getInt(Constants.SETTING_NAME_SIZE, 0);
         String[] timetablesNames = new String[size];
         for (Integer i = 0; i < size; i++) {
-            timetablesNames[i] = preferences.getString(i.toString(), Constants.SETTING_NAME_TIMETABLE + i);
+            timetablesNames[i] = preferences.getString(i.toString(), Constants.SETTING_NAME_ADD_TIMETABLE + i);
         }
         return timetablesNames;
     }
@@ -44,6 +44,6 @@ public class Timetables {
     static void removeTimetablesName(Context context, String name) {
         setTimetablesNames(context, cz.anty.utils.Arrays.remove(getTimetablesNames(context), name));
         context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
-                .edit().remove(Constants.SETTING_NAME_TIMETABLE + name).apply();
+                .edit().remove(Constants.SETTING_NAME_ADD_TIMETABLE + name).apply();
     }
 }

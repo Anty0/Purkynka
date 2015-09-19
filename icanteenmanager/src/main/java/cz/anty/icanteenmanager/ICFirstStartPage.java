@@ -29,8 +29,8 @@ public class ICFirstStartPage extends FirstStartPage {
         LayoutInflater.from(context).inflate(R.layout.activity_icanteen_login, linearLayout);
         //activity.getLayoutInflater().inflate(R.layout.activity_icanteen_settings, linearLayout);
 
-        ((EditText) linearLayout.findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS));
-        ((EditText) linearLayout.findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS));
+        ((EditText) linearLayout.findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN));
+        ((EditText) linearLayout.findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
         linearLayout.findViewById(R.id.but_login).setVisibility(View.GONE);
         //((CheckBox) linearLayout.findViewById(R.id.check_box_sas_marks_update)).setChecked(AppDataManager.isSASMarksAutoUpdate(activity));
     }

@@ -14,14 +14,18 @@ public class AttendanceSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_settings);
-        ((CheckBox) findViewById(R.id.check_box_display_tracking_warnings))
-                .setChecked(getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE)
-                        .getBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS, true));
-    }
 
-    public void onCheckBoxClick(View view) {
-        getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE).edit()
-                .putBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS, ((CheckBox) view).isChecked())
-                .apply();
+        CheckBox trackingWarningsCheckBox = (CheckBox) findViewById(R.id.check_box_display_tracking_warnings);
+        trackingWarningsCheckBox.setChecked(getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE)
+                        .getBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS, true));
+        trackingWarningsCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE).edit()
+                        .putBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS,
+                                ((CheckBox) v).isChecked()).apply();
+
+            }
+        });
     }
 }

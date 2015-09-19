@@ -13,7 +13,7 @@ import cz.anty.utils.listItem.MultilineItem;
  */
 public class Lesson implements MultilineItem {
 
-    private static final String PARSE_CHARS = ":;L;:";
+    //private static final String PARSE_CHARS = ":;L;:";
     private final String name, shortName, classString, teacher;
 
     public Lesson(String name, String shortName, String classString, String teacher) {
@@ -23,12 +23,12 @@ public class Lesson implements MultilineItem {
         this.teacher = teacher == null ? "" : teacher;
     }
 
-    public static Lesson parse(String toParse) {
+    /*public static Lesson parse(String toParse) {
         if ("".equals(toParse) || "null".equals(toParse)) return null;
         String[] toParseData = toParse.split(PARSE_CHARS);
 
         return new Lesson(toParseData[0], toParseData[1], toParseData[2], toParseData[3]);
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -46,13 +46,13 @@ public class Lesson implements MultilineItem {
         return teacher;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return getName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getShortName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getClassString().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getTeacher().replace(PARSE_CHARS, "?????");
-    }
+    }*/
 
     @Override
     public String getTitle(Context context, int position) {

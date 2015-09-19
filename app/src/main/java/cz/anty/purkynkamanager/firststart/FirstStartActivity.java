@@ -35,31 +35,25 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         butSkip = (Button) findViewById(R.id.butSkip);
         butNext = (Button) findViewById(R.id.butNext);
 
-        Thread initThread = null;
-        if (pagesManager == null) {
-            final FirstStartPage[] firstStartPages = new FirstStartPage[]{
-                    new WelcomeFirstStartPage(FirstStartActivity.this),
-                    new TermsFirstStartPage(FirstStartActivity.this),
-                    new SASFirstStartPage(FirstStartActivity.this),
-                    new WifiFirstStartPage(FirstStartActivity.this),
-                    new ICFirstStartPage(FirstStartActivity.this)
-            };
-            initThread = worker.startWorker(new Runnable() {
-                @Override
-                public void run() {
-                    pagesManager = new PagesManager(firstStartPages);
-                }
-            }, getString(R.string.wait_text_please_wait));
-        }
+        final FirstStartPage[] firstStartPages = new FirstStartPage[]{
+                new WelcomeFirstStartPage(FirstStartActivity.this),
+                new TermsFirstStartPage(FirstStartActivity.this),
+                new SASFirstStartPage(FirstStartActivity.this),
+                new WifiFirstStartPage(FirstStartActivity.this),
+                new ICFirstStartPage(FirstStartActivity.this)
+        };
+        final Thread initThread = worker.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                pagesManager = new PagesManager(firstStartPages);
+            }
+        }, getString(R.string.wait_text_please_wait));
 
-        final Thread finalInitThread = initThread;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if (finalInitThread != null)
-                        worker.waitToWorkerStop(finalInitThread);
-                    else worker.waitToWorkerStop();
+                    worker.waitToWorkerStop(initThread);
                 } catch (InterruptedException e) {
                     Log.d(FirstStartActivity.this.getClass()
                             .getSimpleName(), "onCreate", e);
@@ -78,6 +72,12 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        PagesManager.reset();
     }
 
     @SuppressWarnings("ResourceType")
