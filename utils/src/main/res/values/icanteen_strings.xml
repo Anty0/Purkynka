@@ -6,15 +6,15 @@
 
     <string name="activity_title_login_icanteen">Login to iCanteen</string>
 
-    <string name="app_description_icanteen">ICanteen Manager is a tool that can manage and ordering school lunches.</string>
-    <string name="app_description_icanteen_burza">Burza watcher can control at very short intervals burza and thus increases your likelihood to profit from the school lunch burza.</string>
-    <string name="app_description_icanteen_lunch_order">Lunch order can order lunches for you. (use czech language for better strings)</string>
+    <string name="app_description_icanteen">ICanteen Manager is a tool that can manage and <b>ordering school lunches</b>.</string>
+    <string name="app_description_icanteen_burza">Burza watcher can <b>control</b> at very short intervals <b>burza</b> and thus increases your likelihood to profit from the school lunch burza.</string>
+    <string name="app_description_icanteen_lunch_order">Lunch order can <b>order lunches</b> for you. (<b>use czech language for better strings</b>)</string>
 
     <string name="notify_title_can_not_login">Can\'t login to iCanteen</string>
     <string name="notify_text_can_not_login">Please try logout and login again</string>
     <string name="notify_title_burza_checker_running">Burza watcher running</string>
     <string name="notify_text_burza_checker_running">Click to stop</string>
-    <string name="notify_title_burza_checker_completed">Order request for your lunch successfully send to burza</string>
+    <string name="notify_title_burza_checker_completed">Order request for your lunch <b>successfully</b> send to burza</string>
     <string name="notify_text_burza_checker_completed">Please check, if you have your lunch.</string>
 
     <string name="notify_title_select_to_watch">Select what to watch</string>

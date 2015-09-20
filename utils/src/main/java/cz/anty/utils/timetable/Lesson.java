@@ -2,7 +2,6 @@ package cz.anty.utils.timetable;
 
 import android.content.Context;
 
-import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 
@@ -56,14 +55,13 @@ public class Lesson implements MultilineItem {
 
     @Override
     public String getTitle(Context context, int position) {
-        return position + ". " + context.getString(R.string.list_item_text_lesson)
-                .replace(Constants.STRINGS_CONST_NAME, getShortName())
-                .replace(Constants.STRINGS_CONST_CLASS, getClassString());
+        return String.format(context.getString(R.string.list_item_text_lesson),
+                position, getShortName(), getClassString());
     }
 
     @Override
     public String getText(Context context, int position) {
-        return getTeacher();
+        return getTeacher() + " " + getName();
     }
 
     @Override

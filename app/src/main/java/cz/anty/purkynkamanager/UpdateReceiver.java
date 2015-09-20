@@ -38,19 +38,16 @@ public class UpdateReceiver extends BroadcastReceiver {
                 .notify(Constants.NOTIFICATION_ID_UPDATE,
                         new NotificationCompat.Builder(context)
                                 .setContentTitle(context.getString(R.string.notify_title_update))
-                                .setContentText(context.getString(R.string.notify_text_update_new)
-                                        .replace(Constants.STRINGS_CONST_VERSION, getLatestName(context)))
+                                .setContentText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)))
                                 .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText(context.getString(R.string.notify_text_update_new)
-                                                .replace(Constants.STRINGS_CONST_VERSION, getLatestName(context)) + "\n" +
-                                                context.getString(R.string.notify_text_update_old)
-                                                        .replace(Constants.STRINGS_CONST_VERSION, BuildConfig.VERSION_NAME)))
+                                        .bigText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)) + "\n"
+                                                + String.format(context.getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)))
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentIntent(PendingIntent.getActivity(
                                 context, 0, new Intent(context, MainActivity.class), 0))
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .build());
+                                .setAutoCancel(true)
+                                .setDefaults(Notification.DEFAULT_ALL)
+                                .build());
     }
 
     public static boolean isUpdateAvailable(Context context) {

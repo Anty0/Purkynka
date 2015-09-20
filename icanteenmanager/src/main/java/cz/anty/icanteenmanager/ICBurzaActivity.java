@@ -157,14 +157,14 @@ public class ICBurzaActivity extends AppCompatActivity {
 
                                         switch (monthLunches.length) {
                                             case 3:
-                                                lunchCheckBox3.setText(BurzaLunch.LunchNumber.LUNCH_3.toString()
-                                                        + " - " + monthLunches[2].getName());
+                                                lunchCheckBox3.setText(String.format("%1$s - %2$s",
+                                                        BurzaLunch.LunchNumber.LUNCH_3.toString(), monthLunches[2].getName()));
                                             case 2:
-                                                lunchCheckBox2.setText(BurzaLunch.LunchNumber.LUNCH_2.toString()
-                                                        + " - " + monthLunches[1].getName());
+                                                lunchCheckBox2.setText(String.format("%1$s - %2$s",
+                                                        BurzaLunch.LunchNumber.LUNCH_2.toString(), monthLunches[1].getName()));
                                             case 1:
-                                                lunchCheckBox1.setText(BurzaLunch.LunchNumber.LUNCH_1.toString()
-                                                        + " - " + monthLunches[0].getName());
+                                                lunchCheckBox1.setText(String.format("%1$s - %2$s",
+                                                        BurzaLunch.LunchNumber.LUNCH_1.toString(), monthLunches[0].getName()));
                                         }
 
                                         switch (monthLunches.length) {

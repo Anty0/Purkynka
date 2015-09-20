@@ -126,8 +126,8 @@ public class TrackingMansManager {
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
                             //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
-                    .setMessage(context.getString(R.string.dialog_text_attendance_stop_tracking)
-                            .replace(Constants.STRINGS_CONST_NAME, man.getName()))
+                    .setMessage(String.format(context.getString(R.string
+                            .dialog_text_attendance_stop_tracking), man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -145,8 +145,8 @@ public class TrackingMansManager {
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
                             //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
-                    .setMessage(context.getString(R.string.dialog_text_attendance_tracking)
-                            .replace(Constants.STRINGS_CONST_NAME, man.getName()))
+                    .setMessage(String.format(context.getString(R.string
+                            .dialog_text_attendance_tracking), man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -154,8 +154,7 @@ public class TrackingMansManager {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_terms_warning)
                                                 //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
-                                        .setMessage(context.getString(R.string.dialog_text_terms_attendance_tracking)
-                                                .replace(Constants.STRINGS_CONST_NAME, man.getName()))
+                                        .setMessage(String.format(context.getString(R.string.dialog_text_terms_attendance_tracking), man.getName()))
                                         .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

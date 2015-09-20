@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 
@@ -83,9 +82,8 @@ public class Lesson implements MultilineItem {
 
     @Override
     public String getText(Context context, int position) {
-        return context.getString(R.string.text_marks)
-                .replace(Constants.STRINGS_CONST_NUMBER
-                        , Integer.toString(getMarks().length));
+        return String.format(context.getString(R.string.text_marks),
+                getMarks().length);
     }
 
     @Override

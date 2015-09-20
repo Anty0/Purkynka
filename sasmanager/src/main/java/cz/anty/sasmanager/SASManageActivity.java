@@ -14,7 +14,6 @@ import android.widget.ListView;
 import java.util.Arrays;
 
 import cz.anty.utils.AppDataManager;
-import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.ServiceManager;
 import cz.anty.utils.listItem.MultilineAdapter;
@@ -308,9 +307,8 @@ public class SASManageActivity extends AppCompatActivity {
     private void logInException() {
         Log.d("SASManageActivity", "logInException");
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                .setTitle(getString(R.string.exception_title_login)
-                        .replace(Constants.STRINGS_CONST_NAME,
-                                AppDataManager.getUsername(AppDataManager.Type.SAS)))
+                .setTitle(String.format(getString(R.string.exception_title_login),
+                        AppDataManager.getUsername(AppDataManager.Type.SAS)))
                 .setMessage(R.string.exception_message_login)
                 .setPositiveButton(R.string.but_retry, new DialogInterface.OnClickListener() {
                     @Override

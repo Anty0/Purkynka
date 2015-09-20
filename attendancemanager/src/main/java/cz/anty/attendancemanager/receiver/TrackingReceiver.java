@@ -53,13 +53,11 @@ public class TrackingReceiver extends BroadcastReceiver {
                     if (man.isInSchool() != findMan.isInSchool()) {
                         Notification n = new NotificationCompat.Builder(context)
                                 .setContentTitle(findMan.getName() + " " + findMan.getClassString())
-                                .setContentText((Man.IsInSchoolState.IN_SCHOOL
-                                        .equals(findMan.isInSchool()) ?
-                                        context.getString(R.string.notify_text_tracked_is_in_school) :
-                                        context.getString(R.string.notify_text_tracked_is_in_not_school))
-                                        .replace(Constants.STRINGS_CONST_NAME,
-                                                findMan.getName()) + " (" +
-                                        findMan.getLastEnterAsString() + ")")
+                                .setContentText(String.format(Man.IsInSchoolState.IN_SCHOOL
+                                                .equals(findMan.isInSchool()) ?
+                                                context.getString(R.string.notify_text_tracked_is_in_school) :
+                                                context.getString(R.string.notify_text_tracked_is_in_not_school),
+                                        findMan.getName()) + " (" + findMan.getLastEnterAsString() + ")")
                                 .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
                                 .setContentIntent(PendingIntent.getActivity(context, 0,
                                         new Intent(context, SearchActivity.class)

@@ -59,8 +59,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(context, context.getString(R.string.toast_text_logged_in_wifi)
-                                        .replace(Constants.STRINGS_CONST_NAME, wifiInfo.getSSID()),
+                        Toast.makeText(context, String.format(context.getString(R.string
+                                        .toast_text_logged_in_wifi), wifiInfo.getSSID()),
                                 Toast.LENGTH_LONG).show();
                     }
                 });

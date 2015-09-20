@@ -5,7 +5,6 @@ import android.content.Context;
 import java.util.Date;
 import java.util.Locale;
 
-import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.listItem.MultilineItem;
@@ -67,11 +66,10 @@ public class Man implements MultilineItem {
     public String getTitle(Context context, int position) {
         String classString = getClassString();
         IsInSchoolState schoolState = isInSchool();
-        return (IsInSchoolState.UNAVAILABLE.equals(schoolState) ? Constants.STRINGS_CONST_NAME :
-                (IsInSchoolState.IN_SCHOOL.equals(schoolState)
-                        ? context.getString(R.string.text_is_in_school) : context.getString(R.string.text_isnt_in_school)))
-                .replace(Constants.STRINGS_CONST_NAME, getName() +
-                        (classString.length() > 4 ? "" : " " + classString));
+        return String.format((IsInSchoolState.UNAVAILABLE.equals(schoolState) ? "%1$s" :
+                (IsInSchoolState.IN_SCHOOL.equals(schoolState) ? context.getString(R.string.text_is_in_school)
+                        : context.getString(R.string.text_isnt_in_school))), getName() +
+                (classString.length() > 4 ? "" : " " + classString));
     }
 
     @Override

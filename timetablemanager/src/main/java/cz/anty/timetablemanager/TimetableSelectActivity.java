@@ -21,8 +21,6 @@ import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
 import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.settings.TimetableSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.timetable.Timetable;
@@ -33,7 +31,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
     private TimetableManager timetableManager;
     private OnceRunThreadWithSpinner worker;
-    private MultilineAdapter<MultilineItem> adapter;
+    private MultilineAdapter<Timetable> adapter;
     private ListView listView;
 
     @Override
@@ -61,86 +59,12 @@ public class TimetableSelectActivity extends AppCompatActivity {
         for (Timetable timetable : timetables) {
             adapter.add(timetable);
         }
-        adapter.add(new TextMultilineItem(getString(R.string
-                .list_item_text_add_timetable), null));
         adapter.notifyDataSetChanged();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                //final String item = (String) parent.getItemAtPosition(position);
-                if (position >= timetables.length) {
-
-                    ScrollView mainScrollView = new ScrollView(TimetableSelectActivity.this);
-
-                    final LinearLayout layout = new LinearLayout(TimetableSelectActivity.this);
-                    layout.setOrientation(LinearLayout.VERTICAL);
-                    mainScrollView.addView(layout);
-
-                    final EditText input = new EditText(TimetableSelectActivity.this);
-                    layout.addView(input);
-
-                    final CheckBox autoLoadCheckBox = new CheckBox(TimetableSelectActivity.this);
-                    autoLoadCheckBox.setChecked(true);
-                    autoLoadCheckBox.setText(R.string.check_box_text_auto_load);
-                    layout.addView(autoLoadCheckBox);
-
-                    new AlertDialog.Builder(TimetableSelectActivity.this)
-                            .setTitle(R.string.dialog_title_new_timetable)
-                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
-                            .setMessage(R.string.dialog_text_insert_timetable_name)
-                            .setView(mainScrollView)
-                            .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    worker.startWorker(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                Timetable newTimetable = timetableManager.addTimetable(input.getText().toString());
-                                                if (autoLoadCheckBox.isChecked())
-                                                    TimetableConnector.tryLoadTimetable(newTimetable);
-                                            } catch (Exception e) {
-                                                Log.d("TimetableSelectActivity", "initialize", e);
-                                                final String title, message;
-                                                if (e instanceof WrongLoginDataException) {
-                                                    title = getString(R.string.exception_title_name) + ": " + input.getText();
-                                                    message = getString(R.string.exception_message_name);
-                                                } else if (e instanceof IOException) {
-                                                    title = getString(R.string.exception_title_connection);
-                                                    message = getString(R.string.exception_message_connection);
-                                                } else {
-                                                    title = getString(R.string.dialog_title_timetable_still_exists);
-                                                    message = getString(R.string.dialog_message_timetable_still_exists);
-                                                }
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        new AlertDialog.Builder(TimetableSelectActivity.this)
-                                                                .setTitle(title)
-                                                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
-                                                                .setMessage(message)
-                                                                .setPositiveButton(R.string.but_ok, null)
-                                                                .setCancelable(true)
-                                                                .show();
-                                                    }
-                                                });
-                                            }
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    initialize();
-                                                }
-                                            });
-                                        }
-                                    }, getString(R.string.wait_text_loading));
-                                }
-                            })
-                            .setNegativeButton(R.string.but_cancel, null)
-                            .setCancelable(true)
-                            .show();
-                    return;
-                }
                 TimetableManageActivity.toShow = timetables[position];
                 startActivity(new Intent(TimetableSelectActivity.this, TimetableManageActivity.class));
             }
@@ -150,7 +74,6 @@ public class TimetableSelectActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= timetables.length) return false;
                 final Timetable timetable = timetables[position];
                 new AlertDialog.Builder(TimetableSelectActivity.this)
                         .setTitle(timetable.getName())
@@ -193,10 +116,80 @@ public class TimetableSelectActivity extends AppCompatActivity {
         });
     }
 
+    private void addTimetable() {
+        ScrollView mainScrollView = new ScrollView(TimetableSelectActivity.this);
+
+        final LinearLayout layout = new LinearLayout(TimetableSelectActivity.this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        mainScrollView.addView(layout);
+
+        final EditText input = new EditText(TimetableSelectActivity.this);
+        layout.addView(input);
+
+        final CheckBox autoLoadCheckBox = new CheckBox(TimetableSelectActivity.this);
+        autoLoadCheckBox.setChecked(true);
+        autoLoadCheckBox.setText(R.string.check_box_text_auto_load);
+        layout.addView(autoLoadCheckBox);
+
+        new AlertDialog.Builder(TimetableSelectActivity.this)
+                .setTitle(R.string.dialog_title_new_timetable)
+                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                .setMessage(R.string.dialog_text_insert_timetable_name)
+                .setView(mainScrollView)
+                .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        worker.startWorker(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Timetable newTimetable = timetableManager.addTimetable(input.getText().toString());
+                                    if (autoLoadCheckBox.isChecked())
+                                        TimetableConnector.tryLoadTimetable(newTimetable);
+                                } catch (Exception e) {
+                                    Log.d("TimetableSelectActivity", "initialize", e);
+                                    final String title, message;
+                                    if (e instanceof WrongLoginDataException) {
+                                        title = getString(R.string.exception_title_name) + ": " + input.getText();
+                                        message = getString(R.string.exception_message_name);
+                                    } else if (e instanceof IOException) {
+                                        title = getString(R.string.exception_title_connection);
+                                        message = getString(R.string.exception_message_connection);
+                                    } else {
+                                        title = getString(R.string.dialog_title_timetable_still_exists);
+                                        message = getString(R.string.dialog_message_timetable_still_exists);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialog.Builder(TimetableSelectActivity.this)
+                                                    .setTitle(title)
+                                                            //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                                                    .setMessage(message)
+                                                    .setPositiveButton(R.string.but_ok, null)
+                                                    .setCancelable(true)
+                                                    .show();
+                                        }
+                                    });
+                                }
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        initialize();
+                                    }
+                                });
+                            }
+                        }, getString(R.string.wait_text_loading));
+                    }
+                })
+                .setNegativeButton(R.string.but_cancel, null)
+                .setCancelable(true)
+                .show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_default, menu);
+        getMenuInflater().inflate(R.menu.menu_timetable_select, menu);
         return true;
     }
 
@@ -209,6 +202,10 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, TimetableSettingsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_add) {
+            addTimetable();
             return true;
         }
 

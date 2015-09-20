@@ -132,10 +132,10 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         }
                         if (man != null && Man.IsInSchoolState.NOT_IN_SCHOOL.equals(man.isInSchool())) {
                             Notification n = new NotificationCompat.Builder(context)
-                                    .setContentTitle(context.getString(R.string.notify_title_substitution)
-                                            .replace(Constants.STRINGS_CONST_NAME, lesson.getShortName()))
-                                    .setContentText(context.getString(R.string.notify_text_teacher_is_not_here)
-                                            .replace(Constants.STRINGS_CONST_NAME, man.getName()))
+                                    .setContentTitle(String.format(context.getString(R.string
+                                            .notify_title_substitution), lesson.getShortName()))
+                                    .setContentText(String.format(context.getString(R.string
+                                            .notify_text_teacher_is_not_here), man.getName()))
                                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                     .setContentIntent(PendingIntent.getActivity(context, 0,
                                             new Intent(context, TimetableSelectActivity.class), 0))

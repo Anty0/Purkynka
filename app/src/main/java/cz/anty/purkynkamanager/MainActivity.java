@@ -66,10 +66,9 @@ public class MainActivity extends AppCompatActivity {
                         if (UpdateReceiver.isUpdateAvailable(MainActivity.this)) {
                             new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog)
                                     .setTitle(R.string.notify_title_update)
-                                    .setMessage(getString(R.string.notify_text_update_old)
-                                            .replace(Constants.STRINGS_CONST_VERSION, BuildConfig.VERSION_NAME)
-                                            + "\n" + getString(R.string.notify_text_update_new)
-                                            .replace(Constants.STRINGS_CONST_VERSION, UpdateReceiver.getLatestName(MainActivity.this))
+                                    .setMessage(String.format(getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)
+                                            + "\n" + String.format(getString(R.string.notify_text_update_new),
+                                            UpdateReceiver.getLatestName(MainActivity.this))
                                             + "\n\n" + getString(R.string.dialog_message_update_alert))
                                     .setPositiveButton(R.string.but_update, new DialogInterface.OnClickListener() {
                                         @Override

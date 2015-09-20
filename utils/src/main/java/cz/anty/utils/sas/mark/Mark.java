@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 import cz.anty.utils.listItem.MultilineItem;
 
@@ -86,10 +85,8 @@ public class Mark implements MultilineItem {
 
     @Override
     public String getTitle(Context context, int position) {
-        return context.getString(R.string.text_mark_with_weight)
-                .replace(Constants.STRINGS_CONST_NAME, getShortLesson())
-                .replace(Constants.STRINGS_CONST_NUMBER, getValueToShow())
-                .replace(Constants.STRINGS_CONST_WEIGHT, Integer.toString(getWeight()));
+        return String.format(context.getString(R.string.text_mark_with_weight),
+                getShortLesson(), getValueToShow(), getWeight());
     }
 
     @Override

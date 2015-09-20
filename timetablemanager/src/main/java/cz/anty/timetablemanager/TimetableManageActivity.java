@@ -24,7 +24,6 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import cz.anty.utils.Constants;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -257,9 +256,8 @@ public class TimetableManageActivity extends AppCompatActivity {
                     mainScrollView.addView(linearLayout);
 
                     new AlertDialog.Builder(context)
-                            .setTitle(context.getString(R.string.dialog_title_lesson)
-                                    .replace(Constants.STRINGS_CONST_NAME, context.getString(Timetable.DAYS_STRINGS_IDS[day]))
-                                    .replace(Constants.STRINGS_CONST_NUMBER, Integer.toString(lessonIndex)))
+                            .setTitle(String.format(context.getString(R.string.dialog_title_lesson),
+                                    context.getString(Timetable.DAYS_STRINGS_IDS[day]), lessonIndex))
                                     //TODO add set icon with icon "T"
                             .setView(mainScrollView)
                             .setCancelable(false)

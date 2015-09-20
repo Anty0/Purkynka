@@ -9,22 +9,22 @@
 
     <string name="service_title_sas_manager">Služba kontroly známek pro iSAS Manager</string>
 
-    <string name="app_description_sas">iSAS Manager je jednoduchý prográmek pro správu vašich známek, umí upozorňovat na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
+    <string name="app_description_sas">iSAS Manager je jednoduchý prográmek pro <b>správu</b> vašich <b>známek</b>, umí <b>upozorňovat</b> na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
 
     <string name="exception_title_validate">Chyba při ověřování</string>
     <string name="exception_validate_wrong_login">Špatné JMÉNO nebo HESLO</string>
     <string name="exception_validate_no_connection">Nedaří se připojit internetu</string>
     <string name="exception_title_sas_manager_binder_null">Došlo k chybě</string>
     <string name="exception_message_sas_manager_binder_null">zkuste kliknout na obnovit</string>
-    <string name="exception_title_login">Nelze provést přihlášení jako [NAME]</string>
+    <string name="exception_title_login">Nelze provést přihlášení jako %1$s</string>
     <string name="exception_message_login">Uživatelské jméno, nebo heslo není v pořádku</string>
 
     <string name="text_date">Datum</string>
     <string name="text_logo">logo</string>
     <string name="text_from">Z</string>
     <string name="text_free_list">Nic k zobrazení</string>
-    <string name="text_marks">[NUMBER] Známek</string>
-    <string name="text_mark_with_weight">[NAME]: [NUMBER] s vahou [WEIGHT]</string>
+    <string name="text_marks">%1$d Známek</string>
+    <string name="text_mark_with_weight">%1$s: %2$s s vahou %3$d</string>
     <string name="text_value">Známka</string>
     <string name="text_weight">Váha</string>
     <string name="text_type">Typ</string>
@@ -43,6 +43,6 @@
     <string name="menu_item_text_sort_date">Data</string>
     <string name="menu_item_text_sort_lesson">Předmětů</string>
 
-    <string name="notify_title_new_marks">[NUMBER] nové ZNÁMKY</string>
-    <string name="notify_title_new_mark">[NUMBER] nová ZNÁMKA</string>
+    <string name="notify_title_new_marks">%1$d nové ZNÁMKY</string>
+    <string name="notify_title_new_mark">%1$d nová ZNÁMKA</string>
 </resources>
