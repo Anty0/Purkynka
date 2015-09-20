@@ -44,6 +44,7 @@ public class SASConnector {
                     .connect(LOGIN_URL)
                     .data(LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
                     .method(Connection.Method.POST)
+                    .validateTLSCertificates(false)
                     .execute().cookies();
         } catch (IOException e) {
             depth++;
@@ -76,6 +77,7 @@ public class SASConnector {
                     .connect(MARKS_URL)
                     .data(SEMESTER, semester.getValue().toString(), SHORT_BY, SHORT_BY_DATE)
                     .method(Connection.Method.GET)
+                    .validateTLSCertificates(false)
                     .cookies(loginCookies).get();
         } catch (IOException e) {
             depth++;
