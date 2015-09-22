@@ -13,11 +13,11 @@ public abstract class FirstStartPage {
 
     private final Context context;
 
-    public FirstStartPage(Context context) {
+    protected FirstStartPage(Context context) {
         this.context = context;
     }
 
-    public Context getContext() {
+    protected Context getContext() {
         return context;
     }
 

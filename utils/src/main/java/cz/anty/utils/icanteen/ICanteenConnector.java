@@ -17,7 +17,7 @@ import cz.anty.utils.WrongLoginDataException;
  *
  * @author anty
  */
-public class ICanteenConnector {
+class ICanteenConnector {
 
     //public static final SimpleDateFormat DATE_PARSE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
@@ -41,7 +41,7 @@ public class ICanteenConnector {
 
     private final Map<String, String> loginCookies;
 
-    public ICanteenConnector(String username, String password) throws IOException {
+    ICanteenConnector(String username, String password) throws IOException {
         this.loginCookies = login(0, null, username, password);
     }
 

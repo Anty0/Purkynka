@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
-import cz.anty.utils.ServiceManager;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
+import cz.anty.utils.service.ServiceManager;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class ICBurzaCheckerService extends Service {

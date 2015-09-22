@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
-import cz.anty.utils.ServiceManager;
+import cz.anty.utils.service.ServiceManager;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class ICSplashActivity extends AppCompatActivity {

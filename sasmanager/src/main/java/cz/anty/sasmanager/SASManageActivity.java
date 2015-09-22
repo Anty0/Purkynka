@@ -15,13 +15,13 @@ import java.util.Arrays;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Log;
-import cz.anty.utils.ServiceManager;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
 import cz.anty.utils.sas.mark.Lesson;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
+import cz.anty.utils.service.ServiceManager;
 import cz.anty.utils.settings.SASManagerSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 

@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.anty.utils.Log;
-import cz.anty.utils.ServiceManager;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.service.ServiceManager;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class ICLunchOrderActivity extends AppCompatActivity {

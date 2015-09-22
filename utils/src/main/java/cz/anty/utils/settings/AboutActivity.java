@@ -63,7 +63,7 @@ public class AboutActivity extends AppCompatActivity {
                 .show();
     }
 
-    public static void setLocale(Context context, String lang) {
+    private static void setLocale(Context context, String lang) {
         Locale myLocale = new Locale(lang);
         Resources res = context.getResources();
         Configuration conf = res.getConfiguration();

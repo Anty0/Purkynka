@@ -1,4 +1,4 @@
-package cz.anty.utils;
+package cz.anty.utils.service;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -9,6 +9,8 @@ import android.os.IBinder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.anty.utils.Log;
 
 /**
  * Created by anty on 17.9.15.
@@ -50,7 +52,7 @@ public final class ServiceManager<B extends IBinder> {
         }
     };
 
-    public ServiceManager(Context context, Class<? extends Service> serviceClass) {
+    public ServiceManager(Context context, Class<? extends BindImplService<B>> serviceClass) {
         mContext = context;
         mServiceClass = serviceClass;
     }

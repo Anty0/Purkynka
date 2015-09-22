@@ -16,7 +16,7 @@ import cz.anty.utils.sas.mark.MarksManager;
  *
  * @author anty
  */
-public class SASConnector {
+class SASConnector {
 
     private static final String LOGIN_URL = "https://www.sspbrno.cz/ISAS/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
@@ -33,7 +33,7 @@ public class SASConnector {
 
     private final Map<String, String> loginCookies;
 
-    public SASConnector(String username, String password) throws IOException {
+    SASConnector(String username, String password) throws IOException {
         this.loginCookies = login(0, null, username, password);
     }
 

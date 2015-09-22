@@ -3,10 +3,8 @@ package cz.anty.sasmanager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
@@ -22,13 +20,14 @@ import cz.anty.utils.sas.SASManager;
 import cz.anty.utils.sas.mark.Lesson;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
+import cz.anty.utils.service.BindImplService;
 import cz.anty.utils.thread.OnceRunThread;
 
-public class SASManagerService extends Service {
+public class SASManagerService extends BindImplService<SASManagerService.SASBinder> {
 
     public static final String FORCE_UPDATE_WIDGET = "UPDATE_WIDGET";
 
-    private final IBinder mBinder = new SASBinder();
+    private final SASBinder mBinder = new SASBinder();
     private final OnceRunThread worker = new OnceRunThread();
     private State state = State.STOPPED;
     private SASManager sasManager;
@@ -249,8 +248,8 @@ public class SASManagerService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        Log.d("SASManagerService", "onBind");
+    public SASBinder getBinder() {
+        Log.d("SASManagerService", "getBinder");
         return mBinder;
     }
 
