@@ -2,6 +2,7 @@ package cz.anty.timetablemanager;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
@@ -37,8 +38,13 @@ public class TimetableManageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (toShow == null) {
+            startActivity(new Intent(this, TimetableSelectActivity.class));
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_timetable_manage);
-
+        setTitle(getString(R.string.activity_title_timetable_manage) + " - " + toShow.getName());
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

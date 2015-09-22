@@ -16,17 +16,15 @@ import java.util.List;
 import cz.anty.attendancemanager.R;
 import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.attendancemanager.widget.TrackingWidget;
+import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
 import cz.anty.utils.attendance.man.TrackingMansManager;
-import cz.anty.utils.thread.OnceRunThread;
 
 public class TrackingReceiver extends BroadcastReceiver {
-
-    private static final OnceRunThread worker = new OnceRunThread();
 
     public static TrackingMansManager refreshTrackingMans(Context context, @Nullable TrackingMansManager mansManager, boolean updateWidget) {
         if (mansManager == null) mansManager = new TrackingMansManager(context);
@@ -94,8 +92,7 @@ public class TrackingReceiver extends BroadcastReceiver {
             return;
         }
 
-        worker.setPowerManager(context);
-        worker.startWorker(new Runnable() {
+        ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
             public void run() {
                 refreshTrackingMans(context, null, true);

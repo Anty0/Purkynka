@@ -11,14 +11,12 @@ import android.support.v7.app.NotificationCompat;
 
 import java.io.IOException;
 
+import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
-import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.update.UpdateConnector;
 
 public class UpdateReceiver extends BroadcastReceiver {
-
-    private static final OnceRunThread worker = new OnceRunThread();
 
     public static void checkUpdate(Context context) throws IOException, NumberFormatException {
         Integer latestCode = UpdateConnector.getLatestVersionCode();
@@ -66,8 +64,7 @@ public class UpdateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        worker.setPowerManager(context);
-        worker.startWorker(new Runnable() {
+        ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
             public void run() {
                 try {

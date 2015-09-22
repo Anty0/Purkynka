@@ -7,6 +7,7 @@ import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
 import cz.anty.utils.settings.AboutActivity;
+import cz.anty.utils.thread.OnceRunThread;
 
 /**
  * Created by anty on 7.9.15.
@@ -19,12 +20,15 @@ import cz.anty.utils.settings.AboutActivity;
 )
 public class ApplicationBase extends Application {
 
+    public static final OnceRunThread WORKER = new OnceRunThread();
+
     @Override
     public void onCreate() {
         super.onCreate();
+        WORKER.setPowerManager(this);
         ACRA.init(this);
-        AboutActivity.restoreLocale(this);
         AppDataManager.init(this);
+        AboutActivity.restoreLocale(this);
         Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode());
     }
 }

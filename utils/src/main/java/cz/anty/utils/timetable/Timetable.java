@@ -112,6 +112,18 @@ public class Timetable implements MultilineItem {
         return lessons[day][lessonIndex];
     }
 
+    public synchronized int getLessonIndex(Lesson lesson) {
+        if (lesson == null) throw new IllegalArgumentException("Lesson to find is null");
+
+        for (Lesson[] lessons : this.lessons) {
+            for (int i = 0; i < lessons.length; i++) {
+                if (lesson.equals(lessons[i]))
+                    return i;
+            }
+        }
+        return -1;
+    }
+
     public synchronized Lesson getNextLesson(int day, int lessonIndex) {
         Lesson toReturn = null;
         int depth = 0;

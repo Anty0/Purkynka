@@ -16,6 +16,7 @@
     <string name="check_box_text_auto_login">Auto login to ISSWF1</string>
     <string name="check_box_text_wait_login">Wait 1.5s before login try (it can work without this, but most of devices <b>requires</b> this option)</string>
 
+    <string name="toast_text_logging_to_wifi">Logging to %1$s</string>
     <string name="toast_text_logged_in_wifi">Logged in %1$s</string>
     <string name="toast_text_wifi_login_successful">Login request <b>successfully</b> send.</string>
 </resources>

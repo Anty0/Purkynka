@@ -27,8 +27,8 @@ public class WifiLogin {
         for (int i = 0; i < Constants.MAX_TRY; i++) {
             try {
                 Jsoup.connect(LOGIN_URL)
-                        .data("buttonClicked", "4", "err_flag", "0", "err_msg", "", "info_flag", "0", "redirect_url", ""
-                                , LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
+                        .data("buttonClicked", "4", "err_flag", "0", "err_msg", "", "info_flag", "0", "info_msg", "",
+                                "redirect_url", "", LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
                         .method(Connection.Method.POST)
                                 //.validateTLSCertificates(false)
                         .execute();

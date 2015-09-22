@@ -231,7 +231,7 @@ public class SASManagerService extends Service {
         // the addAction re-use the same intent to keep the example short
         Notification n = new NotificationCompat.Builder(SASManagerService.this)
                 .setContentTitle(String.format(newMarks > 1 ? getString(R.string.notify_title_new_marks)
-                        : getString(R.string.notify_title_new_mark), Integer.toString(newMarks)))
+                        : getString(R.string.notify_title_new_mark), newMarks))
                 .setContentText(builder)
                 .setSmallIcon(R.mipmap.ic_launcher_sas)
                 .setContentIntent(pIntent)

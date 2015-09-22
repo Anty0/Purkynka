@@ -18,13 +18,18 @@ class ByteEncryption {
     }
 
     public static String xorFromByte(final String input) {
-        if (input.equals("")) return "";
-        String[] strings = input.split(" ");
-        byte[] bytes = new byte[strings.length];
-        for (int i = 0; i < strings.length; i++) {
-            bytes[i] = Byte.parseByte(strings[i]);
+        try {
+            if (input.equals("")) return "";
+            String[] strings = input.split(" ");
+            byte[] bytes = new byte[strings.length];
+            for (int i = 0; i < strings.length; i++) {
+                bytes[i] = Byte.parseByte(strings[i]);
+            }
+            return new String(xor(bytes, MY_KEY), Charset.defaultCharset());
+        } catch (Exception e) {
+            Log.d(ByteEncryption.class.getSimpleName(), "xorFromByte", e);
+            return xor(input);
         }
-        return new String(xor(bytes, MY_KEY), Charset.defaultCharset());
     }
 
     public static String xor(final String input) {

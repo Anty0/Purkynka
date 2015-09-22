@@ -69,7 +69,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
 
             if (day != Calendar.SUNDAY && day != Calendar.SATURDAY) {
                 for (int i = 0; i < Timetable.MAX_LESSONS; i++) {
-                    int requestedTime = Timetable.START_TIMES_HOURS[i] * 60 + Timetable.START_TIMES_MINUTES[i];
+                    int requestedTime = Timetable.START_TIMES_HOURS[i] * 60 + Timetable.START_TIMES_MINUTES[i] + 45;
                     if (minuteTime < requestedTime) {
                         Lesson actualLesson = timetable.getLesson(day - 2, i);
                         Lesson nextLesson = timetable.getNextLesson(day - 2, i);
@@ -90,8 +90,9 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                                 remoteViews.setViewPadding(R.id.text_view_title, 1, 8, 1, 8);
                             remoteViews.setViewVisibility(R.id.text_view_text, View.GONE);
                         } else {
-                            remoteViews.setTextViewText(R.id.text_view_title, nextLesson.getTitle(context, i + 1).substring(3));
-                            remoteViews.setTextViewText(R.id.text_view_text, nextLesson.getText(context, i + 1));
+                            int index = timetable.getLessonIndex(nextLesson);
+                            remoteViews.setTextViewText(R.id.text_view_title, nextLesson.getTitle(context, index));
+                            remoteViews.setTextViewText(R.id.text_view_text, nextLesson.getText(context, index));
                         }
                         return;
                     }

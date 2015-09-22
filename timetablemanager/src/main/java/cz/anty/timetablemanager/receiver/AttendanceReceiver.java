@@ -16,6 +16,7 @@ import java.util.List;
 import cz.anty.timetablemanager.R;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.timetablemanager.widget.TimetableLessonWidget;
+import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
@@ -23,7 +24,6 @@ import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
 import cz.anty.utils.teacher.Teacher;
 import cz.anty.utils.teacher.TeachersManager;
-import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableManager;
@@ -32,8 +32,6 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     public static final String DAY = "DAY";
     public static final String LESSON_INDEX = "LESSON_INDEX";
-
-    private final OnceRunThread worker = new OnceRunThread();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -92,7 +90,6 @@ public class AttendanceReceiver extends BroadcastReceiver {
         Log.d(getClass().getSimpleName(), "testSupplementation day: " + day + " lessonIndex: " + lessonIndex);
         Timetable[] timetables = new TimetableManager(context).getTimetables();
         final AttendanceConnector connector = new AttendanceConnector();
-        worker.setPowerManager(context);
 
         for (int i = 0, timetablesLength = timetables.length; i < timetablesLength; i++) {
             final Timetable timetable = timetables[i];
@@ -104,7 +101,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
             if (lesson == null) continue;
 
             final int finalI = i < 10 ? i : 9;
-            worker.startWorker(new Runnable() {
+            ApplicationBase.WORKER.startWorker(new Runnable() {
                 @Override
                 public void run() {
                     try {

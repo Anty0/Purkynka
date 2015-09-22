@@ -10,14 +10,12 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
-import cz.anty.utils.thread.OnceRunThread;
 import cz.anty.utils.wifi.WifiLogin;
 
 public class WifiStateReceiver extends BroadcastReceiver {
-
-    private static final OnceRunThread worker = new OnceRunThread();
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -30,8 +28,11 @@ public class WifiStateReceiver extends BroadcastReceiver {
         String wifiSSID = wifiInfo.getSSID();
         if (wifiSSID == null || !wifiSSID.contains(WifiLogin.WIFI_NAME)) return;
 
-        worker.setPowerManager(context);
-        worker.startWorker(new Runnable() {
+        Toast.makeText(context, String.format(context.getString(R.string
+                        .toast_text_logging_to_wifi), wifiInfo.getSSID()),
+                Toast.LENGTH_LONG).show();
+
+        ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
             public void run() {
                 if (AppDataManager.isWifiWaitLogin()) {
