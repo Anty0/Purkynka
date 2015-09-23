@@ -27,7 +27,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
     private FirstStartPage page;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_start);
         worker = new OnceRunThreadWithSpinner(this);
@@ -45,7 +45,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         final Thread initThread = worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                pagesManager = new PagesManager(firstStartPages);
+                pagesManager = new PagesManager(savedInstanceState, firstStartPages);
             }
         }, getString(R.string.wait_text_please_wait));
 
@@ -75,9 +75,9 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void finish() {
-        super.finish();
-        PagesManager.reset();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        pagesManager.save(outState);
     }
 
     @SuppressWarnings("ResourceType")

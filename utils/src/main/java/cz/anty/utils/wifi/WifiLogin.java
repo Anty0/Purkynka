@@ -20,17 +20,17 @@ public class WifiLogin {
     //private static final String LOGOUT_URL = "http://wifi.sspbrno.cz/logout.html";
     private static final String LOGIN_FIELD = "username";
     private static final String PASS_FIELD = "password";
-    private static final String SUBMIT = "Submit";
-    private static final String SUBMIT_VALUE = "Submit";
+    //private static final String SUBMIT = "Submit";
+    //private static final String SUBMIT_VALUE = "Submit";
 
     public static boolean tryLogin(String username, String password) {
         for (int i = 0; i < Constants.MAX_TRY; i++) {
             try {
                 Jsoup.connect(LOGIN_URL)
                         .data("buttonClicked", "4", "err_flag", "0", "err_msg", "", "info_flag", "0", "info_msg", "",
-                                "redirect_url", "", LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
+                                "redirect_url", "", LOGIN_FIELD, username, PASS_FIELD, password/*, SUBMIT, SUBMIT_VALUE*/)
                         .method(Connection.Method.POST)
-                                //.validateTLSCertificates(false)
+                        .validateTLSCertificates(false)
                         .execute();
                 return true;
             } catch (IOException e) {

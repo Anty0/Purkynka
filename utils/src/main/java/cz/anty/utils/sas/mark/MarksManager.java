@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import cz.anty.utils.Constants;
 
@@ -205,7 +204,7 @@ public class MarksManager {
                 case SECOND:
                     return 2;
                 default:
-                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                    Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date(System.currentTimeMillis()));
                     int month = calendar.get(Calendar.MONTH);
                     return month > Calendar.JANUARY && month < Calendar.JULY ? 2 : 1;

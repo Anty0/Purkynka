@@ -11,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import cz.anty.timetablemanager.widget.TimetableLessonWidget;
 import cz.anty.utils.Constants;
@@ -51,7 +50,7 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
             service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                     cal.getTimeInMillis(), Constants.REPEAT_TIME_TEACHERS_ATTENDANCE, defaultPending);*/
 
-            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            Calendar calendar = Calendar.getInstance();
             Log.d(getClass().getSimpleName(), "onReceive startTime: " + calendar.getTime());
             for (int d = 0, days_strings_idsLength = Timetable.DAYS_STRINGS_IDS.length; d < days_strings_idsLength; d++) {
                 int minuteTime = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
@@ -61,13 +60,13 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
                     for (int i = 0; i < Timetable.MAX_LESSONS; i++) {
                         int requestedTime = Timetable.START_TIMES_HOURS[i] * 60 + Timetable.START_TIMES_MINUTES[i];
                         if (minuteTime < requestedTime - 10) {
-                            intent.putExtra(AttendanceReceiver.DAY, day - 2)
+                            defaultIntent.putExtra(AttendanceReceiver.DAY, day - 2)
                                     .putExtra(AttendanceReceiver.LESSON_INDEX, i);
                             calendar.set(Calendar.HOUR_OF_DAY, Timetable.START_TIMES_HOURS[i]);
                             calendar.set(Calendar.MINUTE, Timetable.START_TIMES_MINUTES[i] - 10);
                             calendar.set(Calendar.MILLISECOND, 0);
                             service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), PendingIntent
-                                    .getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT));
+                                    .getBroadcast(context, 0, defaultIntent, PendingIntent.FLAG_CANCEL_CURRENT));
                             Log.d(getClass().getSimpleName(), "onReceive actualMinuteTime: " + minuteTime + " requestedMinuteTime: " + requestedTime
                                     + " setTime1:" + calendar.getTime() + " setTime2: " + calendar.getTimeInMillis()
                                     + " hour: " + calendar.get(Calendar.HOUR_OF_DAY) + " minute: " + calendar.get(Calendar.MINUTE)

@@ -25,6 +25,9 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
+import cz.anty.timetablemanager.widget.TimetableLessonWidget;
 import cz.anty.utils.listItem.MultilineAdapter;
 import cz.anty.utils.listItem.MultilineItem;
 import cz.anty.utils.listItem.TextMultilineItem;
@@ -103,9 +106,16 @@ public class TimetableManageActivity extends AppCompatActivity {
 
             }
         });
-
+        int index = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2;
+        if (index < Timetable.DAYS_STRINGS_IDS.length - 1)
+            mViewPager.setCurrentItem(index);
     }
 
+    @Override
+    protected void onStop() {
+        TimetableLessonWidget.callUpdate(this);
+        super.onStop();
+    }
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {

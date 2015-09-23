@@ -23,7 +23,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
                 || !AppDataManager.isLoggedIn(AppDataManager.Type.WIFI))
             return;
 
-        final WifiInfo wifiInfo = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+        final WifiInfo wifiInfo = ((WifiManager) context
+                .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         if (wifiInfo == null) return;
         String wifiSSID = wifiInfo.getSSID();
         if (wifiSSID == null || !wifiSSID.contains(WifiLogin.WIFI_NAME)) return;
@@ -47,16 +48,6 @@ public class WifiStateReceiver extends BroadcastReceiver {
                         AppDataManager.getPassword(AppDataManager.Type.WIFI)))
                     return;
 
-
-                    /*Notification n = new NotificationCompat.Builder(context)
-                            .setContentTitle(wifiInfo.getSSID())
-                            .setContentText(context.getString(R.string.logged_in) + " " + wifiInfo.getSSID())
-                            .setSmallIcon(R.mipmap.ic_launcher_wifi)
-                                    //.setContentIntent(null)
-                            .setAutoCancel(true)
-                                    //.setDefaults(Notification.DEFAULT_ALL)
-                                    //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
-                            .build();*/
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -65,14 +56,6 @@ public class WifiStateReceiver extends BroadcastReceiver {
                                 Toast.LENGTH_LONG).show();
                     }
                 });
-                    /*NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(3, n);
-                    try {
-                        Thread.sleep(2500);
-                    } catch (InterruptedException e) {
-                        Log.d(null, null, e);
-                    }
-                    notificationManager.cancel(3);*/
             }
         }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
 

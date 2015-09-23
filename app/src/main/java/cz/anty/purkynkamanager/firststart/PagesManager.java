@@ -1,5 +1,7 @@
 package cz.anty.purkynkamanager.firststart;
 
+import android.os.Bundle;
+
 import cz.anty.utils.FirstStartPage;
 
 /**
@@ -9,17 +11,18 @@ import cz.anty.utils.FirstStartPage;
  */
 class PagesManager {
 
-    private static int page = -1;
+    private static final String SAVE_PAGE_KEY = "FIRST_START_PAGE";
     private final FirstStartPage[] firstStartPages;
+    private int page = -1;
 
-    PagesManager(FirstStartPage[] firstStartPages) {
+    PagesManager(Bundle savedInstanceState, FirstStartPage[] firstStartPages) {
         this.firstStartPages = firstStartPages;
-        if (page == -1)
-            next();
+        page = savedInstanceState.getInt(SAVE_PAGE_KEY, 0) - 1;
+        next();
     }
 
-    public static void reset() {
-        page = -1;
+    public synchronized void save(Bundle outState) {
+        outState.putInt(SAVE_PAGE_KEY, page);
     }
 
     public synchronized void next() {

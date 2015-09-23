@@ -1,5 +1,6 @@
 package cz.anty.timetablemanager.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -10,9 +11,9 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import cz.anty.timetablemanager.R;
+import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableManager;
@@ -49,6 +50,8 @@ public class TimetableLessonWidget extends AppWidgetProvider {
 
             RemoteViews remoteViews = new RemoteViews(context
                     .getPackageName(), R.layout.timetable_lesson_widget);
+            remoteViews.setOnClickPendingIntent(R.id.main_frame_layout, PendingIntent
+                    .getActivity(context, 0, new Intent(context, TimetableSelectActivity.class), 0));
 
             if (timetable == null) {
                 remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE);
@@ -62,7 +65,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
     }
 
     private void initTexts(Context context, Timetable timetable, RemoteViews remoteViews) {
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        Calendar calendar = Calendar.getInstance();
         for (int d = 0; d < 7; d++) {
             int minuteTime = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
             int day = calendar.get(Calendar.DAY_OF_WEEK);

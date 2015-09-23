@@ -18,6 +18,7 @@ import android.widget.ScrollView;
 import java.io.IOException;
 
 import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
+import cz.anty.timetablemanager.widget.TimetableLessonWidget;
 import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.listItem.MultilineAdapter;
@@ -38,6 +39,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("TimetableSelectActivity", "onCreate");
         super.onCreate(savedInstanceState);
+        TimetableLessonWidget.callUpdate(this);
         sendBroadcast(new Intent(this, TimetableScheduleReceiver.class));
         setContentView(R.layout.activity_timetable_select);
 
