@@ -17,7 +17,9 @@ class PagesManager {
 
     PagesManager(Bundle savedInstanceState, FirstStartPage[] firstStartPages) {
         this.firstStartPages = firstStartPages;
-        page = savedInstanceState.getInt(SAVE_PAGE_KEY, 0) - 1;
+        if (savedInstanceState != null) {
+            page = savedInstanceState.getInt(SAVE_PAGE_KEY, 0) - 1;
+        }
         next();
     }
 

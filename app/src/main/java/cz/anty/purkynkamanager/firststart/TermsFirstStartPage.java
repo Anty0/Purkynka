@@ -88,7 +88,7 @@ public class TermsFirstStartPage extends FirstStartPage {
                 boolean error = false;
                 try {
                     terms = UpdateConnector.getLatestTerms(context.getString(R.string.language));
-                    if (terms.contains("<html>"))
+                    if (terms.toLowerCase().contains("<html>"))
                         throw new IOException("Wrong page loaded");
                 } catch (IOException e) {
                     Log.d(getClass().getSimpleName(), "updateTerms", e);
