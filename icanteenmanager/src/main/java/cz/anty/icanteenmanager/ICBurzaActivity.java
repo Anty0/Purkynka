@@ -42,13 +42,13 @@ public class ICBurzaActivity extends AppCompatActivity {
 
     private MultilineAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
-    private ICService.ICanteenBinder binder = null;
-    private ServiceManager.BinderConnection<ICService.ICanteenBinder> binderConnection
-            = new ServiceManager.BinderConnection<ICService.ICanteenBinder>() {
+    private ICService.ICBinder binder = null;
+    private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
+            = new ServiceManager.BinderConnection<ICService.ICBinder>() {
         @Override
-        public void onBinderConnected(ICService.ICanteenBinder iCanteenBinder) {
+        public void onBinderConnected(ICService.ICBinder ICBinder) {
             Log.d("ICBurzaActivity", "onBinderConnected");
-            binder = iCanteenBinder;
+            binder = ICBinder;
             refreshThread.startWorker(new Runnable() {
                 @Override
                 public void run() {
@@ -82,7 +82,7 @@ public class ICBurzaActivity extends AppCompatActivity {
         }
     };
 
-    static void startBurzaChecker(final Context context, final ICService.ICanteenBinder binder) {
+    static void startBurzaChecker(final Context context, final ICService.ICBinder binder) {
         Log.d("ICBurzaActivity", "startBurzaChecker");
 
         ScrollView mainScrollView = new ScrollView(context);

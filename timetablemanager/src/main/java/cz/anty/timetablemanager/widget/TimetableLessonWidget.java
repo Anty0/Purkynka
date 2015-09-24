@@ -77,6 +77,11 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                         Lesson actualLesson = timetable.getLesson(day - 2, i);
                         Lesson nextLesson = timetable.getNextLesson(day - 2, i);
 
+                        if (minuteTime < requestedTime - 60) {
+                            nextLesson = actualLesson;
+                            actualLesson = null;
+                        }
+
                         if (actualLesson == null) {
                             remoteViews.setTextViewText(R.id.widget_text_view_title, context.getString(R.string.list_item_text_no_actual_lesson));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)

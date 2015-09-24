@@ -17,23 +17,23 @@ import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
  *
  * @author anty
  */
-public class ICanteenManager {
+public class ICManager {
 
     private final String username, password;
-    private ICanteenConnector connector = null;
+    private ICConnector connector = null;
 
-    public ICanteenManager(String username, String password) {
+    public ICManager(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
     public static void validate(String username, String password) throws IOException {
-        if (!new ICanteenConnector(username, password).isLoggedIn())
+        if (!new ICConnector(username, password).isLoggedIn())
             throw new WrongLoginDataException();
     }
 
     public synchronized void connect() throws IOException {
-        if (!isConnected()) connector = new ICanteenConnector(username, password);
+        if (!isConnected()) connector = new ICConnector(username, password);
     }
 
     public synchronized void disconnect() {

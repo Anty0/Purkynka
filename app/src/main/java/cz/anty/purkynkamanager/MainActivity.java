@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -213,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
                 new TextMultilineItem(getString(R.string.app_name_wifi), showDescription ? getString(R.string.app_description_wifi) : null),
                 new TextMultilineItem(getString(R.string.app_name_icanteen), showDescription ? getString(R.string.app_description_icanteen) : null),
                 new TextMultilineItem(getString(R.string.app_name_timetable), showDescription ? getString(R.string.app_description_timetable) : null),
-                new TextMultilineItem(getString(R.string.app_name_attendance), showDescription ? getString(R.string.app_description_attendance) : null)};
+                new TextMultilineItem(getString(R.string.app_name_attendance), showDescription ? getString(R.string.app_description_attendance) : null),
+                new TextMultilineItem(getString(R.string.app_name_moodle), null)};
 
         adapter.setNotifyOnChange(false);
         adapter.clear();
@@ -243,6 +245,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 4:
                         startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                        break;
+                    case 5:
+                        Toast.makeText(MainActivity.this, R.string.toast_text_coming_soon, Toast.LENGTH_LONG).show();
                         break;
                 }
             }

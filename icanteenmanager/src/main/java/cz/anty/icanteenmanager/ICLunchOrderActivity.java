@@ -33,7 +33,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
 
     private MultilineAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
-    private ICService.ICanteenBinder binder = null;
+    private ICService.ICBinder binder = null;
     private final AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -135,12 +135,12 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             }
         }
     };
-    private ServiceManager.BinderConnection<ICService.ICanteenBinder> binderConnection
-            = new ServiceManager.BinderConnection<ICService.ICanteenBinder>() {
+    private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
+            = new ServiceManager.BinderConnection<ICService.ICBinder>() {
         @Override
-        public void onBinderConnected(ICService.ICanteenBinder iCanteenBinder) {
+        public void onBinderConnected(ICService.ICBinder ICBinder) {
             Log.d("LunchOrderActivity", "onBinderConnected");
-            binder = iCanteenBinder;
+            binder = ICBinder;
             refreshThread.startWorker(new Runnable() {
                 @Override
                 public void run() {

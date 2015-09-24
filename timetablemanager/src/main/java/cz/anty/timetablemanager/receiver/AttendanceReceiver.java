@@ -65,10 +65,10 @@ public class AttendanceReceiver extends BroadcastReceiver {
             if (lesson == null) continue;
 
             Notification n = new NotificationCompat.Builder(context)
-                    .setContentTitle(lesson.getShortName() + " "
-                            + Timetable.START_TIMES_HOURS[lessonIndex] +
-                            ":" + format.format(Timetable.START_TIMES_MINUTES[lessonIndex]))
-                    .setContentText(lesson.getTeacher())
+                    .setContentTitle(lesson.getShortName() + " " + lesson.getClassString())
+                    .setContentText(Timetable.START_TIMES_HOURS[lessonIndex] +
+                            ":" + format.format(Timetable.START_TIMES_MINUTES[lessonIndex])
+                            + lesson.getTeacher())
                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                     .setContentIntent(PendingIntent.getActivity(context, 0,
                             new Intent(context, TimetableSelectActivity.class), 0))

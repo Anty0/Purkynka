@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
-import cz.anty.utils.icanteen.ICanteenManager;
+import cz.anty.utils.icanteen.ICManager;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class ICLoginActivity extends AppCompatActivity {
@@ -28,7 +28,7 @@ public class ICLoginActivity extends AppCompatActivity {
             if (username.equals("") || password.equals(""))
                 throw new WrongLoginDataException();
 
-            ICanteenManager.validate(username, password);
+            ICManager.validate(username, password);
         } catch (final IOException e) {
             activity.runOnUiThread(new Runnable() {
                 @Override

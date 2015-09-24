@@ -17,7 +17,7 @@ import cz.anty.utils.WrongLoginDataException;
  *
  * @author anty
  */
-class ICanteenConnector {
+class ICConnector {
 
     //public static final SimpleDateFormat DATE_PARSE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
@@ -41,7 +41,7 @@ class ICanteenConnector {
 
     private final Map<String, String> loginCookies;
 
-    ICanteenConnector(String username, String password) throws IOException {
+    ICConnector(String username, String password) throws IOException {
         this.loginCookies = login(0, null, username, password);
     }
 
@@ -71,7 +71,7 @@ class ICanteenConnector {
     public synchronized void orderLunch(String urlAdd) throws IOException {
         Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
-        Log.v("ICanteenConnector", "orderBurzaLunch response: " + response.body());
+        Log.v("ICConnector", "orderBurzaLunch response: " + response.body());
     }
 
     public synchronized Elements getMonthElements() throws IOException {
@@ -80,8 +80,8 @@ class ICanteenConnector {
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         //if (AppDataManager.isDebugMode(null))
-        //System.out.println("ICanteenConnector getMonthElements startElements:\n" + monthPage);
-        //Log.v("ICanteenConnector", "getMonthElements startElements:\n" + monthPage);
+        //System.out.println("ICConnector getMonthElements startElements:\n" + monthPage);
+        //Log.v("ICConnector", "getMonthElements startElements:\n" + monthPage);
 
         if (!isLoggedIn(monthPage))
             throw new WrongLoginDataException();
@@ -90,7 +90,7 @@ class ICanteenConnector {
                 .select("div#mainContext")
                 .select("table")
                 .select("form[name=objednatJidlo-]");
-        Log.v("ICanteenConnector", "getMonthElements finalElements: " + toReturn);
+        Log.v("ICConnector", "getMonthElements finalElements: " + toReturn);
         return toReturn;
     }
 
@@ -101,8 +101,8 @@ class ICanteenConnector {
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         //if (AppDataManager.isDebugMode(null))
-        //System.out.println("ICanteenConnector getBurzaElements startElements:\n" + burzaPage);
-        //Log.v("ICanteenConnector", "getBurzaElements startElements:\n" + burzaPage);
+        //System.out.println("ICConnector getBurzaElements startElements:\n" + burzaPage);
+        //Log.v("ICConnector", "getBurzaElements startElements:\n" + burzaPage);
 
         if (!isLoggedIn(burzaPage))
             throw new WrongLoginDataException();
@@ -112,7 +112,7 @@ class ICanteenConnector {
                 .select("table")
                 .select("tr");
         toReturn.remove(0);
-        Log.v("ICanteenConnector", "getBurzaElements finalElements: " + toReturn);
+        Log.v("ICConnector", "getBurzaElements finalElements: " + toReturn);
         return toReturn;
     }
 

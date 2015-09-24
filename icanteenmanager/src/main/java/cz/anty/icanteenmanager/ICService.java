@@ -15,7 +15,7 @@ import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
-import cz.anty.utils.icanteen.ICanteenManager;
+import cz.anty.utils.icanteen.ICManager;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
@@ -23,11 +23,11 @@ import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.service.BindImplService;
 import cz.anty.utils.thread.OnceRunThread;
 
-public class ICService extends BindImplService<ICService.ICanteenBinder> {
+public class ICService extends BindImplService<ICService.ICBinder> {
 
-    private final ICanteenBinder mBinder = new ICanteenBinder();
+    private final ICBinder mBinder = new ICBinder();
     private final OnceRunThread worker = new OnceRunThread();
-    private ICanteenManager mManager;
+    private ICManager mManager;
     private List<BurzaLunch> mBurzaLunchList = null;
     private List<MonthLunchDay> mMonthLunchList = null;
     private Runnable onBurzaChange = null;
@@ -65,7 +65,7 @@ public class ICService extends BindImplService<ICService.ICanteenBinder> {
         }
 
         if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
-            mManager = new ICanteenManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN),
+            mManager = new ICManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN),
                     AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
             try {
                 mManager.connect();
@@ -225,12 +225,12 @@ public class ICService extends BindImplService<ICService.ICanteenBinder> {
     }
 
     @Override
-    public ICanteenBinder getBinder() {
+    public ICBinder getBinder() {
         Log.d(getClass().getSimpleName(), "getBinder");
         return mBinder;
     }
 
-    public class ICanteenBinder extends Binder {
+    public class ICBinder extends Binder {
 
         public void waitToWorkerStop() throws InterruptedException {
             worker.waitToWorkerStop();

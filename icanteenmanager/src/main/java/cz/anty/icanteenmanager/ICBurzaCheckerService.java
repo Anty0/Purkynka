@@ -27,13 +27,13 @@ public class ICBurzaCheckerService extends Service {
     public static final String BURZA_CHECKER_STATE_STOP = "STOP";
 
     private final OnceRunThread worker = new OnceRunThread();
-    private ICService.ICanteenBinder binder = null;
-    private ServiceManager.BinderConnection<ICService.ICanteenBinder> binderConnection
-            = new ServiceManager.BinderConnection<ICService.ICanteenBinder>() {
+    private ICService.ICBinder binder = null;
+    private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
+            = new ServiceManager.BinderConnection<ICService.ICBinder>() {
         @Override
-        public void onBinderConnected(ICService.ICanteenBinder iCanteenBinder) {
+        public void onBinderConnected(ICService.ICBinder ICBinder) {
             Log.d("BurzaCheckerService", "onBinderConnected");
-            binder = iCanteenBinder;
+            binder = ICBinder;
 
         }
 

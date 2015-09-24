@@ -12,7 +12,7 @@ import cz.anty.utils.thread.OnceRunThread;
 
 public class ICSplashActivity extends AppCompatActivity {
 
-    static ServiceManager<ICService.ICanteenBinder> serviceManager;
+    static ServiceManager<ICService.ICBinder> serviceManager;
     private final OnceRunThread worker = new OnceRunThread();
 
     private void startDefaultActivity() {
@@ -41,9 +41,9 @@ public class ICSplashActivity extends AppCompatActivity {
         if (serviceManager == null || !serviceManager.isConnected()) {
             serviceManager = new ServiceManager<>(this, ICService.class);
             serviceManager.addBinderConnection(
-                    new ServiceManager.BinderConnection<ICService.ICanteenBinder>() {
+                    new ServiceManager.BinderConnection<ICService.ICBinder>() {
                         @Override
-                        public void onBinderConnected(final ICService.ICanteenBinder binder) {
+                        public void onBinderConnected(final ICService.ICBinder binder) {
                             worker.startWorker(new Runnable() {
                                 @Override
                                 public void run() {
