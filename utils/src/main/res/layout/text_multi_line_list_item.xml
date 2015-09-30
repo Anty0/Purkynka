@@ -1,38 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    style="@style/CardView.Dark"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="3dp">
+    card_view:cardCornerRadius="3dp"
+    card_view:contentPadding="2dp">
 
-    <TextView
-        android:id="@+id/text_view_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="1dp"
-        android:layout_marginTop="1dp"
-        android:gravity="center_vertical"
-        android:padding="1dip"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="normal" />
-    <!--"#736F6E"-->
+    <include layout="@layout/base_multiline_text_item" />
 
-    <TextView
-        android:id="@+id/text_view_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/text_view_title"
-        android:layout_marginBottom="1dp"
-        android:layout_marginTop="1dp"
-        android:gravity="center_vertical"
-        android:padding="1dip"
-        android:textColor="#A39F9E"
-        android:textSize="15sp"
-        android:textStyle="normal" />
-
-</RelativeLayout>
+</android.support.v7.widget.CardView>

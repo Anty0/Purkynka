@@ -20,9 +20,9 @@ import cz.anty.attendancemanager.receiver.TrackingReceiver;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
-import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.listItem.WidgetMultilineAdapter;
-import cz.anty.utils.listItem.WidgetService;
+import cz.anty.utils.list.listView.MultilineItem;
+import cz.anty.utils.list.widgetList.WidgetMultilineAdapter;
+import cz.anty.utils.list.widgetList.WidgetService;
 import cz.anty.utils.thread.OnceRunThread;
 
 /**

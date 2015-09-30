@@ -4,49 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import cz.anty.utils.R;
-import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.list.listView.TextMultilineItem;
+import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 
 public class SettingsActivity extends AppCompatActivity {
-
-    private MultilineAdapter<TextMultilineItem> adapter;
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter<>(this);
-        listView.setAdapter(adapter);
-
-        initialize();
-    }
-
-    private void initialize() {
-        TextMultilineItem[] data = new TextMultilineItem[]{
-                new TextMultilineItem(getString(R.string.activity_title_sas_settings), null),
+        MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>();
+        adapter.addAllItems(new TextMultilineItem(getString(R.string.activity_title_sas_settings), null),
                 new TextMultilineItem(getString(R.string.activity_title_wifi_settings), null),
                 new TextMultilineItem(getString(R.string.activity_title_timetable_settings), null),
                 new TextMultilineItem(getString(R.string.activity_title_attendance_settings), null),
-                new TextMultilineItem(getString(R.string.activity_title_about), null)};
+                new TextMultilineItem(getString(R.string.activity_title_about), null));
 
-        adapter.clear();
-        for (TextMultilineItem item : data) {
-            adapter.add(item);
-        }
-        adapter.notifyDataSetChanged();
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                //final String item = (String) parent.getItemAtPosition(position);
+            public void onItemClick(View view, int position) {
                 switch (position) {
                     case 0:
                         startActivity(new Intent(SettingsActivity.this, SASManagerSettingsActivity.class));
@@ -65,7 +44,6 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                 }
             }
-
         });
     }
 

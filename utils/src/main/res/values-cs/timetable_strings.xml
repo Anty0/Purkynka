@@ -17,7 +17,9 @@
     <string name="dialog_title_lesson_info">Informace o předmětu</string>
     <string name="dialog_title_timetable_still_exists">Nelze vytvořit ROZVRH hodin</string>
     <string name="dialog_title_lesson">%1$s %2$d. Hodina</string>
-    <string name="dialog_text_insert_timetable_name">Zadejte nové jméno pro ROZVRH hodin:</string>
+    <string name="dialog_title_timetable_widget_alert"><b>Widget</b> ROZVRH hodin</string>
+    <string name="dialog_message_timetable_widget_alert">Nyní si můžete <b>přidat</b> <b>Widget ROZVRH hodin</b> na svou domovskou obrazovku, budete tak mít aktuální a <b>následující hodinu po ruce</b>, aniž byste museli otevírat Správce ROZVRHŮ. :)</string>
+    <string name="dialog_message_insert_timetable_name">Zadejte nové jméno pro ROZVRH hodin:</string>
     <string name="dialog_message_lesson_name">Název předmětu</string>
     <string name="dialog_message_short_lesson_name">Krátký název předmětu</string>
     <string name="dialog_message_class">Třída</string>

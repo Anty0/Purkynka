@@ -17,7 +17,9 @@
     <string name="dialog_title_lesson_info">Lesson info</string>
     <string name="dialog_title_timetable_still_exists">Cannot create TIMETABLE</string>
     <string name="dialog_title_lesson">%1$s %2$d. Lesson</string>
-    <string name="dialog_text_insert_timetable_name">Insert TIMETABLE name:</string>
+    <string name="dialog_title_timetable_widget_alert"><b>Timetable Widget</b> available</string>
+    <string name="dialog_message_timetable_widget_alert">Now you can add <b>Timetable Widget</b> to your home screen. :)</string>
+    <string name="dialog_message_insert_timetable_name">Insert TIMETABLE name:</string>
     <string name="dialog_message_lesson_name">Lesson name</string>
     <string name="dialog_message_short_lesson_name">Short lesson name</string>
     <string name="dialog_message_class">Class</string>

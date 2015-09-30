@@ -19,6 +19,9 @@
     <string name="exception_title_login">Cannot login as %1$s</string>
     <string name="exception_message_login">Username or password are wrong</string>
 
+    <string name="dialog_title_sas_widget_alert"><b>iSAS Widget</b> available</string>
+    <string name="dialog_message_sas_widget_alert">Now you can add <b>iSAS Widget</b> to your home screen. :)</string>
+
     <string name="text_date">Date</string>
     <string name="text_logo">logo</string>
     <string name="text_from">From</string>

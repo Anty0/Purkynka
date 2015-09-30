@@ -17,6 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UpdateActivity"
+            android:label="@string/wait_text_downloading_update"
+            android:theme="@style/AppTheme.Dialog"></activity>
 
         <receiver
             android:name=".UpdateScheduleReceiver"

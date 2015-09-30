@@ -38,6 +38,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
         final FirstStartPage[] firstStartPages = new FirstStartPage[]{
                 new WelcomeFirstStartPage(FirstStartActivity.this),
                 new TermsFirstStartPage(FirstStartActivity.this),
+                new ChangeLogFirstStartPage(FirstStartActivity.this),
                 new SASFirstStartPage(FirstStartActivity.this),
                 new WifiFirstStartPage(FirstStartActivity.this),
                 new ICFirstStartPage(FirstStartActivity.this)

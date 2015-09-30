@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import cz.anty.utils.listItem.MultilineItem;
+import cz.anty.utils.list.listView.MultilineItem;
 
 /**
  * Created by anty on 17.8.15.

@@ -18,19 +18,19 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.Calendar;
 
 import cz.anty.timetablemanager.widget.TimetableLessonWidget;
-import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.list.listView.MultilineItem;
+import cz.anty.utils.list.listView.TextMultilineItem;
+import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
 
@@ -149,7 +149,7 @@ public class TimetableManageActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        private MultilineAdapter<MultilineItem> adapter;
+        private MultilineRecyclerAdapter<MultilineItem> adapter;
 
         public PlaceholderFragment() {
         }
@@ -169,34 +169,13 @@ public class TimetableManageActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            Context context = container.getContext();
-            ListView rootView = new ListView(context); //inflater.inflate(R.layout.fragment_timetable_manage, container, false);
-            adapter = new MultilineAdapter<>(context);
-            rootView.setAdapter(adapter);
-            initializeListView(context, rootView);
-            return rootView;
-        }
-
-        private void initializeListView(final Context context, final ListView rootView) {
             final int day = getArguments().getInt(ARG_SECTION_NUMBER, 0);
-            Lesson[] lessons = toShow == null ? new Lesson[0] : toShow.getDay(day);
-
-            adapter.setNotifyOnChange(false);
-            adapter.clear();
-            for (int i = 0; i < lessons.length; i++) {
-                Lesson lesson = lessons[i];
-                if (lesson != null) {
-                    adapter.add(lesson);
-                    continue;
-                }
-                adapter.add(new TextMultilineItem(i + ". " + context
-                        .getString(R.string.list_item_text_click_to_edit), null));
-            }
-            adapter.notifyDataSetChanged();
-
-            rootView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            final Context context = container.getContext();
+            adapter = new MultilineRecyclerAdapter<>();
+            View result = RecyclerAdapter.inflate(context, container, false, null, adapter,
+                    new RecyclerItemClickListener.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                public void onItemClick(View view, final int position) {
                     if (toShow == null) return;
                     final Lesson lesson = toShow.getLesson(day, position);
                     if (lesson == null) {
@@ -214,7 +193,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         toShow.setLesson(null, day, position);
-                                        initializeListView(context, rootView);
+                                        initializeListView(context);
                                     }
                                 })
                                 .setNeutralButton(R.string.but_edit, new DialogInterface.OnClickListener() {
@@ -283,15 +262,33 @@ public class TimetableManageActivity extends AppCompatActivity {
                                     toShow.setLesson(new Lesson(nameEditText.getText().toString(),
                                             shortNameEditText.getText().toString(), classEditText.getText().toString(),
                                             teacherEditText.getText().toString()), day, lessonIndex);
-                                    initializeListView(context, rootView);
+                                    initializeListView(context);
                                 }
                             })
                             .setNegativeButton(R.string.but_cancel, null)
                             .show();
 
-                    initializeListView(context, rootView);
+                    initializeListView(context);
                 }
             });
+            initializeListView(context);
+            return result;
+        }
+
+        private void initializeListView(final Context context) {
+            int day = getArguments().getInt(ARG_SECTION_NUMBER, 0);
+            Lesson[] lessons = toShow == null ? new Lesson[0] : toShow.getDay(day);
+
+            adapter.clearItems();
+            for (int i = 0; i < lessons.length; i++) {
+                Lesson lesson = lessons[i];
+                if (lesson != null) {
+                    adapter.addItem(lesson);
+                    continue;
+                }
+                adapter.addItem(new TextMultilineItem(i + ". " + context
+                        .getString(R.string.list_item_text_click_to_edit), null));
+            }
         }
     }
 

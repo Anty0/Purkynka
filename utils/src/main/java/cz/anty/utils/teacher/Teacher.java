@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.Locale;
 
-import cz.anty.utils.listItem.MultilineItem;
+import cz.anty.utils.list.listView.MultilineItem;
 
 /**
  * Created by anty on 22.6.15.

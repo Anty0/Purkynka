@@ -1,4 +1,4 @@
-package cz.anty.utils.listItem;
+package cz.anty.utils.list.listView;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -45,7 +45,7 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
     @Override
     public void clear() {
-        Log.d("ALMultilineAdapter", "clear");
+        Log.d(getClass().getSimpleName(), "clear");
         super.clear();
         page = 1;
     }
@@ -63,7 +63,7 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
     @Override
     public MultilineItem getItem(int position) {
-        Log.d("ALMultilineAdapter", "getItem: " + position);
+        Log.d(getClass().getSimpleName(), "getItem: " + position);
         if (position == super.getCount()) {
             return loadingItem;
         } else {
@@ -73,27 +73,27 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
     @Override
     public int getCount() {
-        Log.d("ALMultilineAdapter", "getCount start");
+        Log.d(getClass().getSimpleName(), "getCount start");
         int count = super.getCount();
-        Log.d("ALMultilineAdapter", "getCount orig: " + count + " result: " + (autoLoad ? count + 1 : count));
+        Log.d(getClass().getSimpleName(), "getCount orig: " + count + " result: " + (autoLoad ? count + 1 : count));
         return autoLoad ? count + 1 : count;
     }
 
     @Override
     public void setNotifyOnChange(boolean notifyOnChange) {
-        Log.d("ALMultilineAdapter", "setNotifyOnChange: " + notifyOnChange);
+        Log.d(getClass().getSimpleName(), "setNotifyOnChange: " + notifyOnChange);
         super.setNotifyOnChange(notifyOnChange);
         this.notifyOnChange = notifyOnChange;
     }
 
     @Override
     public void notifyDataSetChanged() {
-        Log.d("ALMultilineAdapter", "notifyDataSetChange");
+        Log.d(getClass().getSimpleName(), "notifyDataSetChange");
         super.notifyDataSetChanged();
     }
 
     public void setAutoLoad(boolean autoLoad) {
-        Log.d("ALMultilineAdapter", "setAutoLoad: " + autoLoad);
+        Log.d(getClass().getSimpleName(), "setAutoLoad: " + autoLoad);
         this.autoLoad = autoLoad;
         if (notifyOnChange)
             notifyDataSetChanged();

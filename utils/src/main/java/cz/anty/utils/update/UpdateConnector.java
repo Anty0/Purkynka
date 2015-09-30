@@ -24,37 +24,51 @@ import cz.anty.utils.thread.ProgressReporter;
 public class UpdateConnector {
 
     private static final String DEFAULT_URL = "http://anty.crush-team.cz/purkynkamanager/";
+
     private static final String LATEST_VERSION_CODE_URL_ADD = "latestVersionCode";
     private static final String LATEST_VERSION_NAME_URL_ADD = "latestVersionName";
     private static final String LATEST_APK_URL_ADD = "latest.apk";
+
     private static final String LATEST_TERMS_URL_ADD = "latestTerms";
     private static final String LATEST_TERMS_VERSION_CODE_URL_ADD = "latestTermsVersionCode";
+
+    private static final String LATEST_CHANGE_LOG_URL_ADD = "latestChangeLog";
 
     public static Integer getLatestVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
                 .execute().body().trim());
-        Log.d("UpdateConnector", "getLatestVersionCode versionCode:" + toReturn);
+        Log.d(UpdateConnector.class.getSimpleName(), "getLatestVersionCode versionCode: " + toReturn);
         return toReturn;
     }
 
     public static String getLatestVersionName() throws IOException {
         String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
                 .execute().body().replace("\n", "");
-        Log.d("UpdateConnector", "getLatestVersionName versionName:" + toReturn);
+        Log.d(UpdateConnector.class.getSimpleName(), "getLatestVersionName versionName: " + toReturn);
         return toReturn;
     }
 
     public static Integer getLatestTermsVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_TERMS_VERSION_CODE_URL_ADD)
                 .execute().body().trim());
-        Log.d("UpdateConnector", "getLatestTermsVersionCode versionCode:" + toReturn);
+        Log.d(UpdateConnector.class.getSimpleName(), "getLatestTermsVersionCode versionCode: " + toReturn);
         return toReturn;
     }
 
     public static String getLatestTerms(String languageShortcut) throws IOException {
-        return Jsoup.connect(DEFAULT_URL + LATEST_TERMS_URL_ADD
+        String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_TERMS_URL_ADD
                 + languageShortcut.toUpperCase(Locale.ENGLISH))
                 .execute().body().trim();
+        Log.d(UpdateConnector.class.getSimpleName(), "getLatestTerms terms: " + toReturn);
+        return toReturn;
+    }
+
+    public static String getLatestChangeLog(String languageShortcut) throws IOException {
+        String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_CHANGE_LOG_URL_ADD
+                + languageShortcut.toUpperCase(Locale.ENGLISH))
+                .execute().body().trim();
+        Log.d(UpdateConnector.class.getSimpleName(), "getLatestChangeLog changeLog: " + toReturn);
+        return toReturn;
     }
 
     public static String downloadUpdate(Context context, ProgressReporter reporter, String filename) throws IOException {
@@ -82,14 +96,12 @@ public class UpdateConnector {
             int completedLen = 0;
             reporter.setMaxProgress(is.available());
             //Log.d("UpdateConnector", "TotalLen: " + is.available());
-            reporter.startShowingProgress();
             while ((len = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, len);
                 completedLen += len;
                 reporter.reportProgress(completedLen);
                 //Log.d("UpdateConnector", "CompletedLen: " + completedLen);
             }
-            reporter.stopShowingProgress();
 
             return PATH + filename;
         } finally {

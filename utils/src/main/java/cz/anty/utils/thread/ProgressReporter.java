@@ -7,10 +7,6 @@ package cz.anty.utils.thread;
  */
 public interface ProgressReporter {
 
-    void startShowingProgress();
-
-    void stopShowingProgress();
-
     void setMaxProgress(int max);
 
     void reportProgress(int progress);

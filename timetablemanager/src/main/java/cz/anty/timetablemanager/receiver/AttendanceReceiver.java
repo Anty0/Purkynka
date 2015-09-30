@@ -10,7 +10,6 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.List;
 
 import cz.anty.timetablemanager.R;
@@ -57,18 +56,18 @@ public class AttendanceReceiver extends BroadcastReceiver {
     private void showLessonNotification(Context context, int day, int lessonIndex) {
         Log.d(getClass().getSimpleName(), "showLessonNotification day: " + day + " lessonIndex: " + lessonIndex);
         Timetable[] timetables = new TimetableManager(context).getTimetables();
-        DecimalFormat format = new DecimalFormat("##");
 
         int i = 0;
         for (Timetable timetable : timetables) {
             Lesson lesson = timetable.getLesson(day, lessonIndex);
             if (lesson == null) continue;
 
+            int minutes = Timetable.START_TIMES_MINUTES[lessonIndex];
             Notification n = new NotificationCompat.Builder(context)
                     .setContentTitle(lesson.getShortName() + " " + lesson.getClassString())
                     .setContentText(Timetable.START_TIMES_HOURS[lessonIndex] +
-                            ":" + format.format(Timetable.START_TIMES_MINUTES[lessonIndex])
-                            + lesson.getTeacher())
+                            ":" + (minutes < 10 ? "0" + minutes : minutes)
+                            + " " + lesson.getTeacher())
                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                     .setContentIntent(PendingIntent.getActivity(context, 0,
                             new Intent(context, TimetableSelectActivity.class), 0))

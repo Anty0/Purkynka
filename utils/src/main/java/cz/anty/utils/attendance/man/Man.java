@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import cz.anty.utils.R;
 import cz.anty.utils.attendance.AttendanceConnector;
-import cz.anty.utils.listItem.MultilineItem;
+import cz.anty.utils.list.listView.MultilineItem;
 
 /**
  * Created by anty on 13.6.15.

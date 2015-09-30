@@ -36,11 +36,11 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
 
         if ((context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)
+                && activeNetInfo != null && activeNetInfo.isConnected())
                 || context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS, false)
                 || AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context,
-                TimetableLessonWidget.class)).length > 0)
-                && activeNetInfo != null && activeNetInfo.isConnected()) {
+                TimetableLessonWidget.class)).length > 0) {
 
             /*Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed

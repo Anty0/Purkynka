@@ -2,6 +2,7 @@ package cz.anty.utils.attendance.man;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -160,6 +161,24 @@ public class TrackingMansManager {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 add(man).apply();
                                                 if (onChange != null) onChange.run();
+                                                final SharedPreferences preferences = context
+                                                        .getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE);
+                                                if (preferences.getBoolean(Constants.SETTING_NAME_FIRST_START, true)) {
+                                                    new AlertDialog.Builder(context)
+                                                            .setTitle(R.string.dialog_title_tracking_widget_alert)
+                                                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                                                            .setMessage(R.string.dialog_message_tracking_widget_alert)
+                                                            .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                                    preferences.edit()
+                                                                            .putBoolean(Constants.SETTING_NAME_FIRST_START, false)
+                                                                            .apply();
+                                                                }
+                                                            })
+                                                            .setNegativeButton(R.string.but_later, null)
+                                                            .setCancelable(false)
+                                                            .show();
+                                                }
                                             }
                                         })
                                         .setNegativeButton(R.string.but_cancel, null)

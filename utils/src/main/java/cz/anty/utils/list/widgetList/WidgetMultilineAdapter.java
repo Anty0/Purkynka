@@ -1,4 +1,4 @@
-package cz.anty.utils.listItem;
+package cz.anty.utils.list.widgetList;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -14,6 +14,7 @@ import java.util.List;
 import cz.anty.utils.Log;
 import cz.anty.utils.R;
 import cz.anty.utils.attendance.man.TrackingMansManager;
+import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
 

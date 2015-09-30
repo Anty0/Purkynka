@@ -9,9 +9,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -23,9 +21,11 @@ import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
 import cz.anty.utils.attendance.man.TrackingMansManager;
-import cz.anty.utils.listItem.AutoLoadMultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.list.listView.MultilineItem;
+import cz.anty.utils.list.listView.TextMultilineItem;
+import cz.anty.utils.list.recyclerView.AutoLoadMultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.utils.settings.AttendanceSettingsActivity;
 import cz.anty.utils.thread.OnceRunThread;
 
@@ -35,13 +35,39 @@ public class SearchActivity extends AppCompatActivity {
 
     private final AttendanceConnector connector = new AttendanceConnector();
     private EditText searchEditText;
-    private AutoLoadMultilineAdapter adapter;
+    private AutoLoadMultilineRecyclerAdapter adapter;
     private OnceRunThread worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        adapter = new AutoLoadMultilineRecyclerAdapter(this,
+                new AutoLoadMultilineRecyclerAdapter.OnLoadNextPageListener() {
+                    @Override
+                    public void onLoadNextPage(AutoLoadMultilineRecyclerAdapter multilineAdapter, int page) {
+                        update(false, page, null);
+                    }
+                });
+        adapter.setNotifyOnChange(false);
+        RecyclerAdapter.inflateToActivity(this, R.layout.activity_search, adapter,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        MultilineItem item = adapter.getItem(position);
+                        final Man man = item instanceof Man
+                                ? (Man) item : null;
+                        if (man != null) {
+                            new TrackingMansManager(SearchActivity.this)
+                                    .processMan(man, new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            sendBroadcast(new Intent(SearchActivity.this,
+                                                    TrackingScheduleReceiver.class));
+                                        }
+                                    });
+                        }
+                    }
+                });
         searchEditText = (EditText) findViewById(R.id.editText);
 
         String search = getIntent().getStringExtra(EXTRA_SEARCH);
@@ -63,34 +89,6 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 update(true, 1, s.toString());
-            }
-        });
-
-        if (adapter == null)
-            adapter = new AutoLoadMultilineAdapter(this,
-                    new AutoLoadMultilineAdapter.OnLoadNextListListener() {
-                        @Override
-                        public void onLoadNextList(AutoLoadMultilineAdapter multilineAdapter, int page) {
-                            update(false, page, null);
-                        }
-                    });
-
-        ListView resultListView = ((ListView) findViewById(R.id.listView));
-        resultListView.setAdapter(adapter);
-        resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MultilineItem item = adapter.getItem(position);
-                final Man man = item instanceof Man
-                        ? (Man) item : null;
-                if (man != null) {
-                    new TrackingMansManager(SearchActivity.this).processMan(man, new Runnable() {
-                        @Override
-                        public void run() {
-                            sendBroadcast(new Intent(SearchActivity.this, TrackingScheduleReceiver.class));
-                        }
-                    });
-                }
             }
         });
 
@@ -148,17 +146,14 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 Log.d("SearchActivity", "update data: " + Arrays.toString(data));
 
-                adapter.setNotifyOnChange(false);
-                if (clearData) adapter.clear();
-                adapter.setAutoLoad(data.length != 0
-                        && data[0] instanceof Man);
-                for (MultilineItem item : data) {
-                    adapter.add(item);
-                }
-
+                final MultilineItem[] finalData = data;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (clearData) adapter.clearItems();
+                        adapter.setAutoLoad(finalData.length != 0
+                                && finalData[0] instanceof Man);
+                        adapter.addAllItems(finalData);
                         adapter.notifyDataSetChanged();
                     }
                 });

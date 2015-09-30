@@ -1,4 +1,4 @@
-package cz.anty.utils.listItem;
+package cz.anty.utils.list.listView;
 
 import android.content.Context;
 

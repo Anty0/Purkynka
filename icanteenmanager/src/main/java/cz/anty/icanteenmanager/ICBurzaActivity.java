@@ -11,11 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,15 +30,17 @@ import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
-import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.list.listView.MultilineItem;
+import cz.anty.utils.list.listView.TextMultilineItem;
+import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.utils.service.ServiceManager;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class ICBurzaActivity extends AppCompatActivity {
 
-    private MultilineAdapter<MultilineItem> adapter;
+    private MultilineRecyclerAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
     private ICService.ICBinder binder = null;
     private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
@@ -235,48 +235,45 @@ public class ICBurzaActivity extends AppCompatActivity {
             return;
         }
 
-        setContentView(R.layout.activity_list);
-
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
-        ListView listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter<>(this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MultilineItem item = adapter.getItem(position);
+        adapter = new MultilineRecyclerAdapter<>();
+        RecyclerAdapter.inflateToActivity(this, null, adapter,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        MultilineItem item = adapter.getItem(position);
 
-                if (item instanceof TextMultilineItem &&
-                        ((TextMultilineItem) item).getTag() == null) {
-                    startBurzaChecker(ICBurzaActivity.this, binder);
-                    return;
-                }
+                        if (item instanceof TextMultilineItem &&
+                                ((TextMultilineItem) item).getTag() == null) {
+                            startBurzaChecker(ICBurzaActivity.this, binder);
+                            return;
+                        }
 
-                final BurzaLunch lunch = item instanceof BurzaLunch
-                        ? (BurzaLunch) item : null;
-                if (lunch == null) return;
+                        final BurzaLunch lunch = item instanceof BurzaLunch
+                                ? (BurzaLunch) item : null;
+                        if (lunch == null) return;
 
-                new AlertDialog.Builder(ICBurzaActivity.this)
-                        .setTitle(lunch.getName())
-                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
-                        .setMessage(lunch.getLunchNumber()
-                                + "\n" + BurzaLunch.DATE_FORMAT.format(lunch.getDate())
-                                + "\n" + lunch.getName())
-                        .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (binder == null)
-                                    Toast.makeText(ICBurzaActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
-                                else binder.orderBurzaLunch(lunch);
-                            }
-                        })
-                        .setNegativeButton(R.string.but_cancel, null)
-                        .setCancelable(true)
-                        .show();
-            }
-        });
+                        new AlertDialog.Builder(ICBurzaActivity.this)
+                                .setTitle(lunch.getName())
+                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                                .setMessage(lunch.getLunchNumber()
+                                        + "\n" + BurzaLunch.DATE_FORMAT.format(lunch.getDate())
+                                        + "\n" + lunch.getName())
+                                .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (binder == null)
+                                            Toast.makeText(ICBurzaActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
+                                        else binder.orderBurzaLunch(lunch);
+                                    }
+                                })
+                                .setNegativeButton(R.string.but_cancel, null)
+                                .setCancelable(true)
+                                .show();
+                    }
+                });
 
         if (ICSplashActivity.serviceManager != null) {
             ICSplashActivity.serviceManager
@@ -308,16 +305,12 @@ public class ICBurzaActivity extends AppCompatActivity {
                             getString(R.string.exception_message_sas_manager_binder_null)).setTag("EXCEPTION")};
                 }
 
-                adapter.setNotifyOnChange(false);
-                adapter.clear();
-                for (MultilineItem item : data) {
-                    adapter.add(item);
-                }
-
+                final MultilineItem[] finalData = data;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.notifyDataSetChanged();
+                        adapter.clearItems();
+                        adapter.addAllItems(finalData);
                     }
                 });
             }

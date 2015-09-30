@@ -6,53 +6,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
-import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.list.listView.TextMultilineItem;
+import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 
 public class ICSelectServiceActivity extends AppCompatActivity {
-
-    private MultilineAdapter<TextMultilineItem> adapter;
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
 
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter<>(this);
-        listView.setAdapter(adapter);
-
-        init();
-    }
-
-    private void init() {
         boolean showDescription = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
-        TextMultilineItem[] data = new TextMultilineItem[]{
-                new TextMultilineItem(getString(R.string.app_name_icanteen_burza), showDescription ? getString(R.string.app_description_icanteen_burza) : null),
-                new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order), showDescription ? getString(R.string.app_description_icanteen_lunch_order) : null)
-        };
+        MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>();
+        adapter.clearItems();
+        adapter.addAllItems(new TextMultilineItem(getString(R.string.app_name_icanteen_burza),
+                        showDescription ? getString(R.string.app_description_icanteen_burza) : null),
+                new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order),
+                        showDescription ? getString(R.string.app_description_icanteen_lunch_order) : null));
 
-        adapter.setNotifyOnChange(false);
-        adapter.clear();
-        for (TextMultilineItem item : data) {
-            adapter.add(item);
-        }
-        adapter.notifyDataSetChanged();
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                //final String item = (String) parent.getItemAtPosition(position);
+            public void onItemClick(View view, int position) {
                 switch (position) {
                     case 0:
                         startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaActivity.class));
@@ -62,7 +42,6 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                         break;
                 }
             }
-
         });
     }
 

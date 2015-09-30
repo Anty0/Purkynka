@@ -21,9 +21,9 @@ import cz.anty.sasmanager.SASManagerService;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Log;
-import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.listItem.WidgetMultilineAdapter;
-import cz.anty.utils.listItem.WidgetService;
+import cz.anty.utils.list.listView.MultilineItem;
+import cz.anty.utils.list.widgetList.WidgetMultilineAdapter;
+import cz.anty.utils.list.widgetList.WidgetService;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
 

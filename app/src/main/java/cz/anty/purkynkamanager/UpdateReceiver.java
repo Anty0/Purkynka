@@ -27,25 +27,32 @@ public class UpdateReceiver extends BroadcastReceiver {
                 .putString(Constants.SETTING_NAME_LATEST_NAME, latestName)
                 .apply();
 
-        if (isUpdateAvailable(context))
-            showNotification(context);
+        updateNotification(context);
     }
 
-    private static void showNotification(Context context) {
-        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
-                .notify(Constants.NOTIFICATION_ID_UPDATE,
-                        new NotificationCompat.Builder(context)
-                                .setContentTitle(context.getString(R.string.notify_title_update))
-                                .setContentText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)))
-                                .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)) + "\n"
-                                                + String.format(context.getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)))
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentIntent(PendingIntent.getActivity(
-                                context, 0, new Intent(context, MainActivity.class), 0))
-                                .setAutoCancel(true)
-                                .setDefaults(Notification.DEFAULT_ALL)
-                                .build());
+    private static void updateNotification(Context context) {
+        NotificationManager notificationManager = (NotificationManager)
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (isUpdateAvailable(context)) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                    new Intent(context, UpdateActivity.class), 0);
+            notificationManager.notify(Constants.NOTIFICATION_ID_UPDATE,
+                    new NotificationCompat.Builder(context)
+                            .setContentTitle(context.getString(R.string.notify_title_update))
+                            .setContentText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)))
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)) + "\n"
+                                            + String.format(context.getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)))
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentIntent(pendingIntent)
+                            .addAction(R.mipmap.ic_launcher, context.getString(R.string.but_update), pendingIntent)
+                            .setAutoCancel(false)
+                            .setOngoing(true)
+                            .setDefaults(Notification.DEFAULT_ALL)
+                            .build());
+        } else {
+            notificationManager.cancel(Constants.NOTIFICATION_ID_UPDATE);
+        }
     }
 
     public static boolean isUpdateAvailable(Context context) {

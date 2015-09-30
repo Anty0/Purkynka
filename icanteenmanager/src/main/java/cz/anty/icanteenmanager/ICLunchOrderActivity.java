@@ -8,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -23,20 +21,23 @@ import java.util.List;
 import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
-import cz.anty.utils.listItem.MultilineAdapter;
-import cz.anty.utils.listItem.MultilineItem;
-import cz.anty.utils.listItem.TextMultilineItem;
+import cz.anty.utils.list.listView.MultilineItem;
+import cz.anty.utils.list.listView.TextMultilineItem;
+import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.utils.service.ServiceManager;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class ICLunchOrderActivity extends AppCompatActivity {
 
-    private MultilineAdapter<MultilineItem> adapter;
+    private MultilineRecyclerAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
     private ICService.ICBinder binder = null;
-    private final AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+    private final RecyclerItemClickListener.OnItemClickListener onItemClickListener =
+            new RecyclerItemClickListener.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        public void onItemClick(View view, int position) {
             MultilineItem item = adapter.getItem(position);
             final MonthLunchDay lunch = item instanceof MonthLunchDay ? (MonthLunchDay) item : null;
             if (lunch == null) return;
@@ -184,15 +185,11 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             return;
         }
 
-        setContentView(R.layout.activity_list);
-
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
-        ListView listView = (ListView) findViewById(R.id.listView);
-        adapter = new MultilineAdapter<>(this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(onItemClickListener);
+        adapter = new MultilineRecyclerAdapter<>();
+        RecyclerAdapter.inflateToActivity(this, null, adapter, onItemClickListener);
 
         if (ICSplashActivity.serviceManager != null) {
             ICSplashActivity.serviceManager
@@ -222,16 +219,12 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                             getString(R.string.exception_message_sas_manager_binder_null))};
                 }
 
-                adapter.setNotifyOnChange(false);
-                adapter.clear();
-                for (MultilineItem item : data) {
-                    adapter.add(item);
-                }
-
+                final MultilineItem[] finalData = data;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.notifyDataSetChanged();
+                        adapter.clearItems();
+                        adapter.addAllItems(finalData);
                     }
                 });
             }

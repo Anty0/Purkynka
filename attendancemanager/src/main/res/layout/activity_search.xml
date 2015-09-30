@@ -16,8 +16,10 @@
         android:ems="10"
         android:inputType="textPersonName" />
 
-    <ListView
-        android:id="@+id/listView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbars="vertical" />
 </LinearLayout>

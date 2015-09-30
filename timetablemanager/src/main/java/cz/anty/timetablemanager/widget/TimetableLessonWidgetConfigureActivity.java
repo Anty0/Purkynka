@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import cz.anty.timetablemanager.R;
 import cz.anty.utils.Constants;
-import cz.anty.utils.listItem.MultilineAdapter;
+import cz.anty.utils.list.listView.MultilineAdapter;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableManager;
 

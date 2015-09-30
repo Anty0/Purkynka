@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.Arrays;
 
@@ -16,45 +14,41 @@ import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
-import cz.anty.utils.listItem.MultilineAdapter;
+import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class TrackingActivity extends AppCompatActivity {
 
     private TrackingMansManager mansManager;
-    private MultilineAdapter<Man> adapter;
+    private MultilineRecyclerAdapter<Man> adapter;
     private OnceRunThreadWithSpinner worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        findViewById(R.id.editText).setVisibility(View.GONE);
-        ListView resultListView = ((ListView) findViewById(R.id.listView));
-        adapter = new MultilineAdapter<>(this);
         mansManager = new TrackingMansManager(this);
-        resultListView.setAdapter(adapter);
-        resultListView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Man man = adapter.getItem(position);
-                if (man != null) {
-                    mansManager.processMan(man, new Runnable() {
-                        @Override
-                        public void run() {
-                            sendBroadcast(new Intent(TrackingActivity.this,
-                                    TrackingScheduleReceiver.class));
+        adapter = new MultilineRecyclerAdapter<>();
+        RecyclerAdapter.inflateToActivity(this, null, adapter,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        final Man man = adapter.getItem(position);
+                        if (man != null) {
+                            mansManager.processMan(man, new Runnable() {
+                                @Override
+                                public void run() {
+                                    sendBroadcast(new Intent(TrackingActivity.this,
+                                            TrackingScheduleReceiver.class));
+                                }
+                            });
                         }
-                    });
-                }
-            }
-        });
+                    }
+                });
 
-        if (worker == null)
-            worker = new OnceRunThreadWithSpinner(this);
-        if (adapter.isEmpty())
-            update();
+        worker = new OnceRunThreadWithSpinner(this);
+        update();
     }
 
     private void update() {
@@ -63,20 +57,15 @@ public class TrackingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 TrackingReceiver.refreshTrackingMans(TrackingActivity.this, mansManager, true);
-                Man[] data = mansManager.get();
+                final Man[] data = mansManager.get();
 
                 Log.d("SearchActivity", "update data: " + Arrays.toString(data));
-
-                adapter.setNotifyOnChange(false);
-                adapter.clear();
-                for (Man item : data) {
-                    adapter.add(item);
-                }
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.notifyDataSetChanged();
+                        adapter.clearItems();
+                        adapter.addAllItems(data);
                     }
                 });
 

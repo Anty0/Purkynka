@@ -1,4 +1,4 @@
-package cz.anty.utils.listItem;
+package cz.anty.utils.list.widgetList;
 
 import android.annotation.TargetApi;
 import android.content.Intent;

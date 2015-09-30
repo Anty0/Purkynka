@@ -109,6 +109,19 @@ public class AppDataManager {
                 .getString(Constants.SETTING_NAME_PASSWORD, ""));
     }
 
+    public static synchronized boolean isFirstStart(Type type) {
+        Log.d("AppDataManager", "isFirstStart");
+        return type.getSharedPreferences()
+                .getBoolean(Constants.SETTING_NAME_FIRST_START, true);
+    }
+
+    public static synchronized void setFirstStart(Type type, boolean toSet) {
+        Log.d("AppDataManager", "setFirstStart toSet: " + toSet);
+        type.getSharedPreferences().edit()
+                .putBoolean(Constants.SETTING_NAME_FIRST_START, toSet)
+                .apply();
+    }
+
     public static synchronized boolean isSASMarksAutoUpdate() {
         Log.d("AppDataManager", "isSASMarksAutoUpdate");
         return Type.SAS.getSharedPreferences()

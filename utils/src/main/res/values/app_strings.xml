@@ -7,6 +7,7 @@
 
     <string name="text_terms">Failed to load the terms of use (<b>click here</b> for try again), check your Internet connection.\nTerms of use this app, you can also read on the pages of the application (<b>http://anty.crush-team.cz/</b>).\n\nBy clicking on "Accept" you accept that you have read the terms of use and agree with them.</string>
     <string name="text_welcome">Welcome to Purkynka Manager\n\n(<b>click here</b> and change to czech language for more details and better strings)</string>
+    <string name="text_change_log">Can\'t load ChangeLog, check your internet connection.</string>
 
     <string name="dialog_title_share">Share app</string>
     <string name="dialog_message_share">Please share this app to your friends :)</string>
