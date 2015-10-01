@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Purkyňka Manager</string>
+    <string name="app_name">Purkyňka</string>
+    <string name="app_name_updater">Updater</string>
 
     <string name="activity_title_first_start_welcome">Vítejte</string>
     <string name="activity_title_first_start_terms">Podmínky používání aplikace</string>
 
     <string name="text_terms">Nepodařilo se načíst podmínky použití (<b>klikněte zde</b> pro další pokus), zkontrolujte vaše připojení k internetu.\nPodmínky použití této aplikace si můžete také přečíst na stránkách aplikace (<b>http://anty.crush-team.cz/</b>).\n\nKliknutím na tlačítko "Příjmout" příjmáte, že jste si podmínky použití přečetl a souhlasíte s nimi.</string>
-    <string name="text_welcome">Vítejte v aplikaci Purkyňka Manager, nyní vás provede jednoduchý průvodce prvním spuštěním a nabídne vám možnost přihlásit se a zprovoznit tak jednotlivé funkce aplikace.\n\n(<b>click here</b> for language change menu)</string>
+    <string name="text_welcome">Vítejte v aplikaci Purkyňka, nyní vás provede jednoduchý průvodce prvním spuštěním a nabídne vám možnost přihlásit se a zprovoznit tak jednotlivé funkce aplikace.\n\n(<b>click here</b> for language change menu)</string>
     <string name="text_change_log">Nedaří se načíst ChangeLog, zkontrolujte své připojení k internetu.</string>
 
     <string name="dialog_title_share">Sdílejte aplikaci</string>
-    <string name="dialog_message_share">Prsím sdílejte tuto aplikaci, ať má každý tu možnost, vyzkoušet si ji :)</string>
+    <string name="dialog_message_share">Prsím sdílej tuto aplikaci třeba na facebooku, ať má každý tu možnost, vyzkoušet si ji :)</string>
     <string name="dialog_message_update_alert">Pokud tlačítko \"Aktualizovat\" nefunguje, tak stáhni a nainstaluj aktualizaci manuálně z oficiálních webových stránek aplikace.</string>
 
     <string name="toast_text_download_successful">Stahování úspěšně dokončeno</string>
     <string name="toast_text_download_failed">Chyba stahování</string>
 
-    <string name="notify_title_update"><b>Dostupná aktualizace</b></string>
+    <string name="notify_title_update_available"><b>Dostupná aktualizace</b></string>
+    <string name="notify_title_no_update">Není dostupná aktualizace</string>
+    <string name="notify_text_no_update">Máš nainstalovanou nejnovější verzi</string>
     <string name="notify_text_update_old">Nainstalovaná verze: %1$s</string>
     <string name="notify_text_update_new">Dostupná verze: %1$s</string>
 

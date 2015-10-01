@@ -63,9 +63,4 @@ public class Lesson implements MultilineItem {
     public String getText(Context context, int position) {
         return getTeacher() + " " + getName();
     }
-
-    @Override
-    public Integer getLayoutResourceId(Context context, int position) {
-        return null;
-    }
 }

@@ -1,12 +1,13 @@
-package cz.anty.utils.settings;
+package cz.anty.attendancemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 
+import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
 import cz.anty.utils.Constants;
-import cz.anty.utils.R;
 
 public class AttendanceSettingsActivity extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class AttendanceSettingsActivity extends AppCompatActivity {
                 getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE).edit()
                         .putBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS,
                                 ((CheckBox) v).isChecked()).apply();
-
+                sendBroadcast(new Intent(AttendanceSettingsActivity.this, TrackingScheduleReceiver.class));
             }
         });
     }

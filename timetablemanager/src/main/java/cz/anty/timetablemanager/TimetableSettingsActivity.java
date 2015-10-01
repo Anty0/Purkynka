@@ -1,12 +1,13 @@
-package cz.anty.utils.settings;
+package cz.anty.timetablemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 
+import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
 import cz.anty.utils.Constants;
-import cz.anty.utils.R;
 
 public class TimetableSettingsActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class TimetableSettingsActivity extends AppCompatActivity {
                 getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE).edit()
                         .putBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS,
                                 ((CheckBox) v).isChecked()).apply();
+                sendBroadcast(new Intent(TimetableSettingsActivity.this, TimetableScheduleReceiver.class));
             }
         });
 
@@ -36,6 +38,7 @@ public class TimetableSettingsActivity extends AppCompatActivity {
                 getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, MODE_PRIVATE).edit()
                         .putBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS,
                                 ((CheckBox) v).isChecked()).apply();
+                sendBroadcast(new Intent(TimetableSettingsActivity.this, TimetableScheduleReceiver.class));
             }
         });
     }

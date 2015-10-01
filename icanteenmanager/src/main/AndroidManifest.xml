@@ -13,10 +13,13 @@
         <activity
             android:name=".ICSplashActivity"
             android:label="@string/app_name_icanteen"
-            android:theme="@style/AppTheme.Splash" />
+            android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".ICSelectServiceActivity"
             android:label="@string/app_name_icanteen" />
+        <activity
+            android:name="cz.anty.icanteenmanager.ICSettingsActivity"
+            android:label="@string/activity_title_icanteen_settings" />
 
         <service
             android:name=".ICService"

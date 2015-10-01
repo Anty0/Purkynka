@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
@@ -34,108 +35,115 @@ public class ICLunchOrderActivity extends AppCompatActivity {
     private MultilineRecyclerAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
     private ICService.ICBinder binder = null;
-    private final RecyclerItemClickListener.OnItemClickListener onItemClickListener =
-            new RecyclerItemClickListener.OnItemClickListener() {
-        @Override
-        public void onItemClick(View view, int position) {
-            MultilineItem item = adapter.getItem(position);
-            final MonthLunchDay lunch = item instanceof MonthLunchDay ? (MonthLunchDay) item : null;
-            if (lunch == null) return;
 
-            ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
+    private final RecyclerItemClickListener.ClickListener onItemClickListener =
+            new RecyclerItemClickListener.ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    MultilineItem item = adapter.getItem(position);
+                    final MonthLunchDay lunch = item instanceof MonthLunchDay ? (MonthLunchDay) item : null;
+                    if (lunch == null) return;
 
-            final RadioGroup radioGroup = new RadioGroup(ICLunchOrderActivity.this);
-            radioGroup.setOrientation(LinearLayout.VERTICAL);
-            mainScrollView.addView(radioGroup);
+                    ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
 
-            RadioButton radioButtonNoLunch = new RadioButton(ICLunchOrderActivity.this);
-            radioButtonNoLunch.setTag(null);
-            radioButtonNoLunch.setText(R.string.radio_button_text_no_lunch);
-            radioButtonNoLunch.setId(R.id.text_view_title);
-            radioGroup.addView(radioButtonNoLunch);
-            //radioButtonNoLunch.setChecked(true);
+                    final RadioGroup radioGroup = new RadioGroup(ICLunchOrderActivity.this);
+                    radioGroup.setOrientation(LinearLayout.VERTICAL);
+                    mainScrollView.addView(radioGroup);
 
-            int toCheck = radioButtonNoLunch.getId();
+                    RadioButton radioButtonNoLunch = new RadioButton(ICLunchOrderActivity.this);
+                    radioButtonNoLunch.setTag(null);
+                    radioButtonNoLunch.setText(R.string.radio_button_text_no_lunch);
+                    radioButtonNoLunch.setId(R.id.text_view_title);
+                    radioGroup.addView(radioButtonNoLunch);
+                    //radioButtonNoLunch.setChecked(true);
 
-            List<Button> buttons = new ArrayList<>();
+                    int toCheck = radioButtonNoLunch.getId();
 
-            MonthLunch[] lunches = lunch.getLunches();
-            for (int i = 0, lunchesLength = lunches.length; i < lunchesLength; i++) {
-                final MonthLunch monthLunch = lunches[i];
+                    List<Button> buttons = new ArrayList<>();
 
-                RadioButton radioButtonLunch = new RadioButton(ICLunchOrderActivity.this);
-                radioButtonLunch.setTag(monthLunch);
-                radioButtonLunch.setText(monthLunch.getName());
-                radioButtonLunch.setId(R.id.text_view_title + 1 + i);
-                radioGroup.addView(radioButtonLunch);
+                    MonthLunch[] lunches = lunch.getLunches();
+                    for (int i = 0, lunchesLength = lunches.length; i < lunchesLength; i++) {
+                        final MonthLunch monthLunch = lunches[i];
 
-                switch (monthLunch.getState()) {
-                    case ORDERED:
-                        radioButtonNoLunch.setTag(monthLunch);
-                    case DISABLED_ORDERED:
-                        radioButtonLunch.setTag(null);
-                        toCheck = radioButtonLunch.getId();
-                        break;
-                    case DISABLED:
-                        radioButtonLunch.setEnabled(false);
-                        break;
-                }
+                        RadioButton radioButtonLunch = new RadioButton(ICLunchOrderActivity.this);
+                        radioButtonLunch.setTag(monthLunch);
+                        radioButtonLunch.setText(monthLunch.getName());
+                        radioButtonLunch.setId(R.id.text_view_title + 1 + i);
+                        radioGroup.addView(radioButtonLunch);
 
-                MonthLunch.BurzaState burzaState = monthLunch.getBurzaState();
-                if (burzaState != null) {
-                    Button button = new Button(ICLunchOrderActivity.this);
-                    button.setText(burzaState.toString());
-                    button.setTag(monthLunch);
-
-                    buttons.add(button);
-
-                    radioGroup.addView(button);
-                }
-            }
-            if (radioButtonNoLunch.getTag() == null
-                    && radioButtonNoLunch.getId() != toCheck)
-                radioButtonNoLunch.setEnabled(false);
-            radioGroup.check(toCheck);
-
-            final AlertDialog dialog = new AlertDialog.Builder(ICLunchOrderActivity.this)
-                    .setTitle(MonthLunchDay.DATE_PARSE_FORMAT.format(lunch.getDate()))
-                            //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
-                    .setView(mainScrollView)
-                    .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            MonthLunch monthLunchToOrder = (MonthLunch)
-                                    radioGroup.findViewById(radioGroup.getCheckedRadioButtonId()).getTag();
-                            if (binder == null || (monthLunchToOrder != null && monthLunchToOrder.getOrderUrlAdd() == null))
-                                Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
-                            else {
-                                if (monthLunchToOrder != null)
-                                    binder.orderMonthLunch(monthLunchToOrder);
-                                update();
-                            }
+                        switch (monthLunch.getState()) {
+                            case ORDERED:
+                                radioButtonNoLunch.setTag(monthLunch);
+                            case DISABLED_ORDERED:
+                                radioButtonLunch.setTag(null);
+                                toCheck = radioButtonLunch.getId();
+                                break;
+                            case DISABLED:
+                                radioButtonLunch.setEnabled(false);
+                                break;
                         }
-                    })
-                    .setNegativeButton(R.string.but_cancel, null)
-                    .setCancelable(true)
-                    .show();
 
-            for (final Button button : buttons) {
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.hide();
-                        MonthLunch monthLunch = (MonthLunch) button.getTag();
-                        if (binder == null || monthLunch.getOrderUrlAdd() == null)
-                            Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
-                        else {
-                            binder.toBurzaMonthLunch(monthLunch);
-                            update();
+                        MonthLunch.BurzaState burzaState = monthLunch.getBurzaState();
+                        if (burzaState != null) {
+                            Button button = new Button(ICLunchOrderActivity.this);
+                            button.setText(burzaState.toString());
+                            button.setTag(monthLunch);
+
+                            buttons.add(button);
+
+                            radioGroup.addView(button);
                         }
                     }
-                });
-            }
-        }
-    };
+                    if (radioButtonNoLunch.getTag() == null
+                            && radioButtonNoLunch.getId() != toCheck)
+                        radioButtonNoLunch.setEnabled(false);
+                    radioGroup.check(toCheck);
+
+                    final AlertDialog dialog = new AlertDialog.Builder(ICLunchOrderActivity.this)
+                            .setTitle(MonthLunchDay.DATE_PARSE_FORMAT.format(lunch.getDate()))
+                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                            .setView(mainScrollView)
+                            .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MonthLunch monthLunchToOrder = (MonthLunch)
+                                            radioGroup.findViewById(radioGroup.getCheckedRadioButtonId()).getTag();
+                                    if (binder == null || (monthLunchToOrder != null && monthLunchToOrder.getOrderUrlAdd() == null))
+                                        Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
+                                    else {
+                                        if (monthLunchToOrder != null)
+                                            binder.orderMonthLunch(monthLunchToOrder);
+                                        update();
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.but_cancel, null)
+                            .setCancelable(true)
+                            .show();
+
+                    for (final Button button : buttons) {
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.hide();
+                                MonthLunch monthLunch = (MonthLunch) button.getTag();
+                                if (binder == null || monthLunch.getOrderUrlAdd() == null)
+                                    Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
+                                else {
+                                    binder.toBurzaMonthLunch(monthLunch);
+                                    update();
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onLongClick(View view, int position) {
+
+                }
+            };
+
     private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
             = new ServiceManager.BinderConnection<ICService.ICBinder>() {
         @Override
@@ -212,8 +220,8 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             public void run() {
                 MultilineItem[] data;
                 try {
-                    List<MonthLunchDay> dataList = binder.getMonth();
-                    data = dataList.toArray(new MonthLunchDay[dataList.size()]);
+                    data = binder.getMonth();
+                    if (data == null) throw new NullPointerException();
                 } catch (NullPointerException | InterruptedException e) {
                     data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
                             getString(R.string.exception_message_sas_manager_binder_null))};
@@ -227,6 +235,8 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                         adapter.addAllItems(finalData);
                     }
                 });
+
+                AppDataManager.setICNewMonthLunches(false);
             }
         }, getString(R.string.wait_text_loading));
     }

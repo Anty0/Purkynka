@@ -79,11 +79,6 @@ public class BurzaLunch implements MultilineItem {
         return getName();
     }
 
-    @Override
-    public Integer getLayoutResourceId(Context context, int position) {
-        return null;
-    }
-
     public enum LunchNumber {
         LUNCH_1, LUNCH_2, LUNCH_3;
 

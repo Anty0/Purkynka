@@ -77,11 +77,6 @@ public class Man implements MultilineItem {
         return getLastEnterAsString();
     }
 
-    @Override
-    public Integer getLayoutResourceId(Context context, int position) {
-        return null;
-    }
-
     public enum IsInSchoolState {
         IN_SCHOOL, NOT_IN_SCHOOL, UNAVAILABLE;
 

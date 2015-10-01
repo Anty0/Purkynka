@@ -10,10 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.io.IOException;
 
+import cz.anty.icanteenmanager.receiver.StartServiceScheduleReceiver;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.icanteen.ICManager;
@@ -42,6 +42,7 @@ public class ICLoginActivity extends AppCompatActivity {
         }
 
         AppDataManager.login(AppDataManager.Type.I_CANTEEN, username, password);
+        activity.sendBroadcast(new Intent(activity, StartServiceScheduleReceiver.class));
         return true;
     }
 
@@ -83,9 +84,7 @@ public class ICLoginActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, R.string.toast_text_coming_soon,
-                    Toast.LENGTH_LONG).show();
-            //TODO open settings
+            startActivity(new Intent(this, ICSettingsActivity.class));
             return true;
         }
 

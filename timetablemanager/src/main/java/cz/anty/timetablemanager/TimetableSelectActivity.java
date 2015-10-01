@@ -25,7 +25,6 @@ import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
 import cz.anty.utils.list.recyclerView.RecyclerAdapter;
 import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
-import cz.anty.utils.settings.TimetableSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.timetable.Timetable;
 import cz.anty.utils.timetable.TimetableConnector;
@@ -51,15 +50,15 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
         adapter = new MultilineRecyclerAdapter<>();
         RecyclerAdapter.inflateToActivity(this, null, adapter,
-                new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener.ClickListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
+                    public void onClick(View view, int position) {
                         TimetableManageActivity.toShow = adapter.getItem(position);
                         startActivity(new Intent(TimetableSelectActivity.this, TimetableManageActivity.class));
                     }
-                }, new RecyclerItemClickListener.OnItemLongClickListener() {
+
                     @Override
-                    public void onItemLongClick(View view, int position) {
+                    public void onLongClick(View view, int position) {
                         final Timetable timetable = adapter.getItem(position);
                         new AlertDialog.Builder(TimetableSelectActivity.this)
                                 .setTitle(timetable.getName())

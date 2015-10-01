@@ -85,9 +85,4 @@ public class Lesson implements MultilineItem {
         return String.format(context.getString(R.string.text_marks),
                 getMarks().length);
     }
-
-    @Override
-    public Integer getLayoutResourceId(Context context, int position) {
-        return null;
-    }
 }

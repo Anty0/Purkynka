@@ -67,9 +67,4 @@ public class MonthLunchDay implements MultilineItem {
         return orderedLunch == null ? context.getString(R.string
                 .text_nothing_ordered) : orderedLunch.getName();
     }
-
-    @Override
-    public Integer getLayoutResourceId(Context context, int position) {
-        return null;
-    }
 }

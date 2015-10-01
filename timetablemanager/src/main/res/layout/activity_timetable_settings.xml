@@ -7,21 +7,19 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cz.anty.utils.settings.WifiSettingsActivity">
+    tools:context="cz.anty.timetablemanager.TimetableSettingsActivity">
 
     <CheckBox
-        android:id="@+id/auto_login_checkbox"
+        android:id="@+id/check_box_display_teachers_warnings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="true"
         android:enabled="true"
-        android:text="@string/check_box_text_auto_login" />
+        android:text="@string/check_box_text_display_attendance_warnings" />
 
     <CheckBox
-        android:id="@+id/wait_login_checkbox"
+        android:id="@+id/check_box_display_lesson_warnings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="true"
         android:enabled="true"
-        android:text="@string/check_box_text_wait_login" />
+        android:text="@string/check_box_text_display_lessons_warnings" />
 </LinearLayout>

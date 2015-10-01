@@ -1,4 +1,4 @@
-package cz.anty.utils.settings;
+package cz.anty.wifiautologin;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import cz.anty.utils.AppDataManager;
-import cz.anty.utils.R;
 
 public class WifiSettingsActivity extends AppCompatActivity {
 

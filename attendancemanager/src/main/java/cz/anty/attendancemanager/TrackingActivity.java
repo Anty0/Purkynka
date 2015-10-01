@@ -31,9 +31,9 @@ public class TrackingActivity extends AppCompatActivity {
         mansManager = new TrackingMansManager(this);
         adapter = new MultilineRecyclerAdapter<>();
         RecyclerAdapter.inflateToActivity(this, null, adapter,
-                new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener.ClickListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
+                    public void onClick(View view, int position) {
                         final Man man = adapter.getItem(position);
                         if (man != null) {
                             mansManager.processMan(man, new Runnable() {
@@ -44,6 +44,11 @@ public class TrackingActivity extends AppCompatActivity {
                                 }
                             });
                         }
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
                     }
                 });
 

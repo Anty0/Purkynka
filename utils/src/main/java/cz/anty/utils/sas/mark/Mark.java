@@ -75,6 +75,12 @@ public class Mark implements MultilineItem {
         return weight;
     }
 
+    /*@Override
+    public boolean equals(Object o) {
+        return super.equals(o) || o instanceof Mark && getDate().equals(((Mark) o).getDate())
+                && getShortLesson().equals(((Mark) o).getShortLesson());
+    }*/
+
     @Override
     public String toString() {
         return getDateAsString()
@@ -92,10 +98,5 @@ public class Mark implements MultilineItem {
     @Override
     public String getText(Context context, int position) {
         return getDateAsString() + " " + getNote();
-    }
-
-    @Override
-    public Integer getLayoutResourceId(Context context, int position) {
-        return null;
     }
 }

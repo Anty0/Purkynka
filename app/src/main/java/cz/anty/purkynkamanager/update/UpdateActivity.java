@@ -1,4 +1,4 @@
-package cz.anty.purkynkamanager;
+package cz.anty.purkynkamanager.update;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +13,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
+import cz.anty.purkynkamanager.BuildConfig;
+import cz.anty.purkynkamanager.MainActivity;
+import cz.anty.purkynkamanager.R;
 import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.thread.ProgressReporter;
 import cz.anty.utils.update.UpdateConnector;
@@ -23,6 +26,8 @@ import cz.anty.utils.update.UpdateConnector;
  * @author anty
  */
 public class UpdateActivity extends AppCompatActivity implements ProgressReporter {
+
+    public static final String EXTRA_SKIP_DIALOG = "SKIP_DIALOG";
 
     private ProgressBar progressBar;
     private TextView percentTextView, numberTextView;
@@ -40,8 +45,13 @@ public class UpdateActivity extends AppCompatActivity implements ProgressReporte
         percentTextView = (TextView) findViewById(R.id.progress_percent);
         numberTextView = (TextView) findViewById(R.id.progress_number);
 
+        if (getIntent().getBooleanExtra(EXTRA_SKIP_DIALOG, false)) {
+            downloadInstallUpdate();
+            return;
+        }
+
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                .setTitle(R.string.notify_title_update)
+                .setTitle(R.string.notify_title_update_available)
                 .setMessage(String.format(getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)
                         + "\n" + String.format(getString(R.string.notify_text_update_new),
                         UpdateReceiver.getLatestName(this))
@@ -63,8 +73,7 @@ public class UpdateActivity extends AppCompatActivity implements ProgressReporte
                 .setNeutralButton(R.string.but_skip, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(UpdateActivity.this, MainActivity.class)
-                                .putExtra(MainActivity.SKIP_UPDATE_CHECK_KEY, true));
+                        startActivity(new Intent(UpdateActivity.this, MainActivity.class));
                     }
                 })
                 .show();

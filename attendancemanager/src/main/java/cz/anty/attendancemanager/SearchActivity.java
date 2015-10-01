@@ -26,7 +26,6 @@ import cz.anty.utils.list.listView.TextMultilineItem;
 import cz.anty.utils.list.recyclerView.AutoLoadMultilineRecyclerAdapter;
 import cz.anty.utils.list.recyclerView.RecyclerAdapter;
 import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
-import cz.anty.utils.settings.AttendanceSettingsActivity;
 import cz.anty.utils.thread.OnceRunThread;
 
 public class SearchActivity extends AppCompatActivity {
@@ -50,9 +49,9 @@ public class SearchActivity extends AppCompatActivity {
                 });
         adapter.setNotifyOnChange(false);
         RecyclerAdapter.inflateToActivity(this, R.layout.activity_search, adapter,
-                new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener.ClickListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
+                    public void onClick(View view, int position) {
                         MultilineItem item = adapter.getItem(position);
                         final Man man = item instanceof Man
                                 ? (Man) item : null;
@@ -66,6 +65,11 @@ public class SearchActivity extends AppCompatActivity {
                                         }
                                     });
                         }
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
                     }
                 });
         searchEditText = (EditText) findViewById(R.id.editText);

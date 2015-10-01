@@ -127,7 +127,7 @@ public class MarksManager {
         if (preferences.getInt(Constants.SETTING_NAME_MARKS_SAVE_VERSION, -1) != MARKS_SAVE_VERSION) {
             apply(Semester.FIRST);
             apply(Semester.SECOND);
-            context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE).edit()
+            preferences.edit()
                     .putInt(Constants.SETTING_NAME_MARKS_SAVE_VERSION, MARKS_SAVE_VERSION)
                     .apply();
             return;

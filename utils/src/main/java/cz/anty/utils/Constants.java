@@ -17,6 +17,7 @@ public class Constants {
     public static final int NOTIFICATION_ID_I_CANTEEN_BURZA = 50;
     public static final int NOTIFICATION_ID_I_CANTEEN_BURZA_RESULT = 60;
     public static final int NOTIFICATION_ID_I_CANTEEN_LOGIN_EXCEPTION = 70;
+    public static final int NOTIFICATION_ID_I_CANTEEN_MONTH = 80;
 
     public static final int WAIT_TIME_ON_BIND = 100;
     public static final int WAIT_TIME_FIRST_REPEAT = 10;
@@ -28,6 +29,12 @@ public class Constants {
     public static final long REPEAT_TIME_SAS_MARKS_UPDATE = 1000 * 60 * 15;
     //public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;
     public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 5;
+    public static final long REPEAT_TIME_IC_LUNCHES_UPDATE = 1000 * 60 * 90;
+
+    public static final int SPECIAL_ITEM_PRIORITY_NEW_UPDATE = 100;
+    public static final int SPECIAL_ITEM_PRIORITY_NO_UPDATE = 0;
+    public static final int SPECIAL_ITEM_PRIORITY_SHARE = 85;
+    public static final int SPECIAL_ITEM_PRIORITY_TRACKING = 55;
 
     //public static final String STRINGS_CONST_NAME = "[NAME]";
     //public static final String STRINGS_CONST_VERSION = "[VERSION]";
@@ -72,6 +79,10 @@ public class Constants {
     public static final String SETTING_NAME_MARKS_SAVE_VERSION = "MARKS_SAVE_VERSION";
     public static final String SETTING_NAME_ADD_MARKS = "MARKS";
 
+    public static final String SETTINGS_NAME_LUNCHES = "LunchesData";
+    public static final String SETTING_NAME_LUNCHES_SAVE_VERSION = "LUNCHES_SAVE_VERSION";
+    public static final String SETTING_NAME_MONTH_LUNCHES = "MONTH_LUNCHES";
+
     public static final String SETTINGS_NAME_SAS = "SASLoginData";
     public static final String SETTING_NAME_LOGIN = "LOGIN";
     public static final String SETTING_NAME_PASSWORD = "PASSWORD";
@@ -83,6 +94,8 @@ public class Constants {
     public static final String SETTING_NAME_AUTO_LOGIN = "AUTO_LOGIN";
 
     public static final String SETTINGS_NAME_I_CANTEEN = "iCanteenLoginData";
+    public static final String SETTING_NAME_NEW_MONTH_LUNCHES = "NEW_MONTH_LUNCHES";
+    public static final String SETTING_NAME_NOTIFY_NEW_MONTH_LUNCHES = "NOTIFY_NEW_MONTH_LUNCHES";
 
     public static final String SETTINGS_NAME_DEBUG = "DEBUGSettingsData";
     public static final String SETTING_NAME_DATA_SAVE_VERSION = "DATA_SAVE_VERSION";

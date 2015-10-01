@@ -13,6 +13,4 @@ public interface MultilineItem {
 
     String getText(Context context, int position);
 
-    Integer getLayoutResourceId(Context context, int position);
-
 }

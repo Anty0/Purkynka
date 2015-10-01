@@ -13,21 +13,6 @@
         android:configChanges="locale|orientation"
         android:fullBackupContent="@xml/backup_scheme">
         <activity
-            android:name=".settings.SettingsActivity"
-            android:label="@string/activity_title_settings" />
-        <activity
-            android:name=".settings.SASManagerSettingsActivity"
-            android:label="@string/activity_title_sas_settings" />
-        <activity
-            android:name=".settings.WifiSettingsActivity"
-            android:label="@string/activity_title_wifi_settings" />
-        <activity
-            android:name=".settings.TimetableSettingsActivity"
-            android:label="@string/activity_title_timetable_settings" />
-        <activity
-            android:name=".settings.AttendanceSettingsActivity"
-            android:label="@string/activity_title_attendance_settings" />
-        <activity
             android:name=".settings.AboutActivity"
             android:label="@string/activity_title_about" />
 

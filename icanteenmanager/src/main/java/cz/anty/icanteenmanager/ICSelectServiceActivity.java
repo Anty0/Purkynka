@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
@@ -30,9 +29,9 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                 new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order),
                         showDescription ? getString(R.string.app_description_icanteen_lunch_order) : null));
 
-        RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.OnItemClickListener() {
+        RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.ClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onClick(View view, int position) {
                 switch (position) {
                     case 0:
                         startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaActivity.class));
@@ -41,6 +40,11 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                         startActivity(new Intent(ICSelectServiceActivity.this, ICLunchOrderActivity.class));
                         break;
                 }
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
             }
         });
     }
@@ -61,9 +65,7 @@ public class ICSelectServiceActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, R.string.toast_text_coming_soon,
-                    Toast.LENGTH_LONG).show();
-            //TODO open settings
+            startActivity(new Intent(this, ICSettingsActivity.class));
             return true;
         }
         if (id == R.id.action_log_out) {

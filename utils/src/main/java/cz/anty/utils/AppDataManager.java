@@ -135,6 +135,32 @@ public class AppDataManager {
                 .apply();
     }
 
+    public static synchronized boolean isICNotifyNewMonthLunches() {
+        Log.d("AppDataManager", "isSASMarksAutoUpdate");
+        return Type.I_CANTEEN.getSharedPreferences()
+                .getBoolean(Constants.SETTING_NAME_NOTIFY_NEW_MONTH_LUNCHES, true);
+    }
+
+    public static synchronized void setICNotifyNewMonthLunches(boolean toSet) {
+        Log.d("AppDataManager", "setSASMarksAutoUpdate toSet: " + toSet);
+        Type.I_CANTEEN.getSharedPreferences().edit()
+                .putBoolean(Constants.SETTING_NAME_NOTIFY_NEW_MONTH_LUNCHES, toSet)
+                .apply();
+    }
+
+    public static synchronized boolean isICNewMonthLunches() {
+        Log.d("AppDataManager", "isSASMarksAutoUpdate");
+        return Type.I_CANTEEN.getSharedPreferences()
+                .getBoolean(Constants.SETTING_NAME_NEW_MONTH_LUNCHES, true);
+    }
+
+    public static synchronized void setICNewMonthLunches(boolean toSet) {
+        Log.d("AppDataManager", "setSASMarksAutoUpdate toSet: " + toSet);
+        Type.I_CANTEEN.getSharedPreferences().edit()
+                .putBoolean(Constants.SETTING_NAME_NEW_MONTH_LUNCHES, toSet)
+                .apply();
+    }
+
     public static synchronized boolean isWifiAutoLogin() {
         Log.d("AppDataManager", "isWifiAutoLogin");
         return Type.WIFI.getSharedPreferences()

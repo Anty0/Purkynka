@@ -41,45 +41,38 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ItemViewHold
     }
 
     public static RecyclerView inflateToActivity(Activity activity, @Nullable Integer layoutResourceId, RecyclerView.Adapter instanceOfAdapter,
-                                                 @Nullable RecyclerItemClickListener.OnItemClickListener itemTouchListener) {
-        return inflateToActivity(activity, layoutResourceId, instanceOfAdapter, itemTouchListener, null);
-    }
-
-    public static RecyclerView inflateToActivity(Activity activity, @Nullable Integer layoutResourceId, RecyclerView.Adapter instanceOfAdapter,
-                                                 @Nullable RecyclerItemClickListener.OnItemClickListener itemTouchListener,
-                                                 @Nullable RecyclerItemClickListener.OnItemLongClickListener longClickListener) {
+                                                 @Nullable RecyclerItemClickListener.ClickListener itemTouchListener) {
         Log.d(RecyclerAdapter.class.getSimpleName(), "inflateToActivity");
         activity.setContentView(layoutResourceId == null ? R.layout.activity_recycler : layoutResourceId);
         RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recyclerView);
-        setValues(recyclerView, activity, instanceOfAdapter, itemTouchListener, longClickListener);
+        setValues(recyclerView, activity, instanceOfAdapter, itemTouchListener);
         return recyclerView;
     }
 
-    public static View inflate(Context context, @Nullable ViewGroup parent, boolean attachToRoot, @Nullable Integer layoutResourceId, RecyclerView.Adapter instanceOfAdapter,
-                               @Nullable RecyclerItemClickListener.OnItemClickListener itemTouchListener) {
-        return inflate(context, parent, attachToRoot, layoutResourceId, instanceOfAdapter, itemTouchListener, null);
+    public static View inflate(Context context, @Nullable ViewGroup parent, boolean attachToRoot,
+                               @Nullable Integer layoutResourceId, RecyclerView.Adapter instanceOfAdapter,
+                               @Nullable RecyclerItemClickListener.ClickListener itemTouchListener) {
+        return inflate(LayoutInflater.from(context), context, parent, attachToRoot, layoutResourceId, instanceOfAdapter, itemTouchListener);
     }
 
-    public static View inflate(Context context, @Nullable ViewGroup parent, boolean attachToRoot, @Nullable Integer layoutResourceId, RecyclerView.Adapter instanceOfAdapter,
-                               @Nullable RecyclerItemClickListener.OnItemClickListener itemTouchListener,
-                               @Nullable RecyclerItemClickListener.OnItemLongClickListener longClickListener) {
+    public static View inflate(LayoutInflater inflater, Context context, @Nullable ViewGroup parent, boolean attachToRoot,
+                               @Nullable Integer layoutResourceId, RecyclerView.Adapter instanceOfAdapter,
+                               @Nullable RecyclerItemClickListener.ClickListener itemTouchListener) {
         Log.d(RecyclerAdapter.class.getSimpleName(), "inflate");
-        View result = LayoutInflater.from(context).inflate(layoutResourceId == null
+        View result = inflater.inflate(layoutResourceId == null
                 ? R.layout.activity_recycler : layoutResourceId, parent, attachToRoot);
         RecyclerView recyclerView = (RecyclerView) result.findViewById(R.id.recyclerView);
-        setValues(recyclerView, context, instanceOfAdapter, itemTouchListener, longClickListener);
+        setValues(recyclerView, context, instanceOfAdapter, itemTouchListener);
         return result;
     }
 
     private static void setValues(RecyclerView recyclerView, Context context, RecyclerView.Adapter instanceOfAdapter,
-                                  @Nullable RecyclerItemClickListener.OnItemClickListener itemTouchListener,
-                                  @Nullable RecyclerItemClickListener.OnItemLongClickListener longClickListener) {
+                                  @Nullable RecyclerItemClickListener.ClickListener itemTouchListener) {
         Log.d(RecyclerAdapter.class.getSimpleName(), "setValues");
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         if (itemTouchListener != null)
-            recyclerView.addOnItemTouchListener(longClickListener == null ? new RecyclerItemClickListener(context, itemTouchListener)
-                    : new RecyclerItemClickListener(context, itemTouchListener, recyclerView, longClickListener));
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, recyclerView, itemTouchListener));
         recyclerView.setAdapter(instanceOfAdapter);
         /*recyclerView.addItemDecoration(new DividerItemDecoration(activity,
                 LinearLayoutManager.VERTICAL));*/

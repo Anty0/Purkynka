@@ -223,12 +223,12 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         // prepare intent which is triggered if the
         // notification is selected
 
-        Intent intent = new Intent(SASManagerService.this, SASSplashActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(SASManagerService.this, 0, intent, 0);
+        Intent intent = new Intent(this, SASSplashActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         // build notification
         // the addAction re-use the same intent to keep the example short
-        Notification n = new NotificationCompat.Builder(SASManagerService.this)
+        Notification n = new NotificationCompat.Builder(this)
                 .setContentTitle(String.format(newMarks > 1 ? getString(R.string.notify_title_new_marks)
                         : getString(R.string.notify_title_new_mark), newMarks))
                 .setContentText(builder)

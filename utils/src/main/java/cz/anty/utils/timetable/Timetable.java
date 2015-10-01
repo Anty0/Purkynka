@@ -191,9 +191,4 @@ public class Timetable implements MultilineItem {
     public String getText(Context context, int position) {
         return null;
     }
-
-    @Override
-    public Integer getLayoutResourceId(Context context, int position) {
-        return null;
-    }
 }

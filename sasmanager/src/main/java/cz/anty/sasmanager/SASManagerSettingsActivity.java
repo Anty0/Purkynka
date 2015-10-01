@@ -1,12 +1,13 @@
-package cz.anty.utils.settings;
+package cz.anty.sasmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 
+import cz.anty.sasmanager.receiver.StartServiceScheduleReceiver;
 import cz.anty.utils.AppDataManager;
-import cz.anty.utils.R;
 
 public class SASManagerSettingsActivity extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class SASManagerSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AppDataManager.setSASMarksAutoUpdate(marksUpdateCheckBox.isChecked());
+                sendBroadcast(new Intent(SASManagerSettingsActivity.this, StartServiceScheduleReceiver.class));
             }
         });
     }

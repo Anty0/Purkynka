@@ -5,10 +5,13 @@
     <string name="app_name_icanteen_lunch_order">Obědnavač obědů</string>
 
     <string name="activity_title_login_icanteen">Přihlášení do iCanteen</string>
+    <string name="activity_title_icanteen_settings">Nastavení iCanteen Manageru</string>
 
     <string name="app_description_icanteen">iCanteen Manager je prográmek, který dokáže <b>spravovat a objednávat</b> školní obědy, také dokáže <b>hlídat burzu</b> a automaticky objednat oběd, jakmile bude dostupný.</string>
     <string name="app_description_icanteen_burza">Hlídač BURZY dokáže <b>kontrolovat</b> ve velmi krátkých intervalech obědovou <b>burzu</b> a tak zvyšuje vaši pravděpodobnost na zisk oběda ze školní burzy.</string>
     <string name="app_description_icanteen_lunch_order">Obědnavač obědů umožňuje <b>pohodlně</b> z mobilního telefonu <b>obědnávat obědy</b>.</string>
+
+    <string name="check_box_text_notify_new_lunches">Zobraz upozorní, když budou dostupné nové obědy k obědnání</string>
 
     <string name="notify_title_can_not_login">Nejde se přihlásit do iCanteen</string>
     <string name="notify_text_can_not_login">Prosím zkuste se odhlásit a zase znovu přihlásit</string>
@@ -16,6 +19,8 @@
     <string name="notify_text_burza_checker_running">Klikněte pro ukončení</string>
     <string name="notify_title_burza_checker_completed">Požadavek na objednávku <b>úspěšně</b> odeslán</string>
     <string name="notify_text_burza_checker_completed">Prosím zkontrolujte, jestli proběhlo objednání úspěšně.</string>
+    <string name="notify_title_new_lunches">Jsou dostupné nové obědy</string>
+    <string name="notify_text_new_lunches">Klikněte zde pro jejich zobrazení</string>
 
     <string name="notify_title_select_to_watch">Zvolte co hlídat</string>
     <string name="text_view_text_date_to_watch">Zvolte hlídané DATUM:</string>

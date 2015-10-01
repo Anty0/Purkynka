@@ -1,4 +1,4 @@
-package cz.anty.purkynkamanager;
+package cz.anty.purkynkamanager.update;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,6 +11,8 @@ import android.support.v7.app.NotificationCompat;
 
 import java.io.IOException;
 
+import cz.anty.purkynkamanager.BuildConfig;
+import cz.anty.purkynkamanager.R;
 import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
@@ -38,7 +40,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                     new Intent(context, UpdateActivity.class), 0);
             notificationManager.notify(Constants.NOTIFICATION_ID_UPDATE,
                     new NotificationCompat.Builder(context)
-                            .setContentTitle(context.getString(R.string.notify_title_update))
+                            .setContentTitle(context.getString(R.string.notify_title_update_available))
                             .setContentText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)))
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .bigText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)) + "\n"

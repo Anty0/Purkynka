@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -143,8 +144,8 @@ public class ICBurzaActivity extends AppCompatActivity {
                         if (binder != null) {
                             Calendar calendar = Calendar.getInstance();
                             try {
-                                List<MonthLunchDay> monthLunchDays = binder.getMonth();
-                                if (monthLunchDays == null) monthLunchDays = new ArrayList<>();
+                                MonthLunchDay[] monthLunchDays = binder.getMonth();
+                                if (monthLunchDays == null) monthLunchDays = new MonthLunchDay[0];
                                 for (MonthLunchDay monthLunchDay : monthLunchDays) {
                                     calendar.setTime(monthLunchDay.getDate());
                                     if (calendar.get(Calendar.DAY_OF_MONTH) == dayOfMonth
@@ -240,9 +241,9 @@ public class ICBurzaActivity extends AppCompatActivity {
 
         adapter = new MultilineRecyclerAdapter<>();
         RecyclerAdapter.inflateToActivity(this, null, adapter,
-                new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener.ClickListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
+                    public void onClick(View view, int position) {
                         MultilineItem item = adapter.getItem(position);
 
                         if (item instanceof TextMultilineItem &&
@@ -273,6 +274,11 @@ public class ICBurzaActivity extends AppCompatActivity {
                                 .setCancelable(true)
                                 .show();
                     }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
                 });
 
         if (ICSplashActivity.serviceManager != null) {
@@ -296,8 +302,9 @@ public class ICBurzaActivity extends AppCompatActivity {
             public void run() {
                 MultilineItem[] data;
                 try {
-                    List<BurzaLunch> dataList = binder.getBurza();
-                    data = dataList.toArray(new MultilineItem[dataList.size() + 1]);
+                    BurzaLunch[] dataList = binder.getBurza();
+                    if (dataList == null) dataList = new BurzaLunch[0];
+                    data = Arrays.asList(dataList).toArray(new MultilineItem[dataList.length + 1]);
                     data[data.length - 1] = new TextMultilineItem(getString(
                             R.string.menu_item_text_start_burza_checking), null);
                 } catch (NullPointerException | InterruptedException e) {

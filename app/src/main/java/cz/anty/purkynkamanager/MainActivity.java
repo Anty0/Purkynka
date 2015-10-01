@@ -1,12 +1,11 @@
 package cz.anty.purkynkamanager;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,69 +13,45 @@ import android.view.View;
 import java.io.IOException;
 
 import cz.anty.attendancemanager.SearchActivity;
+import cz.anty.attendancemanager.TrackingSpecialModule;
 import cz.anty.icanteenmanager.ICSplashActivity;
 import cz.anty.purkynkamanager.firststart.FirstStartActivity;
+import cz.anty.purkynkamanager.update.UpdateSpecialModule;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.list.listView.TextMultilineItem;
-import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.utils.list.recyclerView.RecyclerAdapter;
-import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
-import cz.anty.utils.settings.SettingsActivity;
+import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModuleManager;
+import cz.anty.utils.list.toolbar.FragmentDrawer;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.update.UpdateConnector;
 import cz.anty.wifiautologin.WifiLoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String SKIP_UPDATE_CHECK_KEY = "SKIP_UPDATE";
-
+    private boolean showOptionsMenu = false;
     private OnceRunThreadWithSpinner worker;
-    private MultilineRecyclerAdapter<TextMultilineItem> adapter;
-    private RecyclerView recyclerView;
+    private SpecialModuleManager moduleManager;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.d(getClass().getSimpleName(), "onCreate");
+        showOptionsMenu = false;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        moduleManager = new SpecialModuleManager((RecyclerView) findViewById(R.id.recyclerView),
+                new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this)); // TODO: 30.9.15 add special modules
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         worker = new OnceRunThreadWithSpinner(this);
-        adapter = new MultilineRecyclerAdapter<>();
-        recyclerView = RecyclerAdapter.inflateToActivity(this, null, adapter, null);
 
-        checkUpdate();
-    }
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-    private void checkUpdate() {
-        Log.d(getClass().getSimpleName(), "checkUpdate");
-        if (getIntent().getBooleanExtra(SKIP_UPDATE_CHECK_KEY, false)) {
-            checkFirstStart();
-            return;
-        }
-
-        worker.startWorker(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UpdateReceiver.checkUpdate(MainActivity.this);
-                } catch (IOException | NumberFormatException e) {
-                    Log.d(MainActivity.this.getClass().getSimpleName(), "checkUpdate", e);
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (UpdateReceiver.isUpdateAvailable(MainActivity.this)) {
-                            startActivity(new Intent(MainActivity.this, UpdateActivity.class));
-                            finish();
-                            return;
-                        }
-                        checkFirstStart();
-                    }
-                });
-            }
-        }, getString(R.string.wait_text_loading));
+        checkFirstStart();
     }
 
     private void checkFirstStart() {
@@ -99,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        checkShare();
+                        init();
                     }
                 });
             }
@@ -118,56 +93,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkShare() {
-        Log.d(getClass().getSimpleName(), "checkShare");
-        final SharedPreferences preferences = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
-        if (preferences.getBoolean(Constants.SETTING_NAME_SHOW_SHARE, true)) {
-            new AlertDialog.Builder(MainActivity.this, R.style.AppTheme_Dialog)
-                    .setTitle(R.string.dialog_title_share)
-                    .setMessage(R.string.dialog_message_share)
-                    .setPositiveButton(R.string.but_share, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND)
-                                            .setType("text/plain")
-                                            .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                                            .putExtra(Intent.EXTRA_TEXT, getString(R.string.text_extra_text_share)),// TODO: 2.9.15 better share text
-                                    null));
-
-                            preferences.edit().putBoolean(Constants.SETTING_NAME_SHOW_SHARE, false).apply();
-                            init();
-                        }
-                    })
-                    .setIcon(R.mipmap.ic_launcher)
-                    .setCancelable(false)
-                    .setNeutralButton(R.string.but_skip, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            init();
-                        }
-                    })
-                    .show();
-            return;
-        }
-        init();
-    }
-
     private void init() {
         Log.d(getClass().getSimpleName(), "init");
-        boolean showDescription = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
 
-        adapter.clearItems();
-        adapter.addAllItems(new TextMultilineItem(getString(R.string.app_name_sas), showDescription ? getString(R.string.app_description_sas) : null),
-                new TextMultilineItem(getString(R.string.app_name_wifi), showDescription ? getString(R.string.app_description_wifi) : null),
-                new TextMultilineItem(getString(R.string.app_name_icanteen), showDescription ? getString(R.string.app_description_icanteen) : null),
-                new TextMultilineItem(getString(R.string.app_name_timetable), showDescription ? getString(R.string.app_description_timetable) : null),
-                new TextMultilineItem(getString(R.string.app_name_attendance), showDescription ? getString(R.string.app_description_attendance) : null));
-
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.OnItemClickListener() {
+        FragmentDrawer drawerFragment = (FragmentDrawer)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout)
+                        findViewById(R.id.drawer_layout), mToolbar,
+                new TextMultilineItem(getString(R.string.app_name_sas), null),
+                new TextMultilineItem(getString(R.string.app_name_wifi), null),
+                new TextMultilineItem(getString(R.string.app_name_icanteen), null),
+                new TextMultilineItem(getString(R.string.app_name_timetable), null),
+                new TextMultilineItem(getString(R.string.app_name_attendance), null));
+        drawerFragment.setDrawerListener(new FragmentDrawer.FragmentDrawerListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onDrawerItemSelected(View view, int position) {
                 switch (position) {
                     case 0:
                         startActivity(new Intent(MainActivity.this, SASSplashActivity.class));
@@ -186,15 +126,40 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
-                }));
+        });
 
+        showOptionsMenu = true;
         invalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onResume() {
+        updateModuleManager();
+        super.onResume();
+    }
+
+    private synchronized void updateModuleManager() {
+        if (moduleManager.isInitialized())
+            moduleManager.update();
+        else moduleManager.init();
+    }
+
+    @Override
+    protected void onDestroy() {
+        do {
+            try {
+                worker.waitToWorkerStop();
+            } catch (InterruptedException e) {
+                Log.d(getClass().getSimpleName(), "onDestroy", e);
+            }
+        } while (worker.getWaitingThreadsLength() > 0);
+        super.onDestroy();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (!adapter.isEmpty()) {
+        if (showOptionsMenu) {
             getMenuInflater().inflate(R.menu.menu_default, menu);
             return true;
         }

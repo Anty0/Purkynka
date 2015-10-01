@@ -14,6 +14,7 @@ import cz.anty.utils.R;
  *
  * @author anty
  */
+@Deprecated
 public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
 
     private final Context context;
@@ -51,9 +52,10 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
 
     protected View generateView(int position, View convertView, ViewGroup parent) {
         M item = getItem(position);
-        Integer layoutResourceId = item.getLayoutResourceId(context, position);
-        layoutResourceId = layoutResourceId == null ?
-                this.layoutResourceId : layoutResourceId;
+        Integer layoutResourceId = this.layoutResourceId;
+        if (item instanceof MultilineResourceItem)
+            layoutResourceId = ((MultilineResourceItem) item)
+                    .getLayoutResourceId(context, position);
 
         if (convertView != null) {
             if (!((ItemDataHolder) convertView.getTag())

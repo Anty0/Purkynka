@@ -16,7 +16,6 @@ import java.io.IOException;
 import cz.anty.utils.AppDataManager;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.sas.SASManager;
-import cz.anty.utils.settings.SASManagerSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class SASLoginActivity extends AppCompatActivity {

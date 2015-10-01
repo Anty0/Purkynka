@@ -3,6 +3,7 @@ package cz.anty.sasmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import cz.anty.sasmanager.receiver.StartServiceScheduleReceiver;
 import cz.anty.utils.AppDataManager;
@@ -34,7 +35,8 @@ public class SASSplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.progress_dialog);
+        ((TextView) findViewById(R.id.message)).setText(R.string.wait_text_loading);
 
         worker.setPowerManager(this);
         sendBroadcast(new Intent(this, StartServiceScheduleReceiver.class));

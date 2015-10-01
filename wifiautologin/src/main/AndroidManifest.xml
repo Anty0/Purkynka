@@ -12,6 +12,9 @@
             android:name=".WifiLoginActivity"
             android:icon="@mipmap/ic_launcher_wifi"
             android:label="@string/app_name_wifi" />
+        <activity
+            android:name="cz.anty.wifiautologin.WifiSettingsActivity"
+            android:label="@string/activity_title_wifi_settings" />
 
         <receiver
             android:name=".WifiStateReceiver"

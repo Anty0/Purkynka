@@ -49,6 +49,9 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="cz.anty.timetablemanager.TimetableSettingsActivity"
+            android:label="@string/activity_title_timetable_settings" />
     </application>
 
 </manifest>

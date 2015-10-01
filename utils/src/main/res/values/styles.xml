@@ -4,7 +4,7 @@
 
     </style>
 
-    <style name="AppTheme.Splash" parent="AppTheme.Splash.Base">
+    <style name="AppTheme.NoActionBar" parent="AppTheme.NoActionBar.Base">
 
     </style>
 
@@ -13,13 +13,12 @@
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat">
-        <item name="windowActionBar">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Splash.Base" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.NoActionBar.Base" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

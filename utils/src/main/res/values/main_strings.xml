@@ -58,4 +58,6 @@
     <string name="but_share">Share</string>
     <string name="but_add_widget">Add widget</string>
     <string name="but_later">Later</string>
+    <string name="but_open">Open</string>
+    <string name="but_close">Close</string>
 </resources>

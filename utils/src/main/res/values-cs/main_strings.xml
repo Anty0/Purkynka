@@ -58,4 +58,6 @@
     <string name="but_share">Sdílet</string>
     <string name="but_add_widget">Přidat widget</string>
     <string name="but_later">Později</string>
+    <string name="but_open">Otevřít</string>
+    <string name="but_close">Zavřít</string>
 </resources>

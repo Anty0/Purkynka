@@ -173,104 +173,109 @@ public class TimetableManageActivity extends AppCompatActivity {
             final Context context = container.getContext();
             adapter = new MultilineRecyclerAdapter<>();
             View result = RecyclerAdapter.inflate(context, container, false, null, adapter,
-                    new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, final int position) {
-                    if (toShow == null) return;
-                    final Lesson lesson = toShow.getLesson(day, position);
-                    if (lesson == null) {
-                        edit(context, null, day, position);
-                    } else {
-                        new AlertDialog.Builder(context)
-                                .setTitle(R.string.dialog_title_lesson_info)
-                                        //TODO add set icon with icon "T"
-                                .setMessage(context.getString(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
-                                        context.getString(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
-                                        context.getString(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
-                                        context.getString(R.string.dialog_message_teacher) + ": " + lesson.getTeacher())
-                                .setPositiveButton(R.string.but_ok, null)
-                                .setNegativeButton(R.string.but_delete, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        toShow.setLesson(null, day, position);
-                                        initializeListView(context);
-                                    }
-                                })
-                                .setNeutralButton(R.string.but_edit, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        edit(context, lesson, day, position);
-                                    }
-                                })
-                                .setCancelable(true)
-                                .show();
-                    }
-                }
+                    new RecyclerItemClickListener.ClickListener() {
+                        @Override
+                        public void onClick(View view, final int position) {
+                            if (toShow == null) return;
+                            final Lesson lesson = toShow.getLesson(day, position);
+                            if (lesson == null) {
+                                edit(context, null, day, position);
+                            } else {
+                                new AlertDialog.Builder(context)
+                                        .setTitle(R.string.dialog_title_lesson_info)
+                                                //TODO add set icon with icon "T"
+                                        .setMessage(context.getString(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
+                                                context.getString(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
+                                                context.getString(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
+                                                context.getString(R.string.dialog_message_teacher) + ": " + lesson.getTeacher())
+                                        .setPositiveButton(R.string.but_ok, null)
+                                        .setNegativeButton(R.string.but_delete, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                toShow.setLesson(null, day, position);
+                                                initializeListView(context);
+                                            }
+                                        })
+                                        .setNeutralButton(R.string.but_edit, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                edit(context, lesson, day, position);
+                                            }
+                                        })
+                                        .setCancelable(true)
+                                        .show();
+                            }
+                        }
 
-                private void edit(final Context context, @Nullable Lesson lesson, final int day, final int lessonIndex) {
-                    TextView nameTextView = new TextView(context);
-                    nameTextView.setText(R.string.dialog_message_lesson_name);
+                        @Override
+                        public void onLongClick(View view, int position) {
 
-                    TextView shortNameTextView = new TextView(context);
-                    shortNameTextView.setText(R.string.dialog_message_short_lesson_name);
+                        }
 
-                    TextView classTextView = new TextView(context);
-                    classTextView.setText(R.string.dialog_message_class);
+                        private void edit(final Context context, @Nullable Lesson lesson, final int day, final int lessonIndex) {
+                            TextView nameTextView = new TextView(context);
+                            nameTextView.setText(R.string.dialog_message_lesson_name);
 
-                    TextView teacherTextView = new TextView(context);
-                    teacherTextView.setText(R.string.dialog_message_teacher);
+                            TextView shortNameTextView = new TextView(context);
+                            shortNameTextView.setText(R.string.dialog_message_short_lesson_name);
 
-                    final EditText nameEditText = new EditText(context);
-                    final EditText shortNameEditText = new EditText(context);
-                    final EditText classEditText = new EditText(context);
-                    final EditText teacherEditText = new EditText(context);
+                            TextView classTextView = new TextView(context);
+                            classTextView.setText(R.string.dialog_message_class);
 
-                    if (lesson != null) {
-                        nameEditText.setText(lesson.getName());
-                        shortNameEditText.setText(lesson.getShortName());
-                        classEditText.setText(lesson.getClassString());
-                        teacherEditText.setText(lesson.getTeacher());
-                    }
+                            TextView teacherTextView = new TextView(context);
+                            teacherTextView.setText(R.string.dialog_message_teacher);
 
-                    LinearLayout linearLayout = new LinearLayout(context);
-                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+                            final EditText nameEditText = new EditText(context);
+                            final EditText shortNameEditText = new EditText(context);
+                            final EditText classEditText = new EditText(context);
+                            final EditText teacherEditText = new EditText(context);
 
-                    linearLayout.addView(nameTextView);
-                    linearLayout.addView(nameEditText);
+                            if (lesson != null) {
+                                nameEditText.setText(lesson.getName());
+                                shortNameEditText.setText(lesson.getShortName());
+                                classEditText.setText(lesson.getClassString());
+                                teacherEditText.setText(lesson.getTeacher());
+                            }
 
-                    linearLayout.addView(shortNameTextView);
-                    linearLayout.addView(shortNameEditText);
+                            LinearLayout linearLayout = new LinearLayout(context);
+                            linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-                    linearLayout.addView(classTextView);
-                    linearLayout.addView(classEditText);
+                            linearLayout.addView(nameTextView);
+                            linearLayout.addView(nameEditText);
 
-                    linearLayout.addView(teacherTextView);
-                    linearLayout.addView(teacherEditText);
+                            linearLayout.addView(shortNameTextView);
+                            linearLayout.addView(shortNameEditText);
 
-                    ScrollView mainScrollView = new ScrollView(context);
-                    mainScrollView.addView(linearLayout);
+                            linearLayout.addView(classTextView);
+                            linearLayout.addView(classEditText);
 
-                    new AlertDialog.Builder(context)
-                            .setTitle(String.format(context.getString(R.string.dialog_title_lesson),
-                                    context.getString(Timetable.DAYS_STRINGS_IDS[day]), lessonIndex))
-                                    //TODO add set icon with icon "T"
-                            .setView(mainScrollView)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    toShow.setLesson(new Lesson(nameEditText.getText().toString(),
-                                            shortNameEditText.getText().toString(), classEditText.getText().toString(),
-                                            teacherEditText.getText().toString()), day, lessonIndex);
-                                    initializeListView(context);
-                                }
-                            })
-                            .setNegativeButton(R.string.but_cancel, null)
-                            .show();
+                            linearLayout.addView(teacherTextView);
+                            linearLayout.addView(teacherEditText);
 
-                    initializeListView(context);
-                }
-            });
+                            ScrollView mainScrollView = new ScrollView(context);
+                            mainScrollView.addView(linearLayout);
+
+                            new AlertDialog.Builder(context)
+                                    .setTitle(String.format(context.getString(R.string.dialog_title_lesson),
+                                            context.getString(Timetable.DAYS_STRINGS_IDS[day]), lessonIndex))
+                                            //TODO add set icon with icon "T"
+                                    .setView(mainScrollView)
+                                    .setCancelable(false)
+                                    .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            toShow.setLesson(new Lesson(nameEditText.getText().toString(),
+                                                    shortNameEditText.getText().toString(), classEditText.getText().toString(),
+                                                    teacherEditText.getText().toString()), day, lessonIndex);
+                                            initializeListView(context);
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.but_cancel, null)
+                                    .show();
+
+                            initializeListView(context);
+                        }
+                    });
             initializeListView(context);
             return result;
         }

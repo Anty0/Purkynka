@@ -2,6 +2,7 @@ package cz.anty.icanteenmanager;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Binder;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import cz.anty.utils.AppDataManager;
@@ -16,6 +18,7 @@ import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.WrongLoginDataException;
 import cz.anty.utils.icanteen.ICManager;
+import cz.anty.utils.icanteen.lunch.LunchesManager;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.utils.icanteen.lunch.month.MonthLunch;
@@ -25,11 +28,12 @@ import cz.anty.utils.thread.OnceRunThread;
 
 public class ICService extends BindImplService<ICService.ICBinder> {
 
+    public static final String EXTRA_UPDATE_MONTH = "UPDATE_MONTH";
+
     private final ICBinder mBinder = new ICBinder();
     private final OnceRunThread worker = new OnceRunThread();
     private ICManager mManager;
-    private List<BurzaLunch> mBurzaLunchList = null;
-    private List<MonthLunchDay> mMonthLunchList = null;
+    private LunchesManager mLunchesManager;
     private Runnable onBurzaChange = null;
     private Runnable onMonthChange = null;
     private final Runnable onLoginChange = new Runnable() {
@@ -49,6 +53,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         Log.d(getClass().getSimpleName(), "onCreate");
         super.onCreate();
         worker.setPowerManager(this);
+        mLunchesManager = new LunchesManager(this);
         AppDataManager.addOnChangeListener(AppDataManager.Type.I_CANTEEN, onLoginChange);
         worker.startWorker(new Runnable() {
             @Override
@@ -112,6 +117,9 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.getBooleanExtra
+                (EXTRA_UPDATE_MONTH, false))
+            refreshMonth();
         return START_NOT_STICKY;
     }
 
@@ -133,8 +141,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 mManager.disconnect();
                 mManager = null;
             }
-            mBurzaLunchList = null;
-            mMonthLunchList = null;
+            mLunchesManager = null;
             if (onBurzaChange != null)
                 onBurzaChange.run();
             if (onMonthChange != null)
@@ -144,14 +151,15 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     private boolean refreshBurza() {
-        Log.d(getClass().getSimpleName(), "refreshBurza startStage: " + mBurzaLunchList);
+        Log.d(getClass().getSimpleName(), "refreshBurza");
         try {
-            List<BurzaLunch> burzaLunchList = mBurzaLunchList;
-            mBurzaLunchList = mManager != null ? mManager.getBurza() : mBurzaLunchList;
-            if (onBurzaChange != null && !(mBurzaLunchList != null
-                    ? mBurzaLunchList.equals(burzaLunchList) : burzaLunchList == null))
+            if (mLunchesManager == null) return false;
+            BurzaLunch[] oldLunches = mLunchesManager.getBurzaLunches();
+            List<BurzaLunch> newLunches = mManager != null ? mManager.getBurza() : null;
+            mLunchesManager.setItems(newLunches != null ? newLunches.toArray(
+                    new BurzaLunch[newLunches.size()]) : oldLunches);
+            if (onBurzaChange != null && !Arrays.equals(oldLunches, mLunchesManager.getBurzaLunches()))
                 onBurzaChange.run();
-            Log.d(getClass().getSimpleName(), "refreshBurza finalStage: " + mBurzaLunchList);
             return true;
         } catch (Exception e) {
             Log.d(getClass().getSimpleName(), "refreshBurza", e);
@@ -162,14 +170,17 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     private boolean refreshMonth() {
-        Log.d(getClass().getSimpleName(), "refreshMonth startStage: " + mMonthLunchList);
+        Log.d(getClass().getSimpleName(), "refreshMonth");
         try {
-            List<MonthLunchDay> monthLunchList = mMonthLunchList;
-            mMonthLunchList = mManager != null ? mManager.getMonth() : mMonthLunchList;
-            if (onMonthChange != null && !(mMonthLunchList != null
-                    ? mMonthLunchList.equals(monthLunchList) : monthLunchList == null))
-                onMonthChange.run();
-            Log.d(getClass().getSimpleName(), "refreshMonth finalStage: " + mMonthLunchList);
+            List<MonthLunchDay> newLunchDays = mManager != null ? mManager.getMonth() : null;
+            if (newLunchDays != null) {
+                if (mLunchesManager.setItems(newLunchDays
+                        .toArray(new MonthLunchDay[newLunchDays.size()]))) {
+                    onNewMonthLunches();
+                }
+                if (onMonthChange != null)
+                    onMonthChange.run();
+            }
             return true;
         } catch (Exception e) {
             Log.d(getClass().getSimpleName(), "refreshMonth", e);
@@ -178,6 +189,28 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             return false;
         }
     }
+
+    private void onNewMonthLunches() {
+        AppDataManager.setICNewMonthLunches(true);
+
+        if (AppDataManager.isICNotifyNewMonthLunches()) {
+            PendingIntent pIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(this, ICSplashActivity.class), 0);
+
+            Notification n = new NotificationCompat.Builder(this)
+                    .setContentTitle(getString(R.string.notify_title_new_lunches))
+                    .setContentText(getString(R.string.notify_text_new_lunches))
+                            //.setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                    .setContentIntent(pIntent)
+                    .setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .build();
+
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                    .notify(Constants.NOTIFICATION_ID_I_CANTEEN_MONTH, n);
+        }
+    }
+
 
     private boolean orderBurza(BurzaLunch lunch) {
         Log.d(getClass().getSimpleName(), "orderBurza");
@@ -299,24 +332,28 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             );
         }
 
-        public List<BurzaLunch> getBurza(Thread refreshTread) throws InterruptedException {
+        public BurzaLunch[] getBurza(Thread refreshTread) throws InterruptedException {
             worker.waitToWorkerStop(refreshTread);
-            return mBurzaLunchList;
+            if (mLunchesManager == null) return null;
+            return mLunchesManager.getBurzaLunches();
         }
 
-        public List<BurzaLunch> getBurza() throws InterruptedException {
+        public BurzaLunch[] getBurza() throws InterruptedException {
             worker.waitToWorkerStop();
-            return mBurzaLunchList;
+            if (mLunchesManager == null) return null;
+            return mLunchesManager.getBurzaLunches();
         }
 
-        public List<MonthLunchDay> getMonth(Thread refreshTread) throws InterruptedException {
+        public MonthLunchDay[] getMonth(Thread refreshTread) throws InterruptedException {
             worker.waitToWorkerStop(refreshTread);
-            return mMonthLunchList;
+            if (mLunchesManager == null) return null;
+            return mLunchesManager.getMonthLunches();
         }
 
-        public List<MonthLunchDay> getMonth() throws InterruptedException {
+        public MonthLunchDay[] getMonth() throws InterruptedException {
             worker.waitToWorkerStop();
-            return mMonthLunchList;
+            if (mLunchesManager == null) return null;
+            return mLunchesManager.getMonthLunches();
         }
     }
 }

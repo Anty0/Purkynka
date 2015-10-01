@@ -41,8 +41,10 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         synchronized (mLock) {
             mData.add(object);
         }
-        if (mNotifyOnChange)
+        if (mNotifyOnChange) {
             notifyItemInserted(index);
+            onDataSetChanged();
+        }
     }
 
     /**
@@ -55,8 +57,10 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         synchronized (mLock) {
             mData.addAll(collection);
         }
-        if (mNotifyOnChange)
+        if (mNotifyOnChange) {
             notifyItemRangeInserted(index, collection.size());
+            onDataSetChanged();
+        }
     }
 
     /**
@@ -69,8 +73,10 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         synchronized (mLock) {
             Collections.addAll(mData, items);
         }
-        if (mNotifyOnChange)
+        if (mNotifyOnChange) {
             notifyItemRangeInserted(index, items.length);
+            onDataSetChanged();
+        }
     }
 
     /**
@@ -83,8 +89,10 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         synchronized (mLock) {
             mData.add(index, object);
         }
-        if (mNotifyOnChange)
+        if (mNotifyOnChange) {
             notifyItemInserted(index);
+            onDataSetChanged();
+        }
     }
 
     /**
@@ -99,6 +107,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
                 mData.remove(object);
             }
             notifyItemRemoved(index);
+            onDataSetChanged();
             return;
         }
         synchronized (mLock) {
@@ -114,8 +123,10 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         synchronized (mLock) {
             mData.clear();
         }
-        if (mNotifyOnChange)
+        if (mNotifyOnChange) {
             notifyItemRangeRemoved(0, size);
+            onDataSetChanged();
+        }
     }
 
     /**
@@ -129,8 +140,14 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         synchronized (mLock) {
             Collections.sort(mData, comparator);
         }
-        if (mNotifyOnChange)
+        if (mNotifyOnChange) {
             notifyItemRangeChanged(0, size);
+            onDataSetChanged();
+        }
+    }
+
+    protected void onDataSetChanged() {
+
     }
 
     public boolean isNotifyOnChange() {
@@ -140,7 +157,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     /**
      * Control whether methods that change the list ({@link #addItem},
      * {@link #insertItem}, {@link #removeItem}, {@link #clearItems}) automatically call
-     * {@link #notifyDataSetChanged}.  If set to false, caller must
+     * {@link #notifyDataSetChanged} and {@link #onDataSetChanged}.  If set to false, caller must
      * manually call notifyDataSetChanged() to have the changes
      * reflected in the attached view.
      * <p/>

@@ -20,7 +20,6 @@ import cz.anty.utils.sas.mark.Lesson;
 import cz.anty.utils.sas.mark.Mark;
 import cz.anty.utils.sas.mark.MarksManager;
 import cz.anty.utils.service.ServiceManager;
-import cz.anty.utils.settings.SASManagerSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class SASManageActivity extends AppCompatActivity {
@@ -100,10 +99,15 @@ public class SASManageActivity extends AppCompatActivity {
         adapter = new MultilineRecyclerAdapter<>();
         adapter.setNotifyOnChange(false);
         RecyclerAdapter.inflateToActivity(this, null, adapter,
-                new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener.ClickListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
+                    public void onClick(View view, int position) {
                         detectClass(adapter.getItem(position));
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
                     }
 
                     private void detectClass(MultilineItem item) {
@@ -123,10 +127,15 @@ public class SASManageActivity extends AppCompatActivity {
                                 new MultilineRecyclerAdapter<>(marks);
 
                         View result = RecyclerAdapter.inflate(SASManageActivity.this, null, false, null, adapter,
-                                new RecyclerItemClickListener.OnItemClickListener() {
+                                new RecyclerItemClickListener.ClickListener() {
                                     @Override
-                                    public void onItemClick(View view, int position) {
+                                    public void onClick(View view, int position) {
                                         detectClass(adapter.getItem(position));
+                                    }
+
+                                    @Override
+                                    public void onLongClick(View view, int position) {
+
                                     }
                                 });
 

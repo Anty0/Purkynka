@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import cz.anty.utils.AppDataManager;
-import cz.anty.utils.settings.WifiSettingsActivity;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.wifi.WifiLogin;
 
