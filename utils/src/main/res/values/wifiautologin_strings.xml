@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name_wifi">WIFI auto LOGIN</string>
 
+    <string name="activity_title_wifi_login">Login to WIFI auto LOGIN</string>
     <string name="activity_title_wifi_settings">WIFI auto LOGIN Settings</string>
 
     <string name="app_description_wifi">WIFI auto LOGIN is simple tool which <b>automatically</b> logs in to the school <b>WIFI</b> so you have more time to surf. :)</string>

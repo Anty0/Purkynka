@@ -1,28 +1,27 @@
-package cz.anty.purkynkamanager;
+package cz.anty.wifiautologin;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import cz.anty.utils.AppDataManager;
 import cz.anty.utils.Constants;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
 
 /**
- * Created by anty on 1.10.15.
+ * Created by anty on 2.10.15.
  *
  * @author anty
  */
-public class ShareSpecialModule extends SpecialModule {
+public class WifiSpecialModule extends SpecialModule {
 
-    private boolean mShowShare = false;
-    private boolean hideItem = false;
-    private SharedPreferences preferences;
+    private boolean showItem = false;
 
-    public ShareSpecialModule(Context context) {
+    public WifiSpecialModule(Context context) {
         super(context);
     }
 
@@ -38,25 +37,19 @@ public class ShareSpecialModule extends SpecialModule {
 
     @Override
     protected void onInitialize() {
-        preferences = getContext().getSharedPreferences(
-                Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
-        onUpdate();
+        showItem = !AppDataManager.isLoggedIn
+                (AppDataManager.Type.WIFI);
     }
 
     @Override
     protected void onUpdate() {
-        mShowShare = preferences.getBoolean(Constants.SETTING_NAME_SHOW_SHARE, true);
-    }
-
-    public boolean isShowShare() {
-        return mShowShare;
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.WIFI))
+            showItem = false;
     }
 
     @Override
     protected SpecialItem[] getItems() {
-        if (!isShowShare() || hideItem) {
-            return new SpecialItem[0];
-        }
+        if (!showItem) return new SpecialItem[0];
         return new SpecialItem[]{
                 new SpecialItem() {
                     private TextView title, text;
@@ -71,22 +64,20 @@ public class ShareSpecialModule extends SpecialModule {
 
                     @Override
                     public void onBindViewHolder(int itemPosition) {
-                        title.setText(R.string.dialog_title_share);
-                        text.setText(R.string.dialog_message_share);
+                        title.setText(R.string.activity_title_wifi_login);
+                        if (isShowDescription()) {
+                            text.setVisibility(View.VISIBLE);
+                            text.setText(R.string.app_description_wifi);
+                            title.setPadding(1, 1, 1, 1);
+                        } else {
+                            text.setVisibility(View.GONE);
+                            title.setPadding(1, 8, 1, 8);
+                        }
                     }
 
                     @Override
                     public void onClick() {
-                        Context context = getContext();
-                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND)
-                                        .setType("text/plain")
-                                        .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
-                                        .putExtra(Intent.EXTRA_TEXT, context.getString(R.string.text_extra_text_share)),
-                                null));
-
-                        preferences.edit().putBoolean(Constants.SETTING_NAME_SHOW_SHARE, false).apply();
-                        mShowShare = false;
-                        notifyItemsChanged();
+                        getContext().startActivity(new Intent(getContext(), WifiLoginActivity.class));
                     }
 
                     @Override
@@ -96,18 +87,17 @@ public class ShareSpecialModule extends SpecialModule {
 
                     @Override
                     public void onHideClick() {
-                        hideItem = true;
-                        notifyItemsChanged();
+
                     }
 
                     @Override
                     public boolean isShowHideButton() {
-                        return true;
+                        return false;
                     }
 
                     @Override
                     public int getPriority() {
-                        return Constants.SPECIAL_ITEM_PRIORITY_SHARE;
+                        return Constants.SPECIAL_ITEM_PRIORITY_WIFI_LOGIN;
                     }
                 }
         };
@@ -115,6 +105,6 @@ public class ShareSpecialModule extends SpecialModule {
 
     @Override
     protected int getModuleNameResId() {
-        return R.string.dialog_title_share;
+        return R.string.app_name_wifi;
     }
 }

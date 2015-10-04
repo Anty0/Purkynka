@@ -19,6 +19,7 @@ import cz.anty.purkynkamanager.firststart.FirstStartActivity;
 import cz.anty.purkynkamanager.update.UpdateSpecialModule;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
+import cz.anty.timetablemanager.TimetableSpecialModule;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.list.listView.TextMultilineItem;
@@ -27,6 +28,7 @@ import cz.anty.utils.list.toolbar.FragmentDrawer;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 import cz.anty.utils.update.UpdateConnector;
 import cz.anty.wifiautologin.WifiLoginActivity;
+import cz.anty.wifiautologin.WifiSpecialModule;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         moduleManager = new SpecialModuleManager((RecyclerView) findViewById(R.id.recyclerView),
-                new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this)); // TODO: 30.9.15 add special modules
+                new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this),
+                new TimetableSpecialModule(this), new WifiSpecialModule(this)); // TODO: 30.9.15 add special modules
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         worker = new OnceRunThreadWithSpinner(this);

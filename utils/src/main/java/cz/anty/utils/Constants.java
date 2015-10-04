@@ -32,9 +32,11 @@ public class Constants {
     public static final long REPEAT_TIME_IC_LUNCHES_UPDATE = 1000 * 60 * 90;
 
     public static final int SPECIAL_ITEM_PRIORITY_NEW_UPDATE = 100;
-    public static final int SPECIAL_ITEM_PRIORITY_NO_UPDATE = 0;
-    public static final int SPECIAL_ITEM_PRIORITY_SHARE = 85;
+    public static final int SPECIAL_ITEM_PRIORITY_SHARE = 95;
+    public static final int SPECIAL_ITEM_PRIORITY_WIFI_LOGIN = 85;
+    public static final int SPECIAL_ITEM_PRIORITY_TEMETABLE = 60;
     public static final int SPECIAL_ITEM_PRIORITY_TRACKING = 55;
+    public static final int SPECIAL_ITEM_PRIORITY_NO_UPDATE = 0;
 
     //public static final String STRINGS_CONST_NAME = "[NAME]";
     //public static final String STRINGS_CONST_VERSION = "[VERSION]";

@@ -32,7 +32,7 @@ import cz.anty.utils.timetable.TimetableManager;
 
 public class TimetableSelectActivity extends AppCompatActivity {
 
-    private TimetableManager timetableManager;
+    static TimetableManager timetableManager;
     private OnceRunThreadWithSpinner worker;
     private MultilineRecyclerAdapter<Timetable> adapter;
 
