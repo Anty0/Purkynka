@@ -27,6 +27,7 @@ public class ApplicationBase extends Application {
         super.onCreate();
         WORKER.setPowerManager(this);
         ACRA.init(this);
+        AnalyticsTrackers.initialize(this);
         AppDataManager.init(this);
         AboutActivity.restoreLocale(this);
         Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode());
