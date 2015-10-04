@@ -3,6 +3,8 @@ package cz.anty.utils;
 import android.app.Application;
 import android.util.Log;
 
+import com.google.android.gms.analytics.Tracker;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
@@ -27,7 +29,13 @@ public class ApplicationBase extends Application {
         super.onCreate();
         WORKER.setPowerManager(this);
         ACRA.init(this);
+
         AnalyticsTrackers.initialize(this);
+        Tracker tracker = AnalyticsTrackers.getInstance()
+                .get(AnalyticsTrackers.Target.APP);
+        tracker.enableAutoActivityTracking(true);
+        tracker.enableExceptionReporting(true);
+
         AppDataManager.init(this);
         AboutActivity.restoreLocale(this);
         Log.d("START", "DEBUG-MODE: " + AppDataManager.isDebugMode());
