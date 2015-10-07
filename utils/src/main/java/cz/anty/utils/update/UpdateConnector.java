@@ -63,9 +63,8 @@ public class UpdateConnector {
         return toReturn;
     }
 
-    public static String getLatestChangeLog(String languageShortcut) throws IOException {
-        String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_CHANGE_LOG_URL_ADD
-                + languageShortcut.toUpperCase(Locale.ENGLISH))
+    public static String getLatestChangeLog() throws IOException {
+        String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_CHANGE_LOG_URL_ADD)
                 .execute().body().trim();
         Log.d(UpdateConnector.class.getSimpleName(), "getLatestChangeLog changeLog: " + toReturn);
         return toReturn;
