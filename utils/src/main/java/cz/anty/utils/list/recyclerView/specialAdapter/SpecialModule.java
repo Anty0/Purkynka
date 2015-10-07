@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import cz.anty.utils.Constants;
+import cz.anty.utils.Log;
 import cz.anty.utils.R;
 import cz.anty.utils.thread.OnceRunThread;
 
@@ -23,20 +24,23 @@ public abstract class SpecialModule {
 
     private boolean mInitializeStarted = false;
     private boolean mInitialized = false;
-    private Runnable mOnChange = null;
+    private Runnable mOnChange = null, mOnModify = null;
 
     public SpecialModule(Context context) {
+        Log.d(getClass().getSimpleName(), "<init>");
         mContext = context;
         mShowDescription = mContext.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
         worker = new OnceRunThread(context);
     }
 
-    public synchronized boolean isShowDescription() {
+    public boolean isShowDescription() {
+        Log.d(getClass().getSimpleName(), "isShowDescription");
         return mShowDescription;
     }
 
     public synchronized final boolean isInitialized() {
+        Log.d(getClass().getSimpleName(), "isInitialized");
         return mInitialized;
     }
 
@@ -44,51 +48,64 @@ public abstract class SpecialModule {
 
     protected abstract boolean isUpdateOnThread();
 
-    final synchronized void init(Runnable onChange) {
-        if (mInitializeStarted) {
+    final synchronized void init(Runnable onChange, Runnable onModify) {
+        Log.d(getClass().getSimpleName(), "init");
+        if (mInitializeStarted || mInitialized) {
             throw new IllegalStateException(getClass()
                     .getSimpleName() + " is still initialized.");
         }
         mInitializeStarted = true;
         mOnChange = onChange;
+        mOnModify = onModify;
 
         Runnable initRunnable = new Runnable() {
             @Override
             public void run() {
-                onInitialize();
-                mInitialized = true;
-                notifyItemsChanged();
+                if (onInitialize())
+                    notifyInitializeCompleted();
             }
         };
 
         if (isInitOnThread()) {
             worker.startWorker(initRunnable);
+            return;
         }
         initRunnable.run();
     }
 
-    protected abstract void onInitialize();
+    protected abstract boolean onInitialize();
 
     final synchronized void update() {
+        Log.d(getClass().getSimpleName(), "update");
+        if (!mInitialized) {
+            throw new IllegalStateException(getClass()
+                    .getSimpleName() + " is not initialized.");
+        }
+
         Runnable updateRunnable = new Runnable() {
             @Override
             public void run() {
                 onUpdate();
-                notifyItemsChanged();
             }
         };
 
         if (isUpdateOnThread()) {
             worker.startWorker(updateRunnable);
+            return;
         }
         updateRunnable.run();
     }
 
     protected abstract void onUpdate();
 
+    protected OnceRunThread getWorker() {
+        return worker;
+    }
+
     protected abstract SpecialItem[] getItems();
 
     protected SpecialItem getLoadingItem() {
+        Log.d(getClass().getSimpleName(), "getLoadingItem");
         return new SpecialItem() {
             TextView title, text;
 
@@ -102,7 +119,7 @@ public abstract class SpecialModule {
 
             @Override
             public void onBindViewHolder(int itemPosition) {
-                title.setText(getModuleNameResId());
+                title.setText(getModuleName());
                 text.setText(R.string.wait_text_loading);
             }
 
@@ -127,21 +144,42 @@ public abstract class SpecialModule {
             }
 
             @Override
+            public boolean isVisible() {
+                return true;
+            }
+
+            @Override
             public int getPriority() {
-                return 75;
+                return Constants.SPECIAL_ITEM_PRIORITY_LOADING_ITEM;
             }
         };
     }
 
     @StringRes
-    protected abstract int getModuleNameResId();
+    protected abstract CharSequence getModuleName();
 
     public Context getContext() {
         return mContext;
     }
 
-    public synchronized final void notifyItemsChanged() {
+    protected final void notifyInitializeCompleted() {
+        Log.d(getClass().getSimpleName(), "notifyInitializeCompleted");
+        if (mInitialized)
+            throw new IllegalStateException(getClass()
+                    .getSimpleName() + " is still initialized.");
+        mInitialized = true;
+        notifyItemsChanged();
+    }
+
+    protected synchronized final void notifyItemsChanged() {
+        Log.d(getClass().getSimpleName(), "notifyItemsChanged");
         if (isInitialized() && mOnChange != null)
             mOnChange.run();
+    }
+
+    protected synchronized final void notifyItemsModified() {
+        Log.d(getClass().getSimpleName(), "notifyItemsModified");
+        if (isInitialized() && mOnModify != null)
+            mOnModify.run();
     }
 }

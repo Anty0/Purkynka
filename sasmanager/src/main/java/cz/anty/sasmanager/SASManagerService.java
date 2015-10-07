@@ -26,6 +26,7 @@ import cz.anty.utils.thread.OnceRunThread;
 public class SASManagerService extends BindImplService<SASManagerService.SASBinder> {
 
     public static final String FORCE_UPDATE_WIDGET = "UPDATE_WIDGET";
+    public static final String FORCE_UPDATE_MARKS = "UPDATE_MARKS";
 
     private final SASBinder mBinder = new SASBinder();
     private final OnceRunThread worker = new OnceRunThread();
@@ -134,10 +135,11 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         Log.d("SASManagerService", "onStartCommand");
         if (intent != null) {
             final boolean updateWidget = intent.getBooleanExtra(FORCE_UPDATE_WIDGET, false);
+            final boolean updateMarks = intent.getBooleanExtra(FORCE_UPDATE_MARKS, false);
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    if (refreshMarks(false, false, updateWidget)) {
+                    if (refreshMarks(updateMarks, false, updateWidget)) {
                         SASManageWidget.callUpdate(SASManagerService.this, marks.toString());
                     }
                 }
@@ -199,7 +201,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
     }
 
     private void onMarksChange(MarksManager.Semester semester, int newMarks) {
-        Log.d("SASManagerService", "onMarksChange: " + semester + " - " + newMarks);
+        Log.d("SASManagerService", "onMarksChange: " + semester + ": " + newMarks);
         if (onMarksChange != null)
             onMarksChange.run();
         SASManageWidget.callUpdate(this, marks.toString());
@@ -214,7 +216,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
             builderBig.append("\n").append(marks[i]);
         }
 
-        StringBuilder builder = new StringBuilder(getString(R.string.text_from) + ": ");
+        StringBuilder builder = new StringBuilder(getText(R.string.text_from) + ": ");
         builder.append(marks[0].getShortLesson());
         for (int i = 1; i < newMarks; i++) {
             builder.append(", ").append(marks[i].getShortLesson());

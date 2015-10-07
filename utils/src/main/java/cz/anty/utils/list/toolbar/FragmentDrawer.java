@@ -28,13 +28,13 @@ public class FragmentDrawer extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private View containerView;
-    private FragmentDrawerListener drawerListener;
+    private RecyclerItemClickListener.ClickListener drawerListener;
 
     public FragmentDrawer() {
 
     }
 
-    public void setDrawerListener(FragmentDrawerListener listener) {
+    public void setDrawerListener(RecyclerItemClickListener.ClickListener listener) {
         this.drawerListener = listener;
     }
 
@@ -51,13 +51,13 @@ public class FragmentDrawer extends Fragment {
                 adapter, new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        drawerListener.onDrawerItemSelected(view, position);
                         mDrawerLayout.closeDrawer(containerView);
+                        drawerListener.onClick(view, position);
                     }
 
                     @Override
                     public void onLongClick(View view, int position) {
-
+                        drawerListener.onLongClick(view, position);
                     }
                 });
     }
@@ -101,7 +101,7 @@ public class FragmentDrawer extends Fragment {
         adapter.addAllItems(data);
     }
 
-    public interface FragmentDrawerListener {
-        void onDrawerItemSelected(View view, int position);
+    public MultilineRecyclerAdapter<MultilineItem> getAdapter() {
+        return adapter;
     }
 }

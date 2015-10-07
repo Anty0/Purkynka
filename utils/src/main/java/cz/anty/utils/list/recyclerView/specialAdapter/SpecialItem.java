@@ -21,5 +21,7 @@ public interface SpecialItem {
 
     boolean isShowHideButton();
 
+    boolean isVisible();
+
     int getPriority();
 }

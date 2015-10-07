@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 
 import java.util.Calendar;
 
+import cz.anty.attendancemanager.TrackingActivity;
 import cz.anty.utils.Constants;
 import cz.anty.utils.attendance.man.TrackingMansManager;
 
@@ -27,9 +28,12 @@ public class TrackingScheduleReceiver extends BroadcastReceiver {
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
+        if (TrackingActivity.mansManager == null)
+            TrackingActivity.mansManager = new TrackingMansManager(context);
+
         if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS, true) &&
-                new TrackingMansManager(context).get().length != 0 && activeNetInfo != null && activeNetInfo.isConnected()) {
+                TrackingActivity.mansManager.get().length != 0 && activeNetInfo != null && activeNetInfo.isConnected()) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
             cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);

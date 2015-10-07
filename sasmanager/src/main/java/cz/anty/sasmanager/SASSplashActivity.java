@@ -1,5 +1,6 @@
 package cz.anty.sasmanager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,38 @@ public class SASSplashActivity extends AppCompatActivity {
 
     static ServiceManager<SASManagerService.SASBinder> serviceManager;
     private final OnceRunThread worker = new OnceRunThread();
+
+    public static void initService(Context context, final OnceRunThread worker, final Runnable onComplete) {
+        if (serviceManager == null || !serviceManager.isConnected()) {
+            serviceManager = new ServiceManager<>(context, SASManagerService.class);
+            serviceManager.addBinderConnection(
+                    new ServiceManager.BinderConnection<SASManagerService.SASBinder>() {
+                        @Override
+                        public void onBinderConnected(final SASManagerService.SASBinder binder) {
+                            serviceManager.removeBinderConnection(this);
+                            worker.startWorker(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(Constants.WAIT_TIME_ON_BIND);
+                                        binder.waitToWorkerStop();
+                                    } catch (InterruptedException e) {
+                                        Log.d("SASSplashActivity", "onBinderConnected", e);
+                                    }
+
+                                    onComplete.run();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onBinderDisconnected() {
+
+                        }
+                    });
+            serviceManager.connect();
+        } else onComplete.run();
+    }
 
     private void startDefaultActivity() {
         Intent activity;
@@ -35,45 +68,23 @@ public class SASSplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.progress_dialog);
+        setContentView(R.layout.activity_splash);
         ((TextView) findViewById(R.id.message)).setText(R.string.wait_text_loading);
 
         worker.setPowerManager(this);
         sendBroadcast(new Intent(this, StartServiceScheduleReceiver.class));
 
-        if (serviceManager == null || !serviceManager.isConnected()) {
-            serviceManager = new ServiceManager<>(this, SASManagerService.class);
-            serviceManager.addBinderConnection(
-                    new ServiceManager.BinderConnection<SASManagerService.SASBinder>() {
-                        @Override
-                        public void onBinderConnected(final SASManagerService.SASBinder binder) {
-                            worker.startWorker(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Thread.sleep(Constants.WAIT_TIME_ON_BIND);
-                                        binder.waitToWorkerStop();
-                                    } catch (InterruptedException e) {
-                                        Log.d("SASSplashActivity", "onBinderConnected", e);
-                                    }
+        initService(this, worker, new Runnable() {
+            @Override
+            public void run() {
+                startDefaultActivity();
+            }
+        });
+    }
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            startDefaultActivity();
-                                        }
-                                    });
-                                }
-                            });
-                            serviceManager.removeBinderConnection(this);
-                        }
-
-                        @Override
-                        public void onBinderDisconnected() {
-
-                        }
-                    });
-            serviceManager.connect();
-        } else startDefaultActivity();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        serviceManager.connect();
     }
 }

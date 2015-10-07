@@ -15,6 +15,7 @@ import java.util.List;
 
 import cz.anty.attendancemanager.R;
 import cz.anty.attendancemanager.SearchActivity;
+import cz.anty.attendancemanager.TrackingActivity;
 import cz.anty.attendancemanager.widget.TrackingWidget;
 import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.Constants;
@@ -26,7 +27,7 @@ import cz.anty.utils.attendance.man.TrackingMansManager;
 
 public class TrackingReceiver extends BroadcastReceiver {
 
-    public static TrackingMansManager refreshTrackingMans(Context context, @Nullable TrackingMansManager mansManager, boolean updateWidget) {
+    public static synchronized TrackingMansManager refreshTrackingMans(Context context, @Nullable TrackingMansManager mansManager, boolean updateWidget) {
         if (mansManager == null) mansManager = new TrackingMansManager(context);
         AttendanceConnector connector = new AttendanceConnector();
         Man[] mans = mansManager.get();
@@ -79,7 +80,7 @@ public class TrackingReceiver extends BroadcastReceiver {
 
         mansManager.apply();
         if (updateWidget)
-            TrackingWidget.callUpdate(context, mansManager.toString());
+            TrackingWidget.callUpdate(context, false);
         return mansManager;
     }
 
@@ -96,7 +97,8 @@ public class TrackingReceiver extends BroadcastReceiver {
         ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
             public void run() {
-                refreshTrackingMans(context, null, true);
+                TrackingActivity.mansManager = refreshTrackingMans(context,
+                        TrackingActivity.mansManager, true);
             }
         }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
     }

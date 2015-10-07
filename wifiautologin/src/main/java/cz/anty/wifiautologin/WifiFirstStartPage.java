@@ -53,8 +53,8 @@ public class WifiFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getTitle() {
-        return getContext().getString(R.string.app_name_wifi);
+    public CharSequence getTitle() {
+        return getContext().getText(R.string.app_name_wifi);
     }
 
     @Override
@@ -68,13 +68,13 @@ public class WifiFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getButSkipText() {
-        return getContext().getString(R.string.but_skip);
+    public CharSequence getButSkipText() {
+        return getContext().getText(R.string.but_skip);
     }
 
     @Override
-    public String getButNextText() {
-        return getContext().getString(R.string.but_next);
+    public CharSequence getButNextText() {
+        return getContext().getText(R.string.but_next);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class WifiFirstStartPage extends FirstStartPage {
 
     @Override
     public boolean doFinish() {
-        WifiLoginActivity.save(getContext(),
+        WifiLoginActivity.save(
                 ((EditText) linearLayout.findViewById(R.id.edit_username)).getText().toString(),
                 ((EditText) linearLayout.findViewById(R.id.edit_password)).getText().toString());
 

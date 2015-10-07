@@ -39,8 +39,8 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
     private void init(Context context, @Nullable OnLoadNextListListener onLoadNextListListener) {
         Log.d("ALMultilineAdapter", "init");
-        this.loadingItem = new TextMultilineItem(context.getString(R.string.wait_text_loading),
-                context.getString(R.string.wait_text_please_wait)/*, R.layout.loading_multi_line_list_item*/);
+        this.loadingItem = new TextMultilineItem(context.getText(R.string.wait_text_loading),
+                context.getText(R.string.wait_text_please_wait)/*, R.layout.loading_multi_line_list_item*/);
         this.onLoadNextListListener = onLoadNextListListener;
     }
 

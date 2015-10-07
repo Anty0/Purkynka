@@ -45,8 +45,8 @@ public class ICFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getTitle() {
-        return getContext().getString(R.string.app_name_icanteen);
+    public CharSequence getTitle() {
+        return getContext().getText(R.string.app_name_icanteen);
     }
 
     @Override
@@ -60,13 +60,13 @@ public class ICFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getButSkipText() {
-        return getContext().getString(R.string.but_skip);
+    public CharSequence getButSkipText() {
+        return getContext().getText(R.string.but_skip);
     }
 
     @Override
-    public String getButNextText() {
-        return getContext().getString(R.string.but_next);
+    public CharSequence getButNextText() {
+        return getContext().getText(R.string.but_next);
     }
 
     @Override

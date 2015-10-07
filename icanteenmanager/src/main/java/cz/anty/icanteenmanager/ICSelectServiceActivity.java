@@ -24,10 +24,10 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
         MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>();
         adapter.clearItems();
-        adapter.addAllItems(new TextMultilineItem(getString(R.string.app_name_icanteen_burza),
-                        showDescription ? getString(R.string.app_description_icanteen_burza) : null),
-                new TextMultilineItem(getString(R.string.app_name_icanteen_lunch_order),
-                        showDescription ? getString(R.string.app_description_icanteen_lunch_order) : null));
+        adapter.addAllItems(new TextMultilineItem(getText(R.string.app_name_icanteen_burza),
+                        showDescription ? getText(R.string.app_description_icanteen_burza) : null),
+                new TextMultilineItem(getText(R.string.app_name_icanteen_lunch_order),
+                        showDescription ? getText(R.string.app_description_icanteen_lunch_order) : null));
 
         RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.ClickListener() {
             @Override

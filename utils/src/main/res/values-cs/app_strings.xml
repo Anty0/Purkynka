@@ -12,14 +12,12 @@
 
     <string name="dialog_title_share">Sdílejte aplikaci</string>
     <string name="dialog_message_share">Prsím sdílej tuto aplikaci třeba na facebooku, ať má každý tu možnost, vyzkoušet si ji :)</string>
-    <string name="dialog_message_update_alert">Pokud tlačítko \"Aktualizovat\" nefunguje, tak stáhni a nainstaluj aktualizaci manuálně z oficiálních webových stránek aplikace.</string>
+    <string name="dialog_message_update_alert">Pokud automatický aktualizovátor nefunguje, tak si stáhni a nainstaluj aktualizaci manuálně z oficiálních webových stránek aplikace.</string>
 
     <string name="toast_text_download_successful">Stahování úspěšně dokončeno</string>
     <string name="toast_text_download_failed">Chyba stahování</string>
 
     <string name="notify_title_update_available"><b>Dostupná aktualizace</b></string>
-    <string name="notify_title_no_update">Není dostupná aktualizace</string>
-    <string name="notify_text_no_update">Máš nainstalovanou nejnovější verzi</string>
     <string name="notify_text_update_old">Nainstalovaná verze: %1$s</string>
     <string name="notify_text_update_new">Dostupná verze: %1$s</string>
 

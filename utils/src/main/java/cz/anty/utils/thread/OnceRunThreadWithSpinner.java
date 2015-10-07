@@ -18,7 +18,7 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
 
     private final Activity activity;
     private final AppCompatProgressDialog progressDialog;
-    private final ArrayList<String> messages = new ArrayList<>();
+    private final ArrayList<CharSequence> messages = new ArrayList<>();
     private final Object depthLock = new Object();
     private int depth = 0;
 
@@ -39,11 +39,11 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
         return progressDialog;
     }
 
-    public Thread startWorker(Runnable runnable, @Nullable String message) {
+    public Thread startWorker(Runnable runnable, @Nullable CharSequence message) {
         return startWorker(new Thread(runnable, message + " Thread"), message);
     }
 
-    public Thread startWorker(@NonNull final Thread thread, @Nullable final String message) {
+    public Thread startWorker(@NonNull final Thread thread, @Nullable final CharSequence message) {
         if (thread.getState() != Thread.State.NEW)
             throw new IllegalStateException("Thread must by NEW and RUNNABLE");
         new Thread(new Runnable() {
@@ -58,7 +58,7 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
         return thread;
     }
 
-    void start(final Thread thread, final String message) throws InterruptedException {
+    void start(final Thread thread, final CharSequence message) throws InterruptedException {
         if (message != null) {
             synchronized (messages) {
                 messages.add(message);
@@ -107,14 +107,15 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
         }
     }
 
-    private String getMessage() {
+    private CharSequence getMessage() {
         synchronized (messages) {
             if (messages.size() <= 0) return "";
+            if (messages.size() == 1) return messages.get(0);
             StringBuilder builder = new StringBuilder(messages.get(0));
             for (int i = 1; i < messages.size(); i++) {
                 builder.append("\n").append(messages.get(i));
             }
-            return builder.toString();
+            return builder;
         }
     }
 }

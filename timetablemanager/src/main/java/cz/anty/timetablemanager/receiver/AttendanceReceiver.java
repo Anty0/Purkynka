@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 import cz.anty.timetablemanager.R;
+import cz.anty.timetablemanager.TimetableManageActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.timetablemanager.widget.TimetableLessonWidget;
 import cz.anty.utils.ApplicationBase;
@@ -55,7 +56,9 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     private void showLessonNotification(Context context, int day, int lessonIndex) {
         Log.d(getClass().getSimpleName(), "showLessonNotification day: " + day + " lessonIndex: " + lessonIndex);
-        Timetable[] timetables = new TimetableManager(context).getTimetables();
+        if (TimetableSelectActivity.timetableManager == null)
+            TimetableSelectActivity.timetableManager = new TimetableManager(context);
+        Timetable[] timetables = TimetableSelectActivity.timetableManager.getTimetables();
 
         int i = 0;
         for (Timetable timetable : timetables) {
@@ -70,7 +73,8 @@ public class AttendanceReceiver extends BroadcastReceiver {
                             + " " + lesson.getTeacher())
                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                     .setContentIntent(PendingIntent.getActivity(context, 0,
-                            new Intent(context, TimetableSelectActivity.class), 0))
+                            new Intent(context, TimetableManageActivity.class).putExtra(
+                                    TimetableManageActivity.EXTRA_TIMETABLE_NAME, timetable.getName()), 0))
                     .setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_VIBRATE)
                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
@@ -87,7 +91,9 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     private void testSupplementation(final Context context, final int day, final int lessonIndex) {
         Log.d(getClass().getSimpleName(), "testSupplementation day: " + day + " lessonIndex: " + lessonIndex);
-        Timetable[] timetables = new TimetableManager(context).getTimetables();
+        if (TimetableSelectActivity.timetableManager == null)
+            TimetableSelectActivity.timetableManager = new TimetableManager(context);
+        Timetable[] timetables = TimetableSelectActivity.timetableManager.getTimetables();
         final AttendanceConnector connector = new AttendanceConnector();
 
         for (int i = 0, timetablesLength = timetables.length; i < timetablesLength; i++) {
@@ -134,7 +140,8 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                             .notify_text_teacher_is_not_here), man.getName()))
                                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                     .setContentIntent(PendingIntent.getActivity(context, 0,
-                                            new Intent(context, TimetableSelectActivity.class), 0))
+                                            new Intent(context, TimetableManageActivity.class).putExtra(
+                                                    TimetableManageActivity.EXTRA_TIMETABLE_NAME, timetable.getName()), 0))
                                     .setAutoCancel(true)
                                     .setDefaults(Notification.DEFAULT_ALL)
                                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)

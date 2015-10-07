@@ -67,7 +67,7 @@ public class MultilineRecyclerAdapter<T extends MultilineItem>
         protected void onBindViewHolder(T item, int position) {
             Log.d(getClass().getSimpleName(), "onBindViewHolder");
             titleView.setText(item.getTitle(context, position));
-            String text = item.getText(context, position);
+            CharSequence text = item.getText(context, position);
             if (text == null) {
                 titleView.setPadding(1, 8, 1, 8);
                 textView.setText("");

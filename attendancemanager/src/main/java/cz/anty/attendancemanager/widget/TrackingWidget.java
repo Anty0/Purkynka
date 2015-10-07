@@ -9,36 +9,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.anty.attendancemanager.R;
 import cz.anty.attendancemanager.TrackingActivity;
 import cz.anty.attendancemanager.receiver.TrackingReceiver;
+import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.Log;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
 import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.list.widgetList.WidgetMultilineAdapter;
 import cz.anty.utils.list.widgetList.WidgetService;
-import cz.anty.utils.thread.OnceRunThread;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class TrackingWidget extends AppWidgetProvider {
 
+    private static final String EXTRA_REFRESH_MANS = "REFRESH_MANS";
     private Intent lastIntent = null;
 
-    public static void callUpdate(Context context, @Nullable String mans) {
+    public static void callUpdate(Context context, boolean refreshMans) {
         Log.d("TrackingWidget", "callUpdate");
         //context.sendBroadcast(new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, SASManageWidget.class));
-        context.sendBroadcast(getUpdateIntent(context, mans));
+        context.sendBroadcast(getUpdateIntent(context, refreshMans));
     }
 
-    private static Intent getUpdateIntent(Context context, @Nullable String mans) {
+    private static Intent getUpdateIntent(Context context, boolean refreshMans) {
         Log.d("TrackingWidget", "getUpdateIntent");
         int[] allWidgetIds = AppWidgetManager.getInstance(context)
                 .getAppWidgetIds(new ComponentName(context, TrackingWidget.class));
@@ -46,23 +47,7 @@ public class TrackingWidget extends AppWidgetProvider {
         return new Intent(context.getApplicationContext(), TrackingWidget.class)
                 .setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
                 .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds)
-                .putExtra(WidgetMultilineAdapter.EXTRA_MANS_AS_STRING, mans);
-    }
-
-    private String updateMans(final Context context) {
-        OnceRunThread worker = new OnceRunThread(context);
-        final StringBuilder builder = new StringBuilder();
-        try {
-            worker.waitToWorkerStop(worker.startWorker(new Runnable() {
-                @Override
-                public void run() {
-                    builder.append(TrackingReceiver.refreshTrackingMans(context, null, false));
-                }
-            }));
-        } catch (InterruptedException e) {
-            Log.d("TrackingWidget", "onUpdate", e);
-        }
-        return builder.toString();
+                .putExtra(EXTRA_REFRESH_MANS, refreshMans);
     }
 
     @Override
@@ -74,14 +59,34 @@ public class TrackingWidget extends AppWidgetProvider {
 
     @SuppressLint("NewApi")
     @Override
-    public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public synchronized void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         Log.d("TrackingWidget", "onUpdate");
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
                 context.getPackageName(), R.layout.tracking_widget_loading));
 
-        String mans = lastIntent.getStringExtra(WidgetMultilineAdapter.EXTRA_MANS_AS_STRING);
-        mans = mans == null ? updateMans(context) : mans;
+        if (lastIntent.getBooleanExtra(EXTRA_REFRESH_MANS, true)) {
+            ApplicationBase.WORKER.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    TrackingActivity.mansManager = TrackingReceiver
+                            .refreshTrackingMans(context, TrackingActivity.mansManager, false);
+                    new Handler(context.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateWidget(context, appWidgetManager, appWidgetIds);
+                        }
+                    });
+                }
+            }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
+            return;
+        }
+        if (TrackingActivity.mansManager == null)
+            TrackingActivity.mansManager = new
+                    TrackingMansManager(context);
+        updateWidget(context, appWidgetManager, appWidgetIds);
+    }
 
+    private void updateWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         //Log.d("UPDATE", "onUpdate creating remote views");
         //which layout to show on widget
         RemoteViews remoteViews;
@@ -94,9 +99,10 @@ public class TrackingWidget extends AppWidgetProvider {
                     context.getPackageName(), R.layout.tracking_widget_old);
         }
 
+
         //Log.d("UPDATE", "onUpdate setting onClick listeners");
         remoteViews.setOnClickPendingIntent(R.id.image_button_refresh,
-                PendingIntent.getBroadcast(context, 0, getUpdateIntent(context, null), 0));
+                PendingIntent.getBroadcast(context, 0, getUpdateIntent(context, true), 0));
 
         remoteViews.setOnClickPendingIntent(R.id.relative_layout_widget_main,
                 PendingIntent.getActivity(context, 0,
@@ -110,7 +116,8 @@ public class TrackingWidget extends AppWidgetProvider {
             Intent svcIntent = new Intent(context, WidgetService.class);
             //passing app widget id to that RemoteViews Service
             //svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            svcIntent.putExtra(WidgetMultilineAdapter.EXTRA_MANS_AS_STRING, mans);
+            svcIntent.putExtra(WidgetMultilineAdapter.EXTRA_MANS_AS_STRING,
+                    TrackingActivity.mansManager.toString());
             //setting a unique Uri to the intent
             //don't know its purpose to me right now
             svcIntent.setData(Uri.parse(
@@ -129,7 +136,7 @@ public class TrackingWidget extends AppWidgetProvider {
             remoteViews.setEmptyView(R.id.list_view_marks, R.id.empty_view);
         } else {
             //Log.d("UPDATE", "onUpdate loading old version view");List<Mark> itemList = MarksManager.parseMarks(marks);
-            Man[] itemList = new TrackingMansManager(mans).get();
+            Man[] itemList = TrackingActivity.mansManager.get();
             if (itemList.length == 0)
                 remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE);
             else {

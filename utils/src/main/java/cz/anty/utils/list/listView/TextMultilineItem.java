@@ -9,23 +9,38 @@ import android.content.Context;
  */
 public class TextMultilineItem implements MultilineItem {
 
-    private final String title;
-    private final String text;
+    private CharSequence title, text;
     private Object tag;
 
-    public TextMultilineItem(String title, String text) {
+    public TextMultilineItem(CharSequence title, CharSequence text) {
         this.title = title;
         this.text = text;
     }
 
     @Override
-    public String getTitle(Context context, int position) {
+    public CharSequence getTitle(Context context, int position) {
         return title;
     }
 
     @Override
-    public String getText(Context context, int position) {
+    public CharSequence getText(Context context, int position) {
         return text;
+    }
+
+    public CharSequence getTitle() {
+        return title;
+    }
+
+    public void setTitle(CharSequence title) {
+        this.title = title;
+    }
+
+    public CharSequence getText() {
+        return text;
+    }
+
+    public void setText(CharSequence text) {
+        this.text = text;
     }
 
     public Object getTag() {

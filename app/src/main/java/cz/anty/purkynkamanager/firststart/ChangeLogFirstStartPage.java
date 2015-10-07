@@ -32,8 +32,8 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getTitle() {
-        return "ChangeLog";
+    public CharSequence getTitle() {
+        return "ChangeLog";// TODO: 4.10.15 to strings
     }
 
     @Override
@@ -47,13 +47,13 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getButSkipText() {
-        return getContext().getString(R.string.but_skip);
+    public CharSequence getButSkipText() {
+        return getContext().getText(R.string.but_skip);
     }
 
     @Override
-    public String getButNextText() {
-        return getContext().getString(R.string.but_next);
+    public CharSequence getButNextText() {
+        return getContext().getText(R.string.but_next);
     }
 
     @Override
@@ -70,20 +70,20 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
         ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
             public void run() {
-                String changeLog;
+                CharSequence changeLog;
                 boolean error = false;
                 try {
                     changeLog = UpdateConnector.getLatestChangeLog(
                             context.getString(R.string.language));
-                    if (changeLog.toLowerCase().contains("<html>"))
+                    if (((String) changeLog).toLowerCase().contains("<html>"))
                         throw new IOException("Wrong page loaded");
                 } catch (IOException e) {
                     Log.d(getClass().getSimpleName(), "updateTerms", e);
-                    changeLog = context.getString(R.string.text_change_log);
+                    changeLog = context.getText(R.string.text_change_log);
                     error = true;
                 }
 
-                final String finalChangeLog = changeLog;
+                final CharSequence finalChangeLog = changeLog;
                 final boolean finalError = error;
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override

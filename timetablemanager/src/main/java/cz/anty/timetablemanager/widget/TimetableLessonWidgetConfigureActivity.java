@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Spinner;
 
 import cz.anty.timetablemanager.R;
+import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.Constants;
 import cz.anty.utils.list.listView.MultilineAdapter;
 import cz.anty.utils.timetable.Timetable;
@@ -44,7 +45,6 @@ public class TimetableLessonWidgetConfigureActivity extends AppCompatActivity {
         }
     };
     private MultilineAdapter<Timetable> adapter;
-    private TimetableManager timetableManager;
 
     public TimetableLessonWidgetConfigureActivity() {
         super();
@@ -90,7 +90,8 @@ public class TimetableLessonWidgetConfigureActivity extends AppCompatActivity {
             return;
         }
 
-        timetableManager = new TimetableManager(this);
+        if (TimetableSelectActivity.timetableManager == null)
+            TimetableSelectActivity.timetableManager = new TimetableManager(this);
         adapter = new MultilineAdapter<>(this);
         mTimetableSpinner.setAdapter(adapter);
         init();
@@ -99,15 +100,16 @@ public class TimetableLessonWidgetConfigureActivity extends AppCompatActivity {
     private void init() {
         adapter.setNotifyOnChange(false);
         adapter.clear();
-        for (Timetable timetable : timetableManager.getTimetables()) {
+        for (Timetable timetable : TimetableSelectActivity
+                .timetableManager.getTimetables()) {
             adapter.add(timetable);
         }
         adapter.notifyDataSetChanged();
 
         String name = loadPref(this, mAppWidgetId);
         if (name != null)
-            mTimetableSpinner.setSelection(timetableManager
-                    .getIndexOf(timetableManager.getTimetableByName(name)));
+            mTimetableSpinner.setSelection(TimetableSelectActivity.timetableManager
+                    .getIndexOf(TimetableSelectActivity.timetableManager.getTimetableByName(name)));
     }
 }
 

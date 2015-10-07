@@ -34,8 +34,8 @@ public class WelcomeFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getTitle() {
-        return getContext().getString(R.string.activity_title_first_start_welcome);
+    public CharSequence getTitle() {
+        return getContext().getText(R.string.activity_title_first_start_welcome);
     }
 
     @Override
@@ -49,20 +49,20 @@ public class WelcomeFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getButSkipText() {
-        return getContext().getString(R.string.but_skip);
+    public CharSequence getButSkipText() {
+        return getContext().getText(R.string.but_skip);
     }
 
     @Override
-    public String getButNextText() {
-        return getContext().getString(R.string.but_next);
+    public CharSequence getButNextText() {
+        return getContext().getText(R.string.but_next);
     }
 
     @Override
     public View getView(ViewGroup rootView) {
         final Context context = getContext();
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.activity_first_start_welcome_terms, rootView, false);
+        View view = LayoutInflater.from(context).inflate(R.layout
+                .activity_first_start_welcome_terms, rootView, false);
         TextView textView = ((TextView) view.findViewById(R.id.contentTextView));
         textView.setText(R.string.text_welcome);
         textView.setOnClickListener(new View.OnClickListener() {

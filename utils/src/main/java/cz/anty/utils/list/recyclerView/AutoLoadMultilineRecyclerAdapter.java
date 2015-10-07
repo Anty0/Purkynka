@@ -26,8 +26,8 @@ public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<M
 
     public AutoLoadMultilineRecyclerAdapter(Context context, @Nullable OnLoadNextPageListener onLoadNextListListener) {
         super(R.layout.loading_multi_line_list_item);
-        mLoadingItem = new TextMultilineItem(context.getString(R.string.wait_text_loading),
-                context.getString(R.string.wait_text_please_wait));
+        mLoadingItem = new TextMultilineItem(context.getText(R.string.wait_text_loading),
+                context.getText(R.string.wait_text_please_wait));
         mLoadingItem.setTag(LOADING_ITEM_TAG);
         mOnLoadNextListListener = onLoadNextListListener;
     }

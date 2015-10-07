@@ -1,9 +1,16 @@
 package cz.anty.utils.timetable;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.anty.utils.Constants;
+import cz.anty.utils.R;
 
 /**
  * Created by anty on 13.6.15.
@@ -23,9 +30,32 @@ public class TimetableManager {
         }
     }
 
-    public synchronized Timetable addTimetable(String timetableName) {
+    public synchronized Timetable addTimetable(final Context context, String timetableName) {
         Timetable newTimetable = new Timetable(context, timetableName);
         timetables.add(newTimetable);
+        new Handler(context.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                final SharedPreferences preferences = context.getSharedPreferences(
+                        Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE);
+                if (preferences.getBoolean(Constants.SETTING_NAME_FIRST_START, true)) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(R.string.dialog_title_timetable_widget_alert)
+                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                            .setMessage(R.string.dialog_message_timetable_widget_alert)
+                            .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    preferences.edit()
+                                            .putBoolean(Constants.SETTING_NAME_FIRST_START, false)
+                                            .apply();
+                                }
+                            })
+                            .setNegativeButton(R.string.but_later, null)
+                            .setCancelable(false)
+                            .show();
+                }
+            }
+        });
         return newTimetable;
     }
 

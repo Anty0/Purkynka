@@ -54,13 +54,13 @@ public class Lesson implements MultilineItem {
     }*/
 
     @Override
-    public String getTitle(Context context, int position) {
+    public CharSequence getTitle(Context context, int position) {
         return String.format(context.getString(R.string.list_item_text_lesson),
                 position, getShortName(), getClassString());
     }
 
     @Override
-    public String getText(Context context, int position) {
+    public CharSequence getText(Context context, int position) {
         return getTeacher() + " " + getName();
     }
 }

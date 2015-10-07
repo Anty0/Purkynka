@@ -7,8 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.Arrays;
-
 import cz.anty.attendancemanager.receiver.TrackingReceiver;
 import cz.anty.attendancemanager.receiver.TrackingScheduleReceiver;
 import cz.anty.utils.Log;
@@ -21,14 +19,13 @@ import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 
 public class TrackingActivity extends AppCompatActivity {
 
-    private TrackingMansManager mansManager;
+    public static TrackingMansManager mansManager = null;
     private MultilineRecyclerAdapter<Man> adapter;
     private OnceRunThreadWithSpinner worker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mansManager = new TrackingMansManager(this);
         adapter = new MultilineRecyclerAdapter<>();
         RecyclerAdapter.inflateToActivity(this, null, adapter,
                 new RecyclerItemClickListener.ClickListener() {
@@ -36,11 +33,12 @@ public class TrackingActivity extends AppCompatActivity {
                     public void onClick(View view, int position) {
                         final Man man = adapter.getItem(position);
                         if (man != null) {
-                            mansManager.processMan(man, new Runnable() {
+                            mansManager.processMan(TrackingActivity.this, man, new Runnable() {
                                 @Override
                                 public void run() {
                                     sendBroadcast(new Intent(TrackingActivity.this,
                                             TrackingScheduleReceiver.class));
+                                    update(false);
                                 }
                             });
                         }
@@ -53,18 +51,24 @@ public class TrackingActivity extends AppCompatActivity {
                 });
 
         worker = new OnceRunThreadWithSpinner(this);
-        update();
+
+        if (mansManager == null) {
+            mansManager = new TrackingMansManager(this);
+            update(true);
+            return;
+        }
+        update(false);
     }
 
-    private void update() {
+    private void update(final boolean refresh) {
         Log.d("TrackingActivity", "update");
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                TrackingReceiver.refreshTrackingMans(TrackingActivity.this, mansManager, true);
-                final Man[] data = mansManager.get();
+                if (refresh) TrackingReceiver
+                        .refreshTrackingMans(TrackingActivity.this, mansManager, true);
 
-                Log.d("SearchActivity", "update data: " + Arrays.toString(data));
+                final Man[] data = mansManager.get();
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -75,7 +79,7 @@ public class TrackingActivity extends AppCompatActivity {
                 });
 
             }
-        }, getString(R.string.wait_text_loading));
+        }, getText(R.string.wait_text_loading));
     }
 
     @Override
@@ -93,7 +97,7 @@ public class TrackingActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            update();
+            update(true);
             return true;
         }
 

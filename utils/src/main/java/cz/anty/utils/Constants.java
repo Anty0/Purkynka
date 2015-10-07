@@ -31,18 +31,22 @@ public class Constants {
     public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 5;
     public static final long REPEAT_TIME_IC_LUNCHES_UPDATE = 1000 * 60 * 90;
 
+    //-------------------------------------------------------------
     public static final int SPECIAL_ITEM_PRIORITY_NEW_UPDATE = 100;
     public static final int SPECIAL_ITEM_PRIORITY_SHARE = 95;
+    //-------------------------------------------------------------
+    public static final int SPECIAL_ITEM_PRIORITY_SAS_LOGIN = 86;
     public static final int SPECIAL_ITEM_PRIORITY_WIFI_LOGIN = 85;
-    public static final int SPECIAL_ITEM_PRIORITY_TEMETABLE = 60;
-    public static final int SPECIAL_ITEM_PRIORITY_TRACKING = 55;
-    public static final int SPECIAL_ITEM_PRIORITY_NO_UPDATE = 0;
-
-    //public static final String STRINGS_CONST_NAME = "[NAME]";
-    //public static final String STRINGS_CONST_VERSION = "[VERSION]";
-    //public static final String STRINGS_CONST_NUMBER = "[NUMBER]";
-    //public static final String STRINGS_CONST_WEIGHT = "[WEIGHT]";
-    //public static final String STRINGS_CONST_CLASS = "[CLASS]";
+    public static final int SPECIAL_ITEM_PRIORITY_IC_LOGIN = 84;
+    public static final int SPECIAL_ITEM_PRIORITY_ADD_TIMETABLE = 83;
+    //-------------------------------------------------------------
+    public static final int SPECIAL_ITEM_PRIORITY_IC_NEW_LUNCHES = 80;
+    public static final int SPECIAL_ITEM_PRIORITY_TIMETABLE = 75;
+    public static final int SPECIAL_ITEM_PRIORITY_SAS_BAD_LESSON = 70;
+    public static final int SPECIAL_ITEM_PRIORITY_TRACKING = 65;
+    //-------------------------------------------------------------
+    public static final int SPECIAL_ITEM_PRIORITY_LOADING_ITEM = 50;
+    //-------------------------------------------------------------
 
     public static final String SETTINGS_NAME_ATTENDANCE = "AttendanceData";
     public static final String SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS = "DISPLAY_TEACHERS_WARNING";

@@ -1,6 +1,5 @@
 package cz.anty.wifiautologin;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
@@ -22,7 +21,7 @@ public class WifiLoginActivity extends AppCompatActivity {
 
     private OnceRunThreadWithSpinner worker;
 
-    static void save(Context context, String username, String password) {
+    static void save(String username, String password) {
         AppDataManager.login(AppDataManager.Type.WIFI, username, password);
     }
 
@@ -61,7 +60,7 @@ public class WifiLoginActivity extends AppCompatActivity {
     }
 
     public void onClickSave(@SuppressWarnings("UnusedParameters") View view) {
-        save(this, ((EditText) findViewById(R.id.edit_username)).getText().toString(),
+        save(((EditText) findViewById(R.id.edit_username)).getText().toString(),
                 ((EditText) findViewById(R.id.edit_password)).getText().toString());
         Toast.makeText(this, R.string.text_login_data_successfully_saved, Toast.LENGTH_LONG).show();
     }
@@ -117,7 +116,7 @@ public class WifiLoginActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.wait_text_logging_in));
+        }, getText(R.string.wait_text_logging_in));
 
     }
 

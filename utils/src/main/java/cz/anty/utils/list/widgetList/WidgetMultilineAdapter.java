@@ -8,7 +8,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import cz.anty.utils.Log;
@@ -68,7 +68,7 @@ public class WidgetMultilineAdapter implements RemoteViewsService.RemoteViewsFac
             listItemList.add(listItem);
         }*/
         listItemList.clear();
-        listItemList.addAll(Arrays.asList(items));
+        Collections.addAll(listItemList, items);
     }
 
     @Override

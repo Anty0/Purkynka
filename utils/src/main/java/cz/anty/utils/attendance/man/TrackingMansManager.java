@@ -120,7 +120,7 @@ public class TrackingMansManager {
         }
     }
 
-    public void processMan(@NonNull final Man man, @Nullable final Runnable onChange) {
+    public void processMan(final Context context, @NonNull final Man man, @Nullable final Runnable onChange) {
         if (context == null) return;
 
         if (contains(man)) {

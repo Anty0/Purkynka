@@ -9,8 +9,8 @@ import android.content.Context;
  */
 public interface MultilineItem {
 
-    String getTitle(Context context, int position);
+    CharSequence getTitle(Context context, int position);
 
-    String getText(Context context, int position);
+    CharSequence getText(Context context, int position);
 
 }

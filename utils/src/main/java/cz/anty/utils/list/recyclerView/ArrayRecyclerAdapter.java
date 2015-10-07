@@ -197,6 +197,13 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
     }
 
+
+    public T[] getItems(T[] contents) {
+        synchronized (mLock) {
+            return mData.toArray(contents);
+        }
+    }
+
     /**
      * Returns the position of the specified item in the array.
      *

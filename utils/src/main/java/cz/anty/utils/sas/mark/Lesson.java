@@ -17,7 +17,7 @@ import cz.anty.utils.list.listView.MultilineItem;
  */
 public class Lesson implements MultilineItem {
 
-    private static final DecimalFormat FORMAT = new DecimalFormat("#.###");
+    public static final DecimalFormat FORMAT = new DecimalFormat("#.###");
     private final String fullName, shortName;
     private final List<Mark> marks = new CopyOnWriteArrayList<>();
 
@@ -76,12 +76,12 @@ public class Lesson implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context, int position) {
+    public CharSequence getTitle(Context context, int position) {
         return getShortName() + ": " + FORMAT.format(getDiameter());
     }
 
     @Override
-    public String getText(Context context, int position) {
+    public CharSequence getText(Context context, int position) {
         return String.format(context.getString(R.string.text_marks),
                 getMarks().length);
     }

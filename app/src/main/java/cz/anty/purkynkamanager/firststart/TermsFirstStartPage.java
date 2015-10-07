@@ -46,8 +46,8 @@ public class TermsFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getTitle() {
-        return getContext().getString(R.string.activity_title_first_start_terms);
+    public CharSequence getTitle() {
+        return getContext().getText(R.string.activity_title_first_start_terms);
     }
 
     @Override
@@ -61,13 +61,13 @@ public class TermsFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getButSkipText() {
-        return getContext().getString(R.string.but_exit);
+    public CharSequence getButSkipText() {
+        return getContext().getText(R.string.but_exit);
     }
 
     @Override
-    public String getButNextText() {
-        return getContext().getString(R.string.but_accept);
+    public CharSequence getButNextText() {
+        return getContext().getText(R.string.but_accept);
     }
 
     @Override
@@ -84,22 +84,22 @@ public class TermsFirstStartPage extends FirstStartPage {
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                String terms;
+                CharSequence terms;
                 boolean error = false;
                 try {
                     terms = UpdateConnector.getLatestTerms(context.getString(R.string.language));
-                    if (terms.toLowerCase().contains("<html>"))
+                    if (((String) terms).toLowerCase().contains("<html>"))
                         throw new IOException("Wrong page loaded");
                 } catch (IOException e) {
                     Log.d(getClass().getSimpleName(), "updateTerms", e);
-                    terms = context.getString(R.string.text_terms);
+                    terms = context.getText(R.string.text_terms);
                     error = true;
                 }
 
                 if (!error && latestCode == null)
                     showThisPage();
 
-                final String finalTerms = terms;
+                final CharSequence finalTerms = terms;
                 final boolean finalError = error;
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override

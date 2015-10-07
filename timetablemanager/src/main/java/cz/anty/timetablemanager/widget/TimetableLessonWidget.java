@@ -13,6 +13,7 @@ import android.widget.RemoteViews;
 import java.util.Calendar;
 
 import cz.anty.timetablemanager.R;
+import cz.anty.timetablemanager.TimetableManageActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
@@ -43,15 +44,19 @@ public class TimetableLessonWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
                 context.getPackageName(), R.layout.timetable_lesson_widget_loading));
         // There may be multiple widgets active, so update all of them
+        if (TimetableSelectActivity.timetableManager == null)
+            TimetableSelectActivity.timetableManager = new TimetableManager(context);
+
         for (int appWidgetId : appWidgetIds) {
-            Timetable timetable = new TimetableManager(context)
+            Timetable timetable = TimetableSelectActivity.timetableManager
                     .getTimetableByName(TimetableLessonWidgetConfigureActivity
                             .loadPref(context, appWidgetId));
 
             RemoteViews remoteViews = new RemoteViews(context
                     .getPackageName(), R.layout.timetable_lesson_widget);
             remoteViews.setOnClickPendingIntent(R.id.main_frame_layout, PendingIntent
-                    .getActivity(context, 0, new Intent(context, TimetableSelectActivity.class), 0));
+                    .getActivity(context, 0, new Intent(context, TimetableManageActivity.class).putExtra(TimetableManageActivity
+                            .EXTRA_TIMETABLE_NAME, timetable == null ? null : timetable.getName()), 0));
 
             if (timetable == null) {
                 remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE);
@@ -83,7 +88,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                         }
 
                         if (actualLesson == null) {
-                            remoteViews.setTextViewText(R.id.widget_text_view_title, context.getString(R.string.list_item_text_no_actual_lesson));
+                            remoteViews.setTextViewText(R.id.widget_text_view_title, context.getText(R.string.list_item_text_no_actual_lesson));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                                 remoteViews.setViewPadding(R.id.widget_text_view_title, 1, 8, 1, 8);
                             remoteViews.setViewVisibility(R.id.widget_text_view_text, View.GONE);
@@ -93,7 +98,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                         }
 
                         if (nextLesson == null) {
-                            remoteViews.setTextViewText(R.id.text_view_title, context.getString(R.string.list_item_text_no_next_lesson));
+                            remoteViews.setTextViewText(R.id.text_view_title, context.getText(R.string.list_item_text_no_next_lesson));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                                 remoteViews.setViewPadding(R.id.text_view_title, 1, 8, 1, 8);
                             remoteViews.setViewVisibility(R.id.text_view_text, View.GONE);

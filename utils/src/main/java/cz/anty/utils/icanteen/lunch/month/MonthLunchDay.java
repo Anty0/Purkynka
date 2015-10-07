@@ -57,14 +57,14 @@ public class MonthLunchDay implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context, int position) {
+    public CharSequence getTitle(Context context, int position) {
         return DATE_SHOW_FORMAT.format(getDate());
     }
 
     @Override
-    public String getText(Context context, int position) {
+    public CharSequence getText(Context context, int position) {
         MonthLunch orderedLunch = getOrderedLunch();
-        return orderedLunch == null ? context.getString(R.string
+        return orderedLunch == null ? context.getText(R.string
                 .text_nothing_ordered) : orderedLunch.getName();
     }
 }

@@ -90,13 +90,13 @@ public class Mark implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context, int position) {
+    public CharSequence getTitle(Context context, int position) {
         return String.format(context.getString(R.string.text_mark_with_weight),
                 getShortLesson(), getValueToShow(), getWeight());
     }
 
     @Override
-    public String getText(Context context, int position) {
+    public CharSequence getText(Context context, int position) {
         return getDateAsString() + " " + getNote();
     }
 }

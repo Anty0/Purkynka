@@ -2,8 +2,10 @@ package cz.anty.attendancemanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import cz.anty.attendancemanager.receiver.TrackingReceiver;
 import cz.anty.utils.Constants;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
+import cz.anty.utils.list.recyclerView.specialAdapter.MultilineSpecialItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
 
@@ -22,11 +25,13 @@ import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
  */
 public class TrackingSpecialModule extends SpecialModule {
 
-    private TrackingMansManager mansManager;
-    private boolean hideItems = false;
+    private final SpecialItem[] mItems;
 
     public TrackingSpecialModule(Context context) {
         super(context);
+        mItems = new SpecialItem[]{
+                new TrackingSpecialItem(context)
+        };
     }
 
     @Override
@@ -40,91 +45,85 @@ public class TrackingSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected void onInitialize() {
-        mansManager = new TrackingMansManager(getContext());
+    protected boolean onInitialize() {
+        if (TrackingActivity.mansManager == null) {
+            TrackingActivity.mansManager = new TrackingMansManager(getContext());
+        }
         onUpdate();
+        return true;
     }
 
     @Override
     protected void onUpdate() {
-        TrackingReceiver.refreshTrackingMans(getContext(), mansManager, true);
+        TrackingActivity.mansManager = TrackingReceiver
+                .refreshTrackingMans(getContext(),
+                        TrackingActivity.mansManager, true);
+        notifyItemsModified();
     }
 
     @Override
     protected SpecialItem[] getItems() {
-        if (hideItems || mansManager.get().length == 0) return new SpecialItem[0];
-        return new SpecialItem[]{
-                new SpecialItem() {
-                    private TextView title;
-                    private LinearLayout mansLinearLayout;
-
-                    @Override
-                    public void onCreateViewHolder(FrameLayout parent, int itemPosition) {
-                        LinearLayout linearLayout = new LinearLayout(getContext());
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-                        LayoutInflater.from(getContext()).inflate(R.layout
-                                .base_multiline_text_item, linearLayout);
-
-                        title = (TextView) linearLayout.findViewById(R.id.text_view_title);
-                        linearLayout.findViewById(R.id.text_view_text).setVisibility(View.GONE);
-
-                        mansLinearLayout = new LinearLayout(getContext());
-                        mansLinearLayout.setOrientation(LinearLayout.VERTICAL);
-
-                        linearLayout.addView(mansLinearLayout);
-                        parent.addView(linearLayout);
-                    }
-
-                    @Override
-                    public void onBindViewHolder(int itemPosition) {
-                        title.setText(R.string.activity_title_tracking);
-
-                        mansLinearLayout.removeAllViews();
-                        LayoutInflater inflater = LayoutInflater.from(getContext());
-                        for (Man man : mansManager.get()) {
-                            View view = inflater.inflate(R.layout
-                                    .text_widget_multi_line_list_item, mansLinearLayout, false);
-                            ((TextView) view.findViewById(R.id.widget_text_view_title))
-                                    .setText(man.getTitle(getContext(), 1));
-                            ((TextView) view.findViewById(R.id.widget_text_view_text))
-                                    .setText(man.getText(getContext(), 1));
-                            mansLinearLayout.addView(view);
-                        }
-                    }
-
-                    @Override
-                    public void onClick() {
-                        getContext().startActivity(
-                                new Intent(getContext(), TrackingActivity.class));
-                    }
-
-                    @Override
-                    public void onLongClick() {
-
-                    }
-
-                    @Override
-                    public void onHideClick() {
-                        hideItems = true;
-                        notifyItemsChanged();
-                    }
-
-                    @Override
-                    public boolean isShowHideButton() {
-                        return true;
-                    }
-
-                    @Override
-                    public int getPriority() {
-                        return Constants.SPECIAL_ITEM_PRIORITY_TRACKING;
-                    }
-                }
-        };
+        return mItems;
     }
 
     @Override
-    protected int getModuleNameResId() {
-        return R.string.activity_title_tracking;
+    protected CharSequence getModuleName() {
+        return getContext().getText(R.string.activity_title_tracking);
+    }
+
+    private class TrackingSpecialItem extends MultilineSpecialItem {
+
+        private LinearLayout mansLinearLayout;
+
+        public TrackingSpecialItem(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onCreateViewHolder(FrameLayout parent, int itemPosition) {
+            super.onCreateViewHolder(parent, itemPosition);
+
+            mansLinearLayout = new LinearLayout(getContext());
+            mansLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getTitle() {
+            return getContext().getText(R.string.activity_title_tracking);
+        }
+
+        @Nullable
+        @Override
+        protected View getContentView(ViewGroup parent) {
+            mansLinearLayout.removeAllViews();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            for (Man man : TrackingActivity.mansManager.get()) {
+                View view = inflater.inflate(R.layout
+                        .text_widget_multi_line_list_item, mansLinearLayout, false);
+                ((TextView) view.findViewById(R.id.widget_text_view_title))
+                        .setText(man.getTitle(getContext(), -1));
+                ((TextView) view.findViewById(R.id.widget_text_view_text))
+                        .setText(man.getText(getContext(), -1));
+                mansLinearLayout.addView(view);
+            }
+            return mansLinearLayout;
+        }
+
+        @Override
+        public void onClick() {
+            getContext().startActivity(
+                    new Intent(getContext(), TrackingActivity.class));
+        }
+
+        @Override
+        public boolean isVisible() {
+            return super.isVisible() && TrackingActivity.mansManager.get().length > 0;
+        }
+
+        @Override
+        public int getPriority() {
+            return Constants.SPECIAL_ITEM_PRIORITY_TRACKING;
+        }
     }
 }

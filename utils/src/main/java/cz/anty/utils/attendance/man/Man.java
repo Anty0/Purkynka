@@ -63,7 +63,7 @@ public class Man implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context, int position) {
+    public CharSequence getTitle(Context context, int position) {
         String classString = getClassString();
         IsInSchoolState schoolState = isInSchool();
         return String.format((IsInSchoolState.UNAVAILABLE.equals(schoolState) ? "%1$s" :
@@ -73,7 +73,7 @@ public class Man implements MultilineItem {
     }
 
     @Override
-    public String getText(Context context, int position) {
+    public CharSequence getText(Context context, int position) {
         return getLastEnterAsString();
     }
 

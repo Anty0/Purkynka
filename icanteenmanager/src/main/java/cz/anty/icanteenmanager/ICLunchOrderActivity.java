@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cz.anty.utils.AppDataManager;
@@ -33,6 +35,7 @@ import cz.anty.utils.thread.OnceRunThreadWithSpinner;
 public class ICLunchOrderActivity extends AppCompatActivity {
 
     private MultilineRecyclerAdapter<MultilineItem> adapter;
+    private RecyclerView recyclerView;
     private OnceRunThreadWithSpinner refreshThread;
     private ICService.ICBinder binder = null;
 
@@ -113,7 +116,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                                     else {
                                         if (monthLunchToOrder != null)
                                             binder.orderMonthLunch(monthLunchToOrder);
-                                        update();
+                                        update(false);
                                     }
                                 }
                             })
@@ -131,7 +134,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                                     Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
                                 else {
                                     binder.toBurzaMonthLunch(monthLunch);
-                                    update();
+                                    update(false);
                                 }
                             }
                         });
@@ -156,13 +159,13 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     binder.setOnMonthChangeListener(new Runnable() {
                         @Override
                         public void run() {
-                            update();
+                            update(false);
                         }
                     });
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            update();
+                            update(true);
                         }
                     });
                 }
@@ -197,7 +200,8 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             refreshThread = new OnceRunThreadWithSpinner(this);
 
         adapter = new MultilineRecyclerAdapter<>();
-        RecyclerAdapter.inflateToActivity(this, null, adapter, onItemClickListener);
+        recyclerView = RecyclerAdapter.inflateToActivity(this,
+                null, adapter, onItemClickListener);
 
         if (ICSplashActivity.serviceManager != null) {
             ICSplashActivity.serviceManager
@@ -214,7 +218,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void update() {
+    private void update(final boolean firstUpdete) {
         refreshThread.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -223,8 +227,8 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     data = binder.getMonth();
                     if (data == null) throw new NullPointerException();
                 } catch (NullPointerException | InterruptedException e) {
-                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
-                            getString(R.string.exception_message_sas_manager_binder_null))};
+                    data = new MultilineItem[]{new TextMultilineItem(getText(R.string.exception_title_sas_manager_binder_null),
+                            getText(R.string.exception_message_sas_manager_binder_null))};
                 }
 
                 final MultilineItem[] finalData = data;
@@ -233,12 +237,27 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     public void run() {
                         adapter.clearItems();
                         adapter.addAllItems(finalData);
+
+                        if (!firstUpdete) return;
+                        Calendar actualCalendar = Calendar.getInstance();
+                        Calendar lunchCalendar = Calendar.getInstance();
+                        int position = -1;
+                        for (int i = 0; i < finalData.length; i++) {
+                            lunchCalendar.setTime(((MonthLunchDay) finalData[i]).getDate());
+                            if (lunchCalendar.get(Calendar.YEAR) == actualCalendar.get(Calendar.YEAR) &&
+                                    lunchCalendar.get(Calendar.DAY_OF_YEAR) == actualCalendar.get(Calendar.DAY_OF_YEAR)) {
+                                position = i;
+                                break;
+                            }
+                        }
+                        if (position != -1)
+                            recyclerView.scrollToPosition(position);
                     }
                 });
 
                 AppDataManager.setICNewMonthLunches(false);
             }
-        }, getString(R.string.wait_text_loading));
+        }, getText(R.string.wait_text_loading));
     }
 
     @Override
@@ -259,7 +278,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         if (id == R.id.action_refresh) {
             if (binder != null)
                 binder.refreshMonth();
-            update();
+            update(false);
             return true;
         }
         if (id == R.id.action_start_burza) {

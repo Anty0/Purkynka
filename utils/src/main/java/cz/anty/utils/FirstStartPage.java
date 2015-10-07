@@ -23,15 +23,15 @@ public abstract class FirstStartPage {
 
     public abstract boolean showThisPage();
 
-    public abstract String getTitle();
+    public abstract CharSequence getTitle();
 
     public abstract int getButSkipVisibility();
 
     public abstract int getButNextVisibility();
 
-    public abstract String getButSkipText();
+    public abstract CharSequence getButSkipText();
 
-    public abstract String getButNextText();
+    public abstract CharSequence getButNextText();
 
     public abstract View getView(ViewGroup rootView);
 

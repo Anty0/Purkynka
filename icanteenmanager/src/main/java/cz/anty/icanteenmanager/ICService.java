@@ -97,8 +97,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
     private void onWrongLoginData() {
         Notification n = new NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.notify_title_can_not_login))
-                .setContentText(getString(R.string.notify_text_can_not_login))
+                .setContentTitle(getText(R.string.notify_title_can_not_login))
+                .setContentText(getText(R.string.notify_text_can_not_login))
                 .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -198,8 +198,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     new Intent(this, ICSplashActivity.class), 0);
 
             Notification n = new NotificationCompat.Builder(this)
-                    .setContentTitle(getString(R.string.notify_title_new_lunches))
-                    .setContentText(getString(R.string.notify_text_new_lunches))
+                    .setContentTitle(getText(R.string.notify_title_new_lunches))
+                    .setContentText(getText(R.string.notify_text_new_lunches))
                             //.setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                     .setContentIntent(pIntent)
                     .setAutoCancel(true)
@@ -301,6 +301,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 public void run() {
                     orderBurza(lunch);
                     ICService.this.refreshBurza();
+                    ICService.this.refreshMonth();
                 }
             });
         }

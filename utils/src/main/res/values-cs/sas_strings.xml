@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name_sas">iSAS Manager</string>
 
-    <string name="activity_title_login">Přihlášení do iSAS</string>
+    <string name="activity_title_sas_login">Přihlášení do iSAS</string>
     <string name="activity_title_sas_settings">Nastavení iSAS Manageru</string>
 
     <string name="widget_label_sas_manage">Správce iSASu (poslední známky)</string>
@@ -45,6 +45,8 @@
     <string name="menu_item_text_sort">Řadit podle</string>
     <string name="menu_item_text_sort_date">Data</string>
     <string name="menu_item_text_sort_lesson">Předmětů</string>
+
+    <string name="special_item_title_bad_lesson_diameter">Špatný průměr v %1$s: %2$s</string>
 
     <string name="notify_title_new_marks">%1$d nové ZNÁMKY</string>
     <string name="notify_title_new_mark">%1$d nová ZNÁMKA</string>

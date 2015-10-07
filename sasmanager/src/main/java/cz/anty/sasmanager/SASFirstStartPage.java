@@ -48,8 +48,8 @@ public class SASFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getTitle() {
-        return getContext().getString(R.string.app_name_sas);
+    public CharSequence getTitle() {
+        return getContext().getText(R.string.app_name_sas);
     }
 
     @Override
@@ -63,13 +63,13 @@ public class SASFirstStartPage extends FirstStartPage {
     }
 
     @Override
-    public String getButSkipText() {
-        return getContext().getString(R.string.but_skip);
+    public CharSequence getButSkipText() {
+        return getContext().getText(R.string.but_skip);
     }
 
     @Override
-    public String getButNextText() {
-        return getContext().getString(R.string.but_next);
+    public CharSequence getButNextText() {
+        return getContext().getText(R.string.but_next);
     }
 
     @Override

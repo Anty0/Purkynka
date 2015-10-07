@@ -64,7 +64,7 @@ public class SASManageActivity extends AppCompatActivity {
                     });
                     onUpdate(true);
                 }
-            }, getString(R.string.wait_text_loading));
+            }, getText(R.string.wait_text_loading));
         }
 
         @Override
@@ -153,14 +153,14 @@ public class SASManageActivity extends AppCompatActivity {
                         new AlertDialog.Builder(SASManageActivity.this)
                                 .setTitle("".equals(note) ? mark.getLongLesson() : note)
                                 .setIcon(R.mipmap.ic_launcher_sas)
-                                .setMessage(getString(R.string.text_date) + ": " + mark.getDateAsString()
-                                        + "\n" + getString(R.string.text_short_lesson_name) + ": " + mark.getShortLesson()
-                                        + "\n" + getString(R.string.text_long_lesson_name) + ": " + mark.getLongLesson()
-                                        + "\n" + getString(R.string.text_value) + ": " + mark.getValueToShow()
-                                        + "\n" + getString(R.string.text_weight) + ": " + mark.getWeight()
-                                        + "\n" + getString(R.string.text_type) + ": " + mark.getType()
-                                        + "\n" + getString(R.string.text_note) + ": " + mark.getNote()
-                                        + "\n" + getString(R.string.text_teacher) + ": " + mark.getTeacher())
+                                .setMessage(getText(R.string.text_date) + ": " + mark.getDateAsString()
+                                        + "\n" + getText(R.string.text_short_lesson_name) + ": " + mark.getShortLesson()
+                                        + "\n" + getText(R.string.text_long_lesson_name) + ": " + mark.getLongLesson()
+                                        + "\n" + getText(R.string.text_value) + ": " + mark.getValueToShow()
+                                        + "\n" + getText(R.string.text_weight) + ": " + mark.getWeight()
+                                        + "\n" + getText(R.string.text_type) + ": " + mark.getType()
+                                        + "\n" + getText(R.string.text_note) + ": " + mark.getNote()
+                                        + "\n" + getText(R.string.text_teacher) + ": " + mark.getTeacher())
                                 .setPositiveButton(R.string.but_ok, null)
                                 .setCancelable(true)
                                 .show();
@@ -295,8 +295,8 @@ public class SASManageActivity extends AppCompatActivity {
                     }
                 } catch (NullPointerException | InterruptedException e) {
                     Log.d(getClass().getSimpleName(), "onUpdate", e);
-                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
-                            getString(R.string.exception_message_sas_manager_binder_null))};
+                    data = new MultilineItem[]{new TextMultilineItem(getText(R.string.exception_title_sas_manager_binder_null),
+                            getText(R.string.exception_message_sas_manager_binder_null))};
                 }
 
                 Log.d(getClass().getSimpleName(), "onUpdate: Updating list");
@@ -310,7 +310,7 @@ public class SASManageActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, showProgressBar ? getString(R.string.wait_text_loading) : null);
+        }, showProgressBar ? getText(R.string.wait_text_loading) : null);
         Log.d(getClass().getSimpleName(), "onUpdate: Thread started");
     }
 
@@ -353,7 +353,7 @@ public class SASManageActivity extends AppCompatActivity {
                                     }
                                 }
                             }
-                        }, getString(R.string.wait_text_logging_in));
+                        }, getText(R.string.wait_text_logging_in));
                     }
                 })
                 .setNeutralButton(R.string.but_log_out,

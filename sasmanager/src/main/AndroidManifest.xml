@@ -18,7 +18,7 @@
         <activity
             android:name=".SASLoginActivity"
             android:icon="@mipmap/ic_launcher_sas"
-            android:label="@string/activity_title_login" />
+            android:label="@string/activity_title_sas_login" />
         <activity
             android:name=".SASManageActivity"
             android:icon="@mipmap/ic_launcher_sas"

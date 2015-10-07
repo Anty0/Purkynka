@@ -83,12 +83,12 @@ public class Teacher implements MultilineItem {
     }
 
     @Override
-    public String getTitle(Context context, int position) {
+    public CharSequence getTitle(Context context, int position) {
         return toString();
     }
 
     @Override
-    public String getText(Context context, int position) {
+    public CharSequence getText(Context context, int position) {
         return getPhoneNumber() + " " + getEmail();
     }
 }

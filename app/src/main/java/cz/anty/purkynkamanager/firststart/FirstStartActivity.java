@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
 
 import cz.anty.icanteenmanager.ICFirstStartPage;
@@ -48,7 +51,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
             public void run() {
                 pagesManager = new PagesManager(savedInstanceState, firstStartPages);
             }
-        }, getString(R.string.wait_text_please_wait));
+        }, getText(R.string.wait_text_please_wait));
 
         new Thread(new Runnable() {
             @Override
@@ -66,7 +69,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                             if (validatePage(pagesManager.get())) {
                                 butSkip.setOnClickListener(FirstStartActivity.this);
                                 butNext.setOnClickListener(FirstStartActivity.this);
-                                updateState();
+                                updateState(false);
                             }
                         }
                     }
@@ -82,12 +85,73 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
     }
 
     @SuppressWarnings("ResourceType")
-    private void updateState() {
+    private void updateState(boolean animate) {
         synchronized (worker.getWorkerLock()) {
-            setTitle(page.getTitle());
+            if (animate) {
+                final View oldView = contentScrollView.getChildAt(0);
+                final View newView = page.getView(contentScrollView);
 
-            contentScrollView.removeAllViews();
-            contentScrollView.addView(page.getView(contentScrollView));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        contentScrollView.removeAllViews();
+                        final FrameLayout frameLayout = new FrameLayout(FirstStartActivity.this);
+                        frameLayout.addView(oldView);
+                        frameLayout.addView(newView);
+                        contentScrollView.addView(frameLayout);
+
+                        TranslateAnimation oldAnimation = new TranslateAnimation(0, -contentScrollView.getWidth(), 0, 0);
+                        oldAnimation.setDuration(150);
+                        TranslateAnimation newAnimation = new TranslateAnimation(contentScrollView.getWidth(), 0, 0, 0);
+                        newAnimation.setDuration(150);
+
+                        oldView.setAnimation(oldAnimation);
+                        newView.setAnimation(newAnimation);
+
+                        newAnimation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                oldView.clearAnimation();
+                                newView.clearAnimation();
+                                frameLayout.removeAllViews();
+                                contentScrollView.removeAllViews();
+                                contentScrollView.addView(newView);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+
+                        oldAnimation.startNow();
+                        newAnimation.startNow();
+                        oldView.invalidate();
+                        newView.invalidate();
+                    }
+                });
+                try {
+                    Thread.sleep(60);
+                    while (oldView.getParent() != null) {
+                        Thread.sleep(10);
+                    }
+                } catch (InterruptedException e) {
+                    Log.d(getClass().getSimpleName(), "updateState", e);
+                }
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        contentScrollView.removeAllViews();
+                        contentScrollView.addView(page.getView(contentScrollView));
+                    }
+                });
+            }
 
         /*if (Build.VERSION.SDK_INT >= 12) {
             ViewPropertyAnimator animator = contentScrollView.animate().scaleX(10);
@@ -96,10 +160,17 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
             }
         }*/
 
-            butNext.setText(page.getButNextText());
-            butSkip.setText(page.getButSkipText());
-            butNext.setVisibility(page.getButNextVisibility());
-            butSkip.setVisibility(page.getButSkipVisibility());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setTitle(page.getTitle());
+
+                    butNext.setText(page.getButNextText());
+                    butSkip.setText(page.getButSkipText());
+                    butNext.setVisibility(page.getButNextVisibility());
+                    butSkip.setVisibility(page.getButSkipVisibility());
+                }
+            });
         }
     }
 
@@ -123,7 +194,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                         }
                     });
                 }
-            }, getString(R.string.wait_text_please_wait));
+            }, getText(R.string.wait_text_please_wait));
         }
     }
 
@@ -141,15 +212,8 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
             }
 
             pagesManager.next();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (worker.getWorkerLock()) {
-                        if (validatePage(pagesManager.get()))
-                            updateState();
-                    }
-                }
-            });
+            if (validatePage(pagesManager.get()))
+                updateState(true);
         }
     }
 
@@ -160,8 +224,13 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                 getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                         .edit().putInt(Constants.SETTING_NAME_FIRST_START,
                         BuildConfig.VERSION_CODE).apply();
-                startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
-                finish();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
+                        finish();
+                    }
+                });
                 return false;
             }
             return true;

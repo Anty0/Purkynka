@@ -22,12 +22,13 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>();
-        adapter.addAllItems(new TextMultilineItem(getString(R.string.activity_title_sas_settings), null),
-                new TextMultilineItem(getString(R.string.activity_title_wifi_settings), null),
-                new TextMultilineItem(getString(R.string.activity_title_icanteen_settings), null),
-                new TextMultilineItem(getString(R.string.activity_title_timetable_settings), null),
-                new TextMultilineItem(getString(R.string.activity_title_attendance_settings), null),
-                new TextMultilineItem(getString(R.string.activity_title_about), null));
+        adapter.addAllItems(
+                new TextMultilineItem(getText(R.string.activity_title_sas_settings), null),
+                new TextMultilineItem(getText(R.string.activity_title_wifi_settings), null),
+                new TextMultilineItem(getText(R.string.activity_title_icanteen_settings), null),
+                new TextMultilineItem(getText(R.string.activity_title_timetable_settings), null),
+                new TextMultilineItem(getText(R.string.activity_title_attendance_settings), null),
+                new TextMultilineItem(getText(R.string.activity_title_about), null));
 
         RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.ClickListener() {
             @Override

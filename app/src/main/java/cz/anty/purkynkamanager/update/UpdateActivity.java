@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,12 +26,50 @@ import cz.anty.utils.update.UpdateConnector;
  *
  * @author anty
  */
-public class UpdateActivity extends AppCompatActivity implements ProgressReporter {
+public class UpdateActivity extends AppCompatActivity {
 
     public static final String EXTRA_SKIP_DIALOG = "SKIP_DIALOG";
 
-    private ProgressBar progressBar;
-    private TextView percentTextView, numberTextView;
+    private static Thread downloader;
+    private static AppCompatActivity activity;
+    private static ProgressBar progressBar;
+    private static TextView percentTextView, numberTextView;
+    private static int max = 100, progress = 0;
+    private static ProgressReporter reporter = new ProgressReporter() {
+
+        @Override
+        public void setMaxProgress(final int max) {
+            //Log.d(getClass().getSimpleName(), "setMaxProgress: " + max);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setMax(max);
+                    UpdateActivity.max = max;
+                    updateViews();
+                }
+            });
+        }
+
+        @Override
+        public void reportProgress(final int progress) {
+            //Log.d(getClass().getSimpleName(), "reportProgress: " + progress);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setProgress(progress);
+                    UpdateActivity.progress = progress;
+                    updateViews();
+                }
+            });
+        }
+    };
+
+    private static void updateViews() {
+        String percent = (int) (((float) progress / (float) max) * 100f) + "%";
+        String number = progress + "/" + max;
+        percentTextView.setText(percent);
+        numberTextView.setText(number);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +79,16 @@ public class UpdateActivity extends AppCompatActivity implements ProgressReporte
             return;
         }
         setContentView(R.layout.alert_dialog_progress);
+        findViewById(R.id.alert_dialog_body).setPadding(15, 2, 15, 2);
 
+        activity = this;
         progressBar = (ProgressBar) findViewById(R.id.progress);
         percentTextView = (TextView) findViewById(R.id.progress_percent);
         numberTextView = (TextView) findViewById(R.id.progress_number);
+
+        reporter.setMaxProgress(max);
+        reporter.reportProgress(progress);
+        if (downloader != null) return;
 
         if (getIntent().getBooleanExtra(EXTRA_SKIP_DIALOG, false)) {
             downloadInstallUpdate();
@@ -73,64 +118,58 @@ public class UpdateActivity extends AppCompatActivity implements ProgressReporte
                 .setNeutralButton(R.string.but_skip, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        finish();
                         startActivity(new Intent(UpdateActivity.this, MainActivity.class));
                     }
                 })
                 .show();
     }
 
-    private void updateViews() {
-        percentTextView.setText(String.format("%1$d%", (progressBar.getProgress() / progressBar.getMax()) * 100));
-        numberTextView.setText(String.format("%1$d/%2$d", progressBar.getProgress(), progressBar.getMax()));
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        return downloader == null
+                && super.onKeyUp(keyCode, event);
     }
 
     private void downloadInstallUpdate() {
-        ApplicationBase.WORKER.startWorker(new Runnable() {
+        downloader = ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
             public void run() {
-                String filename = "latest.apk";
-
-                Intent intent;
                 try {
-                    String path = UpdateConnector.downloadUpdate(UpdateActivity.this, UpdateActivity.this, filename);
+                    String filename = "latest.apk";
 
-                    intent = new Intent(Intent.ACTION_VIEW)
-                            .setDataAndType(Uri.fromFile(new File(path)), //TODO delete file after install
-                                    "application/vnd.android.package-archive")
-                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                } catch (IOException e) {
-                    intent = null;
-                }
+                    Intent intent;
+                    try {
+                        String path = UpdateConnector.downloadUpdate(UpdateActivity.this, reporter, filename);
 
-                final Intent finalIntent = intent;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                        String toastText;
-                        if (finalIntent != null) {
-                            startActivity(finalIntent);
-                            toastText = getString(R.string.toast_text_download_successful);
-                        } else {
-                            toastText = getString(R.string.toast_text_download_failed);
-                        }
-                        Toast.makeText(UpdateActivity.this, toastText,
-                                Toast.LENGTH_LONG).show();
+                        intent = new Intent(Intent.ACTION_VIEW)
+                                .setDataAndType(Uri.fromFile(new File(path)), //TODO delete file after install
+                                        "application/vnd.android.package-archive")
+                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    } catch (IOException | InterruptedException e) {
+                        intent = null;
                     }
-                });
+
+                    final Intent finalIntent = intent;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                            CharSequence toastText;
+                            if (finalIntent != null) {
+                                startActivity(finalIntent);
+                                toastText = getText(R.string.toast_text_download_successful);
+                            } else {
+                                toastText = getText(R.string.toast_text_download_failed);
+                            }
+                            Toast.makeText(UpdateActivity.this, toastText,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } finally {
+                    downloader = null;
+                }
             }
         });
-    }
-
-    @Override
-    public void setMaxProgress(int max) {
-        progressBar.setMax(max);
-        updateViews();
-    }
-
-    @Override
-    public void reportProgress(int progress) {
-        progressBar.setProgress(progress);
-        updateViews();
     }
 }

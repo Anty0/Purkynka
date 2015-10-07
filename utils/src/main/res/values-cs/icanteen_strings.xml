@@ -29,6 +29,8 @@
 
     <string name="menu_item_text_start_burza_checking">Spustit Hlídač burzy</string>
 
+    <string name="special_item_title_icanteen_new_lunches">Jsou dostupné nové obědy k obědnání.</string>
+
     <string name="radio_button_text_no_lunch">Žádný oběd</string>
 
     <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač BURZY, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>

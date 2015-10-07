@@ -9,20 +9,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 
 import java.io.IOException;
 
 import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.attendancemanager.TrackingSpecialModule;
+import cz.anty.icanteenmanager.ICSpecialModule;
 import cz.anty.icanteenmanager.ICSplashActivity;
 import cz.anty.purkynkamanager.firststart.FirstStartActivity;
 import cz.anty.purkynkamanager.update.UpdateSpecialModule;
+import cz.anty.sasmanager.SASSpecialModule;
 import cz.anty.sasmanager.SASSplashActivity;
 import cz.anty.timetablemanager.TimetableSelectActivity;
 import cz.anty.timetablemanager.TimetableSpecialModule;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
+import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.list.listView.TextMultilineItem;
+import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModuleManager;
 import cz.anty.utils.list.toolbar.FragmentDrawer;
 import cz.anty.utils.thread.OnceRunThreadWithSpinner;
@@ -32,9 +39,9 @@ import cz.anty.wifiautologin.WifiSpecialModule;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static SpecialModuleManager moduleManager;
     private boolean showOptionsMenu = false;
     private OnceRunThreadWithSpinner worker;
-    private SpecialModuleManager moduleManager;
     private Toolbar mToolbar;
 
     @Override
@@ -44,9 +51,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        moduleManager = new SpecialModuleManager((RecyclerView) findViewById(R.id.recyclerView),
-                new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this),
-                new TimetableSpecialModule(this), new WifiSpecialModule(this)); // TODO: 30.9.15 add special modules
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        if (moduleManager == null)
+            moduleManager = new SpecialModuleManager(recyclerView,
+                    new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this),
+                    new SASSpecialModule(this), new ICSpecialModule(this), new TimetableSpecialModule(this),
+                    new WifiSpecialModule(this));
+        else moduleManager.reInit(recyclerView);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         worker = new OnceRunThreadWithSpinner(this);
@@ -54,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        checkFirstStart();
+        if (savedInstanceState == null) checkFirstStart();
+        else init();
     }
 
     private void checkFirstStart() {
@@ -81,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.wait_text_loading));
+        }, getText(R.string.wait_text_loading));
     }
 
     private boolean isNewTerms() {
@@ -99,18 +111,26 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         Log.d(getClass().getSimpleName(), "init");
 
-        FragmentDrawer drawerFragment = (FragmentDrawer)
+        final FragmentDrawer drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout)
                         findViewById(R.id.drawer_layout), mToolbar,
-                new TextMultilineItem(getString(R.string.app_name_sas), null),
-                new TextMultilineItem(getString(R.string.app_name_wifi), null),
-                new TextMultilineItem(getString(R.string.app_name_icanteen), null),
-                new TextMultilineItem(getString(R.string.app_name_timetable), null),
-                new TextMultilineItem(getString(R.string.app_name_attendance), null));
-        drawerFragment.setDrawerListener(new FragmentDrawer.FragmentDrawerListener() {
+                new TextMultilineItem(getText(R.string.app_name_sas), null),
+                new TextMultilineItem(getText(R.string.app_name_wifi), null),
+                new TextMultilineItem(getText(R.string.app_name_icanteen), null),
+                new TextMultilineItem(getText(R.string.app_name_timetable), null),
+                new TextMultilineItem(getText(R.string.app_name_attendance), null));
+        drawerFragment.setDrawerListener(new RecyclerItemClickListener.ClickListener() {
+            private final int[] descriptionIds = new int[]{
+                    R.string.app_description_sas,
+                    R.string.app_description_wifi,
+                    R.string.app_description_icanteen,
+                    R.string.app_description_timetable,
+                    R.string.app_description_attendance
+            };
+
             @Override
-            public void onDrawerItemSelected(View view, int position) {
+            public void onClick(View view, int position) {
                 switch (position) {
                     case 0:
                         startActivity(new Intent(MainActivity.this, SASSplashActivity.class));
@@ -129,7 +149,76 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+
+            @Override
+            public void onLongClick(final View view, final int position) {
+                final MultilineRecyclerAdapter<MultilineItem> adapter = drawerFragment.getAdapter();
+                final MultilineItem item = adapter.getItem(position);
+                boolean showDescription = item instanceof TextMultilineItem
+                        && ((TextMultilineItem) item).getText() == null;
+                clearTexts(adapter.getItems(new MultilineItem[adapter.getItemCount()]));
+                adapter.notifyDataSetChanged();
+
+                if (showDescription) {
+                    ScaleAnimation animation = new ScaleAnimation(1, 1, 1, 0);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            view.clearAnimation();
+                            ((TextMultilineItem) item).setText(getText(descriptionIds[position]));
+                            adapter.notifyDataSetChanged();
+
+                            ScaleAnimation animation2 = new ScaleAnimation(1, 1, 0, 1);
+                            animation2.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    view.clearAnimation();
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                            animation2.setDuration(100);
+                            view.setAnimation(animation2);
+                            animation2.startNow();
+                            view.invalidate();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    animation.setDuration(100);
+                    view.setAnimation(animation);
+                    animation.startNow();
+                    view.invalidate();
+                }
+            }
+
+            private void clearTexts(MultilineItem[] items) {
+                for (MultilineItem item : items) {
+                    if (item instanceof TextMultilineItem) {
+                        ((TextMultilineItem) item).setText(null);
+                    }
+                }
+            }
         });
+
+        if (!moduleManager.isInitialized())
+            moduleManager.init();
 
         showOptionsMenu = true;
         invalidateOptionsMenu();
@@ -137,14 +226,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        updateModuleManager();
-        super.onResume();
-    }
-
-    private synchronized void updateModuleManager() {
         if (moduleManager.isInitialized())
             moduleManager.update();
-        else moduleManager.init();
+        super.onResume();
     }
 
     @Override

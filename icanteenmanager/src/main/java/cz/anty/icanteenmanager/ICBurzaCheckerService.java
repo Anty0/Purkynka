@@ -112,8 +112,8 @@ public class ICBurzaCheckerService extends Service {
         notificationManager.cancel(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA_RESULT);
 
         Notification n = new NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.notify_title_burza_checker_running))
-                .setContentText(getString(R.string.notify_text_burza_checker_running))
+                .setContentTitle(getText(R.string.notify_title_burza_checker_running))
+                .setContentText(getText(R.string.notify_text_burza_checker_running))
                 .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                 .setContentIntent(PendingIntent.getService(this, 0,
                         new Intent(this, ICBurzaCheckerService.class)
@@ -149,8 +149,8 @@ public class ICBurzaCheckerService extends Service {
                     if (selector.isSelected(lunchDay)
                             && lunchDay.getOrderedLunch() != null) {
                         Notification n1 = new NotificationCompat.Builder(this)
-                                .setContentTitle(getString(R.string.notify_title_burza_checker_completed))
-                                .setContentText(getString(R.string.notify_text_burza_checker_completed))
+                                .setContentTitle(getText(R.string.notify_title_burza_checker_completed))
+                                .setContentText(getText(R.string.notify_text_burza_checker_completed))
                                 .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                                 .setAutoCancel(true)
                                 .setDefaults(Notification.DEFAULT_ALL)

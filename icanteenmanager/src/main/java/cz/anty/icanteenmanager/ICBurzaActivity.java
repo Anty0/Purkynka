@@ -305,11 +305,11 @@ public class ICBurzaActivity extends AppCompatActivity {
                     BurzaLunch[] dataList = binder.getBurza();
                     if (dataList == null) dataList = new BurzaLunch[0];
                     data = Arrays.asList(dataList).toArray(new MultilineItem[dataList.length + 1]);
-                    data[data.length - 1] = new TextMultilineItem(getString(
+                    data[data.length - 1] = new TextMultilineItem(getText(
                             R.string.menu_item_text_start_burza_checking), null);
                 } catch (NullPointerException | InterruptedException e) {
-                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.exception_title_sas_manager_binder_null),
-                            getString(R.string.exception_message_sas_manager_binder_null)).setTag("EXCEPTION")};
+                    data = new MultilineItem[]{new TextMultilineItem(getText(R.string.exception_title_sas_manager_binder_null),
+                            getText(R.string.exception_message_sas_manager_binder_null)).setTag("EXCEPTION")};
                 }
 
                 final MultilineItem[] finalData = data;
@@ -321,7 +321,7 @@ public class ICBurzaActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getString(R.string.wait_text_loading));
+        }, getText(R.string.wait_text_loading));
     }
 
     @Override

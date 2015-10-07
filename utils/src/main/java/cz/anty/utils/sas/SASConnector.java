@@ -67,7 +67,8 @@ class SASConnector {
     }
 
     private synchronized boolean isLoggedIn(Document marksPage) {
-        return marksPage.select("div.isas-varovani").isEmpty() && marksPage.select("form.isas-form").isEmpty();
+        return marksPage.select("div.isas-varovani").isEmpty() && marksPage.select("form.isas-form")
+                .isEmpty() && marksPage.baseUri().toLowerCase().contains("isas");
     }
 
     private synchronized Document getMarksPage(int depth, IOException last, MarksManager.Semester semester) throws IOException {
@@ -75,6 +76,7 @@ class SASConnector {
         try {
             return Jsoup
                     .connect(MARKS_URL)
+                    .followRedirects(false)
                     .data(SEMESTER, semester.getValue().toString(), SHORT_BY, SHORT_BY_DATE)
                     .method(Connection.Method.GET)
                     .validateTLSCertificates(false)

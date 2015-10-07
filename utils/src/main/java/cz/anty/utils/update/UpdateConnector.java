@@ -71,13 +71,14 @@ public class UpdateConnector {
         return toReturn;
     }
 
-    public static String downloadUpdate(Context context, ProgressReporter reporter, String filename) throws IOException {
+    public static String downloadUpdate(Context context, ProgressReporter reporter, String filename) throws IOException, InterruptedException {
         FileOutputStream fos = null;
         InputStream is = null;
         try {
             URL url = new URL(DEFAULT_URL + LATEST_APK_URL_ADD);
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             c.setRequestMethod("GET");
+            c.setInstanceFollowRedirects(false);
             c.setDoOutput(true);
             c.connect();
 
@@ -94,14 +95,20 @@ public class UpdateConnector {
             byte[] buffer = new byte[1024];
             int len;
             int completedLen = 0;
-            reporter.setMaxProgress(is.available());
+            int max = c.getContentLength();
+            reporter.setMaxProgress(max != -1 ? max : Integer.MAX_VALUE);
             //Log.d("UpdateConnector", "TotalLen: " + is.available());
-            while ((len = is.read(buffer)) != -1) {
+            Thread currentThread = Thread.currentThread();
+            while ((len = is.read(buffer)) != -1
+                    && !currentThread.isInterrupted()) {
                 fos.write(buffer, 0, len);
                 completedLen += len;
                 reporter.reportProgress(completedLen);
                 //Log.d("UpdateConnector", "CompletedLen: " + completedLen);
             }
+
+            if (Thread.interrupted())
+                throw new InterruptedException();
 
             return PATH + filename;
         } finally {

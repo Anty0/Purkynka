@@ -21,15 +21,17 @@ import cz.anty.utils.update.UpdateConnector;
 public class UpdateReceiver extends BroadcastReceiver {
 
     public static void checkUpdate(Context context) throws IOException, NumberFormatException {
-        Integer latestCode = UpdateConnector.getLatestVersionCode();
-        String latestName = UpdateConnector.getLatestVersionName();
+        try {
+            Integer latestCode = UpdateConnector.getLatestVersionCode();
+            String latestName = UpdateConnector.getLatestVersionName();
 
-        context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
-                .edit().putInt(Constants.SETTING_NAME_LATEST_CODE, latestCode)
-                .putString(Constants.SETTING_NAME_LATEST_NAME, latestName)
-                .apply();
-
-        updateNotification(context);
+            context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                    .edit().putInt(Constants.SETTING_NAME_LATEST_CODE, latestCode)
+                    .putString(Constants.SETTING_NAME_LATEST_NAME, latestName)
+                    .apply();
+        } finally {
+            updateNotification(context);
+        }
     }
 
     private static void updateNotification(Context context) {
@@ -40,14 +42,14 @@ public class UpdateReceiver extends BroadcastReceiver {
                     new Intent(context, UpdateActivity.class), 0);
             notificationManager.notify(Constants.NOTIFICATION_ID_UPDATE,
                     new NotificationCompat.Builder(context)
-                            .setContentTitle(context.getString(R.string.notify_title_update_available))
+                            .setContentTitle(context.getText(R.string.notify_title_update_available))
                             .setContentText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)))
                             .setStyle(new NotificationCompat.BigTextStyle()
                                     .bigText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)) + "\n"
                                             + String.format(context.getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)))
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentIntent(pendingIntent)
-                            .addAction(R.mipmap.ic_launcher, context.getString(R.string.but_update), pendingIntent)
+                            .addAction(R.mipmap.ic_launcher, context.getText(R.string.but_update), pendingIntent)
                             .setAutoCancel(false)
                             .setOngoing(true)
                             .setDefaults(Notification.DEFAULT_ALL)

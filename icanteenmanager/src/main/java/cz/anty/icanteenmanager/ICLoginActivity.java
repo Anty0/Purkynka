@@ -34,8 +34,8 @@ public class ICLoginActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     validateException(activity, e instanceof WrongLoginDataException
-                            ? activity.getString(R.string.exception_validate_wrong_login)
-                            : activity.getString(R.string.exception_validate_no_connection));
+                            ? activity.getText(R.string.exception_validate_wrong_login)
+                            : activity.getText(R.string.exception_validate_no_connection));
                 }
             });
             return false;
@@ -46,7 +46,7 @@ public class ICLoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private static void validateException(Context context, String message) {
+    private static void validateException(Context context, CharSequence message) {
         new AlertDialog.Builder(context, R.style.AppTheme_Dialog)
                 .setTitle(R.string.exception_title_validate)
                 .setMessage(message)
@@ -108,6 +108,6 @@ public class ICLoginActivity extends AppCompatActivity {
                     });
 
             }
-        }, getString(R.string.wait_text_logging_in));
+        }, getText(R.string.wait_text_logging_in));
     }
 }

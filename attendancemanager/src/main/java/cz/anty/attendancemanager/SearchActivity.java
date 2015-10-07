@@ -56,14 +56,16 @@ public class SearchActivity extends AppCompatActivity {
                         final Man man = item instanceof Man
                                 ? (Man) item : null;
                         if (man != null) {
-                            new TrackingMansManager(SearchActivity.this)
-                                    .processMan(man, new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            sendBroadcast(new Intent(SearchActivity.this,
-                                                    TrackingScheduleReceiver.class));
-                                        }
-                                    });
+                            if (TrackingActivity.mansManager == null)
+                                TrackingActivity.mansManager =
+                                        new TrackingMansManager(SearchActivity.this);
+                            TrackingActivity.mansManager.processMan(SearchActivity.this, man, new Runnable() {
+                                @Override
+                                public void run() {
+                                    sendBroadcast(new Intent(SearchActivity.this,
+                                            TrackingScheduleReceiver.class));
+                                }
+                            });
                         }
                     }
 
@@ -144,8 +146,8 @@ public class SearchActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     Log.d("SearchActivity", "update", e);
                     //values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
-                    data = new MultilineItem[]{new TextMultilineItem(getString(R.string.list_item_title_connection_exception),
-                            getString(R.string.list_item_text_connection_exception) + ": " + e.getMessage())/*,
+                    data = new MultilineItem[]{new TextMultilineItem(getText(R.string.list_item_title_connection_exception),
+                            getText(R.string.list_item_text_connection_exception) + ": " + e.getMessage())/*,
                             new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page)*/};
                 }
                 Log.d("SearchActivity", "update data: " + Arrays.toString(data));

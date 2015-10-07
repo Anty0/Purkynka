@@ -14,7 +14,6 @@ import cz.anty.utils.R;
  *
  * @author anty
  */
-@Deprecated
 public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
 
     private final Context context;
@@ -81,7 +80,7 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
 
         holder = (ItemDataHolder) convertView.getTag();
         holder.text1.setText(item.getTitle(context, position));
-        String text = item.getText(context, position);
+        CharSequence text = item.getText(context, position);
         if (text == null) {
             holder.text1.setPadding(1, 8, 1, 8);
             holder.text2.setVisibility(View.GONE);

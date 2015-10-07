@@ -33,21 +33,29 @@ import cz.anty.utils.list.recyclerView.RecyclerAdapter;
 import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.utils.timetable.Lesson;
 import cz.anty.utils.timetable.Timetable;
+import cz.anty.utils.timetable.TimetableManager;
 
 public class TimetableManageActivity extends AppCompatActivity {
 
-    public static Timetable toShow = null;
+    public static final String EXTRA_TIMETABLE_NAME = "TIMETABLE_NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (toShow == null) {
+        String timetableName = getIntent().getStringExtra(EXTRA_TIMETABLE_NAME);
+        if (timetableName == null) {
             startActivity(new Intent(this, TimetableSelectActivity.class));
             finish();
             return;
         }
+        if (TimetableSelectActivity.timetableManager == null)
+            TimetableSelectActivity.timetableManager = new TimetableManager(this);
+
+        Timetable toShow = TimetableSelectActivity.timetableManager
+                .getTimetableByName(timetableName);
+
         setContentView(R.layout.activity_timetable_manage);
-        setTitle(getString(R.string.activity_title_timetable_manage) + " - " + toShow.getName());
+        setTitle(getText(R.string.activity_title_timetable_manage) + " - " + toShow.getName());
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -59,7 +67,7 @@ public class TimetableManageActivity extends AppCompatActivity {
       may be best to switch to a
       {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), toShow);
 
         final TextView textView = (TextView) findViewById(R.id.textView);
 
@@ -72,7 +80,7 @@ public class TimetableManageActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                textView.setText(positionOffset < 0.5f ? getString(Timetable.DAYS_STRINGS_IDS[position]) : getString(Timetable.DAYS_STRINGS_IDS[position + 1]));
+                textView.setText(positionOffset < 0.5f ? getText(Timetable.DAYS_STRINGS_IDS[position]) : getText(Timetable.DAYS_STRINGS_IDS[position + 1]));
                 if (Build.VERSION.SDK_INT >= 11) {
                     float width;
                     Display display = getWindowManager().getDefaultDisplay();
@@ -150,6 +158,7 @@ public class TimetableManageActivity extends AppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         private MultilineRecyclerAdapter<MultilineItem> adapter;
+        private Timetable toShow;
 
         public PlaceholderFragment() {
         }
@@ -158,11 +167,12 @@ public class TimetableManageActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(Timetable toShow, int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+            fragment.toShow = toShow;
             return fragment;
         }
 
@@ -184,10 +194,10 @@ public class TimetableManageActivity extends AppCompatActivity {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_lesson_info)
                                                 //TODO add set icon with icon "T"
-                                        .setMessage(context.getString(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
-                                                context.getString(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
-                                                context.getString(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
-                                                context.getString(R.string.dialog_message_teacher) + ": " + lesson.getTeacher())
+                                        .setMessage(context.getText(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
+                                                context.getText(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
+                                                context.getText(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
+                                                context.getText(R.string.dialog_message_teacher) + ": " + lesson.getTeacher())
                                         .setPositiveButton(R.string.but_ok, null)
                                         .setNegativeButton(R.string.but_delete, new DialogInterface.OnClickListener() {
                                             @Override
@@ -291,8 +301,8 @@ public class TimetableManageActivity extends AppCompatActivity {
                     adapter.addItem(lesson);
                     continue;
                 }
-                adapter.addItem(new TextMultilineItem(i + ". " + context
-                        .getString(R.string.list_item_text_click_to_edit), null));
+                adapter.addItem(new TextMultilineItem(String.format(context
+                        .getString(R.string.list_item_text_click_to_edit), i), null));
             }
         }
     }
@@ -303,15 +313,18 @@ public class TimetableManageActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private final Timetable mTimetable;
+
+        public SectionsPagerAdapter(FragmentManager fm, Timetable toShow) {
             super(fm);
+            mTimetable = toShow;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position);
+            return PlaceholderFragment.newInstance(mTimetable, position);
         }
 
         @Override
@@ -321,7 +334,7 @@ public class TimetableManageActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return getString(Timetable.DAYS_STRINGS_IDS[position]);
+            return getText(Timetable.DAYS_STRINGS_IDS[position]);
         }
     }
 

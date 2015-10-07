@@ -2,9 +2,7 @@ package cz.anty.purkynkamanager.update;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 
@@ -12,6 +10,7 @@ import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.R;
 import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
+import cz.anty.utils.list.recyclerView.specialAdapter.MultilineSpecialItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
 
@@ -22,11 +21,14 @@ import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
  */
 public class UpdateSpecialModule extends SpecialModule {
 
+    private final SpecialItem[] mItems;
     private boolean updateAvailable = false;
-    private boolean hideItem = false;
 
     public UpdateSpecialModule(Context context) {
         super(context);
+        mItems = new SpecialItem[]{
+                new UpdateSpecialItem(context)
+        };
     }
 
     @Override
@@ -40,7 +42,7 @@ public class UpdateSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected void onInitialize() {
+    protected boolean onInitialize() {
         try {
             UpdateReceiver.checkUpdate(getContext());
         } catch (IOException | NumberFormatException e) {
@@ -48,11 +50,15 @@ public class UpdateSpecialModule extends SpecialModule {
         }
         updateAvailable = UpdateReceiver
                 .isUpdateAvailable(getContext());
+        return true;
     }
 
     @Override
     protected void onUpdate() {
+        boolean last = updateAvailable;
         onInitialize();
+        if (last != updateAvailable)
+            notifyItemsModified();
     }
 
     public boolean isUpdateAvailable() {
@@ -61,115 +67,62 @@ public class UpdateSpecialModule extends SpecialModule {
 
     @Override
     protected SpecialItem[] getItems() {
-        if (isUpdateAvailable())
-            return new SpecialItem[]{
-                    new SpecialItem() {
-                        private TextView title, text;
-
-                        @Override
-                        public void onCreateViewHolder(FrameLayout parent, int itemPosition) {
-                            LayoutInflater.from(getContext()).inflate(R.layout
-                                    .base_multiline_text_item, parent);
-                            title = (TextView) parent.findViewById(R.id.text_view_title);
-                            text = (TextView) parent.findViewById(R.id.text_view_text);
-                        }
-
-                        @Override
-                        public void onBindViewHolder(int itemPosition) {
-                            Context context = getContext();
-                            title.setText(R.string.notify_title_update_available);
-
-                            StringBuilder textData = new StringBuilder();
-                            textData.append(String.format(context.getString(R.string
-                                    .notify_text_update_old), BuildConfig.VERSION_NAME)).append("\n")
-                                    .append(String.format(context.getString(R.string.notify_text_update_new),
-                                            UpdateReceiver.getLatestName(context)));
-                            if (isShowDescription())
-                                textData.append("\n\n").append(context.getString(R.string.dialog_message_update_alert));
-
-                            text.setText(textData.toString());
-                        }
-
-                        @Override
-                        public void onClick() {
-                            Context context = getContext();
-                            context.startActivity(new Intent(context, UpdateActivity.class)
-                                    .putExtra(UpdateActivity.EXTRA_SKIP_DIALOG, true));
-                        }
-
-                        @Override
-                        public void onLongClick() {
-
-                        }
-
-                        @Override
-                        public void onHideClick() {
-
-                        }
-
-                        @Override
-                        public boolean isShowHideButton() {
-                            return false;
-                        }
-
-                        @Override
-                        public int getPriority() {
-                            return Constants.SPECIAL_ITEM_PRIORITY_NEW_UPDATE;
-                        }
-                    }
-            };
-
-        if (!hideItem)
-            return new SpecialItem[]{
-                    new SpecialItem() {
-                        private TextView title, text;
-
-                        @Override
-                        public void onCreateViewHolder(FrameLayout parent, int itemPosition) {
-                            LayoutInflater.from(getContext()).inflate(R.layout
-                                    .base_multiline_text_item, parent);
-                            title = (TextView) parent.findViewById(R.id.text_view_title);
-                            text = (TextView) parent.findViewById(R.id.text_view_text);
-                        }
-
-                        @Override
-                        public void onBindViewHolder(int itemPosition) {
-                            title.setText(R.string.notify_title_no_update);
-                            text.setText(R.string.notify_text_no_update);
-                        }
-
-                        @Override
-                        public void onClick() {
-
-                        }
-
-                        @Override
-                        public void onLongClick() {
-
-                        }
-
-                        @Override
-                        public void onHideClick() {
-                            hideItem = true;
-                            notifyItemsChanged();
-                        }
-
-                        @Override
-                        public boolean isShowHideButton() {
-                            return true;
-                        }
-
-                        @Override
-                        public int getPriority() {
-                            return Constants.SPECIAL_ITEM_PRIORITY_NO_UPDATE;
-                        }
-                    }
-            };
-        return new SpecialItem[0];
+        return mItems;
     }
 
     @Override
-    protected int getModuleNameResId() {
-        return R.string.app_name_updater;
+    protected CharSequence getModuleName() {
+        return getContext().getText(R.string.app_name_updater);
+    }
+
+    private class UpdateSpecialItem extends MultilineSpecialItem {
+
+        public UpdateSpecialItem(Context context) {
+            super(context);
+        }
+
+        @Nullable
+        @Override
+        protected CharSequence getTitle() {
+            return getContext().getText(R.string.notify_title_update_available);
+        }
+
+        @Nullable
+        @Override
+        protected CharSequence getText() {
+            Context context = getContext();
+            StringBuilder textData = new StringBuilder();
+            textData.append(String.format(context.getString(R.string
+                    .notify_text_update_old), BuildConfig.VERSION_NAME))
+                    .append("\n")
+                    .append(String.format(context.getString(R.string.notify_text_update_new),
+                            UpdateReceiver.getLatestName(context)));
+            if (isShowDescription())
+                textData.append("\n\n").append(context.getString(R.string.dialog_message_update_alert));
+
+            return textData;
+        }
+
+        @Override
+        public void onClick() {
+            Context context = getContext();
+            context.startActivity(new Intent(context, UpdateActivity.class)
+                    .putExtra(UpdateActivity.EXTRA_SKIP_DIALOG, true));
+        }
+
+        @Override
+        public boolean isShowHideButton() {
+            return false;
+        }
+
+        @Override
+        public boolean isVisible() {
+            return super.isVisible() && isUpdateAvailable();
+        }
+
+        @Override
+        public int getPriority() {
+            return Constants.SPECIAL_ITEM_PRIORITY_NEW_UPDATE;
+        }
     }
 }

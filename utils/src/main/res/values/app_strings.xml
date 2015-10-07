@@ -12,14 +12,12 @@
 
     <string name="dialog_title_share">Share app</string>
     <string name="dialog_message_share">Please share this app to your friends :)</string>
-    <string name="dialog_message_update_alert">If \"Update\" button don\'t working for you, then download and install update manually from official application web page.</string>
+    <string name="dialog_message_update_alert">If AppUpdater don\'t working for you, then download and install update manually from official application web page.</string>
 
     <string name="toast_text_download_successful">Download successful completed</string>
     <string name="toast_text_download_failed">Download failed</string>
 
     <string name="notify_title_update_available"><b>Update available</b></string>
-    <string name="notify_title_no_update">No update available</string>
-    <string name="notify_text_no_update">You have installed latest version</string>
     <string name="notify_text_update_old">Your version: %1$s</string>
     <string name="notify_text_update_new">New version: %1$s</string>
 
