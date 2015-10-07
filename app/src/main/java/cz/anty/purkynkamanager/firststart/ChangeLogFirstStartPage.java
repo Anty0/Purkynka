@@ -33,7 +33,8 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
 
     @Override
     public CharSequence getTitle() {
-        return "ChangeLog";// TODO: 4.10.15 to strings
+        return getContext().getText(R.string
+                .activity_title_first_start_change_log);
     }
 
     @Override

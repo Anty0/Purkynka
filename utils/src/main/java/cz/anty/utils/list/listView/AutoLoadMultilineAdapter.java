@@ -100,6 +100,7 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
             notifyDataSetChanged();
     }
 
+    @Deprecated
     public interface OnLoadNextListListener {
 
         void onLoadNextList(AutoLoadMultilineAdapter multilineAdapter, int page);

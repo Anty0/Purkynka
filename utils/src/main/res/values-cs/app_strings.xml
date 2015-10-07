@@ -5,6 +5,7 @@
 
     <string name="activity_title_first_start_welcome">Vítejte</string>
     <string name="activity_title_first_start_terms">Podmínky používání aplikace</string>
+    <string name="activity_title_first_start_change_log">ChangeLog</string>
 
     <string name="text_terms">Nepodařilo se načíst podmínky použití (<b>klikněte zde</b> pro další pokus), zkontrolujte vaše připojení k internetu.\nPodmínky použití této aplikace si můžete také přečíst na stránkách aplikace (<b>http://anty.crush-team.cz/</b>).\n\nKliknutím na tlačítko "Příjmout" příjmáte, že jste si podmínky použití přečetl a souhlasíte s nimi.</string>
     <string name="text_welcome">Vítejte v aplikaci Purkyňka, nyní vás provede jednoduchý průvodce prvním spuštěním a nabídne vám možnost přihlásit se a zprovoznit tak jednotlivé funkce aplikace.\n\n(<b>click here</b> for language change menu)</string>

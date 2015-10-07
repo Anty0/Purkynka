@@ -166,7 +166,7 @@ public class TrackingMansManager {
                                                 if (preferences.getBoolean(Constants.SETTING_NAME_FIRST_START, true)) {
                                                     new AlertDialog.Builder(context)
                                                             .setTitle(R.string.dialog_title_tracking_widget_alert)
-                                                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                                                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
                                                             .setMessage(R.string.dialog_message_tracking_widget_alert)
                                                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                                                 public void onClick(DialogInterface dialog, int whichButton) {

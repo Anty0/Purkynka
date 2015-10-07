@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         worker = new OnceRunThreadWithSpinner(this);
 
         setSupportActionBar(mToolbar);
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if (savedInstanceState == null) checkFirstStart();
