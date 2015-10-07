@@ -74,8 +74,7 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
                 CharSequence changeLog;
                 boolean error = false;
                 try {
-                    changeLog = UpdateConnector.getLatestChangeLog(
-                            context.getString(R.string.language));
+                    changeLog = UpdateConnector.getLatestChangeLog();
                     if (((String) changeLog).toLowerCase().contains("<html>"))
                         throw new IOException("Wrong page loaded");
                 } catch (IOException e) {

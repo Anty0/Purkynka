@@ -36,21 +36,21 @@ public class UpdateConnector {
 
     public static Integer getLatestVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
-                .execute().body().trim());
+                .followRedirects(false).execute().body().trim());
         Log.d(UpdateConnector.class.getSimpleName(), "getLatestVersionCode versionCode: " + toReturn);
         return toReturn;
     }
 
     public static String getLatestVersionName() throws IOException {
         String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
-                .execute().body().replace("\n", "");
+                .followRedirects(false).execute().body().replace("\n", "");
         Log.d(UpdateConnector.class.getSimpleName(), "getLatestVersionName versionName: " + toReturn);
         return toReturn;
     }
 
     public static Integer getLatestTermsVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_TERMS_VERSION_CODE_URL_ADD)
-                .execute().body().trim());
+                .followRedirects(false).execute().body().trim());
         Log.d(UpdateConnector.class.getSimpleName(), "getLatestTermsVersionCode versionCode: " + toReturn);
         return toReturn;
     }
@@ -58,14 +58,14 @@ public class UpdateConnector {
     public static String getLatestTerms(String languageShortcut) throws IOException {
         String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_TERMS_URL_ADD
                 + languageShortcut.toUpperCase(Locale.ENGLISH))
-                .execute().body().trim();
+                .followRedirects(false).execute().body().trim();
         Log.d(UpdateConnector.class.getSimpleName(), "getLatestTerms terms: " + toReturn);
         return toReturn;
     }
 
     public static String getLatestChangeLog() throws IOException {
         String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_CHANGE_LOG_URL_ADD)
-                .execute().body().trim();
+                .followRedirects(false).execute().body().trim();
         Log.d(UpdateConnector.class.getSimpleName(), "getLatestChangeLog changeLog: " + toReturn);
         return toReturn;
     }
