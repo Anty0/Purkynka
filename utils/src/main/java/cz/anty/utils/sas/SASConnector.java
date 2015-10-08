@@ -68,7 +68,7 @@ class SASConnector {
 
     private synchronized boolean isLoggedIn(Document marksPage) {
         return marksPage.select("div.isas-varovani").isEmpty() && marksPage.select("form.isas-form")
-                .isEmpty() && marksPage.baseUri().toLowerCase().contains("isas");
+                .isEmpty() && !marksPage.select("#isas-menu").isEmpty();
     }
 
     private synchronized Document getMarksPage(int depth, IOException last, MarksManager.Semester semester) throws IOException {

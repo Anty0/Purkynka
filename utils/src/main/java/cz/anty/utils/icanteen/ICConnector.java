@@ -83,8 +83,8 @@ class ICConnector {
         //System.out.println("ICConnector getMonthElements startElements:\n" + monthPage);
         //Log.v("ICConnector", "getMonthElements startElements:\n" + monthPage);
 
-        if (!isLoggedIn(monthPage))
-            throw new WrongLoginDataException();
+        /*if (!isLoggedIn(monthPage))
+            throw new WrongLoginDataException();*/
 
         Elements toReturn = monthPage
                 .select("div#mainContext")

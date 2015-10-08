@@ -16,8 +16,9 @@
     <string name="exception_validate_no_connection">No internet connection</string>
     <string name="exception_title_sas_manager_binder_null">EXCEPTION occurred</string>
     <string name="exception_message_sas_manager_binder_null">please try click refresh</string>
-    <string name="exception_title_login">Cannot login as %1$s</string>
+    <string name="exception_title_login">Can\'t login as %1$s</string>
     <string name="exception_message_login">Username or password are wrong</string>
+    <string name="exception_no_connection">Can\'t refresh Marks</string>
 
     <string name="dialog_title_sas_widget_alert"><b>iSAS Widget</b> available</string>
     <string name="dialog_message_sas_widget_alert">Now you can add <b>iSAS Widget</b> to your home screen. :)</string>

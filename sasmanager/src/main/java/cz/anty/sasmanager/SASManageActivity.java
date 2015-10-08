@@ -1,5 +1,6 @@
 package cz.anty.sasmanager;
 
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.TextView;
 
 import cz.anty.utils.AppDataManager;
+import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.list.listView.TextMultilineItem;
@@ -26,8 +31,13 @@ public class SASManageActivity extends AppCompatActivity {
 
     private MultilineRecyclerAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
+    private TextView exceptionTextView;
+
     private MarksShort marksShort = MarksShort.DATE;
     private MarksManager.Semester semester = MarksManager.Semester.AUTO.getStableSemester();
+    private boolean isInException = false;
+    private boolean showedException = false;
+
     private SASManagerService.SASBinder binder = null;
     private ServiceManager.BinderConnection<SASManagerService.SASBinder> binderConnection
             = new ServiceManager.BinderConnection<SASManagerService.SASBinder>() {
@@ -59,10 +69,10 @@ public class SASManageActivity extends AppCompatActivity {
                     sasBinder.setOnMarksChangeListener(new Runnable() {
                         @Override
                         public void run() {
-                            onUpdate(false);
+                            onUpdate(false, false);
                         }
                     });
-                    onUpdate(true);
+                    onUpdate(true, true);
                 }
             }, getText(R.string.wait_text_loading));
         }
@@ -93,12 +103,15 @@ public class SASManageActivity extends AppCompatActivity {
             return;
         }
 
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                .cancel(Constants.NOTIFICATION_ID_SAS_MANAGER_SERVICE);
+
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
         adapter = new MultilineRecyclerAdapter<>();
         adapter.setNotifyOnChange(false);
-        RecyclerAdapter.inflateToActivity(this, null, adapter,
+        RecyclerAdapter.inflateToActivity(this, R.layout.activity_sas_manage, adapter,
                 new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
@@ -167,6 +180,8 @@ public class SASManageActivity extends AppCompatActivity {
                     }
                 });
 
+        exceptionTextView = (TextView) findViewById(R.id.text_view_exception);
+
         if (SASSplashActivity.serviceManager != null) {
             SASSplashActivity.serviceManager
                     .addBinderConnection(binderConnection);
@@ -226,7 +241,7 @@ public class SASManageActivity extends AppCompatActivity {
         } else if (i == R.id.action_refresh) {
             if (binder != null) {
                 binder.refresh();
-                onUpdate(true);
+                onUpdate(true, false);
             }
             return true;
         } else if (i == R.id.action_log_out) {
@@ -235,22 +250,22 @@ public class SASManageActivity extends AppCompatActivity {
         } else if (i == R.id.action_sort_date) {
             marksShort = MarksShort.DATE;
             item.setChecked(true);
-            onUpdate(true);
+            onUpdate(true, true);
             return true;
         } else if (i == R.id.action_sort_lesson) {
             marksShort = MarksShort.LESSONS;
             item.setChecked(true);
-            onUpdate(true);
+            onUpdate(true, true);
             return true;
         } else if (i == R.id.action_semester_first) {
             semester = MarksManager.Semester.FIRST;
             item.setChecked(true);
-            onUpdate(true);
+            onUpdate(true, true);
             return true;
         } else if (i == R.id.action_semester_second) {
             semester = MarksManager.Semester.SECOND;
             item.setChecked(true);
-            onUpdate(true);
+            onUpdate(true, true);
             return true;
         }
 
@@ -261,14 +276,18 @@ public class SASManageActivity extends AppCompatActivity {
         Log.d(getClass().getSimpleName(), "onStateChanged");
         if (binder == null) return;
 
-        switch (binder.getState()) {
+        SASManagerService.State state
+                = binder.getState();
+        switch (state) {
             case LOG_IN_EXCEPTION:
                 logInException();
                 break;
         }
+        isInException = state.isException();
+        onUpdate(false, true);
     }
 
-    private void onUpdate(boolean showProgressBar) {
+    private void onUpdate(boolean showProgressBar, final boolean fast) {
         Log.d(getClass().getSimpleName(), "onUpdate: " + showProgressBar);
         Log.d(getClass().getSimpleName(), "onUpdate: Starting thread");
         //((TextView) findViewById(R.id.textView3)).setText(R.string.loading);
@@ -282,12 +301,14 @@ public class SASManageActivity extends AppCompatActivity {
                         switch (marksShort) {
                             case LESSONS:
                                 Log.d(getClass().getSimpleName(), "onUpdate: Loading lessons");
-                                data = binder.getLessons(semester);
+                                if (fast) data = binder.getLessonsFast(semester);
+                                else data = binder.getLessons(semester);
                                 break;
                             case DATE:
                             default:
                                 Log.d(getClass().getSimpleName(), "onUpdate: Loading marks");
-                                data = binder.getMarks(semester);
+                                if (fast) data = binder.getMarksFast(semester);
+                                else data = binder.getMarks(semester);
                                 break;
                         }
                     } else {
@@ -307,6 +328,43 @@ public class SASManageActivity extends AppCompatActivity {
                     public void run() {
                         adapter.notifyDataSetChanged();
                         Log.d(getClass().getSimpleName(), "onUpdate: List updated");
+
+                        if (isInException && !showedException) {
+                            showedException = true;
+                            ScaleAnimation animation = new ScaleAnimation(1, 1, 0, 1);
+                            animation.setDuration(100);
+                            exceptionTextView.setVisibility(View.VISIBLE);
+                            exceptionTextView.clearAnimation();
+                            exceptionTextView.setAnimation(animation);
+                            animation.startNow();
+                            exceptionTextView.invalidate();
+                        }
+                        if (!isInException && showedException) {
+                            showedException = false;
+                            ScaleAnimation animation = new ScaleAnimation(1, 1, 1, 0);
+                            animation.setDuration(100);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    exceptionTextView.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                            exceptionTextView.clearAnimation();
+                            exceptionTextView.setAnimation(animation);
+                            animation.startNow();
+                            exceptionTextView.invalidate();
+                        }
+                        Log.d(getClass().getSimpleName(), "onUpdate: exception view updated");
                     }
                 });
             }

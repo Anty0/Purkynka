@@ -46,22 +46,11 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                 new WifiFirstStartPage(FirstStartActivity.this),
                 new ICFirstStartPage(FirstStartActivity.this)
         };
-        final Thread initThread = worker.startWorker(new Runnable() {
+        worker.startWorker(new Runnable() {
             @Override
             public void run() {
                 pagesManager = new PagesManager(savedInstanceState, firstStartPages);
-            }
-        }, getText(R.string.wait_text_please_wait));
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    worker.waitToWorkerStop(initThread);
-                } catch (InterruptedException e) {
-                    Log.d(FirstStartActivity.this.getClass()
-                            .getSimpleName(), "onCreate", e);
-                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -75,7 +64,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
             }
-        }).start();
+        }, getText(R.string.wait_text_please_wait));
     }
 
     @Override

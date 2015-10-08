@@ -37,6 +37,20 @@
             android:exported="false"
             android:label="@string/app_name_icanteen_burza" />
 
+        <receiver
+            android:name=".receiver.StartServiceReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".receiver.StartServiceScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ICLunchOrderActivity"
             android:label="@string/app_name_icanteen_lunch_order" />

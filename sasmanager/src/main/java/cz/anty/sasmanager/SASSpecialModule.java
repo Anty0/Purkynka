@@ -46,18 +46,7 @@ public class SASSpecialModule extends SpecialModule {
 
     @Override
     protected boolean onInitialize() {
-        SASSplashActivity.initService(getContext(), getWorker(), new Runnable() {
-            @Override
-            public void run() {
-                getWorker().startWorker(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateBadLesson();
-                        notifyInitializeCompleted();
-                    }
-                });
-            }
-        });
+        onUpdate();
         return false;
     }
 
@@ -70,6 +59,10 @@ public class SASSpecialModule extends SpecialModule {
                     @Override
                     public void run() {
                         updateBadLesson();
+                        if (!isInitialized()) {
+                            notifyInitializeCompleted();
+                            return;
+                        }
                         notifyItemsModified();
                     }
                 });

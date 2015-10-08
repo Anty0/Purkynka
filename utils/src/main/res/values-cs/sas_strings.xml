@@ -18,6 +18,7 @@
     <string name="exception_message_sas_manager_binder_null">zkuste kliknout na obnovit</string>
     <string name="exception_title_login">Nelze provést přihlášení jako %1$s</string>
     <string name="exception_message_login">Uživatelské jméno, nebo heslo není v pořádku</string>
+    <string name="exception_no_connection">Nepodařilo se obnovit známky</string>
 
     <string name="dialog_title_sas_widget_alert">iSAS <b>Widget</b></string>
     <string name="dialog_message_sas_widget_alert">Nyní si můžete <b>přidat</b> <b>iSAS Widget</b> na svou domovskou obrazovku, budete tak mít své poslední známky <b>vždy po ruce</b>. :)</string>

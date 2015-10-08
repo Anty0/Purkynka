@@ -39,13 +39,7 @@ public class ICSpecialModule extends SpecialModule {
 
     @Override
     protected boolean onInitialize() {
-        ICSplashActivity.initService(getContext(), getWorker(),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyInitializeCompleted();
-                    }
-                });
+        onUpdate();
         return false;
     }
 
@@ -55,6 +49,10 @@ public class ICSpecialModule extends SpecialModule {
                 new Runnable() {
                     @Override
                     public void run() {
+                        if (!isInitialized()) {
+                            notifyInitializeCompleted();
+                            return;
+                        }
                         notifyItemsModified();
                     }
                 });

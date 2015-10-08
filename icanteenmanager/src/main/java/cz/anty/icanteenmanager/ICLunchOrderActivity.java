@@ -218,7 +218,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void update(final boolean firstUpdete) {
+    private void update(final boolean moveToActualItem) {
         refreshThread.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -238,7 +238,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                         adapter.clearItems();
                         adapter.addAllItems(finalData);
 
-                        if (!firstUpdete) return;
+                        if (!moveToActualItem) return;
                         Calendar actualCalendar = Calendar.getInstance();
                         Calendar lunchCalendar = Calendar.getInstance();
                         int position = -1;

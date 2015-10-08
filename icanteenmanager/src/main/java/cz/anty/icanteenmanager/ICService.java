@@ -42,7 +42,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    initialize();
+                    initialize(true);
                 }
             });
         }
@@ -58,12 +58,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                initialize();
+                initialize(true);
             }
         });
     }
 
-    private void initialize() {
+    private void initialize(boolean callRefresh) {
         Log.d(getClass().getSimpleName(), "initialize");
         if (mManager != null && mManager.isConnected()) {
             mManager.disconnect();
@@ -87,8 +87,10 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     return;
                 }
             }
-            refreshBurza();
-            refreshMonth();
+            if (callRefresh) {
+                refreshBurza();
+                refreshMonth();
+            }
         } else {
             mManager = null;
             stopSelf();
@@ -154,11 +156,13 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         Log.d(getClass().getSimpleName(), "refreshBurza");
         try {
             if (mLunchesManager == null) return false;
+            if (mManager == null) initialize(false);
             BurzaLunch[] oldLunches = mLunchesManager.getBurzaLunches();
             List<BurzaLunch> newLunches = mManager != null ? mManager.getBurza() : null;
             mLunchesManager.setItems(newLunches != null ? newLunches.toArray(
                     new BurzaLunch[newLunches.size()]) : oldLunches);
-            if (onBurzaChange != null && !Arrays.equals(oldLunches, mLunchesManager.getBurzaLunches()))
+            if (onBurzaChange != null && !Arrays
+                    .equals(oldLunches, mLunchesManager.getBurzaLunches()))
                 onBurzaChange.run();
             return true;
         } catch (Exception e) {
@@ -172,14 +176,18 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean refreshMonth() {
         Log.d(getClass().getSimpleName(), "refreshMonth");
         try {
+            if (mLunchesManager == null) return false;
+            if (mManager == null) initialize(false);
             List<MonthLunchDay> newLunchDays = mManager != null ? mManager.getMonth() : null;
             if (newLunchDays != null) {
                 if (mLunchesManager.setItems(newLunchDays
                         .toArray(new MonthLunchDay[newLunchDays.size()]))) {
                     onNewMonthLunches();
                 }
+                mLunchesManager.apply();
                 if (onMonthChange != null)
                     onMonthChange.run();
+                return false;
             }
             return true;
         } catch (Exception e) {
@@ -215,6 +223,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean orderBurza(BurzaLunch lunch) {
         Log.d(getClass().getSimpleName(), "orderBurza");
         try {
+            if (mLunchesManager == null) return false;
+            if (mManager == null) initialize(false);
             if (mManager != null) {
                 mManager.orderBurzaLunch(lunch);
                 return true;
@@ -230,6 +240,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean orderMonth(MonthLunch lunch) {
         Log.d(getClass().getSimpleName(), "orderMonth");
         try {
+            if (mLunchesManager == null) return false;
+            if (mManager == null) initialize(true);
             if (mManager != null) {
                 mManager.orderMonthLunch(lunch);
                 return true;
@@ -245,6 +257,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean toBurzaMonth(MonthLunch lunch) {
         Log.d(getClass().getSimpleName(), "toBurzaMonth");
         try {
+            if (mLunchesManager == null) return false;
+            if (mManager == null) initialize(true);
             if (mManager != null) {
                 mManager.toBurzaMonthLunch(lunch);
                 return true;

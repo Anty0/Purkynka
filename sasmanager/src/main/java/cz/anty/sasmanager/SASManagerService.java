@@ -159,9 +159,8 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         try {
             if (!sasManager.isConnected()) {
                 sasManager.connect();
-                setState(State.CONNECTED);
-                if (sasManager.isLoggedIn())
-                    setState(State.LOGGED_IN);
+                //setState(State.CONNECTED);
+                setState(State.LOGGED_IN);
             }
             try {
                 MarksManager.Semester semester = MarksManager.Semester.AUTO.getStableSemester();
@@ -337,8 +336,16 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
             return marks.getAsLessons(semester);
         }
 
+        public Lesson[] getLessonsFast(MarksManager.Semester semester) {
+            return marks.getAsLessons(semester);
+        }
+
         public Mark[] getMarks(MarksManager.Semester semester) throws InterruptedException {
             waitToWorkerStop();
+            return marks.get(semester);
+        }
+
+        public Mark[] getMarksFast(MarksManager.Semester semester) {
             return marks.get(semester);
         }
 
