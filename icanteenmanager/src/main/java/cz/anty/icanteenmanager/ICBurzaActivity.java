@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,7 +95,7 @@ public class ICBurzaActivity extends AppCompatActivity {
         //mainLinearLayout.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
         mainScrollView.addView(mainLinearLayout);
 
-        TextView dateTextView = new TextView(context);
+        TextView dateTextView = new AppCompatTextView(context);
         dateTextView.setText(R.string.text_view_text_date_to_watch);
         mainLinearLayout.addView(dateTextView);
 
@@ -104,27 +106,27 @@ public class ICBurzaActivity extends AppCompatActivity {
         }
         mainLinearLayout.addView(datePicker);
 
-        final TextView dateWrongTextView = new TextView(context);
+        final TextView dateWrongTextView = new AppCompatTextView(context);
         dateWrongTextView.setTextColor(Color.RED);
         dateWrongTextView.setText(R.string.text_view_text_you_still_have_got_lunch);
         dateWrongTextView.setVisibility(View.GONE);
         mainLinearLayout.addView(dateWrongTextView);
 
-        TextView lunchNumberTextView = new TextView(context);
+        TextView lunchNumberTextView = new AppCompatTextView(context);
         lunchNumberTextView.setText(R.string.text_view_text_numbers_to_watch);
         mainLinearLayout.addView(lunchNumberTextView);
 
-        final CheckBox lunchCheckBox1 = new CheckBox(context);
+        final CheckBox lunchCheckBox1 = new AppCompatCheckBox(context);
         lunchCheckBox1.setText(BurzaLunch.LunchNumber.LUNCH_1.toString());
         lunchCheckBox1.setChecked(true);
         mainLinearLayout.addView(lunchCheckBox1);
 
-        final CheckBox lunchCheckBox2 = new CheckBox(context);
+        final CheckBox lunchCheckBox2 = new AppCompatCheckBox(context);
         lunchCheckBox2.setText(BurzaLunch.LunchNumber.LUNCH_2.toString());
         lunchCheckBox2.setChecked(true);
         mainLinearLayout.addView(lunchCheckBox2);
 
-        final CheckBox lunchCheckBox3 = new CheckBox(context);
+        final CheckBox lunchCheckBox3 = new AppCompatCheckBox(context);
         lunchCheckBox3.setText(BurzaLunch.LunchNumber.LUNCH_3.toString());
         lunchCheckBox3.setChecked(true);
         mainLinearLayout.addView(lunchCheckBox3);
@@ -267,7 +269,7 @@ public class ICBurzaActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (binder == null)
                                             Toast.makeText(ICBurzaActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
-                                        else binder.orderBurzaLunch(lunch);
+                                        else binder.orderLunch(lunch);
                                     }
                                 })
                                 .setNegativeButton(R.string.but_cancel, null)

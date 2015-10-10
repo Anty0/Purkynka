@@ -190,7 +190,7 @@ public class SASManageActivity extends AppCompatActivity {
         if (AppDataManager.isFirstStart(AppDataManager.Type.SAS)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.dialog_title_sas_widget_alert)
-                            //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                    .setIcon(R.mipmap.ic_launcher_sas)
                     .setMessage(R.string.dialog_message_sas_widget_alert)
                     .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -335,9 +335,7 @@ public class SASManageActivity extends AppCompatActivity {
                             animation.setDuration(100);
                             exceptionTextView.setVisibility(View.VISIBLE);
                             exceptionTextView.clearAnimation();
-                            exceptionTextView.setAnimation(animation);
-                            animation.startNow();
-                            exceptionTextView.invalidate();
+                            exceptionTextView.startAnimation(animation);
                         }
                         if (!isInException && showedException) {
                             showedException = false;
@@ -360,9 +358,7 @@ public class SASManageActivity extends AppCompatActivity {
                                 }
                             });
                             exceptionTextView.clearAnimation();
-                            exceptionTextView.setAnimation(animation);
-                            animation.startNow();
-                            exceptionTextView.invalidate();
+                            exceptionTextView.startAnimation(animation);
                         }
                         Log.d(getClass().getSimpleName(), "onUpdate: exception view updated");
                     }

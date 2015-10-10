@@ -11,8 +11,8 @@ import android.widget.TextView;
 import cz.anty.icanteenmanager.ICFirstStartPage;
 import cz.anty.purkynkamanager.R;
 import cz.anty.sasmanager.SASFirstStartPage;
+import cz.anty.utils.ApplicationBase;
 import cz.anty.utils.FirstStartPage;
-import cz.anty.utils.settings.AboutActivity;
 import cz.anty.wifiautologin.WifiFirstStartPage;
 
 /**
@@ -68,7 +68,7 @@ public class WelcomeFirstStartPage extends FirstStartPage {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AboutActivity.generateLanguageChangeDialog(context, new Runnable() {
+                ApplicationBase.generateLanguageChangeDialog(context, new Runnable() {
                     @Override
                     public void run() {
                         ((Activity) context).finish();

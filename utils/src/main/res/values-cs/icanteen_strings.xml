@@ -28,6 +28,7 @@
     <string name="text_view_text_you_still_have_got_lunch">Již máš oběd na tento den.</string>
 
     <string name="menu_item_text_start_burza_checking">Spustit Hlídač burzy</string>
+    <string name="menu_item_text_clear_history">Odstranit staré obědy</string>
 
     <string name="special_item_title_icanteen_new_lunches">Jsou dostupné nové obědy k obědnání.</string>
 
@@ -35,6 +36,8 @@
 
     <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač BURZY, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
     <string name="toast_text_can_not_order_lunch">Nelze objednat jídlo, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_can_not_remove_lunch">Nelze odstranit oběd ze seznamu, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_can_not_refresh_lunches">Nelze obnovit obědy, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_coming_soon">Již brzy</string>
 
     <string name="text_nothing_ordered">Nic neobědnáno</string>

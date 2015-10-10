@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatRadioButton;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import java.io.IOException;
 
 import cz.anty.timetablemanager.receiver.TimetableScheduleReceiver;
 import cz.anty.timetablemanager.widget.TimetableLessonWidget;
+import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.list.listView.MultilineAdapter;
 import cz.anty.utils.list.listView.TextMultilineItem;
@@ -69,7 +73,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                 .setPositiveButton(R.string.but_rename, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        final EditText input = new EditText(TimetableSelectActivity.this);
+                                        final EditText input = new AppCompatEditText(TimetableSelectActivity.this);
                                         input.setText(timetable.getName());
 
                                         new AlertDialog.Builder(TimetableSelectActivity.this)
@@ -123,12 +127,12 @@ public class TimetableSelectActivity extends AppCompatActivity {
         radioGroup.setOrientation(LinearLayout.VERTICAL);
         mainScrollView.addView(radioGroup);
 
-        RadioButton radioButtonDownload = new RadioButton(this);
+        RadioButton radioButtonDownload = new AppCompatRadioButton(this);
         radioButtonDownload.setId(R.id.text_view_title);
         radioButtonDownload.setText(R.string.radio_button_text_download_timetable);
         radioGroup.addView(radioButtonDownload);
 
-        RadioButton radioButtonCreate = new RadioButton(this);
+        RadioButton radioButtonCreate = new AppCompatRadioButton(this);
         radioButtonCreate.setId(R.id.text_view_text);
         radioButtonCreate.setText(R.string.radio_button_text_create_free_timetable);
         radioGroup.addView(radioButtonCreate);
@@ -168,7 +172,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             MultilineAdapter<TextMultilineItem> adapter =
-                                                    new MultilineAdapter<>(TimetableSelectActivity.this);
+                                                    new MultilineAdapter<>(TimetableSelectActivity.this,
+                                                            R.layout.base_multiline_text_item);
                                             adapter.setNotifyOnChange(false);
                                             adapter.clear();
                                             for (String className : classes) {
@@ -176,8 +181,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                             }
                                             adapter.notifyDataSetChanged();
 
-                                            final Spinner spinner = new Spinner(TimetableSelectActivity.this);
-                                            spinner.setPadding(15, 2, 15, 2);
+                                            final Spinner spinner = new AppCompatSpinner(TimetableSelectActivity.this);
+                                            Constants.setPadding(spinner, 15, 2, 15, 2);
                                             spinner.setAdapter(adapter);
 
 
@@ -240,8 +245,8 @@ public class TimetableSelectActivity extends AppCompatActivity {
                             return;
                         }
 
-                        final EditText input = new EditText(TimetableSelectActivity.this);
-                        input.setPadding(15, 2, 15, 2);
+                        final EditText input = new AppCompatEditText(TimetableSelectActivity.this);
+                        Constants.setPadding(input, 15, 2, 15, 2);
 
                         new AlertDialog.Builder(TimetableSelectActivity.this)
                                 .setTitle(R.string.dialog_title_new_timetable)

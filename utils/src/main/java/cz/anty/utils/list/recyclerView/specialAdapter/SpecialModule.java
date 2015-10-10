@@ -24,7 +24,8 @@ public abstract class SpecialModule {
 
     private boolean mInitializeStarted = false;
     private boolean mInitialized = false;
-    private Runnable mOnChange = null, mOnModify = null;
+    private Runnable mOnChange = null;
+    private SpecialModuleManager.OnRemoveItem mOnRemoveItem = null;
 
     public SpecialModule(Context context) {
         Log.d(getClass().getSimpleName(), "<init>");
@@ -48,7 +49,7 @@ public abstract class SpecialModule {
 
     protected abstract boolean isUpdateOnThread();
 
-    final synchronized void init(Runnable onChange, Runnable onModify) {
+    final synchronized void init(Runnable onChange, SpecialModuleManager.OnRemoveItem onRemoveItem) {
         Log.d(getClass().getSimpleName(), "init");
         if (mInitializeStarted || mInitialized) {
             throw new IllegalStateException(getClass()
@@ -56,7 +57,7 @@ public abstract class SpecialModule {
         }
         mInitializeStarted = true;
         mOnChange = onChange;
-        mOnModify = onModify;
+        mOnRemoveItem = onRemoveItem;
 
         Runnable initRunnable = new Runnable() {
             @Override
@@ -124,31 +125,6 @@ public abstract class SpecialModule {
             }
 
             @Override
-            public void onClick() {
-
-            }
-
-            @Override
-            public void onLongClick() {
-
-            }
-
-            @Override
-            public void onHideClick() {
-
-            }
-
-            @Override
-            public boolean isShowHideButton() {
-                return false;
-            }
-
-            @Override
-            public boolean isVisible() {
-                return true;
-            }
-
-            @Override
             public int getPriority() {
                 return Constants.SPECIAL_ITEM_PRIORITY_LOADING_ITEM;
             }
@@ -177,9 +153,9 @@ public abstract class SpecialModule {
             mOnChange.run();
     }
 
-    protected synchronized final void notifyItemsModified() {
-        Log.d(getClass().getSimpleName(), "notifyItemsModified");
-        if (isInitialized() && mOnModify != null)
-            mOnModify.run();
+    protected synchronized final void notifyItemRemoved(SpecialItem item) {
+        Log.d(getClass().getSimpleName(), "notifyItemsChanged");
+        if (isInitialized() && mOnRemoveItem != null)
+            mOnRemoveItem.removeItem(item);
     }
 }

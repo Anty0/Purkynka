@@ -1,12 +1,14 @@
 package cz.anty.utils.list.listView;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 
 /**
@@ -23,13 +25,13 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
         this(context, R.layout.text_multi_line_list_item);
     }
 
-    public MultilineAdapter(Context context, int layoutResourceId) {
+    public MultilineAdapter(Context context, @LayoutRes int layoutResourceId) {
         super(context, layoutResourceId);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
     }
 
-    public MultilineAdapter(Context context, int layoutResourceId, M[] data) {
+    public MultilineAdapter(Context context, @LayoutRes int layoutResourceId, M[] data) {
         super(context, layoutResourceId, data);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
@@ -82,10 +84,14 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
         holder.text1.setText(item.getTitle(context, position));
         CharSequence text = item.getText(context, position);
         if (text == null) {
-            holder.text1.setPadding(1, 8, 1, 8);
+            if (item instanceof MultilinePaddingItem
+                    && !((MultilinePaddingItem) item)
+                    .usePadding(context, position)) {
+                Constants.setPadding(holder.text1, 1, 1, 1, 1);
+            } else Constants.setPadding(holder.text1, 1, 8, 1, 8);
             holder.text2.setVisibility(View.GONE);
         } else {
-            holder.text1.setPadding(1, 1, 1, 1);
+            Constants.setPadding(holder.text1, 1, 1, 1, 1);
             holder.text2.setVisibility(View.VISIBLE);
             holder.text2.setText(text);
             //holder.imgIcon.setImageResource(item.icon);

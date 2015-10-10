@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +55,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     radioGroup.setOrientation(LinearLayout.VERTICAL);
                     mainScrollView.addView(radioGroup);
 
-                    RadioButton radioButtonNoLunch = new RadioButton(ICLunchOrderActivity.this);
+                    RadioButton radioButtonNoLunch = new AppCompatRadioButton(ICLunchOrderActivity.this);
                     radioButtonNoLunch.setTag(null);
                     radioButtonNoLunch.setText(R.string.radio_button_text_no_lunch);
                     radioButtonNoLunch.setId(R.id.text_view_title);
@@ -68,7 +70,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     for (int i = 0, lunchesLength = lunches.length; i < lunchesLength; i++) {
                         final MonthLunch monthLunch = lunches[i];
 
-                        RadioButton radioButtonLunch = new RadioButton(ICLunchOrderActivity.this);
+                        RadioButton radioButtonLunch = new AppCompatRadioButton(ICLunchOrderActivity.this);
                         radioButtonLunch.setTag(monthLunch);
                         radioButtonLunch.setText(monthLunch.getName());
                         radioButtonLunch.setId(R.id.text_view_title + 1 + i);
@@ -82,13 +84,14 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                                 toCheck = radioButtonLunch.getId();
                                 break;
                             case DISABLED:
+                            case UNKNOWN:
                                 radioButtonLunch.setEnabled(false);
                                 break;
                         }
 
                         MonthLunch.BurzaState burzaState = monthLunch.getBurzaState();
                         if (burzaState != null) {
-                            Button button = new Button(ICLunchOrderActivity.this);
+                            Button button = new AppCompatButton(ICLunchOrderActivity.this);
                             button.setText(burzaState.toString());
                             button.setTag(monthLunch);
 
@@ -102,27 +105,44 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                         radioButtonNoLunch.setEnabled(false);
                     radioGroup.check(toCheck);
 
-                    final AlertDialog dialog = new AlertDialog.Builder(ICLunchOrderActivity.this)
-                            .setTitle(MonthLunchDay.DATE_PARSE_FORMAT.format(lunch.getDate()))
+                    AlertDialog.Builder dialogBuilder = new AlertDialog
+                            .Builder(ICLunchOrderActivity.this)
+                            .setTitle(lunch.getTitle(ICLunchOrderActivity.this, MultilineItem.NO_POSITION))
                                     //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
                             .setView(mainScrollView)
                             .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     MonthLunch monthLunchToOrder = (MonthLunch)
-                                            radioGroup.findViewById(radioGroup.getCheckedRadioButtonId()).getTag();
-                                    if (binder == null || (monthLunchToOrder != null && monthLunchToOrder.getOrderUrlAdd() == null))
-                                        Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
+                                            radioGroup.findViewById(radioGroup
+                                                    .getCheckedRadioButtonId()).getTag();
+                                    if (binder == null || (monthLunchToOrder != null && monthLunchToOrder
+                                            .getOrderUrlAdd() == null))
+                                        Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch,
+                                                Toast.LENGTH_LONG).show();
                                     else {
                                         if (monthLunchToOrder != null)
-                                            binder.orderMonthLunch(monthLunchToOrder);
+                                            binder.orderLunch(monthLunchToOrder);
                                         update(false);
                                     }
                                 }
                             })
                             .setNegativeButton(R.string.but_cancel, null)
-                            .setCancelable(true)
-                            .show();
+                            .setCancelable(true);
+                    if (lunch.isDisabled()) {
+                        dialogBuilder.setNeutralButton(R.string.but_remove, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (binder != null) {
+                                    binder.removeDisabledLunch(lunch);
+                                    return;
+                                }
+                                Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_remove_lunch,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                    final AlertDialog dialog = dialogBuilder.create();
 
                     for (final Button button : buttons) {
                         button.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +159,8 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                             }
                         });
                     }
+
+                    dialog.show();
                 }
 
                 @Override
@@ -153,23 +175,13 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         public void onBinderConnected(ICService.ICBinder ICBinder) {
             Log.d("LunchOrderActivity", "onBinderConnected");
             binder = ICBinder;
-            refreshThread.startWorker(new Runnable() {
+            binder.setOnMonthChangeListener(new Runnable() {
                 @Override
                 public void run() {
-                    binder.setOnMonthChangeListener(new Runnable() {
-                        @Override
-                        public void run() {
-                            update(false);
-                        }
-                    });
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            update(true);
-                        }
-                    });
+                    update(false);
                 }
             });
+            update(true);
         }
 
         @Override
@@ -219,6 +231,8 @@ public class ICLunchOrderActivity extends AppCompatActivity {
     }
 
     private void update(final boolean moveToActualItem) {
+        if (!moveToActualItem && refreshThread
+                .isWorkerRunning()) return;
         refreshThread.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -231,27 +245,45 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                             getText(R.string.exception_message_sas_manager_binder_null))};
                 }
 
+                int position = -1;
+                if (moveToActualItem) {
+                    Calendar actualCalendar = Calendar.getInstance();
+                    Calendar lunchCalendar = Calendar.getInstance();
+                    Calendar lunchTmpCalendar = Calendar.getInstance();
+                    lunchTmpCalendar.setTimeInMillis(Long.MAX_VALUE);
+                    for (int i = 0; i < data.length; i++) {
+                        lunchCalendar.setTime(((MonthLunchDay) data[i]).getDate());
+                        int yearDiff = lunchCalendar.get(Calendar.YEAR) - actualCalendar.get(Calendar.YEAR);
+                        int dayDiff = lunchCalendar.get(Calendar.DAY_OF_YEAR) - actualCalendar.get(Calendar.DAY_OF_YEAR);
+                        /*Log.d(getClass().getSimpleName(), "update position: " + i
+                                + " yearDiff: " + yearDiff + " dayDiff: " + dayDiff);*/
+
+                        if (yearDiff == 0 && dayDiff == 0) {
+                            position = i;
+                            //Log.d(getClass().getSimpleName(), "update newUsedItem: " + i);
+                            break;
+                        }
+
+                        /*Log.d(getClass().getSimpleName(), "update position: " + i
+                                + " time: " + time + " tmpTime: " + tmpTime);*/
+                        if (lunchCalendar.getTimeInMillis() < lunchTmpCalendar.getTimeInMillis() && (yearDiff > 0 || (yearDiff >= 0 && dayDiff >= 0))) {
+                            lunchTmpCalendar.setTime(lunchCalendar.getTime());
+                            position = i;
+                            //Log.d(getClass().getSimpleName(), "update newTmpItem: " + position);
+                        }
+                    }
+                }
+
                 final MultilineItem[] finalData = data;
+                final int finalPosition = position;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         adapter.clearItems();
                         adapter.addAllItems(finalData);
 
-                        if (!moveToActualItem) return;
-                        Calendar actualCalendar = Calendar.getInstance();
-                        Calendar lunchCalendar = Calendar.getInstance();
-                        int position = -1;
-                        for (int i = 0; i < finalData.length; i++) {
-                            lunchCalendar.setTime(((MonthLunchDay) finalData[i]).getDate());
-                            if (lunchCalendar.get(Calendar.YEAR) == actualCalendar.get(Calendar.YEAR) &&
-                                    lunchCalendar.get(Calendar.DAY_OF_YEAR) == actualCalendar.get(Calendar.DAY_OF_YEAR)) {
-                                position = i;
-                                break;
-                            }
-                        }
-                        if (position != -1)
-                            recyclerView.scrollToPosition(position);
+                        if (finalPosition != -1)
+                            recyclerView.scrollToPosition(finalPosition);
                     }
                 });
 
@@ -263,7 +295,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_burza, menu);
+        getMenuInflater().inflate(R.menu.menu_lunch_order, menu);
         return true;
     }
 
@@ -278,13 +310,25 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         if (id == R.id.action_refresh) {
             if (binder != null)
                 binder.refreshMonth();
+            else Toast.makeText(this,
+                    R.string.toast_text_can_not_refresh_lunches,
+                    Toast.LENGTH_LONG).show();
             update(false);
             return true;
         }
-        if (id == R.id.action_start_burza) {
-            ICBurzaActivity.startBurzaChecker(this, binder);
+        if (id == R.id.action_clear_history) {
+            if (binder != null)
+                binder.removeAllDisabledLunches();
+            else Toast.makeText(this,
+                    R.string.toast_text_can_not_remove_lunch,
+                    Toast.LENGTH_LONG).show();
+            update(false);
             return true;
         }
+        /*if (id == R.id.action_start_burza) {
+            ICBurzaActivity.startBurzaChecker(this, binder);
+            return true;
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

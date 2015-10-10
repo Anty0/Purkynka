@@ -22,8 +22,8 @@ public class ICSpecialModule extends SpecialModule {
     public ICSpecialModule(Context context) {
         super(context);
         mItems = new SpecialItem[]{
-                new ICLoginSpecialItem(context),
-                new ICNewLunchesSpecialItem(context)
+                new ICLoginSpecialItem(),
+                new ICNewLunchesSpecialItem()
         };
     }
 
@@ -53,7 +53,8 @@ public class ICSpecialModule extends SpecialModule {
                             notifyInitializeCompleted();
                             return;
                         }
-                        notifyItemsModified();
+                        notifyItemsChanged();
+                        //notifyItemsModified();
                     }
                 });
     }
@@ -70,8 +71,8 @@ public class ICSpecialModule extends SpecialModule {
 
     private class ICLoginSpecialItem extends MultilineSpecialItem {
 
-        public ICLoginSpecialItem(Context context) {
-            super(context);
+        public ICLoginSpecialItem() {
+            super(ICSpecialModule.this);
         }
 
         @Nullable
@@ -107,8 +108,8 @@ public class ICSpecialModule extends SpecialModule {
 
     private class ICNewLunchesSpecialItem extends MultilineSpecialItem {
 
-        public ICNewLunchesSpecialItem(Context context) {
-            super(context);
+        public ICNewLunchesSpecialItem() {
+            super(ICSpecialModule.this);
         }
 
         @Nullable

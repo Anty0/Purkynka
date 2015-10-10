@@ -19,6 +19,8 @@ import cz.anty.utils.Log;
  */
 public final class ServiceManager<B extends IBinder> {
 
+    private static final List<ServiceManager> SERVICE_MANAGERS
+            = new ArrayList<>();
     private final Context mContext;
     private final Class<? extends Service> mServiceClass;
     private final Object mBinderLock = new Object();
@@ -51,10 +53,16 @@ public final class ServiceManager<B extends IBinder> {
             }
         }
     };
-
     public ServiceManager(Context context, Class<? extends BindImplService<B>> serviceClass) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mServiceClass = serviceClass;
+        SERVICE_MANAGERS.add(this);
+    }
+
+    public static void disconnectAll() {
+        for (ServiceManager manager : SERVICE_MANAGERS) {
+            manager.forceDisconnect();
+        }
     }
 
     public void addBinderConnection(BinderConnection<B> connection) {
@@ -120,7 +128,8 @@ public final class ServiceManager<B extends IBinder> {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        disconnect();
+        SERVICE_MANAGERS.remove(this);
+        forceDisconnect();
     }
 
     public interface BinderConnection<B extends IBinder> {

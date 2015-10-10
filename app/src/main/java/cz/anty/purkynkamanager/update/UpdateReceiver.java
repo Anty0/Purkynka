@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.v7.app.NotificationCompat;
 
@@ -51,7 +52,9 @@ public class UpdateReceiver extends BroadcastReceiver {
                             .setContentIntent(pendingIntent)
                             .addAction(R.mipmap.ic_launcher, context.getText(R.string.but_update), pendingIntent)
                             .setAutoCancel(false)
-                            .setOngoing(true)
+                            .setOngoing(!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                                    .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) || !((WifiManager) context
+                                    .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().equals("<unknown ssid>"))
                             .setDefaults(Notification.DEFAULT_ALL)
                             .build());
         } else {
@@ -79,7 +82,11 @@ public class UpdateReceiver extends BroadcastReceiver {
             @Override
             public void run() {
                 try {
-                    checkUpdate(context);
+                    if (!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                            .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) || !((WifiManager) context
+                            .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().equals("<unknown ssid>")) {
+                        checkUpdate(context);
+                    } else updateNotification(context);
                 } catch (IOException | NumberFormatException e) {
                     Log.d("UpdateReceiver", "onReceive", e);
                 }

@@ -14,6 +14,7 @@ public class MonthLunch {
     private final String name, orderUrlAdd, toBurzaUrlAdd;
     private final BurzaState burzaState;
     private final State state;
+    private boolean disabled = false;
 
     public MonthLunch(String name, @Nullable String orderUrlAdd, State state, @Nullable String toBurzaUrlAdd, @Nullable BurzaState burzaState) {
         this.name = name;
@@ -28,27 +29,40 @@ public class MonthLunch {
     }
 
     public String getOrderUrlAdd() {
+        if (disabled) return null;
         return orderUrlAdd;
     }
 
     public State getState() {
+        if (disabled) return state == State.ORDERED
+                || state == State.DISABLED_ORDERED
+                ? State.DISABLED_ORDERED : State.DISABLED;
         return state;
     }
 
     public String getToBurzaUrlAdd() {
+        if (disabled) return null;
         return toBurzaUrlAdd;
     }
 
     public BurzaState getBurzaState() {
+        if (disabled) return null;
         return burzaState;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    void disable() {
+        disabled = true;
     }
 
     @Override
     public boolean equals(Object o) {
         return super.equals(o) || o instanceof MonthLunch
-                && ((MonthLunch) o).getName().equals(getName())
-                && ((MonthLunch) o).getState().equals(getState())
-                && ((MonthLunch) o).getOrderUrlAdd().equals(getOrderUrlAdd());
+                && ((MonthLunch) o).name.equals(name)
+                && ((MonthLunch) o).state.equals(state);
     }
 
     public enum State {

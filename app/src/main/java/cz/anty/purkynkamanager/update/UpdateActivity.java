@@ -18,6 +18,7 @@ import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.MainActivity;
 import cz.anty.purkynkamanager.R;
 import cz.anty.utils.ApplicationBase;
+import cz.anty.utils.Constants;
 import cz.anty.utils.thread.ProgressReporter;
 import cz.anty.utils.update.UpdateConnector;
 
@@ -79,7 +80,8 @@ public class UpdateActivity extends AppCompatActivity {
             return;
         }
         setContentView(R.layout.alert_dialog_progress);
-        findViewById(R.id.alert_dialog_body).setPadding(15, 2, 15, 2);
+        Constants.setPadding(findViewById(R.id
+                .alert_dialog_body), 15, 2, 15, 2);
 
         activity = this;
         progressBar = (ProgressBar) findViewById(R.id.progress);

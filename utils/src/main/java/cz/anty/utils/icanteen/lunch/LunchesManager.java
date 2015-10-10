@@ -44,6 +44,10 @@ public class LunchesManager {
     public synchronized boolean setItems(MonthLunchDay[] lunchDays) {
         //mMonthLunches.clear();
         //Collections.addAll(mMonthLunches, lunchDays);
+        for (MonthLunchDay lunchDay : mMonthLunches) {
+            lunchDay.disable();
+        }
+
         boolean newLunches = false;
         MonthLunchDay[] listLunchDays = mMonthLunches
                 .toArray(new MonthLunchDay[mMonthLunches.size()]);
@@ -69,6 +73,19 @@ public class LunchesManager {
     public synchronized void setItems(BurzaLunch[] burzaLunches) {
         mBurzaLunches.clear();
         Collections.addAll(mBurzaLunches, burzaLunches);
+    }
+
+    public synchronized void removeDisabledLunch(MonthLunchDay lunchDay) {
+        if (!lunchDay.isDisabled())
+            throw new IllegalArgumentException("MonthLunchDay is not disabled");
+        mMonthLunches.remove(lunchDay);
+    }
+
+    public synchronized void removeAllDisabledLunches() {
+        for (MonthLunchDay lunchDay : mMonthLunches
+                .toArray(new MonthLunchDay[mMonthLunches.size()])) {
+            if (lunchDay.isDisabled()) mMonthLunches.remove(lunchDay);
+        }
     }
 
     public synchronized MonthLunchDay[] getMonthLunches() {

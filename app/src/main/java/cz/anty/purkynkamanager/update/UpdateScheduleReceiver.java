@@ -39,6 +39,7 @@ public class UpdateScheduleReceiver extends BroadcastReceiver {
             // REPEAT_TIME, pending);
         } else {
             service.cancel(pending);
+            context.sendBroadcast(i);
         }
     }
 }

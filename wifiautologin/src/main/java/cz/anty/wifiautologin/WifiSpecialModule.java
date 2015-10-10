@@ -23,7 +23,7 @@ public class WifiSpecialModule extends SpecialModule {
     public WifiSpecialModule(Context context) {
         super(context);
         mItems = new WifiSpecialItem[]{
-                new WifiSpecialItem(context)
+                new WifiSpecialItem()
         };
     }
 
@@ -49,7 +49,7 @@ public class WifiSpecialModule extends SpecialModule {
         boolean last = showItem;
         onInitialize();
         if (last != showItem)
-            notifyItemsModified();
+            notifyItemsChanged();//
     }
 
     @Override
@@ -68,8 +68,8 @@ public class WifiSpecialModule extends SpecialModule {
 
     private class WifiSpecialItem extends MultilineSpecialItem {
 
-        public WifiSpecialItem(Context context) {
-            super(context);
+        public WifiSpecialItem() {
+            super(WifiSpecialModule.this);
         }
 
         @Nullable

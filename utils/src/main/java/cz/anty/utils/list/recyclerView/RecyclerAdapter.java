@@ -70,6 +70,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ItemViewHold
                                   @Nullable RecyclerItemClickListener.ClickListener itemTouchListener) {
         Log.d(RecyclerAdapter.class.getSimpleName(), "setValues");
         //recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new SpecialItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         if (itemTouchListener != null)
             recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, recyclerView, itemTouchListener));

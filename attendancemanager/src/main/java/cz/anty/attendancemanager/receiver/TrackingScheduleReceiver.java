@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 
 import java.util.Calendar;
 
@@ -33,7 +34,10 @@ public class TrackingScheduleReceiver extends BroadcastReceiver {
 
         if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_TRACKING_ATTENDANCE_WARNINGS, true) &&
-                TrackingActivity.mansManager.get().length != 0 && activeNetInfo != null && activeNetInfo.isConnected()) {
+                TrackingActivity.mansManager.get().length != 0 && activeNetInfo != null && activeNetInfo.isConnected()
+                && (!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) || !((WifiManager) context
+                .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().equals("<unknown ssid>"))) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
             cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);

@@ -94,9 +94,6 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                         TranslateAnimation newAnimation = new TranslateAnimation(contentScrollView.getWidth(), 0, 0, 0);
                         newAnimation.setDuration(150);
 
-                        oldView.setAnimation(oldAnimation);
-                        newView.setAnimation(newAnimation);
-
                         newAnimation.setAnimationListener(new Animation.AnimationListener() {
                             @Override
                             public void onAnimationStart(Animation animation) {
@@ -118,10 +115,8 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                             }
                         });
 
-                        oldAnimation.startNow();
-                        newAnimation.startNow();
-                        oldView.invalidate();
-                        newView.invalidate();
+                        oldView.startAnimation(oldAnimation);
+                        newView.startAnimation(newAnimation);
                     }
                 });
                 try {

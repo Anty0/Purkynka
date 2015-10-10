@@ -3,6 +3,7 @@
     <string name="language">CS</string>
 
     <string name="activity_title_settings">Nastavení</string>
+    <string name="activity_title_main_settings">Obecné Nastavení</string>
     <string name="activity_title_about">O Aplikaci</string>
 
     <string name="menu_item_text_settings">Nastavení</string>
@@ -12,7 +13,7 @@
     <string name="text_view_text_insert_login">Uživatelské jméno:</string>
     <string name="text_view_text_insert_password">Heslo:</string>
 
-    <string name="text_about">Aplikaci vytvořil Anty, pokud máte nějaký problém můžete jej nahlásit na webových stránkách aplikace (http://anty.crush-team.cz/), nebo mě osobně v prostorách školy.</string>
+    <string name="text_about">Aplikaci vytvořil Anty, pokud máte nějaký problém můžete jej nahlásit na webových stránkách aplikace (http://anty.codetopic.eu/purkynka/), nebo mě osobně v prostorách školy.</string>
     <string name="text_add">Přidat</string>
 
     <string name="dialog_title_select_language">Zvolte jazyk</string>
@@ -25,6 +26,7 @@
     <string name="check_box_text_enable_debug">Povolit DEBUG Mode (<b>určeno pouze pro debugging</b>)</string>
     <string name="check_box_text_start_first_start">Spustit <b>průvodce prvním spuštěním</b>, <b>při příštím spuštění</b> aplikace</string>
     <string name="check_box_text_show_description">Zobrazovat popis k jednotlivým nástrojům v hlavním menu</string>
+    <string name="check_box_text_use_only_wifi">Používat pouze wifi pro automatické obnovování (známek, obědů, suplování, docházky, atd.) (<b>BETA</b>)</string>
 
     <string name="wait_text_loading">Načítání…</string>
     <string name="wait_text_logging_in">Přihlašování…</string>
@@ -47,6 +49,7 @@
     <string name="but_exit">Konec</string>
     <string name="but_edit">Upravit</string>
     <string name="but_delete">Smazat</string>
+    <string name="but_remove">Odstranit</string>
     <string name="but_rename">Přejmenovat</string>
     <string name="but_update">Aktualizovat</string>
     <string name="but_refresh">Obnovit</string>

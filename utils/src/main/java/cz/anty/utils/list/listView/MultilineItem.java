@@ -9,6 +9,8 @@ import android.content.Context;
  */
 public interface MultilineItem {
 
+    int NO_POSITION = -1;
+
     CharSequence getTitle(Context context, int position);
 
     CharSequence getText(Context context, int position);

@@ -55,12 +55,19 @@ public class Lesson implements MultilineItem {
 
     @Override
     public CharSequence getTitle(Context context, int position) {
+        if (position == NO_POSITION)
+            return String.format(context.getString(R.string.list_item_text_lesson),
+                    0, getShortName(), getClassString()).substring(3);
+
         return String.format(context.getString(R.string.list_item_text_lesson),
                 position, getShortName(), getClassString());
     }
 
     @Override
     public CharSequence getText(Context context, int position) {
-        return getTeacher() + " " + getName();
+        int minutes = Timetable.START_TIMES_MINUTES[position];
+        return Timetable.START_TIMES_HOURS[position] +
+                ":" + (minutes < 10 ? "0" + minutes : minutes)
+                + " " + getTeacher() + " " + getName();
     }
 }

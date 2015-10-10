@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 
 import java.util.Calendar;
 
@@ -36,7 +37,10 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
 
         if ((context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)
-                && activeNetInfo != null && activeNetInfo.isConnected())
+                && activeNetInfo != null && activeNetInfo.isConnected()
+                && (!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
+                .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) || !((WifiManager) context
+                .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().equals("<unknown ssid>")))
                 || context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS, false)
                 || AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context,

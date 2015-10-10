@@ -204,6 +204,12 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
     }
 
+    public ArrayList<T> getItems() {
+        synchronized (mLock) {
+            return (ArrayList<T>) mData.clone();
+        }
+    }
+
     /**
      * Returns the position of the specified item in the array.
      *

@@ -27,7 +27,7 @@ public class UpdateSpecialModule extends SpecialModule {
     public UpdateSpecialModule(Context context) {
         super(context);
         mItems = new SpecialItem[]{
-                new UpdateSpecialItem(context)
+                new UpdateSpecialItem()
         };
     }
 
@@ -58,7 +58,8 @@ public class UpdateSpecialModule extends SpecialModule {
         boolean last = updateAvailable;
         onInitialize();
         if (last != updateAvailable)
-            notifyItemsModified();
+            notifyItemsChanged();
+        //notifyItemsModified();
     }
 
     public boolean isUpdateAvailable() {
@@ -77,8 +78,8 @@ public class UpdateSpecialModule extends SpecialModule {
 
     private class UpdateSpecialItem extends MultilineSpecialItem {
 
-        public UpdateSpecialItem(Context context) {
-            super(context);
+        public UpdateSpecialItem() {
+            super(UpdateSpecialModule.this);
         }
 
         @Nullable

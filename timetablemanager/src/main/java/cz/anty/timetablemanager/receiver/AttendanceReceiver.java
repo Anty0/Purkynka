@@ -22,6 +22,7 @@ import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
+import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.teacher.Teacher;
 import cz.anty.utils.teacher.TeachersManager;
 import cz.anty.utils.timetable.Lesson;
@@ -65,12 +66,9 @@ public class AttendanceReceiver extends BroadcastReceiver {
             Lesson lesson = timetable.getLesson(day, lessonIndex);
             if (lesson == null) continue;
 
-            int minutes = Timetable.START_TIMES_MINUTES[lessonIndex];
             Notification n = new NotificationCompat.Builder(context)
-                    .setContentTitle(lesson.getShortName() + " " + lesson.getClassString())
-                    .setContentText(Timetable.START_TIMES_HOURS[lessonIndex] +
-                            ":" + (minutes < 10 ? "0" + minutes : minutes)
-                            + " " + lesson.getTeacher())
+                    .setContentTitle(lesson.getTitle(context, MultilineItem.NO_POSITION))
+                    .setContentText(lesson.getText(context, MultilineItem.NO_POSITION))
                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                     .setContentIntent(PendingIntent.getActivity(context, 0,
                             new Intent(context, TimetableManageActivity.class).putExtra(

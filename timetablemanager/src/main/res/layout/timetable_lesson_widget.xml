@@ -13,29 +13,25 @@
 
         <RelativeLayout
             android:id="@+id/main_relative_layout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center"
             android:visibility="visible">
 
             <include
                 android:id="@+id/list_item_actual"
                 layout="@layout/text_widget_multi_line_list_item"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="false" />
+                android:layout_centerHorizontal="true" />
 
             <include
                 android:id="@+id/list_item_next"
                 layout="@layout/text_widget_big_multi_line_list_item"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="false"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/list_item_actual" />
+                android:layout_below="@+id/list_item_actual"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 

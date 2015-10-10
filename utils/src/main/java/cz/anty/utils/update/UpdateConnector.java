@@ -23,7 +23,8 @@ import cz.anty.utils.thread.ProgressReporter;
  */
 public class UpdateConnector {
 
-    private static final String DEFAULT_URL = "http://anty.crush-team.cz/purkynkamanager/";
+    //private static final String DEFAULT_URL = "http://anty.crush-team.cz/purkynkamanager/";
+    public static final String DEFAULT_URL = "http://anty.codetopic.eu/purkynka/";
 
     private static final String LATEST_VERSION_CODE_URL_ADD = "latestVersionCode";
     private static final String LATEST_VERSION_NAME_URL_ADD = "latestVersionName";

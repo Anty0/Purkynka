@@ -24,7 +24,7 @@ public class ShareSpecialModule extends SpecialModule {
     public ShareSpecialModule(Context context) {
         super(context);
         mItems = new SpecialItem[]{
-                new ShareSpecialItem(context)
+                new ShareSpecialItem()
         };
     }
 
@@ -51,7 +51,8 @@ public class ShareSpecialModule extends SpecialModule {
         boolean last = mShowShare;
         mShowShare = preferences.getBoolean(Constants.SETTING_NAME_SHOW_SHARE, true);
         if (last != mShowShare)
-            notifyItemsModified();
+            notifyItemsChanged();
+        //notifyItemsModified();
     }
 
     public boolean isShowShare() {
@@ -70,8 +71,8 @@ public class ShareSpecialModule extends SpecialModule {
 
     private class ShareSpecialItem extends MultilineSpecialItem {
 
-        public ShareSpecialItem(Context context) {
-            super(context);
+        public ShareSpecialItem() {
+            super(ShareSpecialModule.this);
         }
 
         @Nullable

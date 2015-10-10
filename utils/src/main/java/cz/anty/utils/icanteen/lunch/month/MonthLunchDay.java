@@ -18,10 +18,11 @@ import cz.anty.utils.list.listView.MultilineItem;
 public class MonthLunchDay implements MultilineItem {
 
     public static final SimpleDateFormat DATE_PARSE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private static final SimpleDateFormat DATE_SHOW_FORMAT = new SimpleDateFormat("dd. MM. yyyy", Locale.getDefault());
+    public static final SimpleDateFormat DATE_SHOW_FORMAT = new SimpleDateFormat("dd. MM. yyyy", Locale.getDefault());
 
     private final Date date;
     private final MonthLunch[] lunches;
+    private boolean disabled = false;
 
     public MonthLunchDay(Date date, MonthLunch[] monthLunches) {
         this.date = date;
@@ -47,6 +48,16 @@ public class MonthLunchDay implements MultilineItem {
             }
         }
         return orderedLunch;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void disable() {
+        disabled = true;
+        for (MonthLunch lunch : getLunches())
+            lunch.disable();
     }
 
     @Override

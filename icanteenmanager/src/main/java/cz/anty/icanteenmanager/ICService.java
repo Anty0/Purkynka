@@ -143,7 +143,10 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 mManager.disconnect();
                 mManager = null;
             }
-            mLunchesManager = null;
+            if (mLunchesManager != null) {
+                mLunchesManager.apply();
+                mLunchesManager = null;
+            }
             if (onBurzaChange != null)
                 onBurzaChange.run();
             if (onMonthChange != null)
@@ -184,7 +187,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                         .toArray(new MonthLunchDay[newLunchDays.size()]))) {
                     onNewMonthLunches();
                 }
-                mLunchesManager.apply();
+                if (mLunchesManager != null)
+                    mLunchesManager.apply();
                 if (onMonthChange != null)
                     onMonthChange.run();
                 return false;
@@ -277,6 +281,14 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         return mBinder;
     }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        if (mLunchesManager != null)
+            mLunchesManager.apply();
+
+        return super.onUnbind(intent);
+    }
+
     public class ICBinder extends Binder {
 
         public void waitToWorkerStop() throws InterruptedException {
@@ -289,6 +301,24 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
         public void setOnMonthChangeListener(@Nullable Runnable onMonthChange) {
             ICService.this.onMonthChange = onMonthChange;
+        }
+
+        public void removeDisabledLunch(MonthLunchDay lunchDay) {
+            if (mLunchesManager == null) return;
+            mLunchesManager.removeDisabledLunch(lunchDay);
+            if (onMonthChange != null)
+                onMonthChange.run();
+            if (mLunchesManager != null)
+                mLunchesManager.apply();
+        }
+
+        public void removeAllDisabledLunches() {
+            if (mLunchesManager == null) return;
+            mLunchesManager.removeAllDisabledLunches();
+            if (onMonthChange != null)
+                onMonthChange.run();
+            if (mLunchesManager != null)
+                mLunchesManager.apply();
         }
 
         public Thread refreshBurza() {
@@ -309,7 +339,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             });
         }
 
-        public Thread orderBurzaLunch(final BurzaLunch lunch) {
+        public Thread orderLunch(final BurzaLunch lunch) {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
@@ -320,7 +350,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             });
         }
 
-        public Thread orderMonthLunch(final MonthLunch lunch) {
+        public Thread orderLunch(final MonthLunch lunch) {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {

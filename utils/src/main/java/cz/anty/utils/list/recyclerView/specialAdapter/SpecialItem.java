@@ -7,21 +7,31 @@ import android.widget.FrameLayout;
  *
  * @author anty
  */
-public interface SpecialItem {
+public abstract class SpecialItem {
 
-    void onCreateViewHolder(FrameLayout parent, int itemPosition);
+    protected abstract void onCreateViewHolder(FrameLayout parent, int itemPosition);
 
-    void onBindViewHolder(int itemPosition);
+    protected abstract void onBindViewHolder(int itemPosition);
 
-    void onClick();
+    protected void onClick() {
 
-    void onLongClick();
+    }
 
-    void onHideClick();
+    protected void onLongClick() {
 
-    boolean isShowHideButton();
+    }
 
-    boolean isVisible();
+    protected void onHideClick() {
 
-    int getPriority();
+    }
+
+    public boolean isShowHideButton() {
+        return false;
+    }
+
+    public boolean isVisible() {
+        return true;
+    }
+
+    protected abstract int getPriority();
 }

@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import cz.anty.timetablemanager.widget.TimetableLessonWidget;
+import cz.anty.utils.Log;
 import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.list.listView.TextMultilineItem;
 import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
@@ -51,11 +54,11 @@ public class TimetableManageActivity extends AppCompatActivity {
         if (TimetableSelectActivity.timetableManager == null)
             TimetableSelectActivity.timetableManager = new TimetableManager(this);
 
-        Timetable toShow = TimetableSelectActivity.timetableManager
-                .getTimetableByName(timetableName);
+        /*Timetable toShow = TimetableSelectActivity.timetableManager
+                .getTimetableByName(timetableName);*/
 
         setContentView(R.layout.activity_timetable_manage);
-        setTitle(getText(R.string.activity_title_timetable_manage) + " - " + toShow.getName());
+        setTitle(getText(R.string.activity_title_timetable_manage) + " - " + timetableName);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -67,7 +70,8 @@ public class TimetableManageActivity extends AppCompatActivity {
       may be best to switch to a
       {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), toShow);
+        SectionsPagerAdapter mSectionsPagerAdapter = new
+                SectionsPagerAdapter(getSupportFragmentManager(), timetableName);
 
         final TextView textView = (TextView) findViewById(R.id.textView);
 
@@ -115,7 +119,8 @@ public class TimetableManageActivity extends AppCompatActivity {
             }
         });
         int index = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2;
-        if (index < Timetable.DAYS_STRINGS_IDS.length - 1)
+        Log.d(getClass().getSimpleName(), "onCreate dayIndex: " + index);
+        if (index < Timetable.DAYS_STRINGS_IDS.length)
             mViewPager.setCurrentItem(index);
     }
 
@@ -167,13 +172,21 @@ public class TimetableManageActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(Timetable toShow, int sectionNumber) {
+        public static PlaceholderFragment newInstance(String timetableName, int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putString(EXTRA_TIMETABLE_NAME, timetableName);
             fragment.setArguments(args);
-            fragment.toShow = toShow;
             return fragment;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            toShow = TimetableSelectActivity.timetableManager
+                    .getTimetableByName(getArguments()
+                            .getString(EXTRA_TIMETABLE_NAME));
         }
 
         @Override
@@ -193,7 +206,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                             } else {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_lesson_info)
-                                                //TODO add set icon with icon "T"
+                                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                                         .setMessage(context.getText(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
                                                 context.getText(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
                                                 context.getText(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
@@ -223,22 +236,22 @@ public class TimetableManageActivity extends AppCompatActivity {
                         }
 
                         private void edit(final Context context, @Nullable Lesson lesson, final int day, final int lessonIndex) {
-                            TextView nameTextView = new TextView(context);
+                            TextView nameTextView = new AppCompatTextView(context);
                             nameTextView.setText(R.string.dialog_message_lesson_name);
 
-                            TextView shortNameTextView = new TextView(context);
+                            TextView shortNameTextView = new AppCompatTextView(context);
                             shortNameTextView.setText(R.string.dialog_message_short_lesson_name);
 
-                            TextView classTextView = new TextView(context);
+                            TextView classTextView = new AppCompatTextView(context);
                             classTextView.setText(R.string.dialog_message_class);
 
-                            TextView teacherTextView = new TextView(context);
+                            TextView teacherTextView = new AppCompatTextView(context);
                             teacherTextView.setText(R.string.dialog_message_teacher);
 
-                            final EditText nameEditText = new EditText(context);
-                            final EditText shortNameEditText = new EditText(context);
-                            final EditText classEditText = new EditText(context);
-                            final EditText teacherEditText = new EditText(context);
+                            final EditText nameEditText = new AppCompatEditText(context);
+                            final EditText shortNameEditText = new AppCompatEditText(context);
+                            final EditText classEditText = new AppCompatEditText(context);
+                            final EditText teacherEditText = new AppCompatEditText(context);
 
                             if (lesson != null) {
                                 nameEditText.setText(lesson.getName());
@@ -270,7 +283,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                                             context.getString(Timetable.DAYS_STRINGS_IDS[day]), lessonIndex))
                                             //TODO add set icon with icon "T"
                                     .setView(mainScrollView)
-                                    .setCancelable(false)
+                                    .setCancelable(true)
                                     .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -313,18 +326,18 @@ public class TimetableManageActivity extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private final Timetable mTimetable;
+        private final String mTimetableName;
 
-        public SectionsPagerAdapter(FragmentManager fm, Timetable toShow) {
+        public SectionsPagerAdapter(FragmentManager fm, String timetableName) {
             super(fm);
-            mTimetable = toShow;
+            mTimetableName = timetableName;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(mTimetable, position);
+            return PlaceholderFragment.newInstance(mTimetableName, position);
         }
 
         @Override

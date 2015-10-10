@@ -130,7 +130,7 @@ public class ICBurzaCheckerService extends Service {
             try {
                 for (BurzaLunch lunch : binder.getBurza(binder.refreshBurza()))
                     if (selector.isSelected(lunch)) {
-                        binder.orderBurzaLunch(lunch);
+                        binder.orderLunch(lunch);
                         completed = true;
                         Thread.currentThread().interrupt();
                         break;

@@ -29,8 +29,8 @@ public class SASSpecialModule extends SpecialModule {
     public SASSpecialModule(Context context) {
         super(context);
         mItems = new SpecialItem[]{
-                new SASLoginSpecialItem(context),
-                new SASWrongMarkSpecialItem(context)
+                new SASLoginSpecialItem(),
+                new SASWrongMarkSpecialItem()
         };
     }
 
@@ -63,7 +63,8 @@ public class SASSpecialModule extends SpecialModule {
                             notifyInitializeCompleted();
                             return;
                         }
-                        notifyItemsModified();
+                        notifyItemsChanged();
+                        //notifyItemsModified();
                     }
                 });
             }
@@ -101,8 +102,8 @@ public class SASSpecialModule extends SpecialModule {
 
     private class SASLoginSpecialItem extends MultilineSpecialItem {
 
-        public SASLoginSpecialItem(Context context) {
-            super(context);
+        public SASLoginSpecialItem() {
+            super(SASSpecialModule.this);
         }
 
         @Nullable
@@ -137,8 +138,8 @@ public class SASSpecialModule extends SpecialModule {
 
     private class SASWrongMarkSpecialItem extends MultilineSpecialItem {
 
-        public SASWrongMarkSpecialItem(Context context) {
-            super(context);
+        public SASWrongMarkSpecialItem() {
+            super(SASSpecialModule.this);
         }
 
         @Override

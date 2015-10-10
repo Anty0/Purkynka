@@ -14,6 +14,7 @@ import cz.anty.attendancemanager.receiver.TrackingReceiver;
 import cz.anty.utils.Constants;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.TrackingMansManager;
+import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.MultilineSpecialItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
@@ -30,7 +31,7 @@ public class TrackingSpecialModule extends SpecialModule {
     public TrackingSpecialModule(Context context) {
         super(context);
         mItems = new SpecialItem[]{
-                new TrackingSpecialItem(context)
+                new TrackingSpecialItem()
         };
     }
 
@@ -58,7 +59,8 @@ public class TrackingSpecialModule extends SpecialModule {
         TrackingActivity.mansManager = TrackingReceiver
                 .refreshTrackingMans(getContext(),
                         TrackingActivity.mansManager, true);
-        notifyItemsModified();
+        notifyItemsChanged();
+        //notifyItemsModified();
     }
 
     @Override
@@ -75,8 +77,8 @@ public class TrackingSpecialModule extends SpecialModule {
 
         private LinearLayout mansLinearLayout;
 
-        public TrackingSpecialItem(Context context) {
-            super(context);
+        public TrackingSpecialItem() {
+            super(TrackingSpecialModule.this);
         }
 
         @Override
@@ -102,9 +104,9 @@ public class TrackingSpecialModule extends SpecialModule {
                 View view = inflater.inflate(R.layout
                         .text_widget_multi_line_list_item, mansLinearLayout, false);
                 ((TextView) view.findViewById(R.id.widget_text_view_title))
-                        .setText(man.getTitle(getContext(), -1));
+                        .setText(man.getTitle(getContext(), MultilineItem.NO_POSITION));
                 ((TextView) view.findViewById(R.id.widget_text_view_text))
-                        .setText(man.getText(getContext(), -1));
+                        .setText(man.getText(getContext(), MultilineItem.NO_POSITION));
                 mansLinearLayout.addView(view);
             }
             return mansLinearLayout;

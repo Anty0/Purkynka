@@ -9,16 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import cz.anty.attendancemanager.SearchActivity;
 import cz.anty.attendancemanager.TrackingSpecialModule;
 import cz.anty.icanteenmanager.ICSpecialModule;
 import cz.anty.icanteenmanager.ICSplashActivity;
 import cz.anty.purkynkamanager.firststart.FirstStartActivity;
+import cz.anty.purkynkamanager.settings.SettingsActivity;
 import cz.anty.purkynkamanager.update.UpdateSpecialModule;
 import cz.anty.sasmanager.SASSpecialModule;
 import cz.anty.sasmanager.SASSplashActivity;
@@ -116,18 +116,20 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout)
                         findViewById(R.id.drawer_layout), mToolbar,
-                new TextMultilineItem(getText(R.string.app_name_sas), null),
-                new TextMultilineItem(getText(R.string.app_name_wifi), null),
-                new TextMultilineItem(getText(R.string.app_name_icanteen), null),
-                new TextMultilineItem(getText(R.string.app_name_timetable), null),
-                new TextMultilineItem(getText(R.string.app_name_attendance), null));
+                new TextMultilineItem(getText(R.string.app_name_sas), null, false),
+                new TextMultilineItem(getText(R.string.app_name_wifi), null, false),
+                new TextMultilineItem(getText(R.string.app_name_icanteen), null, false),
+                new TextMultilineItem(getText(R.string.app_name_timetable), null, false),
+                new TextMultilineItem(getText(R.string.app_name_attendance), null, false),
+                new TextMultilineItem("", null, false),
+                new TextMultilineItem(getText(R.string.activity_title_settings), null, false));
         drawerFragment.setDrawerListener(new RecyclerItemClickListener.ClickListener() {
             private final int[] descriptionIds = new int[]{
                     R.string.app_description_sas,
                     R.string.app_description_wifi,
                     R.string.app_description_icanteen,
                     R.string.app_description_timetable,
-                    R.string.app_description_attendance
+                    R.string.app_description_attendance, -1, -1
             };
 
             @Override
@@ -148,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
                     case 4:
                         startActivity(new Intent(MainActivity.this, SearchActivity.class));
                         break;
+                    case 6:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        break;
                 }
             }
 
@@ -156,63 +161,26 @@ public class MainActivity extends AppCompatActivity {
                 final MultilineRecyclerAdapter<MultilineItem> adapter = drawerFragment.getAdapter();
                 final MultilineItem item = adapter.getItem(position);
                 boolean showDescription = item instanceof TextMultilineItem
-                        && ((TextMultilineItem) item).getText() == null;
-                clearTexts(adapter.getItems(new MultilineItem[adapter.getItemCount()]));
-                adapter.notifyDataSetChanged();
+                        && ((TextMultilineItem) item).getText() == null
+                        && descriptionIds[position] != -1;
+
+                clearTexts(adapter);
+                adapter.notifyItemRangeChanged(0, adapter.getItemCount());
 
                 if (showDescription) {
-                    ScaleAnimation animation = new ScaleAnimation(1, 1, 1, 0);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            view.clearAnimation();
-                            ((TextMultilineItem) item).setText(getText(descriptionIds[position]));
-                            adapter.notifyDataSetChanged();
-
-                            ScaleAnimation animation2 = new ScaleAnimation(1, 1, 0, 1);
-                            animation2.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    view.clearAnimation();
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
-                            animation2.setDuration(100);
-                            view.setAnimation(animation2);
-                            animation2.startNow();
-                            view.invalidate();
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                    animation.setDuration(100);
-                    view.setAnimation(animation);
-                    animation.startNow();
-                    view.invalidate();
+                    ((TextMultilineItem) item).setText(getText(descriptionIds[position]));
+                    adapter.notifyItemChanged(position);
                 }
             }
 
-            private void clearTexts(MultilineItem[] items) {
-                for (MultilineItem item : items) {
-                    if (item instanceof TextMultilineItem) {
+            private void clearTexts(MultilineRecyclerAdapter<MultilineItem> adapter) {
+                ArrayList<MultilineItem> items = adapter.getItems();
+                for (int i = 0, itemsLength = items.size(); i < itemsLength; i++) {
+                    MultilineItem item = items.get(i);
+                    if (item instanceof TextMultilineItem
+                            && ((TextMultilineItem) item).getText() != null) {
                         ((TextMultilineItem) item).setText(null);
+                        adapter.notifyItemChanged(i);
                     }
                 }
             }

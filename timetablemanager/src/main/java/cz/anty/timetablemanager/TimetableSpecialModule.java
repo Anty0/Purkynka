@@ -33,7 +33,7 @@ public class TimetableSpecialModule extends SpecialModule {
 
     public TimetableSpecialModule(Context context) {
         super(context);
-        addSpecialItem = new TimetableAddSpecialItem(context);
+        addSpecialItem = new TimetableAddSpecialItem();
     }
 
     @Override
@@ -54,14 +54,14 @@ public class TimetableSpecialModule extends SpecialModule {
         mItems.clear();
         for (Timetable timetable : TimetableSelectActivity
                 .timetableManager.getTimetables()) {
-            mItems.add(new TimetableSpecialItem(getContext(), timetable));
+            mItems.add(new TimetableSpecialItem(timetable));
         }
         return true;
     }
 
     @Override
     protected void onUpdate() {
-        boolean changed = false;
+        //boolean changed = false;
         for (Timetable timetable : TimetableSelectActivity
                 .timetableManager.getTimetables()) {
             boolean contains = false;
@@ -73,12 +73,13 @@ public class TimetableSpecialModule extends SpecialModule {
                 }
             }
             if (!contains) {
-                mItems.add(new TimetableSpecialItem(getContext(), timetable));
-                changed = true;
+                mItems.add(new TimetableSpecialItem(timetable));
+                //changed = true;
             }
         }
-        if (changed) notifyItemsChanged();
-        else notifyItemsModified();
+        /*if (changed) notifyItemsChanged();
+        else notifyItemsModified();*/
+        notifyItemsChanged();
     }
 
     @Override
@@ -98,8 +99,8 @@ public class TimetableSpecialModule extends SpecialModule {
         private final Timetable mTimetable;
         private LinearLayout mLinearLayout;
 
-        public TimetableSpecialItem(Context context, Timetable timetable) {
-            super(context);
+        public TimetableSpecialItem(Timetable timetable) {
+            super(TimetableSpecialModule.this);
             mTimetable = timetable;
         }
 
@@ -149,8 +150,8 @@ public class TimetableSpecialModule extends SpecialModule {
                             if (actualLesson == null) {
                                 ((TextView) smallView.findViewById(R.id.widget_text_view_title))
                                         .setText(R.string.list_item_text_no_actual_lesson);
-                                smallView.findViewById(R.id.widget_text_view_title)
-                                        .setPadding(1, 8, 1, 8);
+                                Constants.setPadding(smallView.findViewById(R.id
+                                        .widget_text_view_title), 1, 8, 1, 8);
                                 smallView.findViewById(R.id.widget_text_view_text)
                                         .setVisibility(View.GONE);
                             } else {
@@ -158,8 +159,8 @@ public class TimetableSpecialModule extends SpecialModule {
                                         .setText(actualLesson.getTitle(getContext(), i));
                                 ((TextView) smallView.findViewById(R.id.widget_text_view_text))
                                         .setText(actualLesson.getText(getContext(), i));
-                                smallView.findViewById(R.id.widget_text_view_title)
-                                        .setPadding(1, 1, 1, 1);
+                                Constants.setPadding(smallView.findViewById(R.id
+                                        .widget_text_view_title), 1, 1, 1, 1);
                                 smallView.findViewById(R.id.widget_text_view_text)
                                         .setVisibility(View.VISIBLE);
                             }
@@ -170,8 +171,8 @@ public class TimetableSpecialModule extends SpecialModule {
                             if (nextLesson == null) {
                                 ((TextView) bigView.findViewById(R.id.text_view_title))
                                         .setText(R.string.list_item_text_no_next_lesson);
-                                bigView.findViewById(R.id.text_view_title)
-                                        .setPadding(1, 8, 1, 8);
+                                Constants.setPadding(bigView.findViewById(R.id
+                                        .text_view_title), 1, 8, 1, 8);
                                 bigView.findViewById(R.id.text_view_text)
                                         .setVisibility(View.GONE);
                             } else {
@@ -180,8 +181,8 @@ public class TimetableSpecialModule extends SpecialModule {
                                         .setText(nextLesson.getTitle(getContext(), index));
                                 ((TextView) bigView.findViewById(R.id.text_view_text))
                                         .setText(nextLesson.getText(getContext(), index));
-                                bigView.findViewById(R.id.text_view_title)
-                                        .setPadding(1, 1, 1, 1);
+                                Constants.setPadding(bigView.findViewById(R.id
+                                        .text_view_title), 1, 1, 1, 1);
                                 bigView.findViewById(R.id.text_view_text)
                                         .setVisibility(View.VISIBLE);
                             }
@@ -213,8 +214,8 @@ public class TimetableSpecialModule extends SpecialModule {
 
     private class TimetableAddSpecialItem extends MultilineSpecialItem {
 
-        public TimetableAddSpecialItem(Context context) {
-            super(context);
+        public TimetableAddSpecialItem() {
+            super(TimetableSpecialModule.this);
         }
 
         @Nullable

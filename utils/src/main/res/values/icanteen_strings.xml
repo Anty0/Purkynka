@@ -28,13 +28,16 @@
     <string name="text_view_text_you_still_have_got_lunch">You still have got lunch on this day.</string>
 
     <string name="menu_item_text_start_burza_checking">Start Burza watcher</string>
+    <string name="menu_item_text_clear_history">Clear old lunches</string>
 
     <string name="special_item_title_icanteen_new_lunches">New lunches are available</string>
 
     <string name="radio_button_text_no_lunch">No lunch</string>
 
     <string name="toast_text_can_not_start_burza_checker">Can\'t start Burza watcher, maybe still running, please try stop it or restart application</string>
-    <string name="toast_text_can_not_order_lunch">Can\'t order Lunch, please try restart application</string>
+    <string name="toast_text_can_not_order_lunch">Can\'t order lunch, please try restart application</string>
+    <string name="toast_text_can_not_remove_lunch">Can\'t remove lunch, please try restart application</string>
+    <string name="toast_text_can_not_refresh_lunches">Can\'t refresh lunches, please try restart application</string>
     <string name="toast_text_coming_soon">Coming soon</string>
 
     <string name="text_nothing_ordered">Nothing ordered</string>

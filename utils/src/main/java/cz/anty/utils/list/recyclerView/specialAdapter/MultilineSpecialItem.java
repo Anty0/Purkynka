@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.R;
 
 /**
@@ -27,8 +28,9 @@ public abstract class MultilineSpecialItem extends SpecialItemHideImpl {
     private ImageView mImage;
     private FrameLayout mContent;
 
-    public MultilineSpecialItem(Context context) {
-        mContext = context;
+    public MultilineSpecialItem(SpecialModule module) {
+        super(module);
+        mContext = module.getContext();
     }
 
     public Context getContext() {
@@ -44,7 +46,7 @@ public abstract class MultilineSpecialItem extends SpecialItemHideImpl {
                 .base_multiline_image_text_item, body);
 
         mContent = new FrameLayout(mContext);
-        mContent.setPadding(15, 3, 1, 0);
+        Constants.setPadding(mContent, 15, 3, 1, 0);
         body.addView(mContent);
 
         mImage = (ImageView) body.findViewById(R.id.image_view);
@@ -86,22 +88,12 @@ public abstract class MultilineSpecialItem extends SpecialItemHideImpl {
         if (text == null) {
             toSet.setVisibility(View.GONE);
             toSet.setText("");
-            second.setPadding(1, 8, 1, 8);
+            Constants.setPadding(second, 1, 8, 1, 8);
         } else {
             toSet.setVisibility(View.VISIBLE);
             toSet.setText(text);
-            second.setPadding(1, 1, 1, 1);
+            Constants.setPadding(second, 1, 1, 1, 1);
         }
-    }
-
-    @Override
-    public void onClick() {
-
-    }
-
-    @Override
-    public void onLongClick() {
-
     }
 
     @Nullable

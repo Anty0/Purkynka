@@ -5,13 +5,18 @@ package cz.anty.utils.list.recyclerView.specialAdapter;
  *
  * @author anty
  */
-public abstract class SpecialItemHideImpl implements SpecialItem {
+public abstract class SpecialItemHideImpl extends SpecialItem {
 
-    boolean mVisible = true;
+    private final SpecialModule mModule;
+    private boolean mVisible = true;
+
+    public SpecialItemHideImpl(SpecialModule module) {
+        mModule = module;
+    }
 
     @Override
     public void onHideClick() {
-        mVisible = false;
+        setVisible(false);
     }
 
     @Override
@@ -24,7 +29,10 @@ public abstract class SpecialItemHideImpl implements SpecialItem {
         return mVisible;
     }
 
-    public void setVisible(boolean hidden) {
-        this.mVisible = hidden;
+    public void setVisible(boolean visible) {
+        boolean remove = mVisible && !visible;
+        this.mVisible = visible;
+        if (remove)
+            mModule.notifyItemRemoved(this);
     }
 }
