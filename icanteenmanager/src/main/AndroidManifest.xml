@@ -33,12 +33,15 @@
         <activity
             android:name=".ICBurzaActivity"
             android:label="@string/app_name_icanteen_burza" />
+        <activity
+            android:name=".ICBurzaCheckerActivity"
+            android:label="@string/app_name_icanteen_burza_watcher" />
 
         <service
             android:name=".ICBurzaCheckerService"
             android:enabled="true"
             android:exported="false"
-            android:label="@string/app_name_icanteen_burza" />
+            android:label="@string/app_name_icanteen_burza_watcher" />
 
         <receiver
             android:name=".receiver.StartServiceReceiver"

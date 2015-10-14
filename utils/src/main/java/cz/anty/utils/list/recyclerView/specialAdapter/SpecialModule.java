@@ -1,6 +1,7 @@
 package cz.anty.utils.list.recyclerView.specialAdapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -49,7 +50,8 @@ public abstract class SpecialModule {
 
     protected abstract boolean isUpdateOnThread();
 
-    final synchronized void init(Runnable onChange, SpecialModuleManager.OnRemoveItem onRemoveItem) {
+    final synchronized void init(final SharedPreferences preferences, Runnable onChange,
+                                 SpecialModuleManager.OnRemoveItem onRemoveItem) {
         Log.d(getClass().getSimpleName(), "init");
         if (mInitializeStarted || mInitialized) {
             throw new IllegalStateException(getClass()
@@ -62,7 +64,7 @@ public abstract class SpecialModule {
         Runnable initRunnable = new Runnable() {
             @Override
             public void run() {
-                if (onInitialize())
+                if (onInitialize(preferences))
                     notifyInitializeCompleted();
             }
         };
@@ -74,9 +76,9 @@ public abstract class SpecialModule {
         initRunnable.run();
     }
 
-    protected abstract boolean onInitialize();
+    protected abstract boolean onInitialize(SharedPreferences preferences);
 
-    final synchronized void update() {
+    final synchronized void update(final SharedPreferences preferences) {
         Log.d(getClass().getSimpleName(), "update");
         if (!mInitialized) {
             throw new IllegalStateException(getClass()
@@ -86,7 +88,7 @@ public abstract class SpecialModule {
         Runnable updateRunnable = new Runnable() {
             @Override
             public void run() {
-                onUpdate();
+                onUpdate(preferences);
             }
         };
 
@@ -97,7 +99,9 @@ public abstract class SpecialModule {
         updateRunnable.run();
     }
 
-    protected abstract void onUpdate();
+    protected abstract void onUpdate(SharedPreferences preferences);
+
+    protected abstract void onSaveState(SharedPreferences.Editor preferences);
 
     protected OnceRunThread getWorker() {
         return worker;

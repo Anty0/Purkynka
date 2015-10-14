@@ -2,6 +2,7 @@ package cz.anty.icanteenmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
 import cz.anty.utils.AppDataManager;
@@ -17,11 +18,11 @@ import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
  */
 public class ICSpecialModule extends SpecialModule {
 
-    private final SpecialItem[] mItems;
+    private final MultilineSpecialItem[] mItems;
 
     public ICSpecialModule(Context context) {
         super(context);
-        mItems = new SpecialItem[]{
+        mItems = new MultilineSpecialItem[]{
                 new ICLoginSpecialItem(),
                 new ICNewLunchesSpecialItem()
         };
@@ -38,13 +39,16 @@ public class ICSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected boolean onInitialize() {
-        onUpdate();
+    protected boolean onInitialize(SharedPreferences preferences) {
+        onUpdate(preferences);
         return false;
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(SharedPreferences preferences) {
+        mItems[0].setEnabled(preferences
+                .getBoolean(Constants.SETTING_NAME_ITEM_IC_LOGIN, true));
+
         ICSplashActivity.initService(getContext(), getWorker(),
                 new Runnable() {
                     @Override
@@ -57,6 +61,12 @@ public class ICSpecialModule extends SpecialModule {
                         //notifyItemsModified();
                     }
                 });
+    }
+
+    @Override
+    protected void onSaveState(SharedPreferences.Editor preferences) {
+        preferences.putBoolean(Constants.SETTING_NAME_ITEM_IC_LOGIN,
+                mItems[0].isEnabled());
     }
 
     @Override
@@ -124,7 +134,7 @@ public class ICSpecialModule extends SpecialModule {
         }
 
         @Override
-        public void onHideClick() {
+        public void onHideClick(boolean hide) {
             AppDataManager.setICNewMonthLunches(false);
         }
 

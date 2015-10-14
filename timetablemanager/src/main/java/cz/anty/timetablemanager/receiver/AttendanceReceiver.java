@@ -22,7 +22,6 @@ import cz.anty.utils.Log;
 import cz.anty.utils.attendance.AttendanceConnector;
 import cz.anty.utils.attendance.man.Man;
 import cz.anty.utils.attendance.man.Mans;
-import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.teacher.Teacher;
 import cz.anty.utils.teacher.TeachersManager;
 import cz.anty.utils.timetable.Lesson;
@@ -67,8 +66,8 @@ public class AttendanceReceiver extends BroadcastReceiver {
             if (lesson == null) continue;
 
             Notification n = new NotificationCompat.Builder(context)
-                    .setContentTitle(lesson.getTitle(context, MultilineItem.NO_POSITION))
-                    .setContentText(lesson.getText(context, MultilineItem.NO_POSITION))
+                    .setContentTitle(lesson.getTitle(context, lessonIndex))
+                    .setContentText(lesson.getText(context, lessonIndex))
                     .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
                     .setContentIntent(PendingIntent.getActivity(context, 0,
                             new Intent(context, TimetableManageActivity.class).putExtra(
@@ -91,22 +90,22 @@ public class AttendanceReceiver extends BroadcastReceiver {
         Log.d(getClass().getSimpleName(), "testSupplementation day: " + day + " lessonIndex: " + lessonIndex);
         if (TimetableSelectActivity.timetableManager == null)
             TimetableSelectActivity.timetableManager = new TimetableManager(context);
-        Timetable[] timetables = TimetableSelectActivity.timetableManager.getTimetables();
+        final Timetable[] timetables = TimetableSelectActivity.timetableManager.getTimetables();
         final AttendanceConnector connector = new AttendanceConnector();
 
-        for (int i = 0, timetablesLength = timetables.length; i < timetablesLength; i++) {
-            final Timetable timetable = timetables[i];
-            if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE)
-                    .getLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, 0) +
-                    Constants.WAIT_TIME_TEACHERS_ATTENDANCE > System.currentTimeMillis())
-                continue;
-            final Lesson lesson = timetable.getLesson(day, lessonIndex);
-            if (lesson == null) continue;
+        ApplicationBase.WORKER.startWorker(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0, timetablesLength = timetables.length; i < timetablesLength; i++) {
+                    final Timetable timetable = timetables[i];
+                    if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE)
+                            .getLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, 0) +
+                            Constants.WAIT_TIME_TEACHERS_ATTENDANCE > System.currentTimeMillis())
+                        continue;
+                    final Lesson lesson = timetable.getLesson(day, lessonIndex);
+                    if (lesson == null) continue;
 
-            final int finalI = i < 10 ? i : 9;
-            ApplicationBase.WORKER.startWorker(new Runnable() {
-                @Override
-                public void run() {
+                    final int finalI = i < 10 ? i : 9;
                     try {
                         String teacherName = lesson.getTeacher();
                         if (teacherName.length() != 4) {
@@ -125,8 +124,8 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         List<Man> mans = Mans.parseMans(
                                 connector.getSupElements(teacherName, 1));
                         Man man = null;
-                        for (int i = 0; i < mans.size(); i++) {
-                            man = mans.get(i);
+                        for (int j = 0; j < mans.size(); j++) {
+                            man = mans.get(j);
                             if (man.getClassString().length() > 4) break;
                             else man = null;
                         }
@@ -157,7 +156,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         Log.d("AttendanceReceiver", "testSupplementation", e);
                     }
                 }
-            }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
-        }
+            }
+        }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
     }
 }

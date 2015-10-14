@@ -184,6 +184,11 @@ public class TimetableManageActivity extends AppCompatActivity {
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            if (TimetableSelectActivity.timetableManager == null)
+                TimetableSelectActivity.timetableManager
+                        = new TimetableManager(getContext());
+
             toShow = TimetableSelectActivity.timetableManager
                     .getTimetableByName(getArguments()
                             .getString(EXTRA_TIMETABLE_NAME));

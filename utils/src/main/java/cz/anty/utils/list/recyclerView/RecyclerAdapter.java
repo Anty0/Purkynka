@@ -2,6 +2,7 @@ package cz.anty.utils.list.recyclerView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.Collection;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.R;
 
@@ -101,6 +103,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ItemViewHold
         public ItemViewHolder(View itemView) {
             super(itemView);
             Log.d(getClass().getSimpleName(), "<init>");
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
+                Constants.setPadding(itemView, 1, 5, 1, 5);
         }
 
         protected abstract void onBindViewHolder(I item, int position);

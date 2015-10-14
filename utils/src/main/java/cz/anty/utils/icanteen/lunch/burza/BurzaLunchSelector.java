@@ -2,10 +2,10 @@ package cz.anty.utils.icanteen.lunch.burza;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import com.google.gson.Gson;
+
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 
@@ -16,8 +16,8 @@ import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
  */
 public class BurzaLunchSelector {
 
-    private static final String LUNCH_SPLIT_VALUE = "/";
-    private static final String DATA_SPLIT_VALUE = "\n";
+    //private static final String LUNCH_SPLIT_VALUE = "/";
+    //private static final String DATA_SPLIT_VALUE = "\n";
 
     private final BurzaLunch.LunchNumber[] lunchNumbers;
     private final Date date;
@@ -28,7 +28,8 @@ public class BurzaLunchSelector {
     }
 
     public static BurzaLunchSelector parseBurzaLunchSelector(String toParse) {
-        String[] data = toParse.split(DATA_SPLIT_VALUE);
+        return new Gson().fromJson(toParse, BurzaLunchSelector.class);
+        /*String[] data = toParse.split(DATA_SPLIT_VALUE);
 
         BurzaLunch.LunchNumber[] lunchNumbers;
         String[] lunchNumbersData = data[0].split(LUNCH_SPLIT_VALUE);
@@ -42,7 +43,7 @@ public class BurzaLunchSelector {
             lunchNumbers = lunchNumberList.toArray(new BurzaLunch.LunchNumber[lunchNumberList.size()]);
         }
 
-        return new BurzaLunchSelector(lunchNumbers, new Date(Long.parseLong(data[1])));
+        return new BurzaLunchSelector(lunchNumbers, new Date(Long.parseLong(data[1])));*/
     }
 
     public boolean isSelected(MonthLunchDay lunch) {
@@ -50,6 +51,8 @@ public class BurzaLunchSelector {
     }
 
     public boolean isSelected(BurzaLunch lunch) {
+        /*Log.d(getClass().getSimpleName(), "isSelected date1: " + date + " date2: "
+                + lunch.getDate() + " equals: " + date.equals(lunch.getDate()));*/
         return date.equals(lunch.getDate())
                 && checkLunchNumber(lunch.getLunchNumber());
     }
@@ -70,13 +73,14 @@ public class BurzaLunchSelector {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        return new Gson().toJson(this);
+        /*StringBuilder builder = new StringBuilder();
         if (lunchNumbers.length > 0) {
             builder.append(lunchNumbers[0]);
             for (int i = 1; i < lunchNumbers.length; i++)
                 builder.append(LUNCH_SPLIT_VALUE).append(lunchNumbers[i]);
         }
         builder.append(DATA_SPLIT_VALUE).append(date.getTime());
-        return builder.toString();
+        return builder.toString();*/
     }
 }

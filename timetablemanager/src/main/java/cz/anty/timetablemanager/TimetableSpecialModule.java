@@ -2,6 +2,7 @@ package cz.anty.timetablemanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,7 @@ public class TimetableSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected boolean onInitialize() {
+    protected boolean onInitialize(SharedPreferences preferences) {
         if (TimetableSelectActivity.timetableManager == null)
             TimetableSelectActivity.timetableManager = new TimetableManager(getContext());
 
@@ -56,11 +57,12 @@ public class TimetableSpecialModule extends SpecialModule {
                 .timetableManager.getTimetables()) {
             mItems.add(new TimetableSpecialItem(timetable));
         }
+        restore(preferences);
         return true;
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(SharedPreferences preferences) {
         //boolean changed = false;
         for (Timetable timetable : TimetableSelectActivity
                 .timetableManager.getTimetables()) {
@@ -77,9 +79,33 @@ public class TimetableSpecialModule extends SpecialModule {
                 //changed = true;
             }
         }
+        restore(preferences);
         /*if (changed) notifyItemsChanged();
         else notifyItemsModified();*/
         notifyItemsChanged();
+    }
+
+    private void restore(SharedPreferences preferences) {
+        addSpecialItem.setEnabled(preferences.getBoolean(
+                Constants.SETTING_NAME_ITEM_TIMETABLE_ADD, true));
+
+        for (TimetableSpecialItem item : mItems) {
+            item.setEnabled(preferences.getBoolean(item
+                    .getTimetable().getName() + Constants
+                    .SETTING_NAME_ITEM_TIMETABLE, true));
+        }
+    }
+
+    @Override
+    protected void onSaveState(SharedPreferences.Editor preferences) {
+        preferences.putBoolean(Constants.SETTING_NAME_ITEM_TIMETABLE_ADD,
+                addSpecialItem.isEnabled());
+
+        for (TimetableSpecialItem item : mItems) {
+            preferences.putBoolean(item.getTimetable().getName()
+                            + Constants.SETTING_NAME_ITEM_TIMETABLE,
+                    item.isEnabled());
+        }
     }
 
     @Override

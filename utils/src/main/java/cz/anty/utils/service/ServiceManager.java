@@ -62,6 +62,7 @@ public final class ServiceManager<B extends IBinder> {
     public static void disconnectAll() {
         for (ServiceManager manager : SERVICE_MANAGERS) {
             manager.forceDisconnect();
+            manager.stopService();
         }
     }
 
@@ -87,11 +88,21 @@ public final class ServiceManager<B extends IBinder> {
         }
     }
 
+    public void startService() {
+        Intent service = new Intent(mContext, mServiceClass);
+        mContext.startService(service);
+    }
+
+    public boolean stopService() {
+        Intent service = new Intent(mContext, mServiceClass);
+        return mContext.stopService(service);
+    }
+
     public void connect() {
         if (!isConnected()) {
             Intent service = new Intent(mContext, mServiceClass);
-            mContext.startService(service);
-            mContext.bindService(service, mConnection, 0);
+            //mContext.startService(service);
+            mContext.bindService(service, mConnection, Context.BIND_AUTO_CREATE);
         }
     }
 

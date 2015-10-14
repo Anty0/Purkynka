@@ -3,7 +3,7 @@
     android:configure="cz.anty.timetablemanager.widget.TimetableLessonWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/timetable_lesson_widget_loading"
     android:initialLayout="@layout/timetable_lesson_widget_loading"
-    android:minHeight="60dp"
+    android:minHeight="110dp"
     android:minWidth="110dp"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"

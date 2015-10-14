@@ -43,6 +43,9 @@
             android:exported="false" />
 
         <activity
+            android:name=".RemovedItemsActivity"
+            android:label="@string/activity_title_removed_items" />
+        <activity
             android:name=".firststart.FirstStartActivity"
             android:label="@string/app_name" />
         <activity

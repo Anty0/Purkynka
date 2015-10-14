@@ -17,11 +17,11 @@ public abstract class SpecialItem {
 
     }
 
-    protected void onLongClick() {
-
+    protected boolean onLongClick() {
+        return false;
     }
 
-    protected void onHideClick() {
+    protected void onHideClick(boolean hide) {
 
     }
 

@@ -2,6 +2,7 @@ package cz.anty.purkynkamanager.update;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
 import java.io.IOException;
@@ -21,12 +22,12 @@ import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
  */
 public class UpdateSpecialModule extends SpecialModule {
 
-    private final SpecialItem[] mItems;
+    private final UpdateSpecialItem[] mItems;
     private boolean updateAvailable = false;
 
     public UpdateSpecialModule(Context context) {
         super(context);
-        mItems = new SpecialItem[]{
+        mItems = new UpdateSpecialItem[]{
                 new UpdateSpecialItem()
         };
     }
@@ -42,7 +43,10 @@ public class UpdateSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected boolean onInitialize() {
+    protected boolean onInitialize(SharedPreferences preferences) {
+        mItems[0].setEnabled(preferences
+                .getBoolean(Constants.SETTING_NAME_ITEM_UPDATE, true));
+
         try {
             UpdateReceiver.checkUpdate(getContext());
         } catch (IOException | NumberFormatException e) {
@@ -54,12 +58,18 @@ public class UpdateSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(SharedPreferences preferences) {
         boolean last = updateAvailable;
-        onInitialize();
+        onInitialize(preferences);
         if (last != updateAvailable)
             notifyItemsChanged();
         //notifyItemsModified();
+    }
+
+    @Override
+    protected void onSaveState(SharedPreferences.Editor preferences) {
+        preferences.putBoolean(Constants.SETTING_NAME_ITEM_UPDATE,
+                !isUpdateAvailable() || mItems[0].isEnabled());
     }
 
     public boolean isUpdateAvailable() {
@@ -99,7 +109,8 @@ public class UpdateSpecialModule extends SpecialModule {
                     .append(String.format(context.getString(R.string.notify_text_update_new),
                             UpdateReceiver.getLatestName(context)));
             if (isShowDescription())
-                textData.append("\n\n").append(context.getString(R.string.dialog_message_update_alert));
+                textData.append("\n\n").append(context.getString(R.string
+                        .dialog_message_update_alert));
 
             return textData;
         }
@@ -108,7 +119,7 @@ public class UpdateSpecialModule extends SpecialModule {
         public void onClick() {
             Context context = getContext();
             context.startActivity(new Intent(context, UpdateActivity.class)
-                    .putExtra(UpdateActivity.EXTRA_SKIP_DIALOG, true));
+                    .putExtra(UpdateActivity.EXTRA_SKIP_DIALOG, isUpdateAvailable()));
         }
 
         @Override

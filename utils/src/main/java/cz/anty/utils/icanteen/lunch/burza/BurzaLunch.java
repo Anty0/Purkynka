@@ -71,7 +71,7 @@ public class BurzaLunch implements MultilineItem {
 
     @Override
     public CharSequence getTitle(Context context, int position) {
-        return DATE_FORMAT.format(getDate()) + " " + getPieces() + " x " + getLunchNumber().toString();
+        return DATE_FORMAT.format(getDate()) + " - " + getPieces() + " x " + getLunchNumber().toString();
     }
 
     @Override

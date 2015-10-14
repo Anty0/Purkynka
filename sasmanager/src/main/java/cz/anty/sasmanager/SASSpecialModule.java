@@ -2,6 +2,7 @@ package cz.anty.sasmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
@@ -23,12 +24,12 @@ import cz.anty.utils.sas.mark.MarksManager;
  */
 public class SASSpecialModule extends SpecialModule {
 
-    private final SpecialItem[] mItems;
+    private final MultilineSpecialItem[] mItems;
     private Lesson badLesson = null;
 
     public SASSpecialModule(Context context) {
         super(context);
-        mItems = new SpecialItem[]{
+        mItems = new MultilineSpecialItem[]{
                 new SASLoginSpecialItem(),
                 new SASWrongMarkSpecialItem()
         };
@@ -45,13 +46,18 @@ public class SASSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected boolean onInitialize() {
-        onUpdate();
+    protected boolean onInitialize(SharedPreferences preferences) {
+        onUpdate(preferences);
         return false;
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(SharedPreferences preferences) {
+        mItems[0].setEnabled(preferences
+                .getBoolean(Constants.SETTING_NAME_ITEM_SAS_LOGIN, true));
+        mItems[1].setEnabled(preferences
+                .getBoolean(Constants.SETTING_NAME_ITEM_SAS_WRONG_MARK, true));
+
         SASSplashActivity.initService(getContext(), getWorker(), new Runnable() {
             @Override
             public void run() {
@@ -69,6 +75,14 @@ public class SASSpecialModule extends SpecialModule {
                 });
             }
         });
+    }
+
+    @Override
+    protected void onSaveState(SharedPreferences.Editor preferences) {
+        preferences.putBoolean(Constants.SETTING_NAME_ITEM_SAS_LOGIN,
+                mItems[0].isEnabled())
+                .putBoolean(Constants.SETTING_NAME_ITEM_SAS_WRONG_MARK,
+                        mItems[1].isEnabled());
     }
 
     private void updateBadLesson() {
@@ -153,10 +167,15 @@ public class SASSpecialModule extends SpecialModule {
         @Nullable
         @Override
         public CharSequence getTitle() {
-            if (badLesson == null) return null;
+            String name = "NONE", diameter = "1";
+            if (badLesson != null) {
+                name = badLesson.getShortName();
+                diameter = Lesson.FORMAT
+                        .format(badLesson.getDiameter());
+            }
             return String.format(getContext().getString(R.string
                             .special_item_title_bad_lesson_diameter),
-                    badLesson.getShortName(), Lesson.FORMAT.format(badLesson.getDiameter()));
+                    name, diameter);
         }
 
         @Override

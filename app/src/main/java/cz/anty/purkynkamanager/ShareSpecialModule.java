@@ -17,13 +17,15 @@ import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
  */
 public class ShareSpecialModule extends SpecialModule {
 
-    private final SpecialItem[] mItems;
+    private final ShareSpecialItem[] mItems;
+    private final SharedPreferences mPreferences;
     private boolean mShowShare = false;
-    private SharedPreferences preferences;
 
     public ShareSpecialModule(Context context) {
         super(context);
-        mItems = new SpecialItem[]{
+        mPreferences = context.getSharedPreferences(
+                Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
+        mItems = new ShareSpecialItem[]{
                 new ShareSpecialItem()
         };
     }
@@ -39,20 +41,24 @@ public class ShareSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected boolean onInitialize() {
-        preferences = getContext().getSharedPreferences(
-                Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE);
-        onUpdate();
+    protected boolean onInitialize(SharedPreferences preferences) {
+        onUpdate(preferences);
         return true;
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(SharedPreferences preferences) {
         boolean last = mShowShare;
-        mShowShare = preferences.getBoolean(Constants.SETTING_NAME_SHOW_SHARE, true);
+        mShowShare = mPreferences.getBoolean(Constants
+                .SETTING_NAME_SHOW_SHARE, true);
         if (last != mShowShare)
             notifyItemsChanged();
         //notifyItemsModified();
+    }
+
+    @Override
+    protected void onSaveState(SharedPreferences.Editor preferences) {
+
     }
 
     public boolean isShowShare() {
@@ -96,7 +102,7 @@ public class ShareSpecialModule extends SpecialModule {
                             .putExtra(Intent.EXTRA_TEXT, context.getText(R.string.text_extra_text_share)),
                     null));
 
-            preferences.edit().putBoolean(Constants.SETTING_NAME_SHOW_SHARE, false).apply();
+            mPreferences.edit().putBoolean(Constants.SETTING_NAME_SHOW_SHARE, false).apply();
             mShowShare = false;
             notifyItemsChanged();
         }

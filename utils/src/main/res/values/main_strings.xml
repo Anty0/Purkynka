@@ -41,6 +41,7 @@
     <string name="but_validate">Validate</string>
     <string name="but_save">Save</string>
     <string name="but_start">Start</string>
+    <string name="but_stop">Stop</string>
     <string name="but_retry">Retry</string>
     <string name="but_log_out">Log out</string>
     <string name="but_cancel">Cancel</string>

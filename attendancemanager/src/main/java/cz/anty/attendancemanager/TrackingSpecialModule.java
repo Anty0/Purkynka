@@ -2,6 +2,7 @@ package cz.anty.attendancemanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +27,11 @@ import cz.anty.utils.list.recyclerView.specialAdapter.SpecialModule;
  */
 public class TrackingSpecialModule extends SpecialModule {
 
-    private final SpecialItem[] mItems;
+    private final TrackingSpecialItem[] mItems;
 
     public TrackingSpecialModule(Context context) {
         super(context);
-        mItems = new SpecialItem[]{
+        mItems = new TrackingSpecialItem[]{
                 new TrackingSpecialItem()
         };
     }
@@ -46,21 +47,35 @@ public class TrackingSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected boolean onInitialize() {
+    protected boolean onInitialize(SharedPreferences preferences) {
         if (TrackingActivity.mansManager == null) {
             TrackingActivity.mansManager = new TrackingMansManager(getContext());
         }
-        onUpdate();
+        refresh(preferences);
         return true;
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(SharedPreferences preferences) {
+        refresh(preferences);
+        notifyItemsChanged();
+        //notifyItemsModified();
+    }
+
+    private void refresh(SharedPreferences preferences) {
+        mItems[0].setEnabled(preferences
+                .getBoolean(Constants.SETTING_NAME_ITEM_TRACKING, true));
+
         TrackingActivity.mansManager = TrackingReceiver
                 .refreshTrackingMans(getContext(),
                         TrackingActivity.mansManager, true);
-        notifyItemsChanged();
-        //notifyItemsModified();
+
+    }
+
+    @Override
+    protected void onSaveState(SharedPreferences.Editor preferences) {
+        preferences.putBoolean(Constants.SETTING_NAME_ITEM_TRACKING,
+                mItems[0].isEnabled());
     }
 
     @Override

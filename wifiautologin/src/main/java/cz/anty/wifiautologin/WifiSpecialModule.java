@@ -2,6 +2,7 @@ package cz.anty.wifiautologin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
 import cz.anty.utils.AppDataManager;
@@ -38,18 +39,28 @@ public class WifiSpecialModule extends SpecialModule {
     }
 
     @Override
-    protected boolean onInitialize() {
+    protected boolean onInitialize(SharedPreferences preferences) {
+        mItems[0].setEnabled(preferences.getBoolean(Constants
+                .SETTING_NAME_ITEM_WIFI_LOGIN, true));
+
         showItem = !AppDataManager.isLoggedIn
                 (AppDataManager.Type.WIFI);
         return true;
     }
 
     @Override
-    protected void onUpdate() {
+    protected void onUpdate(SharedPreferences preferences) {
         boolean last = showItem;
-        onInitialize();
+        onInitialize(preferences);
         if (last != showItem)
-            notifyItemsChanged();//
+            notifyItemsChanged();
+        //notifyItemsModified();
+    }
+
+    @Override
+    protected void onSaveState(SharedPreferences.Editor preferences) {
+        preferences.putBoolean(Constants.SETTING_NAME_ITEM_WIFI_LOGIN,
+                mItems[0].isEnabled());
     }
 
     @Override

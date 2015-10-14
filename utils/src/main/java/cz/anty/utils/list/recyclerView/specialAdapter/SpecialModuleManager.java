@@ -1,6 +1,7 @@
 package cz.anty.utils.list.recyclerView.specialAdapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import cz.anty.utils.Constants;
 import cz.anty.utils.Log;
 import cz.anty.utils.list.recyclerView.SpecialItemAnimator;
 
@@ -27,14 +29,19 @@ public class SpecialModuleManager {
     };
 
     private final Context mContext;
+    private final SharedPreferences mPreferences;
     private final SpecialRecyclerAdapter mAdapter;
     private final SpecialModule[] mModules;
+    private final boolean mShowEnabled;
     private boolean mInitialized = false;
 
-    public SpecialModuleManager(RecyclerView recyclerView, SpecialModule... modules) {
+    public SpecialModuleManager(RecyclerView recyclerView, boolean showEnabled, SpecialModule... modules) {
         Log.d(getClass().getSimpleName(), "<init>");
         mModules = modules;
+        mShowEnabled = showEnabled;
         mContext = recyclerView.getContext();
+        mPreferences = mContext.getSharedPreferences
+                (Constants.SETTINGS_NAME_MODULES, Context.MODE_PRIVATE);
         mAdapter = new SpecialRecyclerAdapter();
         mAdapter.setNotifyOnChange(false);
         reInit(recyclerView);
@@ -48,7 +55,9 @@ public class SpecialModuleManager {
     public synchronized void reInit(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setItemAnimator(new SpecialItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+        synchronized (mAdapter) {
+            recyclerView.setAdapter(mAdapter);
+        }
     }
 
     public synchronized void init() {
@@ -75,8 +84,12 @@ public class SpecialModuleManager {
                         .post(new Runnable() {
                             @Override
                             public void run() {
-                                SpecialModuleManager.this
-                                        .removeItem(item);
+                                if (mShowEnabled) {
+                                    SpecialModuleManager.this
+                                            .removeItem(item);
+                                    return;
+                                }
+                                refreshItems();
                             }
                         });
             }
@@ -84,7 +97,7 @@ public class SpecialModuleManager {
 
         synchronized (mModules) {
             for (SpecialModule module : mModules) {
-                module.init(onChange, onRemoveItem);
+                module.init(mPreferences, onChange, onRemoveItem);
             }
         }
     }
@@ -94,17 +107,30 @@ public class SpecialModuleManager {
         synchronized (mModules) {
             for (SpecialModule module : mModules) {
                 if (module.isInitialized())
-                    module.update();
+                    module.update(mPreferences);
             }
         }
         refreshItems();
     }
 
+    public synchronized void saveState() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        synchronized (mModules) {
+            for (SpecialModule module : mModules) {
+                if (module.isInitialized())
+                    module.onSaveState(editor);
+            }
+        }
+        editor.apply();
+    }
+
     private void removeItem(SpecialItem item) {
-        int index = mAdapter.getItemPosition(item);
-        if (index != -1) {
-            mAdapter.removeItem(item);
-            mAdapter.notifyItemRemoved(index);
+        synchronized (mAdapter) {
+            int index = mAdapter.getItemPosition(item);
+            if (index != -1) {
+                mAdapter.removeItem(item);
+                mAdapter.notifyItemRemoved(index);
+            }
         }
     }
 
@@ -121,15 +147,30 @@ public class SpecialModuleManager {
         return items;
     }
 
+    private ArrayList<SpecialItem> getAllEnabledItems() {
+        ArrayList<SpecialItem> items = new ArrayList<>();
+        for (SpecialItem item : getAllItems()) {
+            if (item.isVisible()) items.add(item);
+        }
+        return items;
+    }
+
+    private ArrayList<SpecialItem> getAllDisabledItems() {
+        ArrayList<SpecialItem> items = new ArrayList<>();
+        for (SpecialItem item : getAllItems()) {
+            if (item instanceof SpecialItemHideImpl
+                    && !((SpecialItemHideImpl) item)
+                    .isEnabled()) items.add(item);
+        }
+        return items;
+    }
+
     public void refreshItems() {
         synchronized (mAdapter) {
             Log.d(getClass().getSimpleName(), "refreshItems");
-            ArrayList<SpecialItem> items = new ArrayList<>();
-            for (SpecialItem item : getAllItems()) {
-                if (item.isVisible()) items.add(item);
-            }
             mAdapter.clearItems();
-            mAdapter.addAllItems(items);
+            mAdapter.addAllItems(mShowEnabled ? getAllEnabledItems()
+                    : getAllDisabledItems());
             mAdapter.notifyDataSetChanged();
         }
     }

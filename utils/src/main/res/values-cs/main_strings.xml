@@ -41,6 +41,7 @@
     <string name="but_validate">Ověřit</string>
     <string name="but_save">Uložit</string>
     <string name="but_start">Start</string>
+    <string name="but_stop">Stop</string>
     <string name="but_retry">Zkusit ZNOVU</string>
     <string name="but_log_out">Odhlásit</string>
     <string name="but_cancel">Storno</string>

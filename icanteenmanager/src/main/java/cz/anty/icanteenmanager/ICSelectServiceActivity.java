@@ -24,20 +24,26 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
         MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>();
         adapter.clearItems();
-        adapter.addAllItems(new TextMultilineItem(getText(R.string.app_name_icanteen_burza),
-                        showDescription ? getText(R.string.app_description_icanteen_burza) : null),
-                new TextMultilineItem(getText(R.string.app_name_icanteen_lunch_order),
-                        showDescription ? getText(R.string.app_description_icanteen_lunch_order) : null));
+        adapter.addAllItems(
+                new TextMultilineItem(getText(R.string.app_name_icanteen_lunch_order), showDescription
+                        ? getText(R.string.app_description_icanteen_lunch_order) : null),
+                new TextMultilineItem(getText(R.string.app_name_icanteen_burza_watcher), showDescription
+                        ? getText(R.string.app_description_icanteen_burza_watcher) : null),
+                new TextMultilineItem(getText(R.string.app_name_icanteen_burza), showDescription
+                        ? getText(R.string.app_description_icanteen_burza) : null));
 
         RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaActivity.class));
+                        startActivity(new Intent(ICSelectServiceActivity.this, ICLunchOrderActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(ICSelectServiceActivity.this, ICLunchOrderActivity.class));
+                        startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaCheckerActivity.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaActivity.class));
                         break;
                 }
             }

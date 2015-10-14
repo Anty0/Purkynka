@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         if (moduleManager == null)
-            moduleManager = new SpecialModuleManager(recyclerView,
+            moduleManager = new SpecialModuleManager(recyclerView, true,
                     new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this),
                     new SASSpecialModule(this), new ICSpecialModule(this), new TimetableSpecialModule(this),
                     new WifiSpecialModule(this));
@@ -201,6 +201,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        moduleManager.saveState();
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         do {
             try {
@@ -216,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (showOptionsMenu) {
-            getMenuInflater().inflate(R.menu.menu_default, menu);
+            getMenuInflater().inflate(R.menu.menu_main, menu);
             return true;
         }
         return false;
@@ -232,6 +238,10 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_removed_items) {
+            startActivity(new Intent(MainActivity.this, RemovedItemsActivity.class));
             return true;
         }
 

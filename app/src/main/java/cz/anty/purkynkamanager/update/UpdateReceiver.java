@@ -50,11 +50,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                                             + String.format(context.getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)))
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentIntent(pendingIntent)
-                            .addAction(R.mipmap.ic_launcher, context.getText(R.string.but_update), pendingIntent)
                             .setAutoCancel(false)
-                            .setOngoing(!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
-                                    .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) || !((WifiManager) context
-                                    .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().equals("<unknown ssid>"))
                             .setDefaults(Notification.DEFAULT_ALL)
                             .build());
         } else {

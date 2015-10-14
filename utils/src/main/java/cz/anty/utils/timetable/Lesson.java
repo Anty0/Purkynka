@@ -65,6 +65,9 @@ public class Lesson implements MultilineItem {
 
     @Override
     public CharSequence getText(Context context, int position) {
+        if (position == NO_POSITION)
+            return getTeacher() + " " + getName();
+
         int minutes = Timetable.START_TIMES_MINUTES[position];
         return Timetable.START_TIMES_HOURS[position] +
                 ":" + (minutes < 10 ? "0" + minutes : minutes)

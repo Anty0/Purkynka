@@ -7,6 +7,8 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import cz.anty.utils.Log;
+
 /**
  * Created by anty on 9.6.15.
  *
@@ -68,7 +70,9 @@ public class OnceRunThread {
             public void run() {
                 try {
                     start(thread, broadcastResult);
-                } catch (InterruptedException ignored) {
+                } catch (InterruptedException e) {
+                    Log.d(OnceRunThread.this.getClass()
+                            .getSimpleName(), "startWorker", e);
                 }
             }
         }).start();

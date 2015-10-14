@@ -377,6 +377,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             );
         }
 
+        public void stopBurzaChecker() {
+            startService(new Intent(ICService.this, ICBurzaCheckerService.class)
+                    .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE,
+                            ICBurzaCheckerService.BURZA_CHECKER_STATE_STOP));
+        }
+
         public BurzaLunch[] getBurza(Thread refreshTread) throws InterruptedException {
             worker.waitToWorkerStop(refreshTread);
             if (mLunchesManager == null) return null;
@@ -389,6 +395,11 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             return mLunchesManager.getBurzaLunches();
         }
 
+        public BurzaLunch[] getBurzaFast() {
+            if (mLunchesManager == null) return null;
+            return mLunchesManager.getBurzaLunches();
+        }
+
         public MonthLunchDay[] getMonth(Thread refreshTread) throws InterruptedException {
             worker.waitToWorkerStop(refreshTread);
             if (mLunchesManager == null) return null;
@@ -397,6 +408,11 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
         public MonthLunchDay[] getMonth() throws InterruptedException {
             worker.waitToWorkerStop();
+            if (mLunchesManager == null) return null;
+            return mLunchesManager.getMonthLunches();
+        }
+
+        public MonthLunchDay[] getMonthFast() {
             if (mLunchesManager == null) return null;
             return mLunchesManager.getMonthLunches();
         }

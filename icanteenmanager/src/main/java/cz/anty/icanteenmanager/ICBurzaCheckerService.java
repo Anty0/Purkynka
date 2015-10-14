@@ -26,27 +26,43 @@ public class ICBurzaCheckerService extends Service {
     public static final String BURZA_CHECKER_STATE_START = "START";
     public static final String BURZA_CHECKER_STATE_STOP = "STOP";
 
-    private final OnceRunThread worker = new OnceRunThread();
+    private static final OnceRunThread worker = new OnceRunThread();
+    private static Runnable onStateChangedListener = null;
+    private static boolean running = false;
     private ICService.ICBinder binder = null;
     private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
             = new ServiceManager.BinderConnection<ICService.ICBinder>() {
         @Override
         public void onBinderConnected(ICService.ICBinder ICBinder) {
-            Log.d("BurzaCheckerService", "onBinderConnected");
+            Log.d(ICBurzaCheckerService.this.getClass().getSimpleName(), "onBinderConnected");
             binder = ICBinder;
 
         }
 
         @Override
         public void onBinderDisconnected() {
-            Log.d("BurzaCheckerService", "onBinderDisconnected");
+            Log.d(ICBurzaCheckerService.this.getClass().getSimpleName(), "onBinderDisconnected");
             binder = null;
         }
     };
 
+    public static void setOnStateChangedListener(Runnable onStateChanged) {
+        onStateChangedListener = onStateChanged;
+    }
+
+    public static boolean isRunning() {
+        return running;
+    }
+
+    private static void setRunning(boolean running) {
+        ICBurzaCheckerService.running = running;
+        if (onStateChangedListener != null)
+            onStateChangedListener.run();
+    }
+
     @Override
     public void onCreate() {
-        Log.d("BurzaCheckerService", "onCreate");
+        Log.d(getClass().getSimpleName(), "onCreate");
         super.onCreate();
 
         worker.setPowerManager(this);
@@ -80,7 +96,7 @@ public class ICBurzaCheckerService extends Service {
                             });
                             break;
                         } catch (Exception e) {
-                            Log.d("BurzaCheckerService", "onStartCommand EXTRA_BURZA_CHECKER_STATE", e);
+                            Log.d(getClass().getSimpleName(), "onStartCommand EXTRA_BURZA_CHECKER_STATE", e);
                             stopSelf();
                         }
                     }
@@ -106,7 +122,7 @@ public class ICBurzaCheckerService extends Service {
     }
 
     private void burzaChecker(@NonNull BurzaLunchSelector selector) {
-        Log.d("BurzaCheckerService", "burzaChecker");
+        Log.d(getClass().getSimpleName(), "burzaChecker");
 
         NotificationManager notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
         notificationManager.cancel(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA_RESULT);
@@ -115,15 +131,15 @@ public class ICBurzaCheckerService extends Service {
                 .setContentTitle(getText(R.string.notify_title_burza_checker_running))
                 .setContentText(getText(R.string.notify_text_burza_checker_running))
                 .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
-                .setContentIntent(PendingIntent.getService(this, 0,
-                        new Intent(this, ICBurzaCheckerService.class)
-                                .putExtra(EXTRA_BURZA_CHECKER_STATE, BURZA_CHECKER_STATE_STOP), 0))
+                .setContentIntent(PendingIntent.getActivity(this, 0,
+                        new Intent(this, ICBurzaCheckerActivity.class), 0))
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .build();
 
         startForeground(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA, n);
+        setRunning(true);
 
         boolean completed = false;
         while (!Thread.interrupted() && binder != null) {
@@ -140,6 +156,7 @@ public class ICBurzaCheckerService extends Service {
             }
         }
 
+        setRunning(false);
         stopForeground(true);
 
         boolean successfully = false;
@@ -152,6 +169,8 @@ public class ICBurzaCheckerService extends Service {
                                 .setContentTitle(getText(R.string.notify_title_burza_checker_completed))
                                 .setContentText(getText(R.string.notify_text_burza_checker_completed))
                                 .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                                .setContentIntent(PendingIntent.getActivity(this, 0,
+                                        new Intent(this, ICLunchOrderActivity.class), 0))
                                 .setAutoCancel(true)
                                 .setDefaults(Notification.DEFAULT_ALL)
                                 .build();
@@ -172,7 +191,7 @@ public class ICBurzaCheckerService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d("BurzaCheckerService", "onDestroy");
+        Log.d(getClass().getSimpleName(), "onDestroy");
 
         if (worker.isWorkerRunning())
             worker.stopActualWorker();
@@ -186,7 +205,7 @@ public class ICBurzaCheckerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d("BurzaCheckerService", "onBind");
+        Log.d(getClass().getSimpleName(), "onBind");
         //throw new UnsupportedOperationException("Not yet implemented");
         return null;
     }

@@ -3,6 +3,7 @@
     <string name="app_name">Purkyňka</string>
     <string name="app_name_updater">Updater</string>
 
+    <string name="activity_title_removed_items">Odebrané položky</string>
     <string name="activity_title_first_start_welcome">Vítejte</string>
     <string name="activity_title_first_start_terms">Podmínky používání aplikace</string>
     <string name="activity_title_first_start_change_log">ChangeLog</string>

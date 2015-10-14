@@ -139,8 +139,8 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
         final View view = holder.itemView;
         final ViewPropertyAnimatorCompat animation = ViewCompat.animate(view);
         mRemoveAnimations.add(holder);
-        animation.setDuration(getRemoveDuration())
-                .translationXBy((float) holder.itemView.getWidth() * 1.2f).alpha(0)
+        animation.setDuration(getRemoveDuration()).translationXBy(
+                holder.itemView.getWidth()).alpha(0)
                 .setListener(new VpaListenerAdapter() {
                     @Override
                     public void onAnimationStart(View view) {
@@ -151,6 +151,7 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
                     public void onAnimationEnd(View view) {
                         animation.setListener(null);
                         ViewCompat.setAlpha(view, 1);
+                        ViewCompat.setTranslationX(view, 0);
                         dispatchRemoveFinished(holder);
                         mRemoveAnimations.remove(holder);
                         dispatchFinishedWhenDone();

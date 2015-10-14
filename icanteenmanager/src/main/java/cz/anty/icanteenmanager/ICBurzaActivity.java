@@ -1,38 +1,17 @@
 package cz.anty.icanteenmanager;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatTextView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 
 import cz.anty.utils.Log;
 import cz.anty.utils.icanteen.lunch.burza.BurzaLunch;
-import cz.anty.utils.icanteen.lunch.burza.BurzaLunchSelector;
-import cz.anty.utils.icanteen.lunch.month.MonthLunch;
-import cz.anty.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.utils.list.listView.MultilineItem;
 import cz.anty.utils.list.listView.TextMultilineItem;
 import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
@@ -50,7 +29,7 @@ public class ICBurzaActivity extends AppCompatActivity {
             = new ServiceManager.BinderConnection<ICService.ICBinder>() {
         @Override
         public void onBinderConnected(ICService.ICBinder ICBinder) {
-            Log.d("ICBurzaActivity", "onBinderConnected");
+            Log.d(ICBurzaActivity.this.getClass().getSimpleName(), "onBinderConnected");
             binder = ICBinder;
             refreshThread.startWorker(new Runnable() {
                 @Override
@@ -73,159 +52,17 @@ public class ICBurzaActivity extends AppCompatActivity {
 
         @Override
         public void onBinderDisconnected() {
-            Log.d("ICBurzaActivity", "onBinderDisconnected");
+            Log.d(ICBurzaActivity.this.getClass().getSimpleName(), "onBinderDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d("ICBurzaActivity", "onBinderDisconnected", e);
+                Log.d(ICBurzaActivity.this.getClass().getSimpleName(), "onBinderDisconnected", e);
             }
             binder.setOnBurzaChangeListener(null);
             binder = null;
 
         }
     };
-
-    static void startBurzaChecker(final Context context, final ICService.ICBinder binder) {
-        Log.d("ICBurzaActivity", "startBurzaChecker");
-
-        ScrollView mainScrollView = new ScrollView(context);
-
-        LinearLayout mainLinearLayout = new LinearLayout(context);
-        mainLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        //mainLinearLayout.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-        mainScrollView.addView(mainLinearLayout);
-
-        TextView dateTextView = new AppCompatTextView(context);
-        dateTextView.setText(R.string.text_view_text_date_to_watch);
-        mainLinearLayout.addView(dateTextView);
-
-        final DatePicker datePicker = new DatePicker(context);
-        if (Build.VERSION.SDK_INT >= 11) {
-            datePicker.setCalendarViewShown(false);
-            datePicker.setSpinnersShown(true);
-        }
-        mainLinearLayout.addView(datePicker);
-
-        final TextView dateWrongTextView = new AppCompatTextView(context);
-        dateWrongTextView.setTextColor(Color.RED);
-        dateWrongTextView.setText(R.string.text_view_text_you_still_have_got_lunch);
-        dateWrongTextView.setVisibility(View.GONE);
-        mainLinearLayout.addView(dateWrongTextView);
-
-        TextView lunchNumberTextView = new AppCompatTextView(context);
-        lunchNumberTextView.setText(R.string.text_view_text_numbers_to_watch);
-        mainLinearLayout.addView(lunchNumberTextView);
-
-        final CheckBox lunchCheckBox1 = new AppCompatCheckBox(context);
-        lunchCheckBox1.setText(BurzaLunch.LunchNumber.LUNCH_1.toString());
-        lunchCheckBox1.setChecked(true);
-        mainLinearLayout.addView(lunchCheckBox1);
-
-        final CheckBox lunchCheckBox2 = new AppCompatCheckBox(context);
-        lunchCheckBox2.setText(BurzaLunch.LunchNumber.LUNCH_2.toString());
-        lunchCheckBox2.setChecked(true);
-        mainLinearLayout.addView(lunchCheckBox2);
-
-        final CheckBox lunchCheckBox3 = new AppCompatCheckBox(context);
-        lunchCheckBox3.setText(BurzaLunch.LunchNumber.LUNCH_3.toString());
-        lunchCheckBox3.setChecked(true);
-        mainLinearLayout.addView(lunchCheckBox3);
-
-        DatePicker.OnDateChangedListener datePickerOnDateChangedListener =
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        dateWrongTextView.setVisibility(View.GONE);
-                        lunchCheckBox1.setText(BurzaLunch.LunchNumber.LUNCH_1.toString());
-                        lunchCheckBox2.setText(BurzaLunch.LunchNumber.LUNCH_2.toString());
-                        lunchCheckBox3.setText(BurzaLunch.LunchNumber.LUNCH_3.toString());
-                        lunchCheckBox1.setVisibility(View.VISIBLE);
-                        lunchCheckBox2.setVisibility(View.VISIBLE);
-                        lunchCheckBox3.setVisibility(View.VISIBLE);
-
-                        if (binder != null) {
-                            Calendar calendar = Calendar.getInstance();
-                            try {
-                                MonthLunchDay[] monthLunchDays = binder.getMonth();
-                                if (monthLunchDays == null) monthLunchDays = new MonthLunchDay[0];
-                                for (MonthLunchDay monthLunchDay : monthLunchDays) {
-                                    calendar.setTime(monthLunchDay.getDate());
-                                    if (calendar.get(Calendar.DAY_OF_MONTH) == dayOfMonth
-                                            && calendar.get(Calendar.MONTH) == monthOfYear
-                                            && calendar.get(Calendar.YEAR) == year) {
-                                        if (monthLunchDay.getOrderedLunch() != null)
-                                            dateWrongTextView.setVisibility(View.VISIBLE);
-
-                                        MonthLunch[] monthLunches = monthLunchDay.getLunches();
-
-                                        switch (monthLunches.length) {
-                                            case 3:
-                                                lunchCheckBox3.setText(String.format("%1$s - %2$s",
-                                                        BurzaLunch.LunchNumber.LUNCH_3.toString(), monthLunches[2].getName()));
-                                            case 2:
-                                                lunchCheckBox2.setText(String.format("%1$s - %2$s",
-                                                        BurzaLunch.LunchNumber.LUNCH_2.toString(), monthLunches[1].getName()));
-                                            case 1:
-                                                lunchCheckBox1.setText(String.format("%1$s - %2$s",
-                                                        BurzaLunch.LunchNumber.LUNCH_1.toString(), monthLunches[0].getName()));
-                                        }
-
-                                        switch (monthLunches.length) {
-                                            case 0:
-                                                lunchCheckBox1.setVisibility(View.GONE);
-                                            case 1:
-                                                lunchCheckBox2.setVisibility(View.GONE);
-                                            case 2:
-                                                lunchCheckBox3.setVisibility(View.GONE);
-                                        }
-
-                                        break;
-                                    }
-                                }
-                            } catch (InterruptedException e) {
-                                Log.d("ICBurzaActivity", "startBurzaChecker datePickerOnDateChangedListener:", e);
-                            }
-                        }
-                    }
-                };
-        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), datePickerOnDateChangedListener);
-        datePickerOnDateChangedListener.onDateChanged(datePicker, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
-
-        new AlertDialog.Builder(context)
-                .setTitle(R.string.notify_title_select_to_watch)
-                .setView(mainScrollView)
-                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
-                .setPositiveButton(R.string.but_start, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        List<BurzaLunch.LunchNumber> lunchNumbers = new ArrayList<>();
-                        if (lunchCheckBox1.isChecked())
-                            lunchNumbers.add(BurzaLunch.LunchNumber.LUNCH_1);
-                        if (lunchCheckBox2.isChecked())
-                            lunchNumbers.add(BurzaLunch.LunchNumber.LUNCH_2);
-                        if (lunchCheckBox3.isChecked())
-                            lunchNumbers.add(BurzaLunch.LunchNumber.LUNCH_3);
-
-                        try {
-                            if (binder == null)
-                                Toast.makeText(context, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
-                            else {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy", Locale.getDefault());
-                                binder.startBurzaChecker(
-                                        new BurzaLunchSelector(lunchNumbers.toArray(new BurzaLunch.LunchNumber[lunchNumbers.size()]),
-                                                dateFormat.parse(datePicker.getDayOfMonth() + "."
-                                                        + datePicker.getMonth() + "." + datePicker.getYear()))
-                                );
-                            }
-                        } catch (ParseException e) {
-                            Toast.makeText(context, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.but_cancel, null)
-                .setCancelable(true)
-                .show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,12 +84,6 @@ public class ICBurzaActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view, int position) {
                         MultilineItem item = adapter.getItem(position);
-
-                        if (item instanceof TextMultilineItem &&
-                                ((TextMultilineItem) item).getTag() == null) {
-                            startBurzaChecker(ICBurzaActivity.this, binder);
-                            return;
-                        }
 
                         final BurzaLunch lunch = item instanceof BurzaLunch
                                 ? (BurzaLunch) item : null;
@@ -304,11 +135,7 @@ public class ICBurzaActivity extends AppCompatActivity {
             public void run() {
                 MultilineItem[] data;
                 try {
-                    BurzaLunch[] dataList = binder.getBurza();
-                    if (dataList == null) dataList = new BurzaLunch[0];
-                    data = Arrays.asList(dataList).toArray(new MultilineItem[dataList.length + 1]);
-                    data[data.length - 1] = new TextMultilineItem(getText(
-                            R.string.menu_item_text_start_burza_checking), null);
+                    data = binder.getBurza();
                 } catch (NullPointerException | InterruptedException e) {
                     data = new MultilineItem[]{new TextMultilineItem(getText(R.string.exception_title_sas_manager_binder_null),
                             getText(R.string.exception_message_sas_manager_binder_null)).setTag("EXCEPTION")};
@@ -345,10 +172,6 @@ public class ICBurzaActivity extends AppCompatActivity {
             if (binder != null)
                 binder.refreshBurza();
             update();
-            return true;
-        }
-        if (id == R.id.action_start_burza) {
-            startBurzaChecker(this, binder);
             return true;
         }
 

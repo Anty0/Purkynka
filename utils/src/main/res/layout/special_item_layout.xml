@@ -15,6 +15,16 @@
     </FrameLayout>
 
     <ImageButton
+        android:id="@+id/restore_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/but_cancel"
+        android:src="@android:drawable/ic_menu_revert"
+        android:visibility="gone" />
+
+    <ImageButton
         android:id="@+id/hide_image_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -41,6 +41,7 @@ public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem, Special
 
         private final FrameLayout mContent;
         private final ImageButton mHideButton;
+        private final ImageButton mRestoreButton;
 
         private SpecialItem mItem = null;
         //private int mPosition;
@@ -53,9 +54,12 @@ public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem, Special
                     .findViewById(R.id.content_frame_layout);
             mHideButton = (ImageButton) itemView
                     .findViewById(R.id.hide_image_button);
+            mRestoreButton = (ImageButton) itemView
+                    .findViewById(R.id.restore_image_button);
             mContent.setOnClickListener(this);
             mContent.setOnLongClickListener(this);
             mHideButton.setOnClickListener(this);
+            mRestoreButton.setOnClickListener(this);
 
         }
 
@@ -67,8 +71,15 @@ public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem, Special
                 mItem = item;
                 mItem.onCreateViewHolder(mContent, position);
             }
-            mHideButton.setVisibility(mItem.isShowHideButton()
-                    ? View.VISIBLE : View.GONE);
+            if (mItem.isShowHideButton()) {
+                boolean enabled = !(item instanceof SpecialItemHideImpl)
+                        || ((SpecialItemHideImpl) item).isEnabled();
+                mHideButton.setVisibility(enabled ? View.VISIBLE : View.GONE);
+                mRestoreButton.setVisibility(enabled ? View.GONE : View.VISIBLE);
+            } else {
+                mHideButton.setVisibility(View.GONE);
+                mRestoreButton.setVisibility(View.GONE);
+            }
             mItem.onBindViewHolder(position);
             /*mItemView.setVisibility(mItem.isVisible()
                     ? View.VISIBLE : View.GONE);*/
@@ -77,18 +88,17 @@ public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem, Special
         @Override
         public void onClick(View v) {
             if (mItem != null) {
-                if (v == mHideButton) mItem.onHideClick();
-                else mItem.onClick();
+                if (v == mContent) {
+                    mItem.onClick();
+                    return;
+                }
+                mItem.onHideClick(v == mHideButton);
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            if (mItem != null) {
-                mItem.onLongClick();
-                return true;
-            }
-            return false;
+            return mItem != null && mItem.onLongClick();
         }
     }
 }

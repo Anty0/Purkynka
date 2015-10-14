@@ -3,6 +3,7 @@
     <string name="app_name">Purkynka</string>
     <string name="app_name_updater">Updater</string>
 
+    <string name="activity_title_removed_items">Removed items</string>
     <string name="activity_title_first_start_welcome">Welcome</string>
     <string name="activity_title_first_start_terms">Terms of use</string>
     <string name="activity_title_first_start_change_log">ChangeLog</string>

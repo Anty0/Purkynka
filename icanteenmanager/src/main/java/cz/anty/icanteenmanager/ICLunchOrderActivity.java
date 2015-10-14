@@ -123,7 +123,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                                     else {
                                         if (monthLunchToOrder != null)
                                             binder.orderLunch(monthLunchToOrder);
-                                        update(false);
+                                        update();
                                     }
                                 }
                             })
@@ -154,7 +154,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                                     Toast.makeText(ICLunchOrderActivity.this, R.string.toast_text_can_not_order_lunch, Toast.LENGTH_LONG).show();
                                 else {
                                     binder.toBurzaMonthLunch(monthLunch);
-                                    update(false);
+                                    update();
                                 }
                             }
                         });
@@ -178,10 +178,10 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             binder.setOnMonthChangeListener(new Runnable() {
                 @Override
                 public void run() {
-                    update(false);
+                    update();
                 }
             });
-            update(true);
+            update();
         }
 
         @Override
@@ -230,9 +230,8 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void update(final boolean moveToActualItem) {
-        if (!moveToActualItem && refreshThread
-                .isWorkerRunning()) return;
+    private void update() {
+        if (refreshThread.isWorkerRunning()) return;
         refreshThread.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -245,34 +244,34 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                             getText(R.string.exception_message_sas_manager_binder_null))};
                 }
 
+
                 int position = -1;
-                if (moveToActualItem) {
-                    Calendar actualCalendar = Calendar.getInstance();
-                    Calendar lunchCalendar = Calendar.getInstance();
-                    Calendar lunchTmpCalendar = Calendar.getInstance();
-                    lunchTmpCalendar.setTimeInMillis(Long.MAX_VALUE);
-                    for (int i = 0; i < data.length; i++) {
-                        lunchCalendar.setTime(((MonthLunchDay) data[i]).getDate());
-                        int yearDiff = lunchCalendar.get(Calendar.YEAR) - actualCalendar.get(Calendar.YEAR);
-                        int dayDiff = lunchCalendar.get(Calendar.DAY_OF_YEAR) - actualCalendar.get(Calendar.DAY_OF_YEAR);
+                Calendar actualCalendar = Calendar.getInstance();
+                Calendar lunchCalendar = Calendar.getInstance();
+                Calendar lunchTmpCalendar = Calendar.getInstance();
+                lunchTmpCalendar.setTimeInMillis(Long.MAX_VALUE);
+                for (int i = 0; i < data.length; i++) {
+                    lunchCalendar.setTime(((MonthLunchDay) data[i]).getDate());
+                    int yearDiff = lunchCalendar.get(Calendar.YEAR) - actualCalendar.get(Calendar.YEAR);
+                    int dayDiff = lunchCalendar.get(Calendar.DAY_OF_YEAR) - actualCalendar.get(Calendar.DAY_OF_YEAR);
                         /*Log.d(getClass().getSimpleName(), "update position: " + i
                                 + " yearDiff: " + yearDiff + " dayDiff: " + dayDiff);*/
 
-                        if (yearDiff == 0 && dayDiff == 0) {
-                            position = i;
-                            //Log.d(getClass().getSimpleName(), "update newUsedItem: " + i);
-                            break;
-                        }
+                    if (yearDiff == 0 && dayDiff == 0) {
+                        position = i;
+                        //Log.d(getClass().getSimpleName(), "update newUsedItem: " + i);
+                        break;
+                    }
 
                         /*Log.d(getClass().getSimpleName(), "update position: " + i
                                 + " time: " + time + " tmpTime: " + tmpTime);*/
-                        if (lunchCalendar.getTimeInMillis() < lunchTmpCalendar.getTimeInMillis() && (yearDiff > 0 || (yearDiff >= 0 && dayDiff >= 0))) {
-                            lunchTmpCalendar.setTime(lunchCalendar.getTime());
-                            position = i;
-                            //Log.d(getClass().getSimpleName(), "update newTmpItem: " + position);
-                        }
+                    if (lunchCalendar.getTimeInMillis() < lunchTmpCalendar.getTimeInMillis() && (yearDiff > 0 || (yearDiff >= 0 && dayDiff >= 0))) {
+                        lunchTmpCalendar.setTime(lunchCalendar.getTime());
+                        position = i;
+                        //Log.d(getClass().getSimpleName(), "update newTmpItem: " + position);
                     }
                 }
+
 
                 final MultilineItem[] finalData = data;
                 final int finalPosition = position;
@@ -313,7 +312,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             else Toast.makeText(this,
                     R.string.toast_text_can_not_refresh_lunches,
                     Toast.LENGTH_LONG).show();
-            update(false);
+            update();
             return true;
         }
         if (id == R.id.action_clear_history) {
@@ -322,7 +321,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             else Toast.makeText(this,
                     R.string.toast_text_can_not_remove_lunch,
                     Toast.LENGTH_LONG).show();
-            update(false);
+            update();
             return true;
         }
         /*if (id == R.id.action_start_burza) {
