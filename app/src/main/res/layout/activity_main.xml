@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
-        android:name="cz.anty.utils.list.toolbar.FragmentDrawer"
+        android:name="cz.anty.purkynkamanager.utils.list.toolbar.FragmentDrawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

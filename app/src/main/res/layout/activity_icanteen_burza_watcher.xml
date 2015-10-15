@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:scrollbars="vertical"
+    tools:context="cz.anty.purkynkamanager.icanteen.ICBurzaCheckerActivity">
+
+    <LinearLayout
+        android:id="@+id/linear_layout_burza_watcher_start_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:text="@string/notify_title_select_to_watch"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_view_text_date_to_watch" />
+
+        <DatePicker
+            android:id="@+id/date_picker_burza_watcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:spinnersShown="true" />
+
+        <TextView
+            android:id="@+id/text_view_wrong_lunch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_view_text_you_still_have_got_lunch"
+            android:textColor="#FF7070"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_view_text_numbers_to_watch" />
+
+        <CheckBox
+            android:id="@+id/check_box_lunch_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/check_box_lunch_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+
+        <CheckBox
+            android:id="@+id/check_box_lunch_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/but_stop"
+        android:visibility="gone" />
+
+</LinearLayout>

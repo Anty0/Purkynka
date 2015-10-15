@@ -5,17 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import cz.anty.attendancemanager.AttendanceSettingsActivity;
-import cz.anty.icanteenmanager.ICSettingsActivity;
 import cz.anty.purkynkamanager.R;
-import cz.anty.sasmanager.SASManagerSettingsActivity;
-import cz.anty.timetablemanager.TimetableSettingsActivity;
-import cz.anty.utils.list.listView.TextMultilineItem;
-import cz.anty.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.utils.list.recyclerView.RecyclerAdapter;
-import cz.anty.utils.list.recyclerView.RecyclerItemClickListener;
-import cz.anty.utils.settings.AboutActivity;
-import cz.anty.wifiautologin.WifiSettingsActivity;
+import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.settings.AboutActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 

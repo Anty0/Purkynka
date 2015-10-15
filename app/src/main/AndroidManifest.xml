@@ -2,19 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cz.anty.purkynkamanager">
 
-    <uses-permission android:name="ANDROID.PERMISSION.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" /> -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".utils.ApplicationBase"
         android:allowBackup="true"
+        android:configChanges="locale|orientation"
         android:fullBackupContent="@xml/backup_scheme"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -43,17 +50,256 @@
             android:exported="false" />
 
         <activity
-            android:name=".RemovedItemsActivity"
-            android:label="@string/activity_title_removed_items" />
+            android:name=".main.RemovedItemsActivity"
+            android:label="@string/activity_title_removed_items"
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".firststart.FirstStartActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".settings.SettingsActivity"
-            android:label="@string/activity_title_settings" />
+            android:label="@string/activity_title_settings"
+            android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.MainSettingsActivity"
-            android:label="@string/activity_title_main_settings" />
+            android:label="@string/activity_title_main_settings"
+            android:parentActivityName=".settings.SettingsActivity" />
+
+
+        <activity
+            android:name=".attendance.SearchActivity"
+            android:label="@string/activity_title_attendance_search"
+            android:parentActivityName=".main.MainActivity" />
+        <activity
+            android:name=".settings.AttendanceSettingsActivity"
+            android:label="@string/activity_title_attendance_settings" />
+
+        <receiver
+            android:name=".attendance.receiver.TrackingReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".attendance.receiver.TrackingScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".attendance.TrackingActivity"
+            android:label="@string/activity_title_tracking"
+            android:parentActivityName=".attendance.SearchActivity" />
+
+        <receiver
+            android:name=".attendance.widget.TrackingWidget"
+            android:label="@string/widget_label_tracking">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/tracking_widget_info" />
+        </receiver>
+
+
+        <activity
+            android:name=".icanteen.ICLoginActivity"
+            android:label="@string/activity_title_login_icanteen"
+            android:parentActivityName=".main.MainActivity" />
+        <activity
+            android:name=".icanteen.ICSplashActivity"
+            android:label="@string/app_name_icanteen"
+            android:theme="@style/AppTheme.Dialog" />
+        <activity
+            android:name=".icanteen.ICSelectServiceActivity"
+            android:label="@string/app_name_icanteen"
+            android:parentActivityName=".main.MainActivity" />
+        <activity
+            android:name=".settings.ICSettingsActivity"
+            android:label="@string/activity_title_icanteen_settings"
+            android:parentActivityName=".icanteen.ICSelectServiceActivity" />
+
+        <service
+            android:name=".icanteen.ICService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="@string/app_name_icanteen" />
+
+        <activity
+            android:name=".icanteen.ICBurzaActivity"
+            android:label="@string/app_name_icanteen_burza"
+            android:parentActivityName=".icanteen.ICSelectServiceActivity" />
+        <activity
+            android:name=".icanteen.ICBurzaCheckerActivity"
+            android:label="@string/app_name_icanteen_burza_watcher"
+            android:parentActivityName=".icanteen.ICSelectServiceActivity" />
+
+        <service
+            android:name=".icanteen.ICBurzaCheckerService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="@string/app_name_icanteen_burza_watcher" />
+
+        <receiver
+            android:name=".icanteen.receiver.StartServiceReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".icanteen.receiver.StartServiceScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".icanteen.ICLunchOrderActivity"
+            android:label="@string/app_name_icanteen_lunch_order"
+            android:parentActivityName=".icanteen.ICSelectServiceActivity" />
+
+
+        <activity
+            android:name=".sas.SASSplashActivity"
+            android:excludeFromRecents="true"
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/app_name_sas"
+            android:theme="@style/AppTheme.Dialog" />
+        <activity
+            android:name=".sas.SASLoginActivity"
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/activity_title_sas_login"
+            android:parentActivityName=".main.MainActivity" />
+        <activity
+            android:name=".sas.SASManageActivity"
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/app_name_sas"
+            android:parentActivityName=".main.MainActivity" />
+        <activity
+            android:name=".settings.SASManagerSettingsActivity"
+            android:label="@string/activity_title_sas_settings" />
+
+        <service
+            android:name=".sas.SASManagerService"
+            android:enabled="true"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_sas"
+            android:label="@string/service_title_sas_manager"> <!-- android:process=":SASManagerService" -->
+        </service>
+
+        <receiver
+            android:name=".sas.receiver.StartServiceReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".sas.receiver.StartServiceScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".sas.widget.SASManageWidget"
+            android:label="@string/widget_label_sas_manage">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/sasmanage_widget_info" />
+        </receiver>
+
+
+        <activity
+            android:name=".timetable.TimetableSelectActivity"
+            android:label="@string/activity_title_timetable_select"
+            android:parentActivityName=".main.MainActivity" />
+        <activity
+            android:name=".timetable.TimetableManageActivity"
+            android:label="@string/activity_title_timetable_manage"
+            android:parentActivityName=".timetable.TimetableSelectActivity" />
+
+        <receiver
+            android:name=".timetable.receiver.AttendanceReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".timetable.receiver.TimetableScheduleReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".timetable.widget.TimetableLessonWidget"
+            android:label="@string/activity_title_timetable_manage">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/timetable_lesson_widget_info" />
+        </receiver>
+
+        <activity
+            android:name=".timetable.widget.TimetableLessonWidgetConfigureActivity"
+            android:label="@string/activity_title_timetable_select"
+            android:theme="@style/AppTheme.Dialog">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".settings.TimetableSettingsActivity"
+            android:label="@string/activity_title_timetable_settings" />
+
+
+        <activity
+            android:name=".wifi.WifiLoginActivity"
+            android:icon="@mipmap/ic_launcher_wifi"
+            android:label="@string/app_name_wifi"
+            android:parentActivityName=".main.MainActivity" />
+        <activity
+            android:name=".settings.WifiSettingsActivity"
+            android:label="@string/activity_title_wifi_settings" />
+
+        <receiver
+            android:name=".wifi.WifiStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+
+                <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+
+        <activity
+            android:name=".utils.settings.AboutActivity"
+            android:label="@string/activity_title_about"
+            android:parentActivityName=".settings.SettingsActivity" />
+
+        <service
+            android:name=".utils.list.widgetList.WidgetService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

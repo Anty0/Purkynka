@@ -15,12 +15,12 @@ import java.io.File;
 import java.io.IOException;
 
 import cz.anty.purkynkamanager.BuildConfig;
-import cz.anty.purkynkamanager.MainActivity;
 import cz.anty.purkynkamanager.R;
-import cz.anty.utils.ApplicationBase;
-import cz.anty.utils.Constants;
-import cz.anty.utils.thread.ProgressReporter;
-import cz.anty.utils.update.UpdateConnector;
+import cz.anty.purkynkamanager.main.MainActivity;
+import cz.anty.purkynkamanager.utils.ApplicationBase;
+import cz.anty.purkynkamanager.utils.Constants;
+import cz.anty.purkynkamanager.utils.thread.ProgressReporter;
+import cz.anty.purkynkamanager.utils.update.UpdateConnector;
 
 /**
  * Created by anty on 24.9.15.

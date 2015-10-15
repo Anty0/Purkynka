@@ -11,11 +11,11 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.utils.Constants;
-import cz.anty.utils.FirstStartPage;
-import cz.anty.utils.Log;
-import cz.anty.utils.thread.OnceRunThread;
-import cz.anty.utils.update.UpdateConnector;
+import cz.anty.purkynkamanager.utils.Constants;
+import cz.anty.purkynkamanager.utils.FirstStartPage;
+import cz.anty.purkynkamanager.utils.Log;
+import cz.anty.purkynkamanager.utils.thread.OnceRunThread;
+import cz.anty.purkynkamanager.utils.update.UpdateConnector;
 
 /**
  * Created by anty on 28.8.15.

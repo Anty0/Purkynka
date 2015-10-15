@@ -8,12 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import cz.anty.icanteenmanager.ICFirstStartPage;
 import cz.anty.purkynkamanager.R;
-import cz.anty.sasmanager.SASFirstStartPage;
-import cz.anty.utils.ApplicationBase;
-import cz.anty.utils.FirstStartPage;
-import cz.anty.wifiautologin.WifiFirstStartPage;
+import cz.anty.purkynkamanager.utils.ApplicationBase;
+import cz.anty.purkynkamanager.utils.FirstStartPage;
 
 /**
  * Created by anty on 28.8.15.

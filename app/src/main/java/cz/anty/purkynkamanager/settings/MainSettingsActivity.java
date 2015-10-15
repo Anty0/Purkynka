@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.utils.AppDataManager;
-import cz.anty.utils.ApplicationBase;
-import cz.anty.utils.Constants;
+import cz.anty.purkynkamanager.utils.AppDataManager;
+import cz.anty.purkynkamanager.utils.ApplicationBase;
+import cz.anty.purkynkamanager.utils.Constants;
 
 /**
  * Created by anty on 9.10.15.

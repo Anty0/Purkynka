@@ -10,7 +10,7 @@ import android.net.NetworkInfo;
 
 import java.util.Calendar;
 
-import cz.anty.utils.Constants;
+import cz.anty.purkynkamanager.utils.Constants;
 
 public class UpdateScheduleReceiver extends BroadcastReceiver {
 

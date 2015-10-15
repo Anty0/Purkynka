@@ -2,7 +2,7 @@ package cz.anty.purkynkamanager.firststart;
 
 import android.os.Bundle;
 
-import cz.anty.utils.FirstStartPage;
+import cz.anty.purkynkamanager.utils.FirstStartPage;
 
 /**
  * Created by anty on 30.8.15.

@@ -2,24 +2,22 @@ package cz.anty.purkynkamanager.firststart;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 
-import cz.anty.icanteenmanager.ICFirstStartPage;
 import cz.anty.purkynkamanager.BuildConfig;
-import cz.anty.purkynkamanager.MainActivity;
 import cz.anty.purkynkamanager.R;
-import cz.anty.sasmanager.SASFirstStartPage;
-import cz.anty.utils.Constants;
-import cz.anty.utils.FirstStartPage;
-import cz.anty.utils.Log;
-import cz.anty.utils.thread.OnceRunThreadWithSpinner;
-import cz.anty.wifiautologin.WifiFirstStartPage;
+import cz.anty.purkynkamanager.main.MainActivity;
+import cz.anty.purkynkamanager.utils.Constants;
+import cz.anty.purkynkamanager.utils.FirstStartPage;
+import cz.anty.purkynkamanager.utils.Log;
+import cz.anty.purkynkamanager.utils.list.recyclerView.SpecialItemAnimator;
+import cz.anty.purkynkamanager.utils.thread.OnceRunThreadWithSpinner;
 
 public class FirstStartActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -89,34 +87,23 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                         frameLayout.addView(newView);
                         contentScrollView.addView(frameLayout);
 
-                        TranslateAnimation oldAnimation = new TranslateAnimation(0, -contentScrollView.getWidth(), 0, 0);
-                        oldAnimation.setDuration(150);
-                        TranslateAnimation newAnimation = new TranslateAnimation(contentScrollView.getWidth(), 0, 0, 0);
-                        newAnimation.setDuration(150);
+                        ViewPropertyAnimatorCompat oldAnimation = ViewCompat.animate(oldView)
+                                .setDuration(150).translationY(-contentScrollView.getWidth());
+                        final ViewPropertyAnimatorCompat newAnimation = ViewCompat.animate(newView)
+                                .setDuration(150).alpha(1);
 
-                        newAnimation.setAnimationListener(new Animation.AnimationListener() {
+                        newAnimation.setListener(new SpecialItemAnimator.VpaListenerAdapter() {
                             @Override
-                            public void onAnimationStart(Animation animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                oldView.clearAnimation();
-                                newView.clearAnimation();
+                            public void onAnimationEnd(View view) {
+                                newAnimation.setListener(null);
                                 frameLayout.removeAllViews();
                                 contentScrollView.removeAllViews();
                                 contentScrollView.addView(newView);
                             }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
                         });
 
-                        oldView.startAnimation(oldAnimation);
-                        newView.startAnimation(newAnimation);
+                        oldAnimation.start();
+                        newAnimation.start();
                     }
                 });
                 try {
