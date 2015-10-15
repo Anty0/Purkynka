@@ -121,7 +121,7 @@
         <activity
             android:name=".settings.ICSettingsActivity"
             android:label="@string/activity_title_icanteen_settings"
-            android:parentActivityName=".icanteen.ICSelectServiceActivity" />
+            android:parentActivityName=".settings.SettingsActivity" />
 
         <service
             android:name=".icanteen.ICService"
@@ -182,7 +182,8 @@
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.SASManagerSettingsActivity"
-            android:label="@string/activity_title_sas_settings" />
+            android:label="@string/activity_title_sas_settings"
+            android:parentActivityName=".settings.SettingsActivity" />
 
         <service
             android:name=".sas.SASManagerService"
@@ -262,7 +263,8 @@
         </activity>
         <activity
             android:name=".settings.TimetableSettingsActivity"
-            android:label="@string/activity_title_timetable_settings" />
+            android:label="@string/activity_title_timetable_settings"
+            android:parentActivityName=".settings.SettingsActivity" />
 
 
         <activity
@@ -272,7 +274,8 @@
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.WifiSettingsActivity"
-            android:label="@string/activity_title_wifi_settings" />
+            android:label="@string/activity_title_wifi_settings"
+            android:parentActivityName=".settings.SettingsActivity" />
 
         <receiver
             android:name=".wifi.WifiStateReceiver"

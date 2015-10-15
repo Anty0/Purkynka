@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_sas">iSAS Manager</string>
+
+    <string name="activity_title_sas_login">Login to iSAS</string>
+    <string name="activity_title_sas_settings">iSAS Manager Settings</string>
+
+    <string name="widget_label_sas_manage">iSAS Manager (latest marks)</string>
+
+    <string name="service_title_sas_manager">iSAS Manager Service</string>
+
+    <string name="app_description_sas">iSAS Manager is a simple tool for <b>managing</b> your <b>marks</b>, can <b>notify</b> you of new marks and provides complete view of your marks.</string>
+
+    <string name="exception_title_validate">Validate exception</string>
+    <string name="exception_validate_wrong_login">Wrong LOGIN or PASSWORD</string>
+    <string name="exception_validate_no_connection">No internet connection</string>
+    <string name="exception_title_sas_manager_binder_null">EXCEPTION occurred</string>
+    <string name="exception_message_sas_manager_binder_null">please try click refresh</string>
+    <string name="exception_title_login">Can\'t login as %1$s</string>
+    <string name="exception_message_login">Username or password are wrong</string>
+    <string name="exception_no_connection">Can\'t refresh Marks</string>
+
+    <string name="dialog_title_sas_widget_alert"><b>iSAS Widget</b> available</string>
+    <string name="dialog_message_sas_widget_alert">Now you can add <b>iSAS Widget</b> to your home screen. :)</string>
+
+    <string name="text_date">Date</string>
+    <string name="text_logo">logo</string>
+    <string name="text_from">From</string>
+    <string name="text_free_list">Nothing to show</string>
+    <string name="text_marks">%1$d Marks</string>
+    <string name="text_mark_with_weight">%1$s: %2$s with weight %3$d</string>
+    <string name="text_value">Value</string>
+    <string name="text_weight">Weight</string>
+    <string name="text_type">Type</string>
+    <string name="text_note">Note</string>
+    <string name="text_teacher">Teacher</string>
+    <string name="text_short_lesson_name">Short lesson name</string>
+    <string name="text_long_lesson_name">Long lesson name</string>
+
+    <string name="check_box_text_sas_marks_update">Notify when new marks are available</string>
+
+    <string name="menu_item_text_semester">Semester</string>
+    <string name="menu_item_text_semester_first">First</string>
+    <string name="menu_item_text_semester_second">Second</string>
+
+    <string name="menu_item_text_sort">Sort by</string>
+    <string name="menu_item_text_sort_date">Date</string>
+    <string name="menu_item_text_sort_lesson">Lesson</string>
+
+    <string name="special_item_title_bad_lesson_diameter">Bad diameter in %1$s: %2$s</string>
+
+    <string name="notify_title_new_marks">%1$d new MARKS</string>
+    <string name="notify_title_new_mark">%1$d new MARK</string>
+</resources>

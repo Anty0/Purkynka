@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_icanteen">iCanteen Manager</string>
+    <string name="app_name_icanteen_burza">Prohlížeč Burzy</string>
+    <string name="app_name_icanteen_burza_watcher">Hlídač Burzy</string>
+    <string name="app_name_icanteen_lunch_order">Obědnavač obědů</string>
+
+    <string name="activity_title_login_icanteen">Přihlášení do iCanteen</string>
+    <string name="activity_title_icanteen_settings">Nastavení iCanteen Manageru</string>
+
+    <string name="app_description_icanteen">iCanteen Manager je prográmek, který dokáže <b>spravovat a objednávat</b> školní obědy, také dokáže <b>hlídat burzu</b> a automaticky objednat oběd, jakmile bude dostupný.</string>
+    <string name="app_description_icanteen_burza">Prohlížeč Burzy umožňuje <b>prohlížet</b> obědovou <b>burzu</b> a také nabízí možnost si oběd z burzy obědnat.</string>
+    <string name="app_description_icanteen_burza_watcher">Hlídač BURZY dokáže <b>kontrolovat</b> ve velmi krátkých intervalech obědovou <b>burzu</b> a tak zvyšuje vaši pravděpodobnost na zisk oběda ze školní burzy.</string>
+    <string name="app_description_icanteen_lunch_order">Obědnavač obědů umožňuje <b>pohodlně</b> z mobilního telefonu <b>obědnávat obědy</b>, také je možné do burzy obědy, které již nelze zrušit.</string>
+
+    <string name="check_box_text_notify_new_lunches">Zobraz upozorní, když budou dostupné nové obědy k obědnání</string>
+
+    <string name="notify_title_can_not_login">Nejde se přihlásit do iCanteen</string>
+    <string name="notify_text_can_not_login">Prosím zkuste se odhlásit a zase znovu přihlásit</string>
+    <string name="notify_title_burza_checker_running">Hlídač BURZY běží</string>
+    <string name="notify_text_burza_checker_running">Klikněte pro zobrazení možností</string>
+    <string name="notify_title_burza_checker_completed">Požadavek na objednávku <b>úspěšně</b> odeslán</string>
+    <string name="notify_text_burza_checker_completed">Prosím zkontrolujte, jestli proběhlo objednání úspěšně.</string>
+    <string name="notify_title_new_lunches">Jsou dostupné nové obědy</string>
+    <string name="notify_text_new_lunches">Klikněte zde pro jejich zobrazení</string>
+
+    <string name="notify_title_select_to_watch">Zvolte co hlídat</string>
+    <string name="text_view_text_date_to_watch">Zvolte hlídané DATUM:</string>
+    <string name="text_view_text_numbers_to_watch">Zvolte OBĚDY pro hlídání:</string>
+    <string name="text_view_text_you_still_have_got_lunch">Již máš oběd na tento den.</string>
+
+    <string name="menu_item_text_start_burza_checking">Spustit Hlídač burzy</string>
+    <string name="menu_item_text_clear_history">Odstranit staré obědy</string>
+
+    <string name="special_item_title_icanteen_new_lunches">Jsou dostupné nové obědy k obědnání.</string>
+
+    <string name="radio_button_text_no_lunch">Žádný oběd</string>
+
+    <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač BURZY, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
+    <string name="toast_text_can_not_order_lunch">Nelze objednat jídlo, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_can_not_remove_lunch">Nelze odstranit oběd ze seznamu, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_can_not_refresh_lunches">Nelze obnovit obědy, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_coming_soon">Již brzy</string>
+
+    <string name="text_nothing_ordered">Nic neobědnáno</string>
+</resources>

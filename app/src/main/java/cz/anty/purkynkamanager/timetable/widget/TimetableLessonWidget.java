@@ -82,7 +82,8 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                         Lesson actualLesson = timetable.getLesson(day - 2, i);
                         Lesson nextLesson = timetable.getNextLesson(day - 2, i);
 
-                        if (minuteTime < requestedTime - 60) {
+                        if (actualLesson != null &&
+                                minuteTime < requestedTime - 60) {
                             nextLesson = actualLesson;
                             actualLesson = null;
                         }
@@ -114,6 +115,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
 
             calendar.add(Calendar.DAY_OF_WEEK, 1);
             calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
         }
     }
 

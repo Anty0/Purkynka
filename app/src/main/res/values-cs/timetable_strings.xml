@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_timetable">Správce ROZVRHŮ (<b>BETA</b>)</string>
+
+    <string name="activity_title_timetable_select">Vyber ROZVRH hodin k zobrazení</string>
+    <string name="activity_title_timetable_manage">ROZVRH hodin</string>
+    <string name="activity_title_timetable_settings">Nastavení Správce ROZVRHŮ</string>
+
+    <string name="app_description_timetable">Správce rozvrhů je prográmek určený ke <b>správě</b> a <b>vytváření</b> rozvrhů hodin, dokáže také <b>stáhnout</b> rozvrh hodin dané třídy z webových stránek školy a upozornit na to, že <b>učitel</b> zapsaný rozvrhu na další hodinu <b>není ve škole</b> a je proto velmi pravděpodobné, že bude následující hodina <b>suplovaná</b>.</string>
+
+    <string name="list_item_title_add_timetable">Přidejte si ROZVRH hodin</string>
+    <string name="list_item_text_click_to_edit">%1$d. Klikněte pro změnu</string>
+    <string name="list_item_text_lesson">%1$d. %2$s v %3$s</string>
+    <string name="list_item_text_no_actual_lesson">Jsi volný :)</string>
+    <string name="list_item_text_no_next_lesson">Žádná další hodina</string>
+
+    <string name="dialog_title_new_timetable">Nový ROZVRH hodin</string>
+    <string name="dialog_title_lesson_info">Informace o předmětu</string>
+    <string name="dialog_title_timetable_still_exists">Nelze vytvořit ROZVRH hodin</string>
+    <string name="dialog_title_lesson">%1$s %2$d. Hodina</string>
+    <string name="dialog_title_timetable_widget_alert"><b>Widget</b> ROZVRH hodin</string>
+    <string name="dialog_message_timetable_widget_alert">Nyní si můžete <b>přidat</b> <b>Widget ROZVRH hodin</b> na svou domovskou obrazovku, budete tak mít aktuální a <b>následující hodinu po ruce</b>, aniž byste museli otevírat Správce ROZVRHŮ. :)</string>
+    <string name="dialog_message_insert_timetable_name">Zadejte nové jméno pro ROZVRH hodin:</string>
+    <string name="dialog_message_select_your_class_name">Zvol svou třídu:</string>
+    <string name="dialog_message_lesson_name">Název předmětu</string>
+    <string name="dialog_message_short_lesson_name">Krátký název předmětu</string>
+    <string name="dialog_message_class">Třída</string>
+    <string name="dialog_message_teacher">Učitel (nejlépe <b>CELÝM JMÉNEM</b>)</string>
+    <string name="dialog_message_timetable_still_exists">ROZVRH s tímto jménem již existuje</string>
+    <string name="dialog_message_what_to_do">Co máš v plánu udělat?</string>
+
+    <string name="radio_button_text_download_timetable">Načíst rozvrh hodin ze stránek SPSEIT</string>
+    <string name="radio_button_text_create_free_timetable">Vytvořit prázdný rozvrh</string>
+
+    <string name="check_box_text_display_attendance_warnings">Zobraz upozornění, když bude pravděpodobné, že bude suplování. (<b>BETA</b>)</string>
+    <string name="check_box_text_display_lessons_warnings">Zobraz upozornění před začátkem vyučovací hodiny (zobrazí název hodiny a učebnu v liště telefou :)). (<b>BETA</b>)</string>
+    <!--<string name="check_box_text_auto_load">Automaticky načti rozvrh hodin ze stránek SPSEIT (jméno rozvrhu musí obsahovat jméno třídy)</string>-->
+
+    <string name="notify_title_substitution">%1$s bude Suplovaná</string>
+    <string name="notify_text_teacher_is_not_here">%1$s se nenachází v prostorách školy</string>
+
+    <string name="exception_title_connection">Chyba připojení</string>
+    <string name="exception_title_name">Špatné jméno</string>
+    <string name="exception_message_connection">Rozvrh nemůže být načten z internetu.\nZkontroluj své připojení.</string>
+    <string name="exception_message_name">Třída s tímto jménem neexistuje.\nProsím zkontrolujte jméno rozvrhu.</string>
+
+    <string name="text_monday">PONDĚLÍ</string>
+    <string name="text_tuesday">UTERÝ</string>
+    <string name="text_wednesday">STŘEDA</string>
+    <string name="text_thursday">ČTVRTEK</string>
+    <string name="text_friday">PÁTEK</string>
+</resources>
