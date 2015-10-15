@@ -5,12 +5,20 @@ import android.content.Context;
 import java.util.Locale;
 
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 /**
  * Created by anty on 22.6.15.
  *
  * @author anty
  */
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class Teacher implements MultilineItem {
 
     private static final String tab00c0 = "AAAAAAACEEEEIIII" +
@@ -25,6 +33,7 @@ public class Teacher implements MultilineItem {
             "OoOoRrRrRrSsSsSs" +
             "SsTtTtTtUuUuUuUu" +
             "UuUuWwYyYZzZzZzF";
+
     private final String name, shortcut, phoneNumber, email;
 
     Teacher(String name, String shortcut, String phoneNumber, String email) {

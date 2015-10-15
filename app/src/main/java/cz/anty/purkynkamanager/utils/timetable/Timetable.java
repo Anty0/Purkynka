@@ -36,6 +36,7 @@ public class Timetable implements MultilineItem {
     private static final int WEDNESDAY = 2;
     private static final int THURSDAY = 3;
     private static final int FRIDAY = 4;*/
+
     private final Lesson[][] lessons;
     private final Context context;
     private String name;

@@ -4,12 +4,21 @@ import android.content.Context;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 /**
  * Created by anty on 13.6.15.
  *
  * @author anty
  */
+
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class Lesson implements MultilineItem {
 
     //private static final String PARSE_CHARS = ":;L;:";

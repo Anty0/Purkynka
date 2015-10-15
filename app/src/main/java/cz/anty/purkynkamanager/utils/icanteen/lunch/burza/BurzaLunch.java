@@ -8,12 +8,20 @@ import java.util.Date;
 import java.util.Locale;
 
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 /**
  * Created by anty on 17.8.15.
  *
  * @author anty
  */
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class BurzaLunch implements MultilineItem {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -79,6 +87,10 @@ public class BurzaLunch implements MultilineItem {
         return getName();
     }
 
+    @Keep
+    @KeepName
+    @KeepClassMembers
+    @KeepClassMemberNames
     public enum LunchNumber {
         LUNCH_1, LUNCH_2, LUNCH_3;
 

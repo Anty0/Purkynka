@@ -8,12 +8,20 @@ import java.util.Arrays;
 import java.util.Date;
 
 import cz.anty.purkynkamanager.utils.icanteen.lunch.month.MonthLunchDay;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 /**
  * Created by anty on 19.8.15.
  *
  * @author anty
  */
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class BurzaLunchSelector {
 
     //private static final String LUNCH_SPLIT_VALUE = "/";

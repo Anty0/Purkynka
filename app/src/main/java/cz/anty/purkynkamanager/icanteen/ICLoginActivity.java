@@ -63,8 +63,17 @@ public class ICLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_icanteen_login);
 
-        ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN));
-        ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
+        String username, password;
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.WIFI)
+                && !AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
+            username = AppDataManager.getUsername(AppDataManager.Type.WIFI);
+            password = AppDataManager.getPassword(AppDataManager.Type.WIFI);
+        } else {
+            username = AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN);
+            password = AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN);
+        }
+        ((EditText) findViewById(R.id.edit_username)).setText(username);
+        ((EditText) findViewById(R.id.edit_password)).setText(password);
 
         if (saveThread == null)
             saveThread = new OnceRunThreadWithSpinner(this);

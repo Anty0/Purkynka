@@ -8,12 +8,20 @@ import java.util.Locale;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.attendance.AttendanceConnector;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 /**
  * Created by anty on 13.6.15.
  *
  * @author anty
  */
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class Man implements MultilineItem {
 
     private final String name, classString;
@@ -77,6 +85,10 @@ public class Man implements MultilineItem {
         return getLastEnterAsString();
     }
 
+    @Keep
+    @KeepName
+    @KeepClassMembers
+    @KeepClassMemberNames
     public enum IsInSchoolState {
         IN_SCHOOL, NOT_IN_SCHOOL, UNAVAILABLE;
 

@@ -19,6 +19,7 @@ import org.acra.annotation.ReportsCrashes;
 
 import java.util.Locale;
 
+import cz.anty.purkynkamanager.AnalyticsTrackers;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.service.ServiceManager;
 import cz.anty.purkynkamanager.utils.thread.OnceRunThread;
@@ -30,8 +31,7 @@ import cz.anty.purkynkamanager.utils.update.UpdateConnector;
  * @author anty
  */
 @ReportsCrashes(
-        formUri = UpdateConnector.DEFAULT_URL + "report.php",
-        disableSSLCertValidation = true
+        formUri = UpdateConnector.DEFAULT_URL + "report.php"
 )
 public class ApplicationBase extends Application {
 

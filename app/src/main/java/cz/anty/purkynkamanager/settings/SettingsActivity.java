@@ -10,7 +10,6 @@ import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
-import cz.anty.purkynkamanager.utils.settings.AboutActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 

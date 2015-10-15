@@ -8,12 +8,20 @@ import java.util.Locale;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 /**
  * Created by anty on 8.6.15.
  *
  * @author anty
  */
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class Mark implements MultilineItem {
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());

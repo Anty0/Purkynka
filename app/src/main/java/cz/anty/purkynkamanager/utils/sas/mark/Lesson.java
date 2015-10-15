@@ -9,15 +9,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 /**
  * Created by anty on 8.6.15.
  *
  * @author anty
  */
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class Lesson implements MultilineItem {
 
     public static final DecimalFormat FORMAT = new DecimalFormat("#.###");
+
     private final String fullName, shortName;
     private final List<Mark> marks = new CopyOnWriteArrayList<>();
 

@@ -4,11 +4,20 @@ import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
+
 /**
  * Created by anty on 24.8.15.
  *
  * @author anty
  */
+@Keep
+@KeepName
+@KeepClassMembers
+@KeepClassMemberNames
 public class MonthLunch {
 
     private final String name, orderUrlAdd, toBurzaUrlAdd;
@@ -65,6 +74,10 @@ public class MonthLunch {
                 && ((MonthLunch) o).state.equals(state);
     }
 
+    @Keep
+    @KeepName
+    @KeepClassMembers
+    @KeepClassMemberNames
     public enum State {
         ENABLED, DISABLED, DISABLED_ORDERED, ORDERED, UNKNOWN;
 
@@ -74,6 +87,10 @@ public class MonthLunch {
         }
     }
 
+    @Keep
+    @KeepName
+    @KeepClassMembers
+    @KeepClassMemberNames
     public enum BurzaState {
         TO_BURZA, FROM_BURZA;
 

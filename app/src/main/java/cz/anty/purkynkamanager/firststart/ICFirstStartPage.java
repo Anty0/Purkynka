@@ -32,8 +32,17 @@ public class ICFirstStartPage extends FirstStartPage {
         LayoutInflater.from(context).inflate(R.layout.activity_icanteen_login, linearLayout);
         //activity.getLayoutInflater().inflate(R.layout.activity_icanteen_settings, linearLayout);
 
-        ((EditText) linearLayout.findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN));
-        ((EditText) linearLayout.findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
+        String username, password;
+        if (AppDataManager.isLoggedIn(AppDataManager.Type.WIFI)
+                && !AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
+            username = AppDataManager.getUsername(AppDataManager.Type.WIFI);
+            password = AppDataManager.getPassword(AppDataManager.Type.WIFI);
+        } else {
+            username = AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN);
+            password = AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN);
+        }
+        ((EditText) linearLayout.findViewById(R.id.edit_username)).setText(username);
+        ((EditText) linearLayout.findViewById(R.id.edit_password)).setText(password);
         linearLayout.findViewById(R.id.but_login).setVisibility(View.GONE);
         //((CheckBox) linearLayout.findViewById(R.id.check_box_sas_marks_update)).setChecked(AppDataManager.isSASMarksAutoUpdate(activity));
     }
