@@ -18,11 +18,15 @@ import cz.anty.purkynkamanager.timetable.TimetableSelectActivity;
 import cz.anty.purkynkamanager.utils.timetable.Lesson;
 import cz.anty.purkynkamanager.utils.timetable.Timetable;
 import cz.anty.purkynkamanager.utils.timetable.TimetableManager;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepName;
 
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link TimetableLessonWidgetConfigureActivity TimetableLessonWidgetConfigureActivity}
  */
+@Keep
+@KeepName
 public class TimetableLessonWidget extends AppWidgetProvider {
 
     public static void callUpdate(Context context) {
@@ -42,7 +46,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
-                context.getPackageName(), R.layout.timetable_lesson_widget_loading));
+                context.getPackageName(), R.layout.widget_timetable_lesson_loading));
         // There may be multiple widgets active, so update all of them
         if (TimetableSelectActivity.timetableManager == null)
             TimetableSelectActivity.timetableManager = new TimetableManager(context);
@@ -53,7 +57,7 @@ public class TimetableLessonWidget extends AppWidgetProvider {
                             .loadPref(context, appWidgetId));
 
             RemoteViews remoteViews = new RemoteViews(context
-                    .getPackageName(), R.layout.timetable_lesson_widget);
+                    .getPackageName(), R.layout.widget_timetable_lesson);
             remoteViews.setOnClickPendingIntent(R.id.main_frame_layout, PendingIntent
                     .getActivity(context, 0, new Intent(context, TimetableManageActivity.class).putExtra(TimetableManageActivity
                             .EXTRA_TIMETABLE_NAME, timetable == null ? null : timetable.getName()), 0));

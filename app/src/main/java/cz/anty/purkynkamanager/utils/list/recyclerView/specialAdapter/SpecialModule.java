@@ -2,6 +2,7 @@ package cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -19,17 +20,18 @@ import cz.anty.purkynkamanager.utils.thread.OnceRunThread;
  */
 public abstract class SpecialModule {
 
+    private static final String LOG_TAG = "SpecialModule";
+
     private final Context mContext;
     private final boolean mShowDescription;
     private final OnceRunThread worker;
 
     private boolean mInitializeStarted = false;
     private boolean mInitialized = false;
-    private Runnable mOnChange = null;
-    private SpecialModuleManager.OnRemoveItem mOnRemoveItem = null;
+    private SpecialModuleManager mModuleManager = null;
 
     public SpecialModule(Context context) {
-        Log.d(getClass().getSimpleName(), "<init>");
+        Log.d(LOG_TAG, "<init>");
         mContext = context;
         mShowDescription = mContext.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
@@ -37,12 +39,12 @@ public abstract class SpecialModule {
     }
 
     public boolean isShowDescription() {
-        Log.d(getClass().getSimpleName(), "isShowDescription");
+        Log.d(LOG_TAG, "isShowDescription");
         return mShowDescription;
     }
 
     public synchronized final boolean isInitialized() {
-        Log.d(getClass().getSimpleName(), "isInitialized");
+        Log.d(LOG_TAG, "isInitialized");
         return mInitialized;
     }
 
@@ -50,16 +52,14 @@ public abstract class SpecialModule {
 
     protected abstract boolean isUpdateOnThread();
 
-    final synchronized void init(final SharedPreferences preferences, Runnable onChange,
-                                 SpecialModuleManager.OnRemoveItem onRemoveItem) {
-        Log.d(getClass().getSimpleName(), "init");
+    final synchronized void init(final SharedPreferences preferences,
+                                 SpecialModuleManager moduleManager) {
+        Log.d(LOG_TAG, "init");
         if (mInitializeStarted || mInitialized) {
-            throw new IllegalStateException(getClass()
-                    .getSimpleName() + " is still initialized.");
+            throw new IllegalStateException(LOG_TAG + " is still initialized.");
         }
         mInitializeStarted = true;
-        mOnChange = onChange;
-        mOnRemoveItem = onRemoveItem;
+        mModuleManager = moduleManager;
 
         Runnable initRunnable = new Runnable() {
             @Override
@@ -79,10 +79,9 @@ public abstract class SpecialModule {
     protected abstract boolean onInitialize(SharedPreferences preferences);
 
     final synchronized void update(final SharedPreferences preferences) {
-        Log.d(getClass().getSimpleName(), "update");
+        Log.d(LOG_TAG, "update");
         if (!mInitialized) {
-            throw new IllegalStateException(getClass()
-                    .getSimpleName() + " is not initialized.");
+            throw new IllegalStateException(LOG_TAG + " is not initialized.");
         }
 
         Runnable updateRunnable = new Runnable() {
@@ -110,14 +109,14 @@ public abstract class SpecialModule {
     protected abstract SpecialItem[] getItems();
 
     protected SpecialItem getLoadingItem() {
-        Log.d(getClass().getSimpleName(), "getLoadingItem");
+        Log.d(LOG_TAG, "getLoadingItem");
         return new SpecialItem() {
             TextView title, text;
 
             @Override
             public void onCreateViewHolder(FrameLayout parent, int itemPosition) {
                 LayoutInflater.from(parent.getContext()).inflate(R.layout
-                        .base_loading_multi_line_list_item, parent);
+                        .base_list_item_multi_line_loading, parent);
                 title = (TextView) parent.findViewById(R.id.text_view_title);
                 text = (TextView) parent.findViewById(R.id.text_view_text);
             }
@@ -143,23 +142,46 @@ public abstract class SpecialModule {
     }
 
     protected final void notifyInitializeCompleted() {
-        Log.d(getClass().getSimpleName(), "notifyInitializeCompleted");
+        Log.d(LOG_TAG, "notifyInitializeCompleted");
         if (mInitialized)
-            throw new IllegalStateException(getClass()
-                    .getSimpleName() + " is still initialized.");
+            throw new IllegalStateException(LOG_TAG + " is still initialized.");
         mInitialized = true;
         notifyItemsChanged();
     }
 
     protected synchronized final void notifyItemsChanged() {
-        Log.d(getClass().getSimpleName(), "notifyItemsChanged");
-        if (isInitialized() && mOnChange != null)
-            mOnChange.run();
+        Log.d(LOG_TAG, "notifyItemsChanged");
+        if (isInitialized() && mModuleManager != null)
+            new Handler(mContext.getMainLooper())
+                    .post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mModuleManager.refreshItems();
+                        }
+                    });
     }
 
-    protected synchronized final void notifyItemRemoved(SpecialItem item) {
-        Log.d(getClass().getSimpleName(), "notifyItemsChanged");
-        if (isInitialized() && mOnRemoveItem != null)
-            mOnRemoveItem.removeItem(item);
+    /*protected synchronized final void notifyItemRemoved(final SpecialItem item) {
+        Log.d(LOG_TAG, "notifyItemsChanged");
+        if (isInitialized() && mModuleManager != null)
+            new Handler(mContext.getMainLooper())
+                    .post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mModuleManager.removeItem(item);
+                        }
+                    });
     }
+
+    protected synchronized final void notifyItemAdded(final SpecialItem item) {
+        Log.d(LOG_TAG, "notifyItemsChanged");
+        if (isInitialized() && mModuleManager != null)
+            new Handler(mContext.getMainLooper())
+                    .post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mModuleManager.addItem(item);
+                        }
+                    });
+    }*/
 }

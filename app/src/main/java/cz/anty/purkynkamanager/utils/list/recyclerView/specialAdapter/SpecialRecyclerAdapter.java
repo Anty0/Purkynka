@@ -1,5 +1,6 @@
 package cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -15,20 +16,23 @@ import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
  *
  * @author anty
  */
-public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem, SpecialRecyclerAdapter.SpecialItemViewHolder> {
+public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem,
+        SpecialRecyclerAdapter.SpecialItemViewHolder> {
+
+    private static final String LOG_TAG = "SpecialRecyclerAdapter";
 
     private static final int LAYOUT_RESOURCE_ID = R.layout.special_item_layout;
 
-    public SpecialRecyclerAdapter() {
-        super(LAYOUT_RESOURCE_ID);
+    public SpecialRecyclerAdapter(Context context) {
+        super(context, LAYOUT_RESOURCE_ID);
     }
 
-    public SpecialRecyclerAdapter(Collection<? extends SpecialItem> data) {
-        super(LAYOUT_RESOURCE_ID, data);
+    public SpecialRecyclerAdapter(Context context, Collection<? extends SpecialItem> data) {
+        super(context, LAYOUT_RESOURCE_ID, data);
     }
 
-    public SpecialRecyclerAdapter(SpecialItem... data) {
-        super(LAYOUT_RESOURCE_ID, data);
+    public SpecialRecyclerAdapter(Context context, SpecialItem... data) {
+        super(context, LAYOUT_RESOURCE_ID, data);
     }
 
     @Override
@@ -48,7 +52,7 @@ public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem, Special
 
         public SpecialItemViewHolder(View itemView) {
             super(itemView);
-            Log.d(getClass().getSimpleName(), "<init>");
+            Log.d(LOG_TAG, "<init>");
 
             mContent = (FrameLayout) itemView
                     .findViewById(R.id.content_frame_layout);

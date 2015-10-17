@@ -113,7 +113,7 @@ public class WidgetMultilineAdapter implements RemoteViewsService.RemoteViewsFac
     public RemoteViews getViewAt(int position) {
         Log.d("WidgetMultilineAdapter", "getViewAt: " + position);
         final RemoteViews remoteView = new RemoteViews(
-                context.getPackageName(), R.layout.text_widget_multi_line_list_item);
+                context.getPackageName(), R.layout.widget_list_item_multi_line_text);
         MultilineItem multilineItem = listItemList.get(position);
         remoteView.setTextViewText(R.id.widget_text_view_title, multilineItem.getTitle(context, position));
         remoteView.setTextViewText(R.id.widget_text_view_text, multilineItem.getText(context, position));

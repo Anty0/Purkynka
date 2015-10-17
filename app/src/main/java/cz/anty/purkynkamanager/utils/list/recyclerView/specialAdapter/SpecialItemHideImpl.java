@@ -34,13 +34,16 @@ public abstract class SpecialItemHideImpl extends SpecialItem {
     }
 
     public void setEnabled(boolean enabled) {
-        boolean remove = mEnabled && !enabled;
         boolean changed = mEnabled != enabled;
+        /*boolean remove = mEnabled && !enabled;
+        boolean add = !mEnabled && enabled;*/
         this.mEnabled = enabled;
-        if (remove) {
+        if (changed)
+            mModule.notifyItemsChanged();
+        /*if (remove) {
             mModule.notifyItemRemoved(this);
             return;
         }
-        if (changed) mModule.notifyItemsChanged();
+        if (add) mModule.notifyItemAdded(this);*/
     }
 }

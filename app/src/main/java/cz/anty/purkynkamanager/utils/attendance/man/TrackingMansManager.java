@@ -126,7 +126,7 @@ public class TrackingMansManager {
         if (contains(man)) {
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
-                            //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
+                    .setIcon(R.mipmap.ic_launcher_a)
                     .setMessage(String.format(context.getString(R.string
                             .dialog_text_attendance_stop_tracking), man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
@@ -145,7 +145,7 @@ public class TrackingMansManager {
 
             new AlertDialog.Builder(context)
                     .setTitle(man.getName())
-                            //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
+                    .setIcon(R.mipmap.ic_launcher_a)
                     .setMessage(String.format(context.getString(R.string
                             .dialog_text_attendance_tracking), man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
@@ -154,7 +154,7 @@ public class TrackingMansManager {
                             if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_terms_warning)
-                                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
+                                        .setIcon(R.mipmap.ic_launcher_a)
                                         .setMessage(String.format(context.getString(R.string.dialog_text_terms_attendance_tracking), man.getName()))
                                         .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
                                             @Override
@@ -166,7 +166,7 @@ public class TrackingMansManager {
                                                 if (preferences.getBoolean(Constants.SETTING_NAME_FIRST_START, true)) {
                                                     new AlertDialog.Builder(context)
                                                             .setTitle(R.string.dialog_title_tracking_widget_alert)
-                                                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
+                                                            .setIcon(R.mipmap.ic_launcher_a)
                                                             .setMessage(R.string.dialog_message_tracking_widget_alert)
                                                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                                                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -187,7 +187,7 @@ public class TrackingMansManager {
                             } else {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_terms_warning)
-                                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
+                                        .setIcon(R.mipmap.ic_launcher_a)
                                         .setMessage(R.string.dialog_text_attendance_can_not_start_tracking)
                                         .setPositiveButton(R.string.but_cancel, null)
                                         .setCancelable(true)

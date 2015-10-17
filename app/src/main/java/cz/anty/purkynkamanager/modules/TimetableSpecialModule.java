@@ -18,6 +18,7 @@ import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.timetable.TimetableManageActivity;
 import cz.anty.purkynkamanager.timetable.TimetableSelectActivity;
 import cz.anty.purkynkamanager.utils.Constants;
+import cz.anty.purkynkamanager.utils.Utils;
 import cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter.MultilineSpecialItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter.SpecialModule;
@@ -147,6 +148,12 @@ public class TimetableSpecialModule extends SpecialModule {
 
         @Nullable
         @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher_t;
+        }
+
+        @Nullable
+        @Override
         public CharSequence getTitle() {
             return getContext().getText(R.string.activity_title_timetable_manage)
                     + " - " + mTimetable.getName();
@@ -176,11 +183,11 @@ public class TimetableSpecialModule extends SpecialModule {
 
                             LayoutInflater inflater = LayoutInflater.from(getContext());
                             View smallView = inflater.inflate(R.layout
-                                    .text_widget_multi_line_list_item, mLinearLayout, false);
+                                    .widget_list_item_multi_line_text, mLinearLayout, false);
                             if (actualLesson == null) {
                                 ((TextView) smallView.findViewById(R.id.widget_text_view_title))
                                         .setText(R.string.list_item_text_no_actual_lesson);
-                                Constants.setPadding(smallView.findViewById(R.id
+                                Utils.setPadding(smallView.findViewById(R.id
                                         .widget_text_view_title), 1, 8, 1, 8);
                                 smallView.findViewById(R.id.widget_text_view_text)
                                         .setVisibility(View.GONE);
@@ -189,7 +196,7 @@ public class TimetableSpecialModule extends SpecialModule {
                                         .setText(actualLesson.getTitle(getContext(), i));
                                 ((TextView) smallView.findViewById(R.id.widget_text_view_text))
                                         .setText(actualLesson.getText(getContext(), i));
-                                Constants.setPadding(smallView.findViewById(R.id
+                                Utils.setPadding(smallView.findViewById(R.id
                                         .widget_text_view_title), 1, 1, 1, 1);
                                 smallView.findViewById(R.id.widget_text_view_text)
                                         .setVisibility(View.VISIBLE);
@@ -197,11 +204,11 @@ public class TimetableSpecialModule extends SpecialModule {
                             mLinearLayout.addView(smallView);
 
                             View bigView = inflater.inflate(R.layout
-                                    .text_widget_big_multi_line_list_item, mLinearLayout, false);
+                                    .widget_list_item_multi_line_big_text, mLinearLayout, false);
                             if (nextLesson == null) {
                                 ((TextView) bigView.findViewById(R.id.text_view_title))
                                         .setText(R.string.list_item_text_no_next_lesson);
-                                Constants.setPadding(bigView.findViewById(R.id
+                                Utils.setPadding(bigView.findViewById(R.id
                                         .text_view_title), 1, 8, 1, 8);
                                 bigView.findViewById(R.id.text_view_text)
                                         .setVisibility(View.GONE);
@@ -211,7 +218,7 @@ public class TimetableSpecialModule extends SpecialModule {
                                         .setText(nextLesson.getTitle(getContext(), index));
                                 ((TextView) bigView.findViewById(R.id.text_view_text))
                                         .setText(nextLesson.getText(getContext(), index));
-                                Constants.setPadding(bigView.findViewById(R.id
+                                Utils.setPadding(bigView.findViewById(R.id
                                         .text_view_title), 1, 1, 1, 1);
                                 bigView.findViewById(R.id.text_view_text)
                                         .setVisibility(View.VISIBLE);
@@ -247,6 +254,12 @@ public class TimetableSpecialModule extends SpecialModule {
 
         public TimetableAddSpecialItem() {
             super(TimetableSpecialModule.this);
+        }
+
+        @Nullable
+        @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher_t;
         }
 
         @Nullable

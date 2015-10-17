@@ -30,7 +30,7 @@ import cz.anty.purkynkamanager.utils.thread.OnceRunThread;
 public class ICService extends BindImplService<ICService.ICBinder> {
 
     public static final String EXTRA_UPDATE_MONTH = "UPDATE_MONTH";
-
+    private static final String LOG_TAG = "ICService";
     private final ICBinder mBinder = new ICBinder();
     private final OnceRunThread worker = new OnceRunThread();
     private ICManager mManager;
@@ -51,7 +51,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
     @Override
     public void onCreate() {
-        Log.d(getClass().getSimpleName(), "onCreate");
+        Log.d(LOG_TAG, "onCreate");
         super.onCreate();
         worker.setPowerManager(this);
         mLunchesManager = new LunchesManager(this);
@@ -65,7 +65,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     private void initialize(boolean callRefresh) {
-        Log.d(getClass().getSimpleName(), "initialize");
+        Log.d(LOG_TAG, "initialize");
         if (mManager != null && mManager.isConnected()) {
             mManager.disconnect();
         }
@@ -102,7 +102,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         Notification n = new NotificationCompat.Builder(this)
                 .setContentTitle(getText(R.string.notify_title_can_not_login))
                 .setContentText(getText(R.string.notify_text_can_not_login))
-                .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                .setSmallIcon(R.mipmap.ic_launcher_ic)
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .build();
@@ -128,7 +128,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
     @Override
     public void onDestroy() {
-        Log.d(getClass().getSimpleName(), "onDestroy");
+        Log.d(LOG_TAG, "onDestroy");
         if (ICSplashActivity.serviceManager != null)
             ICSplashActivity.serviceManager.forceDisconnect();
 
@@ -137,7 +137,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             try {
                 worker.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d(getClass().getSimpleName(), "onDestroy", e);
+                Log.d(LOG_TAG, "onDestroy", e);
             }
 
             if (mManager != null) {
@@ -157,7 +157,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     private boolean refreshBurza() {
-        Log.d(getClass().getSimpleName(), "refreshBurza");
+        Log.d(LOG_TAG, "refreshBurza");
         try {
             if (mLunchesManager == null) return false;
             if (mManager == null) initialize(false);
@@ -170,7 +170,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 onBurzaChange.run();
             return true;
         } catch (Exception e) {
-            Log.d(getClass().getSimpleName(), "refreshBurza", e);
+            Log.d(LOG_TAG, "refreshBurza", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
             return false;
@@ -178,7 +178,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     private boolean refreshMonth() {
-        Log.d(getClass().getSimpleName(), "refreshMonth");
+        Log.d(LOG_TAG, "refreshMonth");
         try {
             if (mLunchesManager == null) return false;
             if (mManager == null) initialize(false);
@@ -196,7 +196,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             }
             return true;
         } catch (Exception e) {
-            Log.d(getClass().getSimpleName(), "refreshMonth", e);
+            Log.d(LOG_TAG, "refreshMonth", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
             return false;
@@ -213,7 +213,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             Notification n = new NotificationCompat.Builder(this)
                     .setContentTitle(getText(R.string.notify_title_new_lunches))
                     .setContentText(getText(R.string.notify_text_new_lunches))
-                            //.setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                    .setSmallIcon(R.mipmap.ic_launcher_ic)
                     .setContentIntent(pIntent)
                     .setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_ALL)
@@ -226,7 +226,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
 
     private boolean orderBurza(BurzaLunch lunch) {
-        Log.d(getClass().getSimpleName(), "orderBurza");
+        Log.d(LOG_TAG, "orderBurza");
         try {
             if (mLunchesManager == null) return false;
             if (mManager == null) initialize(false);
@@ -235,7 +235,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 return true;
             }
         } catch (Exception e) {
-            Log.d(getClass().getSimpleName(), "orderBurza", e);
+            Log.d(LOG_TAG, "orderBurza", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
         }
@@ -243,7 +243,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     private boolean orderMonth(MonthLunch lunch) {
-        Log.d(getClass().getSimpleName(), "orderMonth");
+        Log.d(LOG_TAG, "orderMonth");
         try {
             if (mLunchesManager == null) return false;
             if (mManager == null) initialize(true);
@@ -260,7 +260,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     private boolean toBurzaMonth(MonthLunch lunch) {
-        Log.d(getClass().getSimpleName(), "toBurzaMonth");
+        Log.d(LOG_TAG, "toBurzaMonth");
         try {
             if (mLunchesManager == null) return false;
             if (mManager == null) initialize(true);
@@ -269,7 +269,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 return true;
             }
         } catch (Exception e) {
-            Log.d(getClass().getSimpleName(), "toBurzaMonth", e);
+            Log.d(LOG_TAG, "toBurzaMonth", e);
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
         }
@@ -278,7 +278,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
     @Override
     public ICBinder getBinder() {
-        Log.d(getClass().getSimpleName(), "getBinder");
+        Log.d(LOG_TAG, "getBinder");
         return mBinder;
     }
 

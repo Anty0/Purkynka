@@ -25,7 +25,7 @@ public class UpdateConnector {
 
     //private static final String DEFAULT_URL = "http://anty.crush-team.cz/purkynkamanager/";
     public static final String DEFAULT_URL = "http://anty.codetopic.eu/purkynka/";
-
+    private static final String LOG_TAG = "UpdateConnector";
     private static final String LATEST_VERSION_CODE_URL_ADD = "latestVersionCode";
     private static final String LATEST_VERSION_NAME_URL_ADD = "latestVersionName";
     private static final String LATEST_APK_URL_ADD = "latest.apk";
@@ -38,21 +38,21 @@ public class UpdateConnector {
     public static Integer getLatestVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_VERSION_CODE_URL_ADD)
                 .followRedirects(false).execute().body().trim());
-        Log.d(UpdateConnector.class.getSimpleName(), "getLatestVersionCode versionCode: " + toReturn);
+        Log.d(LOG_TAG, "getLatestVersionCode versionCode: " + toReturn);
         return toReturn;
     }
 
     public static String getLatestVersionName() throws IOException {
         String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_VERSION_NAME_URL_ADD)
                 .followRedirects(false).execute().body().replace("\n", "");
-        Log.d(UpdateConnector.class.getSimpleName(), "getLatestVersionName versionName: " + toReturn);
+        Log.d(LOG_TAG, "getLatestVersionName versionName: " + toReturn);
         return toReturn;
     }
 
     public static Integer getLatestTermsVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(DEFAULT_URL + LATEST_TERMS_VERSION_CODE_URL_ADD)
                 .followRedirects(false).execute().body().trim());
-        Log.d(UpdateConnector.class.getSimpleName(), "getLatestTermsVersionCode versionCode: " + toReturn);
+        Log.d(LOG_TAG, "getLatestTermsVersionCode versionCode: " + toReturn);
         return toReturn;
     }
 
@@ -60,14 +60,14 @@ public class UpdateConnector {
         String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_TERMS_URL_ADD
                 + languageShortcut.toUpperCase(Locale.ENGLISH))
                 .followRedirects(false).execute().body().trim();
-        Log.d(UpdateConnector.class.getSimpleName(), "getLatestTerms terms: " + toReturn);
+        Log.d(LOG_TAG, "getLatestTerms terms: " + toReturn);
         return toReturn;
     }
 
     public static String getLatestChangeLog() throws IOException {
         String toReturn = Jsoup.connect(DEFAULT_URL + LATEST_CHANGE_LOG_URL_ADD)
                 .followRedirects(false).execute().body().trim();
-        Log.d(UpdateConnector.class.getSimpleName(), "getLatestChangeLog changeLog: " + toReturn);
+        Log.d(LOG_TAG, "getLatestChangeLog changeLog: " + toReturn);
         return toReturn;
     }
 

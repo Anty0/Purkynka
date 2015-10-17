@@ -27,6 +27,8 @@ import cz.anty.purkynkamanager.utils.attendance.man.TrackingMansManager;
 
 public class TrackingReceiver extends BroadcastReceiver {
 
+    private static final String LOG_TAG = "TrackingReceiver";
+
     public static synchronized TrackingMansManager refreshTrackingMans(Context context, @Nullable TrackingMansManager mansManager, boolean updateWidget) {
         if (mansManager == null) mansManager = new TrackingMansManager(context);
         AttendanceConnector connector = new AttendanceConnector();
@@ -57,7 +59,7 @@ public class TrackingReceiver extends BroadcastReceiver {
                                                 context.getString(R.string.notify_text_tracked_is_in_school) :
                                                 context.getString(R.string.notify_text_tracked_is_in_not_school),
                                         findMan.getName()) + " (" + findMan.getLastEnterAsString() + ")")
-                                .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon A
+                                .setSmallIcon(R.mipmap.ic_launcher_a)
                                 .setContentIntent(PendingIntent.getActivity(context, 0,
                                         new Intent(context, SearchActivity.class)
                                                 .putExtra(SearchActivity.EXTRA_SEARCH, search), 0))
@@ -73,7 +75,7 @@ public class TrackingReceiver extends BroadcastReceiver {
                             .putLong(man.getName() + Constants.SETTING_NAME_ADD_LAST_UPDATE, System.currentTimeMillis()).apply();
                 }
             } catch (IOException e) {
-                Log.d("TrackingReceiver", "onReceive", e);
+                Log.d(LOG_TAG, "onReceive", e);
             }
 
         }

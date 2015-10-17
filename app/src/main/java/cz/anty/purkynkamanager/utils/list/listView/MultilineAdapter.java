@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.Constants;
+import cz.anty.purkynkamanager.utils.Utils;
 
 /**
  * Created by anty on 18.6.15.
@@ -22,7 +22,7 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
     private final int layoutResourceId;
 
     public MultilineAdapter(Context context) {
-        this(context, R.layout.text_multi_line_list_item);
+        this(context, R.layout.list_item_multi_line_text);
     }
 
     public MultilineAdapter(Context context, @LayoutRes int layoutResourceId) {
@@ -87,11 +87,11 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
             if (item instanceof MultilinePaddingItem
                     && !((MultilinePaddingItem) item)
                     .usePadding(context, position)) {
-                Constants.setPadding(holder.text1, 1, 1, 1, 1);
-            } else Constants.setPadding(holder.text1, 1, 8, 1, 8);
+                Utils.setPadding(holder.text1, 1, 1, 1, 1);
+            } else Utils.setPadding(holder.text1, 1, 8, 1, 8);
             holder.text2.setVisibility(View.GONE);
         } else {
-            Constants.setPadding(holder.text1, 1, 1, 1, 1);
+            Utils.setPadding(holder.text1, 1, 1, 1, 1);
             holder.text2.setVisibility(View.VISIBLE);
             holder.text2.setText(text);
             //holder.imgIcon.setImageResource(item.icon);

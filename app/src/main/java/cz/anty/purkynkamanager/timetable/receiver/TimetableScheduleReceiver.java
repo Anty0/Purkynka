@@ -20,9 +20,11 @@ import cz.anty.purkynkamanager.utils.timetable.Timetable;
 
 public class TimetableScheduleReceiver extends BroadcastReceiver {
 
+    private static final String LOG_TAG = "TimetableScheduleReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(getClass().getSimpleName(), "onReceive");
+        Log.d(LOG_TAG, "onReceive");
         AlarmManager service = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
         Intent defaultIntent = new Intent(context, AttendanceReceiver.class);
@@ -55,7 +57,7 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
                     cal.getTimeInMillis(), Constants.REPEAT_TIME_TEACHERS_ATTENDANCE, defaultPending);*/
 
             Calendar calendar = Calendar.getInstance();
-            Log.d(getClass().getSimpleName(), "onReceive startTime: " + calendar.getTime());
+            Log.d(LOG_TAG, "onReceive startTime: " + calendar.getTime());
             for (int d = 0, days_strings_idsLength = Timetable.DAYS_STRINGS_IDS.length; d < days_strings_idsLength; d++) {
                 int minuteTime = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
                 int day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -71,7 +73,7 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
                             calendar.set(Calendar.MILLISECOND, 0);
                             service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), PendingIntent
                                     .getBroadcast(context, 0, defaultIntent, PendingIntent.FLAG_CANCEL_CURRENT));
-                            Log.d(getClass().getSimpleName(), "onReceive actualMinuteTime: " + minuteTime + " requestedMinuteTime: " + requestedTime
+                            Log.d(LOG_TAG, "onReceive actualMinuteTime: " + minuteTime + " requestedMinuteTime: " + requestedTime
                                     + " setTime1:" + calendar.getTime() + " setTime2: " + calendar.getTimeInMillis()
                                     + " hour: " + calendar.get(Calendar.HOUR_OF_DAY) + " minute: " + calendar.get(Calendar.MINUTE)
                                     + " day1: " + (day - 2) + " day2: " + calendar.get(Calendar.DAY_OF_WEEK)

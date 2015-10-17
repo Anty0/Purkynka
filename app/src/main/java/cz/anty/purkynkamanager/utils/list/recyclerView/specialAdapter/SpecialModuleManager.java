@@ -2,9 +2,9 @@ package cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +21,7 @@ import cz.anty.purkynkamanager.utils.list.recyclerView.SpecialItemAnimator;
  */
 public class SpecialModuleManager {
 
+    private static final String LOG_TAG = "SpecialModuleManager";
     private static final Comparator<SpecialItem> COMPARATOR = new Comparator<SpecialItem>() {
         @Override
         public int compare(SpecialItem lhs, SpecialItem rhs) {
@@ -35,75 +36,46 @@ public class SpecialModuleManager {
     private final boolean mShowEnabled;
     private boolean mInitialized = false;
 
-    public SpecialModuleManager(RecyclerView recyclerView, boolean showEnabled, SpecialModule... modules) {
-        Log.d(getClass().getSimpleName(), "<init>");
+    public SpecialModuleManager(RecyclerView recyclerView, View emptyView, boolean showEnabled, SpecialModule... modules) {
+        Log.d(LOG_TAG, "<init>");
         mModules = modules;
         mShowEnabled = showEnabled;
         mContext = recyclerView.getContext();
         mPreferences = mContext.getSharedPreferences
                 (Constants.SETTINGS_NAME_MODULES, Context.MODE_PRIVATE);
-        mAdapter = new SpecialRecyclerAdapter();
-        mAdapter.setNotifyOnChange(false);
-        reInit(recyclerView);
+        mAdapter = new SpecialRecyclerAdapter(mContext);
+        //mAdapter.setNotifyOnChange(false);
+        reInit(recyclerView, emptyView);
     }
 
     public boolean isInitialized() {
-        Log.d(getClass().getSimpleName(), "isInitialized");
+        Log.d(LOG_TAG, "isInitialized");
         return mInitialized;
     }
 
-    public synchronized void reInit(RecyclerView recyclerView) {
+    public synchronized void reInit(RecyclerView recyclerView, View emptyView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setItemAnimator(new SpecialItemAnimator());
+        recyclerView.setItemAnimator(new SpecialItemAnimator(true));
         synchronized (mAdapter) {
             recyclerView.setAdapter(mAdapter);
+            mAdapter.setEmptyView(emptyView);
         }
     }
 
     public synchronized void init() {
-        Log.d(getClass().getSimpleName(), "init");
+        Log.d(LOG_TAG, "init");
         mInitialized = true;
 
         refreshItems();
-        Runnable onChange = new Runnable() {
-            @Override
-            public void run() {
-                new Handler(mContext.getMainLooper())
-                        .post(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshItems();
-                            }
-                        });
-            }
-        };
-        OnRemoveItem onRemoveItem = new OnRemoveItem() {
-            @Override
-            public void removeItem(final SpecialItem item) {
-                new Handler(mContext.getMainLooper())
-                        .post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mShowEnabled) {
-                                    SpecialModuleManager.this
-                                            .removeItem(item);
-                                    return;
-                                }
-                                refreshItems();
-                            }
-                        });
-            }
-        };
-
         synchronized (mModules) {
             for (SpecialModule module : mModules) {
-                module.init(mPreferences, onChange, onRemoveItem);
+                module.init(mPreferences, this);
             }
         }
     }
 
     public synchronized void update() {
-        Log.d(getClass().getSimpleName(), "update");
+        Log.d(LOG_TAG, "update");
         synchronized (mModules) {
             for (SpecialModule module : mModules) {
                 if (module.isInitialized())
@@ -124,15 +96,31 @@ public class SpecialModuleManager {
         editor.apply();
     }
 
-    private void removeItem(SpecialItem item) {
+    /*void removeItem(SpecialItem item) {
         synchronized (mAdapter) {
             int index = mAdapter.getItemPosition(item);
             if (index != -1) {
                 mAdapter.removeItem(item);
-                mAdapter.notifyItemRemoved(index);
+                //mAdapter.notifyItemRemoved(index);
             }
         }
     }
+
+    void addItem(SpecialItem item) {
+        synchronized (mAdapter) {
+            int position = -1;
+            ArrayList<SpecialItem> items = mAdapter.getItems();
+            for (int i = 0, itemsSize = items.size(); i < itemsSize; i++) {
+                if (items.get(i).getPriority() <= item.getPriority()) {
+                    position = i;
+                    break;
+                }
+            }
+            if (position != -1)
+                mAdapter.insertItem(item, position);
+            else mAdapter.addItem(item);
+        }
+    }*/
 
     private ArrayList<SpecialItem> getAllItems() {
         ArrayList<SpecialItem> items = new ArrayList<>();
@@ -165,26 +153,23 @@ public class SpecialModuleManager {
         return items;
     }
 
-    public void refreshItems() {
+    /*public void refreshItems() {
         synchronized (mAdapter) {
-            Log.d(getClass().getSimpleName(), "refreshItems");
+            Log.d(LOG_TAG, "refreshItems");
             mAdapter.clearItems();
             mAdapter.addAllItems(mShowEnabled ? getAllEnabledItems()
                     : getAllDisabledItems());
             mAdapter.notifyDataSetChanged();
         }
-    }
+    }*/
 
-    /*public void refreshItems() {
+    public void refreshItems() {
         synchronized (mAdapter) {
-            Log.d(getClass().getSimpleName(), "refreshItems");
-            //List<SpecialItem> oldItems = mAdapter.getItems();
-            ArrayList<SpecialItem> items = new ArrayList<>();
-            for (SpecialItem item : getAllItems()) {
-                if (item.isVisible()) items.add(item);
-            }
+            Log.d(LOG_TAG, "refreshItems");
+            ArrayList<SpecialItem> items = mShowEnabled
+                    ? getAllEnabledItems() : getAllDisabledItems();
 
-            *//*ArrayList<SpecialItem> removedItems = new ArrayList<>();
+            /*ArrayList<SpecialItem> removedItems = new ArrayList<>();
             ArrayList<SpecialItem> addedItems = new ArrayList<>();
             ArrayList<SpecialItem> movedItems = new ArrayList<>();
             for (SpecialItem item : oldItems) {
@@ -197,31 +182,32 @@ public class SpecialModuleManager {
             for (SpecialItem item : items) {
                 if (!oldItems.contains(item))
                     addedItems.add(item);
-            }*//*
+            }*/
 
             for (SpecialItem item : mAdapter.getItems()) {
                 if (!items.contains(item)) {
                     mAdapter.removeItem(item);
-                    mAdapter.notifyItemRemoved(mAdapter
-                            .getItemPosition(item));
+                    /*mAdapter.notifyItemRemoved(mAdapter
+                            .getItemPosition(item));*/
                 }
             }
 
             for (SpecialItem item : items) {
                 int index = mAdapter.getItemPosition(item);
                 if (index != -1) {
+                    mAdapter.setNotifyOnChange(false);
                     mAdapter.removeItem(item);
-                    mAdapter.notifyItemRemoved(index);
-                    *//*mAdapter.addItem(item);
+                    mAdapter.addItem(item);
                     mAdapter.notifyItemMoved(index,
                             mAdapter.getItemPosition(item));
-                    continue;*//*
+                    mAdapter.setNotifyOnChange(true);
+                    continue;
                 }
                 mAdapter.addItem(item);
-                mAdapter.notifyItemInserted(mAdapter
-                        .getItemPosition(item));
+                /*mAdapter.notifyItemInserted(mAdapter
+                        .getItemPosition(item));*/
             }
-            *//*mAdapter.addAllItems(items);
+            /*mAdapter.addAllItems(items);
 
             for (SpecialItem item : removedItems) {
                 mAdapter.notifyItemRemoved(
@@ -236,10 +222,10 @@ public class SpecialModuleManager {
                         to = items.indexOf(item);
                 if (from != to)
                     mAdapter.notifyItemMoved(from, to);
-            }*//*
+            }*/
             //mAdapter.notifyDataSetChanged();
         }
-    }*/
+    }
 
     public interface OnRemoveItem {
         void removeItem(SpecialItem item);

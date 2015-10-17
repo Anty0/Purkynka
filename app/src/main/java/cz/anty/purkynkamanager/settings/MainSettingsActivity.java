@@ -9,8 +9,8 @@ import android.widget.CheckBox;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.AppDataManager;
-import cz.anty.purkynkamanager.utils.ApplicationBase;
 import cz.anty.purkynkamanager.utils.Constants;
+import cz.anty.purkynkamanager.utils.Utils;
 
 /**
  * Created by anty on 9.10.15.
@@ -72,7 +72,7 @@ public class MainSettingsActivity extends AppCompatActivity {
         findViewById(R.id.button_language).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApplicationBase.generateLanguageChangeDialog(MainSettingsActivity.this, new Runnable() {
+                Utils.generateLanguageChangeDialog(MainSettingsActivity.this, new Runnable() {
                     @Override
                     public void run() {
                         //finish();

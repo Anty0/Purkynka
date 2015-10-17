@@ -42,6 +42,8 @@ import cz.anty.purkynkamanager.wifi.WifiLoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = "MainActivity";
+
     private static SpecialModuleManager moduleManager;
     private boolean showOptionsMenu = false;
     private OnceRunThreadWithSpinner worker;
@@ -49,18 +51,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(getClass().getSimpleName(), "onCreate");
+        Log.d(LOG_TAG, "onCreate");
         showOptionsMenu = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        View emptyView = findViewById(R.id.empty_view);
         if (moduleManager == null)
-            moduleManager = new SpecialModuleManager(recyclerView, true,
+            moduleManager = new SpecialModuleManager(recyclerView, emptyView, true,
                     new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this),
                     new SASSpecialModule(this), new ICSpecialModule(this), new TimetableSpecialModule(this),
                     new WifiSpecialModule(this));
-        else moduleManager.reInit(recyclerView);
+        else moduleManager.reInit(recyclerView, emptyView);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         worker = new OnceRunThreadWithSpinner(this);
@@ -74,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkFirstStart() {
-        Log.d(getClass().getSimpleName(), "checkFirstStart");
+        Log.d(LOG_TAG, "checkFirstStart");
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -101,19 +104,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isNewTerms() {
-        Log.d(getClass().getSimpleName(), "isNewTerms");
+        Log.d(LOG_TAG, "isNewTerms");
         try {
             return getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                     .getInt(Constants.SETTING_NAME_LATEST_TERMS_CODE, -1)
                     != UpdateConnector.getLatestTermsVersionCode();
         } catch (IOException | NumberFormatException e) {
-            Log.d(getClass().getSimpleName(), "isNewTerms", e);
+            Log.d(LOG_TAG, "isNewTerms", e);
             return false;
         }
     }
 
     private void init() {
-        Log.d(getClass().getSimpleName(), "init");
+        Log.d(LOG_TAG, "init");
 
         final FragmentDrawer drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -215,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 worker.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d(getClass().getSimpleName(), "onDestroy", e);
+                Log.d(LOG_TAG, "onDestroy", e);
             }
         } while (worker.getWaitingThreadsLength() > 0);
         super.onDestroy();

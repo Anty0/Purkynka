@@ -24,23 +24,29 @@ import cz.anty.purkynkamanager.utils.attendance.man.TrackingMansManager;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
 import cz.anty.purkynkamanager.utils.list.widgetList.WidgetMultilineAdapter;
 import cz.anty.purkynkamanager.utils.list.widgetList.WidgetService;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepName;
 
 /**
  * Implementation of App Widget functionality.
  */
+@Keep
+@KeepName
 public class TrackingWidget extends AppWidgetProvider {
 
+    private static final String LOG_TAG = "TrackingWidget";
     private static final String EXTRA_REFRESH_MANS = "REFRESH_MANS";
+
     private Intent lastIntent = null;
 
     public static void callUpdate(Context context, boolean refreshMans) {
-        Log.d("TrackingWidget", "callUpdate");
+        Log.d(LOG_TAG, "callUpdate");
         //context.sendBroadcast(new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, SASManageWidget.class));
         context.sendBroadcast(getUpdateIntent(context, refreshMans));
     }
 
     private static Intent getUpdateIntent(Context context, boolean refreshMans) {
-        Log.d("TrackingWidget", "getUpdateIntent");
+        Log.d(LOG_TAG, "getUpdateIntent");
         int[] allWidgetIds = AppWidgetManager.getInstance(context)
                 .getAppWidgetIds(new ComponentName(context, TrackingWidget.class));
 
@@ -52,7 +58,7 @@ public class TrackingWidget extends AppWidgetProvider {
 
     @Override
     public synchronized void onReceive(@NonNull Context context, @NonNull Intent intent) {
-        Log.d("TrackingWidget", "onReceive");
+        Log.d(LOG_TAG, "onReceive");
         lastIntent = intent;
         super.onReceive(context, intent);
     }
@@ -60,9 +66,9 @@ public class TrackingWidget extends AppWidgetProvider {
     @SuppressLint("NewApi")
     @Override
     public synchronized void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
-        Log.d("TrackingWidget", "onUpdate");
+        Log.d(LOG_TAG, "onUpdate");
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
-                context.getPackageName(), R.layout.tracking_widget_loading));
+                context.getPackageName(), R.layout.widget_tracking_loading));
 
         if (lastIntent.getBooleanExtra(EXTRA_REFRESH_MANS, true)) {
             ApplicationBase.WORKER.startWorker(new Runnable() {
@@ -93,10 +99,10 @@ public class TrackingWidget extends AppWidgetProvider {
 
         if (Build.VERSION.SDK_INT >= 11) {
             remoteViews = new RemoteViews(
-                    context.getPackageName(), R.layout.tracking_widget_new);
+                    context.getPackageName(), R.layout.widget_tracking_new);
         } else {
             remoteViews = new RemoteViews(
-                    context.getPackageName(), R.layout.tracking_widget_old);
+                    context.getPackageName(), R.layout.widget_tracking_old);
         }
 
 
@@ -147,10 +153,10 @@ public class TrackingWidget extends AppWidgetProvider {
                 for (int i = 0; i < len; i++) {
                     MultilineItem multilineItem = itemList[i];
                     RemoteViews itemRemoteViews = new RemoteViews(
-                            context.getPackageName(), R.layout.text_widget_multi_line_list_item);
+                            context.getPackageName(), R.layout.widget_list_item_multi_line_text);
                     itemRemoteViews.setTextViewText(R.id.widget_text_view_title, multilineItem.getTitle(context, i));
                     itemRemoteViews.setTextViewText(R.id.widget_text_view_text, multilineItem.getText(context, i));
-                    //if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "onUpdate itemRemoteViews: " + itemRemoteViews + " remoteViews: " + remoteViews);
+                    //if (AppDataManager.isDebugMode(context)) Log.d(LOG_TAG, "onUpdate itemRemoteViews: " + itemRemoteViews + " remoteViews: " + remoteViews);
                     remoteViews.addView(R.id.widget_main_layout, itemRemoteViews);
                 }
             }
@@ -164,7 +170,7 @@ public class TrackingWidget extends AppWidgetProvider {
 
         //Log.d("UPDATE", "onUpdate updating widget");
         // Instruct the widget manager to update the widget
-        //if (AppDataManager.isDebugMode(context)) Log.d("TrackingWidget", "onUpdate updateWidgets");
+        //if (AppDataManager.isDebugMode(context)) Log.d(LOG_TAG, "onUpdate updateWidgets");
         //ComponentName thisWidget = new ComponentName(context, TrackingWidget.class);
         //appWidgetManager = AppWidgetManager.getInstance(context);
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
@@ -173,13 +179,13 @@ public class TrackingWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        Log.d("TrackingWidget", "onEnabled");
+        Log.d(LOG_TAG, "onEnabled");
         // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        Log.d("TrackingWidget", "onDisabled");
+        Log.d(LOG_TAG, "onDisabled");
         // Enter relevant functionality for when the last widget is disabled
     }
 }

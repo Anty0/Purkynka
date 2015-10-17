@@ -21,7 +21,7 @@ import cz.anty.purkynkamanager.utils.Log;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
 import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.list.recyclerView.SpecialItemAnimator;
 import cz.anty.purkynkamanager.utils.sas.mark.Lesson;
@@ -31,6 +31,8 @@ import cz.anty.purkynkamanager.utils.service.ServiceManager;
 import cz.anty.purkynkamanager.utils.thread.OnceRunThreadWithSpinner;
 
 public class SASManageActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = "SASManageActivity";
 
     private MultilineRecyclerAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
@@ -46,7 +48,7 @@ public class SASManageActivity extends AppCompatActivity {
             = new ServiceManager.BinderConnection<SASManagerService.SASBinder>() {
         @Override
         public void onBinderConnected(final SASManagerService.SASBinder sasBinder) {
-            Log.d(getClass().getSimpleName(), "onBinderConnected");
+            Log.d(LOG_TAG, "onBinderConnected");
             binder = sasBinder;
             refreshThread.startWorker(new Runnable() {
                 @Override
@@ -82,11 +84,11 @@ public class SASManageActivity extends AppCompatActivity {
 
         @Override
         public void onBinderDisconnected() {
-            Log.d(getClass().getSimpleName(), "onBinderDisconnected");
+            Log.d(LOG_TAG, "onBinderDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d(getClass().getSimpleName(), "onBinderDisconnected", e);
+                Log.d(LOG_TAG, "onBinderDisconnected", e);
             }
             binder.setOnMarksChangeListener(null);
             binder.setOnStateChangedListener(null);
@@ -96,7 +98,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(getClass().getSimpleName(), "onCreate");
+        Log.d(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
         if (SASSplashActivity.serviceManager == null
@@ -112,9 +114,9 @@ public class SASManageActivity extends AppCompatActivity {
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
-        adapter = new MultilineRecyclerAdapter<>();
+        adapter = new MultilineRecyclerAdapter<>(this);
         adapter.setNotifyOnChange(false);
-        RecyclerAdapter.inflateToActivity(this, R.layout.activity_sas_manage, adapter,
+        RecyclerInflater.inflateToActivity(this, R.layout.activity_sas_manage, adapter,
                 new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
@@ -140,9 +142,9 @@ public class SASManageActivity extends AppCompatActivity {
                         Mark[] marks = lesson.getMarks();
 
                         final MultilineRecyclerAdapter<Mark> adapter =
-                                new MultilineRecyclerAdapter<>(marks);
+                                new MultilineRecyclerAdapter<>(SASManageActivity.this, marks);
 
-                        View result = RecyclerAdapter.inflate(SASManageActivity.this, null, false, null, adapter,
+                        View result = RecyclerInflater.inflate(SASManageActivity.this, null, false, adapter,
                                 new RecyclerItemClickListener.ClickListener() {
                                     @Override
                                     public void onClick(View view, int position) {
@@ -208,7 +210,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d(getClass().getSimpleName(), "onDestroy");
+        Log.d(LOG_TAG, "onDestroy");
         if (SASSplashActivity.serviceManager != null) {
             SASSplashActivity.serviceManager
                     .removeBinderConnection(binderConnection);
@@ -218,7 +220,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(getClass().getSimpleName(), "onCreateOptionsMenu");
+        Log.d(LOG_TAG, "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_manage, menu);
 
@@ -235,7 +237,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(getClass().getSimpleName(), "onOptionsItemSelected");
+        Log.d(LOG_TAG, "onOptionsItemSelected");
         int i = item.getItemId();
 
         if (i == R.id.action_settings) {
@@ -276,7 +278,7 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     private void onStateChanged() {
-        Log.d(getClass().getSimpleName(), "onStateChanged");
+        Log.d(LOG_TAG, "onStateChanged");
         if (binder == null) return;
 
         SASManagerService.State state
@@ -291,25 +293,25 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     private void onUpdate(boolean showProgressBar, final boolean fast) {
-        Log.d(getClass().getSimpleName(), "onUpdate: " + showProgressBar);
-        Log.d(getClass().getSimpleName(), "onUpdate: Starting thread");
+        Log.d(LOG_TAG, "onUpdate: " + showProgressBar);
+        Log.d(LOG_TAG, "onUpdate: Starting thread");
         //((TextView) findViewById(R.id.textView3)).setText(R.string.loading);
         refreshThread.startWorker(new Runnable() {
             @Override
             public void run() {
-                Log.d(getClass().getSimpleName(), "onUpdate: Thread running");
+                Log.d(LOG_TAG, "onUpdate: Thread running");
                 MultilineItem[] data;
                 try {
                     if (binder != null) {
                         switch (marksShort) {
                             case LESSONS:
-                                Log.d(getClass().getSimpleName(), "onUpdate: Loading lessons");
+                                Log.d(LOG_TAG, "onUpdate: Loading lessons");
                                 if (fast) data = binder.getLessonsFast(semester);
                                 else data = binder.getLessons(semester);
                                 break;
                             case DATE:
                             default:
-                                Log.d(getClass().getSimpleName(), "onUpdate: Loading marks");
+                                Log.d(LOG_TAG, "onUpdate: Loading marks");
                                 if (fast) data = binder.getMarksFast(semester);
                                 else data = binder.getMarks(semester);
                                 break;
@@ -318,19 +320,19 @@ public class SASManageActivity extends AppCompatActivity {
                         throw new NullPointerException();
                     }
                 } catch (NullPointerException | InterruptedException e) {
-                    Log.d(getClass().getSimpleName(), "onUpdate", e);
+                    Log.d(LOG_TAG, "onUpdate", e);
                     data = new MultilineItem[]{new TextMultilineItem(getText(R.string.exception_title_sas_manager_binder_null),
                             getText(R.string.exception_message_sas_manager_binder_null))};
                 }
 
-                Log.d(getClass().getSimpleName(), "onUpdate: Updating list");
+                Log.d(LOG_TAG, "onUpdate: Updating list");
                 adapter.clearItems();
                 adapter.addAllItems(data);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         adapter.notifyDataSetChanged();
-                        Log.d(getClass().getSimpleName(), "onUpdate: List updated");
+                        Log.d(LOG_TAG, "onUpdate: List updated");
 
                         if (isInException && !showedException) {
                             showedException = true;
@@ -352,16 +354,16 @@ public class SASManageActivity extends AppCompatActivity {
                                         }
                                     }).start();
                         }
-                        Log.d(getClass().getSimpleName(), "onUpdate: exception view updated");
+                        Log.d(LOG_TAG, "onUpdate: exception view updated");
                     }
                 });
             }
         }, showProgressBar ? getText(R.string.wait_text_loading) : null);
-        Log.d(getClass().getSimpleName(), "onUpdate: Thread started");
+        Log.d(LOG_TAG, "onUpdate: Thread started");
     }
 
     private void logOut() {
-        Log.d(getClass().getSimpleName(), "logOut");
+        Log.d(LOG_TAG, "logOut");
         AppDataManager.logout(AppDataManager.Type.SAS);
         //binder.waitToWorkerStop();
         //sendBroadcast(new Intent(this, StartActivityReceiver.class));
@@ -371,7 +373,7 @@ public class SASManageActivity extends AppCompatActivity {
     }
 
     private void logInException() {
-        Log.d(getClass().getSimpleName(), "logInException");
+        Log.d(LOG_TAG, "logInException");
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
                 .setTitle(String.format(getString(R.string.exception_title_login),
                         AppDataManager.getUsername(AppDataManager.Type.SAS)))
@@ -387,7 +389,7 @@ public class SASManageActivity extends AppCompatActivity {
                                     try {
                                         binder.waitToWorkerStop();
                                     } catch (InterruptedException e) {
-                                        Log.d(getClass().getSimpleName(), "logInException", e);
+                                        Log.d(LOG_TAG, "logInException", e);
                                     }
                                     if (binder.getState() == SASManagerService.State.LOG_IN_EXCEPTION) {
                                         runOnUiThread(new Runnable() {

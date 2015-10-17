@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +13,8 @@ import android.view.ViewGroup;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
-import cz.anty.purkynkamanager.utils.list.recyclerView.SpecialItemAnimator;
 
 /**
  * Created by anty on 30.9.15.
@@ -25,8 +23,7 @@ import cz.anty.purkynkamanager.utils.list.recyclerView.SpecialItemAnimator;
  */
 public class FragmentDrawer extends Fragment {
 
-    private MultilineRecyclerAdapter<MultilineItem> adapter =
-            new MultilineRecyclerAdapter<>(R.layout.base_multiline_text_item);
+    private MultilineRecyclerAdapter<MultilineItem> adapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private View containerView;
@@ -43,14 +40,16 @@ public class FragmentDrawer extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new MultilineRecyclerAdapter<>(getContext(),
+                R.layout.base_list_item_multi_line_text);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflating view layout
-        View view = RecyclerAdapter.inflate(inflater, getContext(), container, false, R.layout.fragment_navigation_drawer,
-                adapter, new RecyclerItemClickListener.ClickListener() {
+        return RecyclerInflater.inflate(inflater, getContext(), container, false, R.layout.fragment_navigation_drawer,
+                adapter, null, new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
                         mDrawerLayout.closeDrawer(containerView);
@@ -62,9 +61,6 @@ public class FragmentDrawer extends Fragment {
                         drawerListener.onLongClick(view, position);
                     }
                 });
-        ((RecyclerView) view.findViewById(R.id.recyclerView))
-                .setItemAnimator(new SpecialItemAnimator());
-        return view;
     }
 
 

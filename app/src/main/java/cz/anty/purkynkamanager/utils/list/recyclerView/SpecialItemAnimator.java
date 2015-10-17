@@ -5,39 +5,40 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.anty.purkynkamanager.utils.AppDataManager;
-import cz.anty.purkynkamanager.utils.Log;
 
 /**
  * Created by anty on 9.10.15.
  *
  * @author anty
  */
-public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
+public class SpecialItemAnimator extends SimpleItemAnimator {
 
+    private final boolean mSpecialAnimations;
     private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<>();
     private ArrayList<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<>();
     private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
     private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<>();
-
-    private ArrayList<ArrayList<RecyclerView.ViewHolder>> mAdditionsList =
-            new ArrayList<>();
+    private ArrayList<ArrayList<RecyclerView.ViewHolder>> mAdditionsList = new ArrayList<>();
     private ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList<>();
     private ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList<>();
-
     private ArrayList<RecyclerView.ViewHolder> mAddAnimations = new ArrayList<>();
     private ArrayList<RecyclerView.ViewHolder> mMoveAnimations = new ArrayList<>();
     private ArrayList<RecyclerView.ViewHolder> mRemoveAnimations = new ArrayList<>();
     private ArrayList<RecyclerView.ViewHolder> mChangeAnimations = new ArrayList<>();
 
+    public SpecialItemAnimator(boolean specialAnimations) {
+        mSpecialAnimations = specialAnimations;
+    }
+
     @Override
     public void runPendingAnimations() {
-        Log.v(getClass().getSimpleName(), "runPendingAnimations");
         boolean removalsPending = !mPendingRemovals.isEmpty();
         boolean movesPending = !mPendingMoves.isEmpty();
         boolean changesPending = !mPendingChanges.isEmpty();
@@ -128,40 +129,39 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public boolean animateRemove(final RecyclerView.ViewHolder holder) {
-        Log.v(getClass().getSimpleName(), "animateRemove");
         resetAnimation(holder);
         mPendingRemovals.add(holder);
         return true;
     }
 
     private void animateRemoveImpl(final RecyclerView.ViewHolder holder) {
-        Log.v(getClass().getSimpleName(), "animateRemoveImpl");
         final View view = holder.itemView;
         final ViewPropertyAnimatorCompat animation = ViewCompat.animate(view);
         mRemoveAnimations.add(holder);
-        animation.setDuration(getRemoveDuration()).translationXBy(
-                holder.itemView.getWidth()).alpha(0)
-                .setListener(new VpaListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(View view) {
-                        dispatchRemoveStarting(holder);
-                    }
+        if (mSpecialAnimations)
+            animation.translationX(holder.itemView.getWidth());
+        animation.setDuration(getRemoveDuration())
+                .alpha(0).setListener(new VpaListenerAdapter() {
+            @Override
+            public void onAnimationStart(View view) {
+                dispatchRemoveStarting(holder);
+            }
 
-                    @Override
-                    public void onAnimationEnd(View view) {
-                        animation.setListener(null);
-                        ViewCompat.setAlpha(view, 1);
-                        ViewCompat.setTranslationX(view, 0);
-                        dispatchRemoveFinished(holder);
-                        mRemoveAnimations.remove(holder);
-                        dispatchFinishedWhenDone();
-                    }
-                }).start();
+            @Override
+            public void onAnimationEnd(View view) {
+                animation.setListener(null);
+                ViewCompat.setAlpha(view, 1);
+                if (mSpecialAnimations)
+                    ViewCompat.setTranslationX(view, 0);
+                dispatchRemoveFinished(holder);
+                mRemoveAnimations.remove(holder);
+                dispatchFinishedWhenDone();
+            }
+        }).start();
     }
 
     @Override
     public boolean animateAdd(final RecyclerView.ViewHolder holder) {
-        Log.v(getClass().getSimpleName(), "animateAdd");
         resetAnimation(holder);
         ViewCompat.setAlpha(holder.itemView, 0);
         mPendingAdditions.add(holder);
@@ -169,21 +169,22 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private void animateAddImpl(final RecyclerView.ViewHolder holder) {
-        Log.v(getClass().getSimpleName(), "animateAddImpl");
         final View view = holder.itemView;
         final ViewPropertyAnimatorCompat animation = ViewCompat.animate(view);
         mAddAnimations.add(holder);
-        animation.scaleY(1).alpha(1).setDuration(getAddDuration()).
+        if (mSpecialAnimations)
+            animation.scaleY(1);
+        animation.alpha(1).setDuration(getAddDuration()).
                 setListener(new VpaListenerAdapter() {
                     @Override
                     public void onAnimationStart(View view) {
                         dispatchAddStarting(holder);
                     }
-
                     @Override
                     public void onAnimationCancel(View view) {
                         ViewCompat.setAlpha(view, 1);
-                        ViewCompat.setScaleY(view, 1);
+                        if (mSpecialAnimations)
+                            ViewCompat.setScaleY(view, 1);
                     }
 
                     @Override
@@ -199,7 +200,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     @Override
     public boolean animateMove(final RecyclerView.ViewHolder holder, int fromX, int fromY,
                                int toX, int toY) {
-        Log.v(getClass().getSimpleName(), "animateMove");
         final View view = holder.itemView;
         fromX += ViewCompat.getTranslationX(holder.itemView);
         fromY += ViewCompat.getTranslationY(holder.itemView);
@@ -221,7 +221,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private void animateMoveImpl(final RecyclerView.ViewHolder holder, int fromX, int fromY, int toX, int toY) {
-        Log.v(getClass().getSimpleName(), "animateMoveImpl");
         final View view = holder.itemView;
         final int deltaX = toX - fromX;
         final int deltaY = toY - fromY;
@@ -241,7 +240,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
             public void onAnimationStart(View view) {
                 dispatchMoveStarting(holder);
             }
-
             @Override
             public void onAnimationCancel(View view) {
                 if (deltaX != 0) {
@@ -251,7 +249,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
                     ViewCompat.setTranslationY(view, 0);
                 }
             }
-
             @Override
             public void onAnimationEnd(View view) {
                 animation.setListener(null);
@@ -265,7 +262,11 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     @Override
     public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder,
                                  int fromX, int fromY, int toX, int toY) {
-        Log.v(getClass().getSimpleName(), "animateChange");
+        if (oldHolder == newHolder) {
+            // Don't know how to run change animations when the same view holder is re-used.
+            // run a move animation to handle position changes.
+            return animateMove(oldHolder, fromX, fromY, toX, toY);
+        }
         final float prevTranslationX = ViewCompat.getTranslationX(oldHolder.itemView);
         final float prevTranslationY = ViewCompat.getTranslationY(oldHolder.itemView);
         final float prevAlpha = ViewCompat.getAlpha(oldHolder.itemView);
@@ -276,7 +277,7 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
         ViewCompat.setTranslationX(oldHolder.itemView, prevTranslationX);
         ViewCompat.setTranslationY(oldHolder.itemView, prevTranslationY);
         ViewCompat.setAlpha(oldHolder.itemView, prevAlpha);
-        if (newHolder != null && newHolder.itemView != null) {
+        if (newHolder != null) {
             // carry over translation values
             resetAnimation(newHolder);
             ViewCompat.setTranslationX(newHolder.itemView, -deltaX);
@@ -288,7 +289,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private void animateChangeImpl(final ChangeInfo changeInfo) {
-        Log.v(getClass().getSimpleName(), "animateChangeImpl");
         final RecyclerView.ViewHolder holder = changeInfo.oldHolder;
         final View view = holder == null ? null : holder.itemView;
         final RecyclerView.ViewHolder newHolder = changeInfo.newHolder;
@@ -326,7 +326,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
                 public void onAnimationStart(View view) {
                     dispatchChangeStarting(changeInfo.newHolder, false);
                 }
-
                 @Override
                 public void onAnimationEnd(View view) {
                     newViewAnimation.setListener(null);
@@ -342,7 +341,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private void endChangeAnimation(List<ChangeInfo> infoList, RecyclerView.ViewHolder item) {
-        Log.v(getClass().getSimpleName(), "endChangeAnimation");
         for (int i = infoList.size() - 1; i >= 0; i--) {
             ChangeInfo changeInfo = infoList.get(i);
             if (endChangeAnimationIfNecessary(changeInfo, item)) {
@@ -354,7 +352,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private void endChangeAnimationIfNecessary(ChangeInfo changeInfo) {
-        Log.v(getClass().getSimpleName(), "endChangeAnimationIfNecessary");
         if (changeInfo.oldHolder != null) {
             endChangeAnimationIfNecessary(changeInfo, changeInfo.oldHolder);
         }
@@ -364,7 +361,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private boolean endChangeAnimationIfNecessary(ChangeInfo changeInfo, RecyclerView.ViewHolder item) {
-        Log.v(getClass().getSimpleName(), "endChangeAnimationIfNecessary");
         boolean oldItem = false;
         if (changeInfo.newHolder == item) {
             changeInfo.newHolder = null;
@@ -383,7 +379,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public void endAnimation(RecyclerView.ViewHolder item) {
-        Log.v(getClass().getSimpleName(), "endAnimation");
         final View view = item.itemView;
         // this will trigger end callback which should set properties to their target values.
         ViewCompat.animate(view).cancel();
@@ -442,22 +437,26 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
         }
 
         // animations should be ended by the cancel above.
+        //noinspection PointlessBooleanExpression,ConstantConditions
         boolean debug = AppDataManager.isDebugMode();
         if (mRemoveAnimations.remove(item) && debug) {
             throw new IllegalStateException("after animation is cancelled, item should not be in "
                     + "mRemoveAnimations list");
         }
 
+        //noinspection PointlessBooleanExpression,ConstantConditions
         if (mAddAnimations.remove(item) && debug) {
             throw new IllegalStateException("after animation is cancelled, item should not be in "
                     + "mAddAnimations list");
         }
 
+        //noinspection PointlessBooleanExpression,ConstantConditions
         if (mChangeAnimations.remove(item) && debug) {
             throw new IllegalStateException("after animation is cancelled, item should not be in "
                     + "mChangeAnimations list");
         }
 
+        //noinspection PointlessBooleanExpression,ConstantConditions
         if (mMoveAnimations.remove(item) && debug) {
             throw new IllegalStateException("after animation is cancelled, item should not be in "
                     + "mMoveAnimations list");
@@ -466,14 +465,12 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     private void resetAnimation(RecyclerView.ViewHolder holder) {
-        Log.v(getClass().getSimpleName(), "resetAnimation");
         AnimatorCompatHelper.clearInterpolator(holder.itemView);
         endAnimation(holder);
     }
 
     @Override
     public boolean isRunning() {
-        Log.v(getClass().getSimpleName(), "isRunning");
         return (!mPendingAdditions.isEmpty() ||
                 !mPendingChanges.isEmpty() ||
                 !mPendingMoves.isEmpty() ||
@@ -493,7 +490,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
      * listeners.
      */
     private void dispatchFinishedWhenDone() {
-        Log.v(getClass().getSimpleName(), "dispatchFinishedWhenDone");
         if (!isRunning()) {
             dispatchAnimationsFinished();
         }
@@ -501,7 +497,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
 
     @Override
     public void endAnimations() {
-        Log.v(getClass().getSimpleName(), "endAnimations");
         int count = mPendingMoves.size();
         for (int i = count - 1; i >= 0; i--) {
             MoveInfo item = mPendingMoves.get(i);
@@ -587,7 +582,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     }
 
     void cancelAll(List<RecyclerView.ViewHolder> viewHolders) {
-        Log.v(getClass().getSimpleName(), "cancelAll");
         for (int i = viewHolders.size() - 1; i >= 0; i--) {
             ViewCompat.animate(viewHolders.get(i).itemView).cancel();
         }
@@ -609,7 +603,6 @@ public class SpecialItemAnimator extends RecyclerView.ItemAnimator {
     private static class ChangeInfo {
         public RecyclerView.ViewHolder oldHolder, newHolder;
         public int fromX, fromY, toX, toY;
-
         private ChangeInfo(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder) {
             this.oldHolder = oldHolder;
             this.newHolder = newHolder;

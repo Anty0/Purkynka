@@ -26,10 +26,14 @@ import cz.anty.purkynkamanager.utils.list.widgetList.WidgetMultilineAdapter;
 import cz.anty.purkynkamanager.utils.list.widgetList.WidgetService;
 import cz.anty.purkynkamanager.utils.sas.mark.Mark;
 import cz.anty.purkynkamanager.utils.sas.mark.MarksManager;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepName;
 
 /**
  * Implementation of App Widget functionality.
  */
+@Keep
+@KeepName
 public class SASManageWidget extends AppWidgetProvider {
 
     private static final String REQUEST_UPDATE = "REQUEST_MARKS_UPDATE";
@@ -66,7 +70,7 @@ public class SASManageWidget extends AppWidgetProvider {
     public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d("SASManageWidget", "onUpdate");
         appWidgetManager.updateAppWidget(appWidgetIds, new RemoteViews(
-                context.getPackageName(), R.layout.sasmanage_widget_loading));
+                context.getPackageName(), R.layout.widget_sasmanage_loading));
 
         if (lastIntent.getBooleanExtra(REQUEST_UPDATE, false) &&
                 AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
@@ -84,10 +88,10 @@ public class SASManageWidget extends AppWidgetProvider {
 
         if (Build.VERSION.SDK_INT >= 11) {
             remoteViews = new RemoteViews(
-                    context.getPackageName(), R.layout.sasmanage_widget_new);
+                    context.getPackageName(), R.layout.widget_sasmanage_new);
         } else {
             remoteViews = new RemoteViews(
-                    context.getPackageName(), R.layout.sasmanage_widget_old);
+                    context.getPackageName(), R.layout.widget_sasmanage_old);
         }
 
         //Log.d("UPDATE", "onUpdate setting onClick listeners");
@@ -139,7 +143,7 @@ public class SASManageWidget extends AppWidgetProvider {
                 for (int i = 0; i < len; i++) {
                     MultilineItem multilineItem = itemList.get(i);
                     RemoteViews itemRemoteViews = new RemoteViews(
-                            context.getPackageName(), R.layout.text_widget_multi_line_list_item);
+                            context.getPackageName(), R.layout.widget_list_item_multi_line_text);
                     itemRemoteViews.setTextViewText(R.id.widget_text_view_title, multilineItem.getTitle(context, i));
                     itemRemoteViews.setTextViewText(R.id.widget_text_view_text, multilineItem.getText(context, i));
                     remoteViews.addView(R.id.widget_main_layout, itemRemoteViews);

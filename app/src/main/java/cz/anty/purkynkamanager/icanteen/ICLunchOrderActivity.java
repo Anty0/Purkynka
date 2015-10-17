@@ -30,7 +30,7 @@ import cz.anty.purkynkamanager.utils.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
 import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.service.ServiceManager;
 import cz.anty.purkynkamanager.utils.thread.OnceRunThreadWithSpinner;
@@ -109,7 +109,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     AlertDialog.Builder dialogBuilder = new AlertDialog
                             .Builder(ICLunchOrderActivity.this)
                             .setTitle(lunch.getTitle(ICLunchOrderActivity.this, MultilineItem.NO_POSITION))
-                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                            .setIcon(R.mipmap.ic_launcher_ic)
                             .setView(mainScrollView)
                             .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
                                 @Override
@@ -212,9 +212,9 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
-        adapter = new MultilineRecyclerAdapter<>();
-        recyclerView = RecyclerAdapter.inflateToActivity(this,
-                null, adapter, onItemClickListener);
+        adapter = new MultilineRecyclerAdapter<>(this);
+        recyclerView = RecyclerInflater.inflateToActivity(this,
+                adapter, onItemClickListener);
 
         if (ICSplashActivity.serviceManager != null) {
             ICSplashActivity.serviceManager

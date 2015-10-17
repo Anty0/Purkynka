@@ -47,7 +47,7 @@
     <string name="menu_item_text_sort_date">Date</string>
     <string name="menu_item_text_sort_lesson">Lesson</string>
 
-    <string name="special_item_title_bad_lesson_diameter">Bad diameter in %1$s: %2$s</string>
+    <string name="special_item_title_bad_lesson_diameter">Bad diameter in %1$s (%2$s)</string>
 
     <string name="notify_title_new_marks">%1$d new MARKS</string>
     <string name="notify_title_new_mark">%1$d new MARK</string>

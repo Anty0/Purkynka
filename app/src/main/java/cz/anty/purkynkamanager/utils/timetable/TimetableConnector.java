@@ -20,6 +20,8 @@ import cz.anty.purkynkamanager.utils.WrongLoginDataException;
  */
 public class TimetableConnector {
 
+    private static final String LOG_TAG = "TimetableConnector";
+
     private static final String DEFAULT_URL_NAV_BAR = "http://www.sspbrno.cz/rozvrh/frames/navbar.htm";
     private static final String DEFAULT_URL_TIMETABLE = "http://www.sspbrno.cz/rozvrh/%1$s/%2$s/%2$s%3$s.htm";//5
 
@@ -96,7 +98,7 @@ public class TimetableConnector {
                 return Jsoup.connect(DEFAULT_URL_NAV_BAR)
                         .followRedirects(false).get();
             } catch (IOException e) {
-                Log.d(TimetableConnector.class.getSimpleName(), "getNavBar", e);
+                Log.d(LOG_TAG, "getNavBar", e);
                 lastException = e;
             }
         }

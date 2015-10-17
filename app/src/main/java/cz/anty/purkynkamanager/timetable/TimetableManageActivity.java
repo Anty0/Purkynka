@@ -33,7 +33,7 @@ import cz.anty.purkynkamanager.utils.Log;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
 import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.timetable.Lesson;
 import cz.anty.purkynkamanager.utils.timetable.Timetable;
@@ -42,6 +42,7 @@ import cz.anty.purkynkamanager.utils.timetable.TimetableManager;
 public class TimetableManageActivity extends AppCompatActivity {
 
     public static final String EXTRA_TIMETABLE_NAME = "TIMETABLE_NAME";
+    private static final String LOG_TAG = "TimetableManageActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class TimetableManageActivity extends AppCompatActivity {
             }
         });
         int index = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2;
-        Log.d(getClass().getSimpleName(), "onCreate dayIndex: " + index);
+        Log.d(LOG_TAG, "onCreate dayIndex: " + index);
         if (index < Timetable.DAYS_STRINGS_IDS.length)
             mViewPager.setCurrentItem(index);
     }
@@ -202,8 +203,8 @@ public class TimetableManageActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             final int day = getArguments().getInt(ARG_SECTION_NUMBER, 0);
             final Context context = container.getContext();
-            adapter = new MultilineRecyclerAdapter<>();
-            View result = RecyclerAdapter.inflate(context, container, false, null, adapter,
+            adapter = new MultilineRecyclerAdapter<>(getContext());
+            View result = RecyclerInflater.inflate(context, container, false, adapter,
                     new RecyclerItemClickListener.ClickListener() {
                         @Override
                         public void onClick(View view, final int position) {
@@ -214,7 +215,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                             } else {
                                 new AlertDialog.Builder(context)
                                         .setTitle(R.string.dialog_title_lesson_info)
-                                                //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                                        .setIcon(R.mipmap.ic_launcher_t)
                                         .setMessage(context.getText(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
                                                 context.getText(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
                                                 context.getText(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
@@ -289,7 +290,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                             new AlertDialog.Builder(context)
                                     .setTitle(String.format(context.getString(R.string.dialog_title_lesson),
                                             context.getString(Timetable.DAYS_STRINGS_IDS[day]), lessonIndex))
-                                            //TODO add set icon with icon "T"
+                                    .setIcon(R.mipmap.ic_launcher_t)
                                     .setView(mainScrollView)
                                     .setCancelable(true)
                                     .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {

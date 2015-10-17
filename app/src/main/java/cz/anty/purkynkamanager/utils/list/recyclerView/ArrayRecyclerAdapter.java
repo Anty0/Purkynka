@@ -43,8 +43,8 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
         if (mNotifyOnChange) {
             notifyItemInserted(index);
-            onDataSetChanged();
         }
+        onDataSetChanged();
     }
 
     /**
@@ -59,8 +59,8 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
         if (mNotifyOnChange) {
             notifyItemRangeInserted(index, collection.size());
-            onDataSetChanged();
         }
+        onDataSetChanged();
     }
 
     /**
@@ -75,8 +75,8 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
         if (mNotifyOnChange) {
             notifyItemRangeInserted(index, items.length);
-            onDataSetChanged();
         }
+        onDataSetChanged();
     }
 
     /**
@@ -91,8 +91,8 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
         if (mNotifyOnChange) {
             notifyItemInserted(index);
-            onDataSetChanged();
         }
+        onDataSetChanged();
     }
 
     /**
@@ -113,6 +113,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         synchronized (mLock) {
             mData.remove(object);
         }
+        onDataSetChanged();
     }
 
     /**
@@ -125,8 +126,8 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
         if (mNotifyOnChange) {
             notifyItemRangeRemoved(0, size);
-            onDataSetChanged();
         }
+        onDataSetChanged();
     }
 
     /**
@@ -142,8 +143,8 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         }
         if (mNotifyOnChange) {
             notifyItemRangeChanged(0, size);
-            onDataSetChanged();
         }
+        onDataSetChanged();
     }
 
     protected void onDataSetChanged() {

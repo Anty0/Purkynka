@@ -24,6 +24,8 @@ import cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter.SpecialMod
  */
 public class UpdateSpecialModule extends SpecialModule {
 
+    private static final String LOG_TAG = "UpdateSpecialModule";
+
     private final UpdateSpecialItem[] mItems;
     private boolean updateAvailable = false;
 
@@ -52,7 +54,7 @@ public class UpdateSpecialModule extends SpecialModule {
         try {
             UpdateReceiver.checkUpdate(getContext());
         } catch (IOException | NumberFormatException e) {
-            Log.d(getClass().getSimpleName(), "onInitialize", e);
+            Log.d(LOG_TAG, "onInitialize", e);
         }
         updateAvailable = UpdateReceiver
                 .isUpdateAvailable(getContext());
@@ -92,6 +94,12 @@ public class UpdateSpecialModule extends SpecialModule {
 
         public UpdateSpecialItem() {
             super(UpdateSpecialModule.this);
+        }
+
+        @Nullable
+        @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher;
         }
 
         @Nullable

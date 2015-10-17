@@ -84,6 +84,12 @@ public class ShareSpecialModule extends SpecialModule {
 
         @Nullable
         @Override
+        protected Integer getImageId() {
+            return R.drawable.ic_action_like;
+        }
+
+        @Nullable
+        @Override
         protected CharSequence getTitle() {
             return getContext().getText(R.string.dialog_title_share);
         }

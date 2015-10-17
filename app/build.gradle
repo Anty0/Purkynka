@@ -7,8 +7,8 @@ android {
         applicationId "cz.anty.purkynkamanager"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 29
-        versionName '3.2.2'
+        versionCode 30
+        versionName '3.3.0'
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
@@ -39,9 +39,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
-    compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'com.android.support:cardview-v7:23.1.0'
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'ch.acra:acra:4.7.0-RC.1'
     compile 'com.google.code.gson:gson:2.4'

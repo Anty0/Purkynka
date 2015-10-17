@@ -19,6 +19,8 @@ import cz.anty.purkynkamanager.utils.Log;
  */
 public final class ServiceManager<B extends IBinder> {
 
+    private static final String LOG_TAG = "ServiceManager";
+
     private static final List<ServiceManager> SERVICE_MANAGERS
             = new ArrayList<>();
     private final Context mContext;
@@ -115,7 +117,7 @@ public final class ServiceManager<B extends IBinder> {
         try {
             disconnect();
         } catch (RuntimeException e) {
-            Log.d(getClass().getSimpleName(), "forceDisconnect", e);
+            Log.d(LOG_TAG, "forceDisconnect", e);
             mConnection.onServiceDisconnected(null);
         }
     }

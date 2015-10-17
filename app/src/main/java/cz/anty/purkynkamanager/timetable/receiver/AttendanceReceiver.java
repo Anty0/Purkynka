@@ -32,10 +32,11 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
     public static final String DAY = "DAY";
     public static final String LESSON_INDEX = "LESSON_INDEX";
+    private static final String LOG_TAG = "AttendanceReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(getClass().getSimpleName(), "onReceive");
+        Log.d(LOG_TAG, "onReceive");
         TimetableLessonWidget.callUpdate(context);
 
         int day = intent.getIntExtra(DAY, -1);
@@ -55,7 +56,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
     }
 
     private void showLessonNotification(Context context, int day, int lessonIndex) {
-        Log.d(getClass().getSimpleName(), "showLessonNotification day: " + day + " lessonIndex: " + lessonIndex);
+        Log.d(LOG_TAG, "showLessonNotification day: " + day + " lessonIndex: " + lessonIndex);
         if (TimetableSelectActivity.timetableManager == null)
             TimetableSelectActivity.timetableManager = new TimetableManager(context);
         Timetable[] timetables = TimetableSelectActivity.timetableManager.getTimetables();
@@ -68,7 +69,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
             Notification n = new NotificationCompat.Builder(context)
                     .setContentTitle(lesson.getTitle(context, lessonIndex))
                     .setContentText(lesson.getText(context, lessonIndex))
-                    .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                    .setSmallIcon(R.mipmap.ic_launcher_t)
                     .setContentIntent(PendingIntent.getActivity(context, 0,
                             new Intent(context, TimetableManageActivity.class).putExtra(
                                     TimetableManageActivity.EXTRA_TIMETABLE_NAME, timetable.getName()), 0))
@@ -87,7 +88,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
     }
 
     private void testSupplementation(final Context context, final int day, final int lessonIndex) {
-        Log.d(getClass().getSimpleName(), "testSupplementation day: " + day + " lessonIndex: " + lessonIndex);
+        Log.d(LOG_TAG, "testSupplementation day: " + day + " lessonIndex: " + lessonIndex);
         if (TimetableSelectActivity.timetableManager == null)
             TimetableSelectActivity.timetableManager = new TimetableManager(context);
         final Timetable[] timetables = TimetableSelectActivity.timetableManager.getTimetables();
@@ -135,7 +136,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                             .notify_title_substitution), lesson.getShortName()))
                                     .setContentText(String.format(context.getString(R.string
                                             .notify_text_teacher_is_not_here), man.getName()))
-                                    .setSmallIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                                    .setSmallIcon(R.mipmap.ic_launcher_t)
                                     .setContentIntent(PendingIntent.getActivity(context, 0,
                                             new Intent(context, TimetableManageActivity.class).putExtra(
                                                     TimetableManageActivity.EXTRA_TIMETABLE_NAME, timetable.getName()), 0))

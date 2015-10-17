@@ -13,7 +13,7 @@ import cz.anty.purkynkamanager.utils.AppDataManager;
 import cz.anty.purkynkamanager.utils.Constants;
 import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 
 public class ICSelectServiceActivity extends AppCompatActivity {
@@ -24,7 +24,7 @@ public class ICSelectServiceActivity extends AppCompatActivity {
 
         boolean showDescription = getSharedPreferences(Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
-        MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>();
+        MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>(this);
         adapter.clearItems();
         adapter.addAllItems(
                 new TextMultilineItem(getText(R.string.app_name_icanteen_lunch_order), showDescription
@@ -34,7 +34,7 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                 new TextMultilineItem(getText(R.string.app_name_icanteen_burza), showDescription
                         ? getText(R.string.app_description_icanteen_burza) : null));
 
-        RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.ClickListener() {
+        RecyclerInflater.inflateToActivity(this, adapter, new RecyclerItemClickListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 switch (position) {

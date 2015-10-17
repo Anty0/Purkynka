@@ -17,6 +17,7 @@ import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
  */
 public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<MultilineItem> {
 
+    private static final String LOG_TAG = "AutoLoadMultilineRecyclerAdapter";
     private static final String LOADING_ITEM_TAG = "LOADING_ITEM";
 
     private TextMultilineItem mLoadingItem;
@@ -25,7 +26,7 @@ public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<M
     private boolean mAutoLoad = true;
 
     public AutoLoadMultilineRecyclerAdapter(Context context, @Nullable OnLoadNextPageListener onLoadNextListListener) {
-        super(R.layout.loading_multi_line_list_item);
+        super(context, R.layout.list_item_multi_line_loading);
         mLoadingItem = new TextMultilineItem(context.getText(R.string.wait_text_loading),
                 context.getText(R.string.wait_text_please_wait));
         mLoadingItem.setTag(LOADING_ITEM_TAG);
@@ -39,7 +40,7 @@ public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<M
 
     @Override
     public void onBindViewHolder(ItemViewHolder<MultilineItem> holder, int position) {
-        Log.d(getClass().getSimpleName(), "onBindViewHolder: " + position);
+        Log.d(LOG_TAG, "onBindViewHolder: " + position);
         if (super.getItemCount() == position) {
             mPage++;
             if (mOnLoadNextListListener != null)
@@ -50,14 +51,14 @@ public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<M
 
     @Override
     public void clearItems() {
-        Log.d(getClass().getSimpleName(), "clearItems");
+        Log.d(LOG_TAG, "clearItems");
         super.clearItems();
         mPage = 1;
     }
 
     @Override
     public MultilineItem getItem(int position) {
-        Log.d(getClass().getSimpleName(), "getItem: " + position);
+        Log.d(LOG_TAG, "getItem: " + position);
         if (position == super.getItemCount()) {
             return mLoadingItem;
         } else {
@@ -67,14 +68,14 @@ public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<M
 
     @Override
     public int getItemCount() {
-        Log.d(getClass().getSimpleName(), "getCount");
+        Log.d(LOG_TAG, "getCount");
         int count = super.getItemCount();
-        //Log.d(getClass().getSimpleName(), "getCount orig: " + count + " result: " + (mAutoLoad ? count + 1 : count));
+        //Log.d(LOG_TAG, "getCount orig: " + count + " result: " + (mAutoLoad ? count + 1 : count));
         return mAutoLoad ? count + 1 : count;
     }
 
     public void setAutoLoad(boolean autoLoad) {
-        Log.d(getClass().getSimpleName(), "setAutoLoad: " + autoLoad);
+        Log.d(LOG_TAG, "setAutoLoad: " + autoLoad);
         if (mAutoLoad != autoLoad) {
             mAutoLoad = autoLoad;
             if (isNotifyOnChange())
@@ -90,18 +91,20 @@ public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<M
 
     private static class AutoLoadMultilineViewHolder extends MultilineViewHolder<MultilineItem> {
 
+        private static final String LOG_TAG = "AutoLoadMultilineViewHolder";
+
         private final ProgressBar loadingProgressBar;
 
         public AutoLoadMultilineViewHolder(View itemView) {
             super(itemView);
-            Log.d(getClass().getSimpleName(), "<init>");
+            Log.d(LOG_TAG, "<init>");
             loadingProgressBar = (ProgressBar) itemView
                     .findViewById(R.id.progress_loading);
         }
 
         @Override
         protected void onBindViewHolder(MultilineItem item, int position) {
-            Log.d(getClass().getSimpleName(), "onBindViewHolder");
+            Log.d(LOG_TAG, "onBindViewHolder");
             loadingProgressBar.setVisibility((item instanceof TextMultilineItem && LOADING_ITEM_TAG
                     .equals(((TextMultilineItem) item).getTag())) ? View.VISIBLE : View.GONE);
             super.onBindViewHolder(item, position);

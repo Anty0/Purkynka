@@ -27,6 +27,8 @@ import cz.anty.purkynkamanager.utils.sas.mark.MarksManager;
  */
 public class SASSpecialModule extends SpecialModule {
 
+    private static final String LOG_TAG = "SASSpecialModule";
+
     private final MultilineSpecialItem[] mItems;
     private Lesson badLesson = null;
 
@@ -102,7 +104,7 @@ public class SASSpecialModule extends SpecialModule {
                         badLesson = lesson;
                 }
             } catch (InterruptedException e) {
-                Log.d(getClass().getSimpleName(), "onInitialize", e);
+                Log.d(LOG_TAG, "onInitialize", e);
             }
         }
     }
@@ -121,6 +123,12 @@ public class SASSpecialModule extends SpecialModule {
 
         public SASLoginSpecialItem() {
             super(SASSpecialModule.this);
+        }
+
+        @Nullable
+        @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher_sas;
         }
 
         @Nullable
@@ -165,6 +173,12 @@ public class SASSpecialModule extends SpecialModule {
 
             ((TextView) parent.findViewById(R.id.text_view_title)).setTextColor(Color.RED);
             ((TextView) parent.findViewById(R.id.text_view_text)).setTextColor(Color.RED);
+        }
+
+        @Nullable
+        @Override
+        protected Integer getImageId() {
+            return R.drawable.ic_action_dislike;
         }
 
         @Nullable

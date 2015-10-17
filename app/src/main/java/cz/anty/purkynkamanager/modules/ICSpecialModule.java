@@ -89,6 +89,12 @@ public class ICSpecialModule extends SpecialModule {
 
         @Nullable
         @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher_ic;
+        }
+
+        @Nullable
+        @Override
         public CharSequence getTitle() {
             return getContext().getText(R.string.activity_title_login_icanteen);
         }
@@ -122,6 +128,12 @@ public class ICSpecialModule extends SpecialModule {
 
         public ICNewLunchesSpecialItem() {
             super(ICSpecialModule.this);
+        }
+
+        @Nullable
+        @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher_ic;
         }
 
         @Nullable

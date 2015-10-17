@@ -1,8 +1,5 @@
 package cz.anty.purkynkamanager.utils;
 
-import android.util.TypedValue;
-import android.view.View;
-
 /**
  * Created by anty on 26.7.15.
  *
@@ -118,15 +115,4 @@ public class Constants {
     public static final String SETTING_NAME_DATA_SAVE_VERSION = "DATA_SAVE_VERSION";
     public static final String SETTING_NAME_DEBUG_MODE = "DEBUG_MODE";
 
-    public static void setPadding(View view, int left, int top, int right, int bottom) {
-        left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                left, view.getContext().getResources().getDisplayMetrics());
-        right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                right, view.getContext().getResources().getDisplayMetrics());
-        top = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                top, view.getContext().getResources().getDisplayMetrics());
-        bottom = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                bottom, view.getContext().getResources().getDisplayMetrics());
-        view.setPadding(left, top, right, bottom);
-    }
 }

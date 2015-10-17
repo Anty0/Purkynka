@@ -12,6 +12,12 @@ import android.widget.ScrollView;
 
 import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.R;
+import cz.anty.purkynkamanager.firststart.pages.ChangeLogFirstStartPage;
+import cz.anty.purkynkamanager.firststart.pages.ICFirstStartPage;
+import cz.anty.purkynkamanager.firststart.pages.SASFirstStartPage;
+import cz.anty.purkynkamanager.firststart.pages.TermsFirstStartPage;
+import cz.anty.purkynkamanager.firststart.pages.WelcomeFirstStartPage;
+import cz.anty.purkynkamanager.firststart.pages.WifiFirstStartPage;
 import cz.anty.purkynkamanager.main.MainActivity;
 import cz.anty.purkynkamanager.utils.Constants;
 import cz.anty.purkynkamanager.utils.FirstStartPage;
@@ -20,6 +26,8 @@ import cz.anty.purkynkamanager.utils.list.recyclerView.SpecialItemAnimator;
 import cz.anty.purkynkamanager.utils.thread.OnceRunThreadWithSpinner;
 
 public class FirstStartActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String LOG_TAG = "FirstStartActivity";
 
     private OnceRunThreadWithSpinner worker;
     private ScrollView contentScrollView;
@@ -112,7 +120,7 @@ public class FirstStartActivity extends AppCompatActivity implements View.OnClic
                         Thread.sleep(10);
                     }
                 } catch (InterruptedException e) {
-                    Log.d(getClass().getSimpleName(), "updateState", e);
+                    Log.d(LOG_TAG, "updateState", e);
                 }
             } else {
                 runOnUiThread(new Runnable() {

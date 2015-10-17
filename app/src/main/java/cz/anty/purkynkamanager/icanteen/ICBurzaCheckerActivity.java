@@ -33,6 +33,8 @@ import cz.anty.purkynkamanager.utils.icanteen.lunch.month.MonthLunchDay;
  */
 public class ICBurzaCheckerActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = "ICBurzaCheckerActivity";
+
     private LinearLayout startSettingsLayout;
     private TextView wrongLunchTextView;
     private DatePicker datePicker;
@@ -185,7 +187,7 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
                     ICService.ICBinder binder = ICSplashActivity
                             .serviceManager.getBinder();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy", Locale.getDefault());
-                    Log.d(getClass().getSimpleName(), "onOptionsItemSelected month: " + datePicker.getMonth());
+                    Log.d(LOG_TAG, "onOptionsItemSelected month: " + datePicker.getMonth());
                     binder.startBurzaChecker(
                             new BurzaLunchSelector(lunchNumbers.toArray(new BurzaLunch.LunchNumber[lunchNumbers.size()]),
                                     dateFormat.parse(datePicker.getDayOfMonth() + "."

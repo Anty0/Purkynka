@@ -41,7 +41,7 @@ public class TimetableManager {
                 if (preferences.getBoolean(Constants.SETTING_NAME_FIRST_START, true)) {
                     new AlertDialog.Builder(context)
                             .setTitle(R.string.dialog_title_timetable_widget_alert)
-                                    //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon T
+                            .setIcon(R.mipmap.ic_launcher_t)
                             .setMessage(R.string.dialog_message_timetable_widget_alert)
                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {

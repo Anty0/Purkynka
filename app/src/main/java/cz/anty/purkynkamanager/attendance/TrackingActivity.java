@@ -14,11 +14,13 @@ import cz.anty.purkynkamanager.utils.Log;
 import cz.anty.purkynkamanager.utils.attendance.man.Man;
 import cz.anty.purkynkamanager.utils.attendance.man.TrackingMansManager;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.thread.OnceRunThreadWithSpinner;
 
 public class TrackingActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = "TrackingActivity";
 
     public static TrackingMansManager mansManager = null;
     private MultilineRecyclerAdapter<Man> adapter;
@@ -27,8 +29,8 @@ public class TrackingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new MultilineRecyclerAdapter<>();
-        RecyclerAdapter.inflateToActivity(this, null, adapter,
+        adapter = new MultilineRecyclerAdapter<>(this);
+        RecyclerInflater.inflateToActivity(this, adapter,
                 new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
@@ -62,7 +64,7 @@ public class TrackingActivity extends AppCompatActivity {
     }
 
     private void update(final boolean refresh) {
-        Log.d("TrackingActivity", "update");
+        Log.d(LOG_TAG, "update");
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -86,7 +88,7 @@ public class TrackingActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tracking, menu);
+        getMenuInflater().inflate(R.menu.menu_refresh, menu);
         return true;
     }
 

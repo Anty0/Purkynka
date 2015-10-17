@@ -16,6 +16,8 @@ import cz.anty.purkynkamanager.utils.Log;
  */
 public class OnceRunThread {
 
+    private static final String LOG_TAG = "OnceRunThread";
+
     private final Object waitingThreadsLock = new Object();
     private final Object workerLock = new Object();
     private final Object waitingLock = new Object();
@@ -71,8 +73,7 @@ public class OnceRunThread {
                 try {
                     start(thread, broadcastResult);
                 } catch (InterruptedException e) {
-                    Log.d(OnceRunThread.this.getClass()
-                            .getSimpleName(), "startWorker", e);
+                    Log.d(LOG_TAG, "startWorker", e);
                 }
             }
         }).start();

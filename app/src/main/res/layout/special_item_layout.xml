@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="3dp"
+    card_view:cardUseCompatPadding="true"
     card_view:contentPadding="2dp">
 
     <FrameLayout
@@ -21,7 +22,7 @@
         android:layout_gravity="right|top"
         android:background="@android:color/transparent"
         android:contentDescription="@string/but_cancel"
-        android:src="@android:drawable/ic_menu_revert"
+        android:src="@drawable/ic_action_add"
         android:visibility="gone" />
 
     <ImageButton
@@ -31,6 +32,6 @@
         android:layout_gravity="right|top"
         android:background="@android:color/transparent"
         android:contentDescription="@string/but_close"
-        android:src="@android:drawable/ic_delete" />
+        android:src="@drawable/ic_action_close" />
 
 </android.support.v7.widget.CardView>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -26,17 +27,19 @@ import cz.anty.purkynkamanager.utils.attendance.man.TrackingMansManager;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
 import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.AutoLoadMultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.thread.OnceRunThread;
 
 public class SearchActivity extends AppCompatActivity {
 
     public static final String EXTRA_SEARCH = "EXTRA_SEARCH";
+    private static final String LOG_TAG = "SearchActivity";
 
     private final AttendanceConnector connector = new AttendanceConnector();
     private EditText searchEditText;
     private AutoLoadMultilineRecyclerAdapter adapter;
+    private RecyclerView recyclerView;
     private OnceRunThread worker;
 
     @Override
@@ -50,7 +53,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
         //adapter.setNotifyOnChange(false);
-        RecyclerAdapter.inflateToActivity(this, R.layout.activity_search, adapter,
+        recyclerView = RecyclerInflater.inflateToActivity(this, R.layout.activity_search, adapter,
                 new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
@@ -133,10 +136,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void update(final boolean clearData, final int page, @Nullable String search) {
-        Log.d("SearchActivity",
-                "update clearData: " + clearData + " page: " + page + " search: " + search);
+        Log.d(LOG_TAG, "update clearData: " + clearData + " page: " + page + " search: " + search);
         final String toSearch = search == null ? searchEditText.getText().toString() : search;
-        Log.d("SearchActivity", "update toSearch: " + toSearch);
+        Log.d(LOG_TAG, "update toSearch: " + toSearch);
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
@@ -146,13 +148,13 @@ public class SearchActivity extends AppCompatActivity {
                     List<Man> mans = Mans.parseMans(connector.getSupElements(toSearch, page));
                     data = mans.toArray(new MultilineItem[mans.size()]);
                 } catch (IOException e) {
-                    Log.d("SearchActivity", "update", e);
+                    Log.d(LOG_TAG, "update", e);
                     //values = new String[]{"Connection exception: " + e.getMessage() + "\n" + "Check your internet connection"};
                     data = new MultilineItem[]{new TextMultilineItem(getText(R.string.list_item_title_connection_exception),
                             getText(R.string.list_item_text_connection_exception) + ": " + e.getMessage())/*,
                             new TextMultilineItem(getString(R.string.to_page) + " -> " + (page + 1), getString(R.string.on_page) + ": " + page)*/};
                 }
-                Log.d("SearchActivity", "update data: " + Arrays.toString(data));
+                Log.d(LOG_TAG, "update data: " + Arrays.toString(data));
 
                 final MultilineItem[] finalData = data;
                 runOnUiThread(new Runnable() {
@@ -161,7 +163,10 @@ public class SearchActivity extends AppCompatActivity {
                         if (clearData) adapter.clearItems();
                         adapter.setAutoLoad(finalData.length != 0
                                 && finalData[0] instanceof Man);
+
+                        boolean moveToFirst = adapter.getItemCount() == 0;
                         adapter.addAllItems(finalData);
+                        if (moveToFirst) recyclerView.scrollToPosition(0);
                         //adapter.notifyDataSetChanged();
                     }
                 });

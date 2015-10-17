@@ -108,6 +108,12 @@ public class TrackingSpecialModule extends SpecialModule {
 
         @Nullable
         @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher_a;
+        }
+
+        @Nullable
+        @Override
         public CharSequence getTitle() {
             return getContext().getText(R.string.activity_title_tracking);
         }
@@ -119,7 +125,7 @@ public class TrackingSpecialModule extends SpecialModule {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             for (Man man : TrackingActivity.mansManager.get()) {
                 View view = inflater.inflate(R.layout
-                        .text_widget_multi_line_list_item, mansLinearLayout, false);
+                        .widget_list_item_multi_line_text, mansLinearLayout, false);
                 ((TextView) view.findViewById(R.id.widget_text_view_title))
                         .setText(man.getTitle(getContext(), MultilineItem.NO_POSITION));
                 ((TextView) view.findViewById(R.id.widget_text_view_text))

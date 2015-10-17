@@ -22,6 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".main.MainActivity"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -32,13 +33,15 @@
         </activity>
         <activity
             android:name=".update.UpdateActivity"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/wait_text_downloading_update"
             android:theme="@style/AppTheme.Dialog" />
 
         <receiver
             android:name=".update.UpdateScheduleReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -47,41 +50,50 @@
         <receiver
             android:name=".update.UpdateReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher" />
 
         <activity
             android:name=".main.RemovedItemsActivity"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_removed_items"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".firststart.FirstStartActivity"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name" />
         <activity
             android:name=".settings.SettingsActivity"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_settings"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.MainSettingsActivity"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_main_settings"
             android:parentActivityName=".settings.SettingsActivity" />
 
 
         <activity
             android:name=".attendance.SearchActivity"
+            android:icon="@mipmap/ic_launcher_a"
             android:label="@string/activity_title_attendance_search"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.AttendanceSettingsActivity"
+            android:icon="@mipmap/ic_launcher_a"
             android:label="@string/activity_title_attendance_settings" />
 
         <receiver
             android:name=".attendance.receiver.TrackingReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_a" />
         <receiver
             android:name=".attendance.receiver.TrackingScheduleReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_a">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -90,11 +102,13 @@
 
         <activity
             android:name=".attendance.TrackingActivity"
+            android:icon="@mipmap/ic_launcher_a"
             android:label="@string/activity_title_tracking"
             android:parentActivityName=".attendance.SearchActivity" />
 
         <receiver
             android:name=".attendance.widget.TrackingWidget"
+            android:icon="@mipmap/ic_launcher_a"
             android:label="@string/widget_label_tracking">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -108,18 +122,22 @@
 
         <activity
             android:name=".icanteen.ICLoginActivity"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/activity_title_login_icanteen"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".icanteen.ICSplashActivity"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".icanteen.ICSelectServiceActivity"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.ICSettingsActivity"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/activity_title_icanteen_settings"
             android:parentActivityName=".settings.SettingsActivity" />
 
@@ -127,14 +145,17 @@
             android:name=".icanteen.ICService"
             android:enabled="true"
             android:exported="false"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen" />
 
         <activity
             android:name=".icanteen.ICBurzaActivity"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_burza"
             android:parentActivityName=".icanteen.ICSelectServiceActivity" />
         <activity
             android:name=".icanteen.ICBurzaCheckerActivity"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_burza_watcher"
             android:parentActivityName=".icanteen.ICSelectServiceActivity" />
 
@@ -142,16 +163,19 @@
             android:name=".icanteen.ICBurzaCheckerService"
             android:enabled="true"
             android:exported="false"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_burza_watcher" />
 
         <receiver
             android:name=".icanteen.receiver.StartServiceReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_ic" />
         <receiver
             android:name=".icanteen.receiver.StartServiceScheduleReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_ic">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -160,6 +184,7 @@
 
         <activity
             android:name=".icanteen.ICLunchOrderActivity"
+            android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_lunch_order"
             android:parentActivityName=".icanteen.ICSelectServiceActivity" />
 
@@ -182,6 +207,7 @@
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.SASManagerSettingsActivity"
+            android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/activity_title_sas_settings"
             android:parentActivityName=".settings.SettingsActivity" />
 
@@ -196,11 +222,13 @@
         <receiver
             android:name=".sas.receiver.StartServiceReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_sas" />
         <receiver
             android:name=".sas.receiver.StartServiceScheduleReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_sas">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -208,6 +236,7 @@
         </receiver>
         <receiver
             android:name=".sas.widget.SASManageWidget"
+            android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/widget_label_sas_manage">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -221,21 +250,25 @@
 
         <activity
             android:name=".timetable.TimetableSelectActivity"
+            android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_select"
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".timetable.TimetableManageActivity"
+            android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_manage"
             android:parentActivityName=".timetable.TimetableSelectActivity" />
 
         <receiver
             android:name=".timetable.receiver.AttendanceReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_t" />
         <receiver
             android:name=".timetable.receiver.TimetableScheduleReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_t">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -243,6 +276,7 @@
         </receiver>
         <receiver
             android:name=".timetable.widget.TimetableLessonWidget"
+            android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_manage">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -255,6 +289,7 @@
 
         <activity
             android:name=".timetable.widget.TimetableLessonWidgetConfigureActivity"
+            android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_select"
             android:theme="@style/AppTheme.Dialog">
             <intent-filter>
@@ -263,6 +298,7 @@
         </activity>
         <activity
             android:name=".settings.TimetableSettingsActivity"
+            android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_settings"
             android:parentActivityName=".settings.SettingsActivity" />
 
@@ -274,13 +310,15 @@
             android:parentActivityName=".main.MainActivity" />
         <activity
             android:name=".settings.WifiSettingsActivity"
+            android:icon="@mipmap/ic_launcher_wifi"
             android:label="@string/activity_title_wifi_settings"
             android:parentActivityName=".settings.SettingsActivity" />
 
         <receiver
             android:name=".wifi.WifiStateReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_wifi">
             <intent-filter>
 
                 <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
@@ -291,6 +329,7 @@
 
         <activity
             android:name=".settings.AboutActivity"
+            android:icon="@mipmap/ic_launcher_wifi"
             android:label="@string/activity_title_about"
             android:parentActivityName=".settings.SettingsActivity" />
 
@@ -298,6 +337,7 @@
             android:name=".utils.list.widgetList.WidgetService"
             android:enabled="true"
             android:exported="false"
+            android:icon="@mipmap/ic_launcher_wifi"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <meta-data

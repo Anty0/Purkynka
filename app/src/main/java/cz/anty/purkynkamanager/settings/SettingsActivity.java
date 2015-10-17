@@ -8,7 +8,7 @@ import android.view.View;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -16,7 +16,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MultilineRecyclerAdapter<TextMultilineItem> adapter = new MultilineRecyclerAdapter<>();
+        MultilineRecyclerAdapter<TextMultilineItem> adapter
+                = new MultilineRecyclerAdapter<>(this);
         adapter.addAllItems(
                 new TextMultilineItem(getText(R.string.activity_title_main_settings), null),
                 new TextMultilineItem(getText(R.string.activity_title_sas_settings), null),
@@ -26,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
                 new TextMultilineItem(getText(R.string.activity_title_attendance_settings), null),
                 new TextMultilineItem(getText(R.string.activity_title_about), null));
 
-        RecyclerAdapter.inflateToActivity(this, null, adapter, new RecyclerItemClickListener.ClickListener() {
+        RecyclerInflater.inflateToActivity(this, adapter, new RecyclerItemClickListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 switch (position) {

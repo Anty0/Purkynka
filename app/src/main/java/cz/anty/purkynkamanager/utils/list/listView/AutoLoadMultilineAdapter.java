@@ -16,6 +16,8 @@ import cz.anty.purkynkamanager.utils.Log;
 @Deprecated
 public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
+    private static final String LOG_TAG = "AutoLoadMultilineAdapter";
+
     private MultilineItem loadingItem;
     private OnLoadNextListListener onLoadNextListListener;
     private int page = 1;
@@ -40,13 +42,13 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
     private void init(Context context, @Nullable OnLoadNextListListener onLoadNextListListener) {
         Log.d("ALMultilineAdapter", "init");
         this.loadingItem = new TextMultilineItem(context.getText(R.string.wait_text_loading),
-                context.getText(R.string.wait_text_please_wait)/*, R.layout.loading_multi_line_list_item*/);
+                context.getText(R.string.wait_text_please_wait)/*, R.layout.list_item_multi_line_loading*/);
         this.onLoadNextListListener = onLoadNextListListener;
     }
 
     @Override
     public void clear() {
-        Log.d(getClass().getSimpleName(), "clear");
+        Log.d(LOG_TAG, "clear");
         super.clear();
         page = 1;
     }
@@ -64,7 +66,7 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
     @Override
     public MultilineItem getItem(int position) {
-        Log.d(getClass().getSimpleName(), "getItem: " + position);
+        Log.d(LOG_TAG, "getItem: " + position);
         if (position == super.getCount()) {
             return loadingItem;
         } else {
@@ -74,27 +76,27 @@ public class AutoLoadMultilineAdapter extends MultilineAdapter<MultilineItem> {
 
     @Override
     public int getCount() {
-        Log.d(getClass().getSimpleName(), "getCount start");
+        Log.d(LOG_TAG, "getCount start");
         int count = super.getCount();
-        Log.d(getClass().getSimpleName(), "getCount orig: " + count + " result: " + (autoLoad ? count + 1 : count));
+        Log.d(LOG_TAG, "getCount orig: " + count + " result: " + (autoLoad ? count + 1 : count));
         return autoLoad ? count + 1 : count;
     }
 
     @Override
     public void setNotifyOnChange(boolean notifyOnChange) {
-        Log.d(getClass().getSimpleName(), "setNotifyOnChange: " + notifyOnChange);
+        Log.d(LOG_TAG, "setNotifyOnChange: " + notifyOnChange);
         super.setNotifyOnChange(notifyOnChange);
         this.notifyOnChange = notifyOnChange;
     }
 
     @Override
     public void notifyDataSetChanged() {
-        Log.d(getClass().getSimpleName(), "notifyDataSetChange");
+        Log.d(LOG_TAG, "notifyDataSetChange");
         super.notifyDataSetChanged();
     }
 
     public void setAutoLoad(boolean autoLoad) {
-        Log.d(getClass().getSimpleName(), "setAutoLoad: " + autoLoad);
+        Log.d(LOG_TAG, "setAutoLoad: " + autoLoad);
         this.autoLoad = autoLoad;
         if (notifyOnChange)
             notifyDataSetChanged();

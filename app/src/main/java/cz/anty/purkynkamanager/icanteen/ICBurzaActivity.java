@@ -16,12 +16,14 @@ import cz.anty.purkynkamanager.utils.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
 import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerAdapter;
+import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.service.ServiceManager;
 import cz.anty.purkynkamanager.utils.thread.OnceRunThreadWithSpinner;
 
 public class ICBurzaActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = "ICBurzaActivity";
 
     private MultilineRecyclerAdapter<MultilineItem> adapter;
     private OnceRunThreadWithSpinner refreshThread;
@@ -30,7 +32,7 @@ public class ICBurzaActivity extends AppCompatActivity {
             = new ServiceManager.BinderConnection<ICService.ICBinder>() {
         @Override
         public void onBinderConnected(ICService.ICBinder ICBinder) {
-            Log.d(ICBurzaActivity.this.getClass().getSimpleName(), "onBinderConnected");
+            Log.d(LOG_TAG, "onBinderConnected");
             binder = ICBinder;
             refreshThread.startWorker(new Runnable() {
                 @Override
@@ -53,11 +55,11 @@ public class ICBurzaActivity extends AppCompatActivity {
 
         @Override
         public void onBinderDisconnected() {
-            Log.d(ICBurzaActivity.this.getClass().getSimpleName(), "onBinderDisconnected");
+            Log.d(LOG_TAG, "onBinderDisconnected");
             try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
-                Log.d(ICBurzaActivity.this.getClass().getSimpleName(), "onBinderDisconnected", e);
+                Log.d(LOG_TAG, "onBinderDisconnected", e);
             }
             binder.setOnBurzaChangeListener(null);
             binder = null;
@@ -79,8 +81,8 @@ public class ICBurzaActivity extends AppCompatActivity {
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
-        adapter = new MultilineRecyclerAdapter<>();
-        RecyclerAdapter.inflateToActivity(this, null, adapter,
+        adapter = new MultilineRecyclerAdapter<>(this);
+        RecyclerInflater.inflateToActivity(this, adapter,
                 new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
@@ -92,7 +94,7 @@ public class ICBurzaActivity extends AppCompatActivity {
 
                         new AlertDialog.Builder(ICBurzaActivity.this)
                                 .setTitle(lunch.getName())
-                                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                                .setIcon(R.mipmap.ic_launcher_ic)
                                 .setMessage(lunch.getLunchNumber()
                                         + "\n" + BurzaLunch.DATE_FORMAT.format(lunch.getDate())
                                         + "\n" + lunch.getName())
@@ -157,7 +159,7 @@ public class ICBurzaActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_burza, menu);
+        getMenuInflater().inflate(R.menu.menu_refresh, menu);
         return true;
     }
 

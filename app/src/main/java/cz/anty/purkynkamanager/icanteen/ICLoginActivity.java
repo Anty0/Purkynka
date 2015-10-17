@@ -53,7 +53,7 @@ public class ICLoginActivity extends AppCompatActivity {
                 .setTitle(R.string.exception_title_validate)
                 .setMessage(message)
                 .setPositiveButton(R.string.but_ok, null)
-                        //.setIcon(R.mipmap.ic_launcher) // TODO: 2.9.15 use icon iC
+                .setIcon(R.mipmap.ic_launcher_ic)
                 .setCancelable(true)
                 .show();
     }

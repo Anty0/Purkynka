@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
  */
 class ByteEncryption {
 
+    private static final String LOG_TAG = "ByteEncryption";
     private static final byte[] MY_KEY = "Copyright ANTY 2015".getBytes(Charset.defaultCharset());
 
     public static String xorToByte(final String input) {
@@ -27,7 +28,7 @@ class ByteEncryption {
             }
             return new String(xor(bytes, MY_KEY), Charset.defaultCharset());
         } catch (Exception e) {
-            Log.d(ByteEncryption.class.getSimpleName(), "xorFromByte", e);
+            Log.d(LOG_TAG, "xorFromByte", e);
             return xor(input);
         }
     }

@@ -73,7 +73,7 @@ public class TimetableLessonWidgetConfigureActivity extends AppCompatActivity {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
 
-        setContentView(R.layout.timetable_lesson_widget_configure);
+        setContentView(R.layout.widget_timetable_lesson_configure);
         mTimetableSpinner = (Spinner) findViewById(R.id.spinner_timetable_select);
         findViewById(R.id.button_add_widget).setOnClickListener(mOnClickListener);
 

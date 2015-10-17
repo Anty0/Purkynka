@@ -87,6 +87,12 @@ public class WifiSpecialModule extends SpecialModule {
 
         @Nullable
         @Override
+        protected Integer getImageId() {
+            return R.mipmap.ic_launcher_wifi;
+        }
+
+        @Nullable
+        @Override
         public CharSequence getTitle() {
             return getContext().getText(R.string.activity_title_wifi_login);
         }

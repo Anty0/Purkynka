@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.Constants;
+import cz.anty.purkynkamanager.utils.Utils;
 
 /**
  * Created by anty on 4.10.15.
@@ -43,10 +43,10 @@ public abstract class MultilineSpecialItem extends SpecialItemHideImpl {
         body.setOrientation(LinearLayout.VERTICAL);
 
         LayoutInflater.from(mContext).inflate(R.layout
-                .base_multiline_image_text_item, body);
+                .base_list_item_multi_line_image_text, body);
 
         mContent = new FrameLayout(mContext);
-        Constants.setPadding(mContent, 15, 3, 1, 0);
+        Utils.setPadding(mContent, 15, 3, 1, 0);
         body.addView(mContent);
 
         mImage = (ImageView) body.findViewById(R.id.image_view);
@@ -88,11 +88,11 @@ public abstract class MultilineSpecialItem extends SpecialItemHideImpl {
         if (text == null) {
             toSet.setVisibility(View.GONE);
             toSet.setText("");
-            Constants.setPadding(second, 1, 8, 1, 8);
+            Utils.setPadding(second, 1, 8, 1, 8);
         } else {
             toSet.setVisibility(View.VISIBLE);
             toSet.setText(text);
-            Constants.setPadding(second, 1, 1, 1, 1);
+            Utils.setPadding(second, 1, 1, 1, 1);
         }
     }
 
