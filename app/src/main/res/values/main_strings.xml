@@ -10,13 +10,19 @@
     <string name="menu_item_text_refresh">Refresh</string>
     <string name="menu_item_text_log_out">Log out</string>
 
+    <string name="list_item_text_installed_app_version">Installed app version</string>
+    <string name="list_item_text_available_app_version">Available app version </string>
+    <string name="list_item_text_about_developer">About Developer</string>
+
     <string name="text_view_text_insert_login">Login:</string>
     <string name="text_view_text_insert_password">Password:</string>
 
-    <string name="text_about">Application created and developed by Anty.\nIf you have a problem you can report on the website of applications (http://anty.codetopic.eu/purkynka/), or me personally at the school.</string>
+    <string name="text_about">Application created and developed by Anty.\nThe website of application is http://anty.codetopic.eu/purkynka/.\nIf you have a problem you can report on using \"Send Feedback\" button on main screen in menu, or me personally at the school.</string>
     <string name="text_add">Add</string>
 
     <string name="dialog_title_select_language">Select language</string>
+    <string name="dialog_title_bonus_unlocked"><b>Bonus unlocked</b>!</string>
+    <string name="dialog_text_bonus_unlocked">Now you can use this bonus functions:\n  Tracking people</string>
 
     <string name="radio_button_text_czech">Czech</string>
     <string name="radio_button_text_english">English</string>

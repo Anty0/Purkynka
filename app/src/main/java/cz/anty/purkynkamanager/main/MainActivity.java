@@ -1,10 +1,10 @@
 package cz.anty.purkynkamanager.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,30 +15,24 @@ import java.util.ArrayList;
 
 import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.attendance.SearchActivity;
-import cz.anty.purkynkamanager.firststart.FirstStartActivity;
-import cz.anty.purkynkamanager.icanteen.ICSplashActivity;
-import cz.anty.purkynkamanager.modules.ICSpecialModule;
-import cz.anty.purkynkamanager.modules.SASSpecialModule;
-import cz.anty.purkynkamanager.modules.ShareSpecialModule;
-import cz.anty.purkynkamanager.modules.TimetableSpecialModule;
-import cz.anty.purkynkamanager.modules.TrackingSpecialModule;
-import cz.anty.purkynkamanager.modules.UpdateSpecialModule;
-import cz.anty.purkynkamanager.modules.WifiSpecialModule;
-import cz.anty.purkynkamanager.sas.SASSplashActivity;
-import cz.anty.purkynkamanager.settings.SettingsActivity;
-import cz.anty.purkynkamanager.timetable.TimetableSelectActivity;
-import cz.anty.purkynkamanager.utils.Constants;
-import cz.anty.purkynkamanager.utils.Log;
-import cz.anty.purkynkamanager.utils.list.listView.MultilineItem;
-import cz.anty.purkynkamanager.utils.list.listView.TextMultilineItem;
-import cz.anty.purkynkamanager.utils.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.list.recyclerView.RecyclerItemClickListener;
-import cz.anty.purkynkamanager.utils.list.recyclerView.specialAdapter.SpecialModuleManager;
-import cz.anty.purkynkamanager.utils.list.toolbar.FragmentDrawer;
-import cz.anty.purkynkamanager.utils.thread.OnceRunThreadWithSpinner;
-import cz.anty.purkynkamanager.utils.update.UpdateConnector;
-import cz.anty.purkynkamanager.wifi.WifiLoginActivity;
+import cz.anty.purkynkamanager.modules.attendance.SearchActivity;
+import cz.anty.purkynkamanager.modules.icanteen.ICSplashActivity;
+import cz.anty.purkynkamanager.modules.sas.SASSplashActivity;
+import cz.anty.purkynkamanager.modules.timetable.TimetableSelectActivity;
+import cz.anty.purkynkamanager.modules.wifi.WifiLoginActivity;
+import cz.anty.purkynkamanager.utils.firststart.FirstStartActivity;
+import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialModuleManager;
+import cz.anty.purkynkamanager.utils.other.list.toolbar.FragmentDrawer;
+import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
+import cz.anty.purkynkamanager.utils.other.update.UpdateConnector;
+import cz.anty.purkynkamanager.utils.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static SpecialModuleManager moduleManager;
     private boolean showOptionsMenu = false;
-    private OnceRunThreadWithSpinner worker;
+    private OnceRunThread worker;
     private Toolbar mToolbar;
 
     @Override
@@ -54,20 +48,17 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onCreate");
         showOptionsMenu = false;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        View emptyView = findViewById(R.id.empty_view);
         if (moduleManager == null)
-            moduleManager = new SpecialModuleManager(recyclerView, emptyView, true,
-                    new UpdateSpecialModule(this), new ShareSpecialModule(this), new TrackingSpecialModule(this),
-                    new SASSpecialModule(this), new ICSpecialModule(this), new TimetableSpecialModule(this),
-                    new WifiSpecialModule(this));
-        else moduleManager.reInit(recyclerView, emptyView);
+            moduleManager = SpecialModuleManager.getInstance(this, true);
+        moduleManager.bindRecyclerManager(RecyclerInflater
+                .inflateToActivity(this).setLayoutResourceId
+                        (R.layout.activity_main).inflate()
+                .setRefreshing(true));
+
+        worker = new OnceRunThread(this);
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        worker = new OnceRunThreadWithSpinner(this);
-
         setSupportActionBar(mToolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -100,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, getText(R.string.wait_text_loading));
+        });
     }
 
     private boolean isNewTerms() {
@@ -241,13 +232,30 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         }
         if (id == R.id.action_removed_items) {
             startActivity(new Intent(MainActivity.this, RemovedItemsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_share) {
+            startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND)
+                            .setType("text/plain")
+                            .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                            .putExtra(Intent.EXTRA_TEXT, getText(R.string.text_extra_text_share)),
+                    null));
+
+            getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE).edit()
+                    .putBoolean(Constants.SETTING_NAME_SHOW_SHARE, false).apply();
+
+            if (moduleManager.isInitialized())
+                moduleManager.update();
+            return true;
+        }
+        if (id == R.id.action_send_feedback) {
+            startActivity(new Intent(MainActivity.this, SendFeedbackActivity.class));
             return true;
         }
 

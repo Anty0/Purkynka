@@ -21,7 +21,7 @@
     <string name="exception_no_connection">Can\'t refresh Marks</string>
 
     <string name="dialog_title_sas_widget_alert"><b>iSAS Widget</b> available</string>
-    <string name="dialog_message_sas_widget_alert">Now you can add <b>iSAS Widget</b> to your home screen. :)</string>
+    <string name="dialog_message_sas_widget_alert">Now you can add <b>iSAS Widget</b> to your home screen.</string>
 
     <string name="text_date">Date</string>
     <string name="text_logo">logo</string>

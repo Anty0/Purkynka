@@ -8,30 +8,44 @@
     card_view:cardUseCompatPadding="true"
     card_view:contentPadding="2dp">
 
-    <FrameLayout
-        android:id="@+id/content_frame_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/content_frame_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/buttons_frame_layout" />
 
-    <ImageButton
-        android:id="@+id/restore_image_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/but_cancel"
-        android:src="@drawable/ic_action_add"
-        android:visibility="gone" />
+        <FrameLayout
+            android:id="@+id/buttons_frame_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true">
 
-    <ImageButton
-        android:id="@+id/hide_image_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/but_close"
-        android:src="@drawable/ic_action_close" />
+            <ImageButton
+                android:id="@+id/restore_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/but_cancel"
+                android:src="@drawable/ic_action_add"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/hide_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/but_close"
+                android:src="@drawable/ic_action_close" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

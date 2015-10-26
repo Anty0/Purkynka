@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name_wifi">WIFI auto LOGIN</string>
+    <string name="app_name_wifi">Automatické přihlašování k Wi-Fi</string>
 
-    <string name="activity_title_wifi_login">Přihlásit k WIFI auto LOGIN</string>
-    <string name="activity_title_wifi_settings">Nastavení WIFI auto LOGIN</string>
+    <string name="activity_title_wifi_login">Přihlášovací údaje k Wi-Fi</string>
+    <string name="activity_title_wifi_settings">Nastavení Přihlašování k Wi-Fi</string>
 
-    <string name="app_description_wifi">WIFI auto LOGIN je jednoduchý prográmek který vás <b>automaticky přihlásí</b> ke školní <b>WIFI</b> takže budete mít více času na surfování. :)</string>
+    <string name="app_description_wifi">Automatické přihlašování k Wi-Fi je jednoduchý prográmek který vás <b>automaticky přihlásí</b> ke školní <b>WIFI</b> takže budete mít více času na surfování.</string>
 
     <string name="exception_title_wifi_login">Nejde provést přihlášení</string>
     <string name="exception_wifi_login_wrong_login_or_wifi">Špatné přihlašovací údaje nebo je zařízení připojeno k nesprávné WIFI.</string>
     <string name="exception_wifi_login_no_valid_wifi">Pro přihlášení musí být zařízení přpojeno k ISSWF1. Přesto pokračovat?</string>
 
-    <string name="text_login_data_successfully_saved">Uživatelské JMÉNO a HESLO bylo úspěšně ULOŽENO</string>
-    <string name="text_login_data_successfully_validated">Uživatelské JMÉNO a HESLO bylo úspěšně OVĚŘENO</string>
+    <string name="text_login_data_successfully_saved">Uživatelské <b>jméno</b> a <b>heslo</b> bylo úspěšně <b>uloženo</b></string>
+    <string name="text_login_data_successfully_validated">Uživatelské <b>jméno</b> a <b>heslo</b> bylo úspěšně <b>ověřeno</b></string>
 
     <string name="check_box_text_auto_login">Automaticky přihlašovat k ISSWF1</string>
     <string name="check_box_text_wait_login">Počkat 1.5s před pokusem o přihlášení (přihlášení může fungovat i bez tohoto nastavení, ale většina nových zařízení <b>vyžaduje</b> tuto možnost)</string>

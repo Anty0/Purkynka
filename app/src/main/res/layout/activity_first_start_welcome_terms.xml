@@ -5,4 +5,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:text="@string/wait_text_please_wait"
-    tools:context="cz.anty.purkynkamanager.firststart.FirstStartActivity" />
+    tools:context="cz.anty.purkynkamanager.utils.firststart.FirstStartActivity" />

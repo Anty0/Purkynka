@@ -18,4 +18,18 @@
         android:title="@string/activity_title_removed_items"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_share"
+        android:icon="@android:drawable/ic_menu_share"
+        android:orderInCategory="100"
+        android:title="@string/but_share"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_send_feedback"
+        android:icon="@drawable/ic_action_send"
+        android:orderInCategory="100"
+        android:title="@string/activity_title_send_feedback"
+        app:showAsAction="never" />
+
 </menu>

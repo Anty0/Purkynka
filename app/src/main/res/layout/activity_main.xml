@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="cz.anty.purkynkamanager.main.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +21,7 @@
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
-        android:name="cz.anty.purkynkamanager.utils.list.toolbar.FragmentDrawer"
+        android:name="cz.anty.purkynkamanager.utils.other.list.toolbar.FragmentDrawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

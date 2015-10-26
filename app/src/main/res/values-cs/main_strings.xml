@@ -10,13 +10,19 @@
     <string name="menu_item_text_refresh">Obnovit</string>
     <string name="menu_item_text_log_out">Odhlásit se</string>
 
+    <string name="list_item_text_installed_app_version">Nainstalovaná verze aplikace</string>
+    <string name="list_item_text_available_app_version">Dostupná verze aplikace</string>
+    <string name="list_item_text_about_developer">O Vývojáři</string>
+
     <string name="text_view_text_insert_login">Uživatelské jméno:</string>
     <string name="text_view_text_insert_password">Heslo:</string>
 
-    <string name="text_about">Aplikaci vytvořil Anty, pokud máte nějaký problém můžete jej nahlásit na webových stránkách aplikace (http://anty.codetopic.eu/purkynka/), nebo mě osobně v prostorách školy.</string>
+    <string name="text_about">Aplikaci vytvořil Anty.\nWebové stránky aplikace:\nhttp://anty.codetopic.eu/purkynka/\n\nPokud máte nějaký problém můžete jej nahlásit na hlavní obrazovce použitím tlačítka \"Odeslat zpětnou vazbu\", nebo mě osobně v prostorách školy.</string>
     <string name="text_add">Přidat</string>
 
     <string name="dialog_title_select_language">Zvolte jazyk</string>
+    <string name="dialog_title_bonus_unlocked"><b>Bonus odemčen</b>!</string>
+    <string name="dialog_text_bonus_unlocked">Byly vám zpřístupněny následující bonusové funkce:\n  Sledování lidé - (Můžete v prohlížeči docházky povolit sledování vybraných lidí.)</string>
 
     <string name="radio_button_text_czech">Čeština (Czech)</string>
     <string name="radio_button_text_english">Angličtina (English)</string>

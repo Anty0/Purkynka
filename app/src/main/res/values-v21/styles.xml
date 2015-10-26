@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="AppTheme.AS" parent="AppTheme.AS.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorAS</item>
+    </style>
+
+    <style name="AppTheme.IC" parent="AppTheme.IC.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorIC</item>
+    </style>
+
+    <style name="AppTheme.T" parent="AppTheme.T.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorT</item>
+    </style>
+
+    <style name="AppTheme.W" parent="AppTheme.W.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorW</item>
+    </style>
+
+
+    <style name="AppTheme.Dialog.AS" parent="AppTheme.Dialog.AS.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorAS</item>
+    </style>
+
+    <style name="AppTheme.Dialog.IC" parent="AppTheme.Dialog.IC.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorIC</item>
+    </style>
+
+    <style name="AppTheme.Dialog.T" parent="AppTheme.Dialog.T.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorT</item>
+    </style>
+
+    <style name="AppTheme.Dialog.W" parent="AppTheme.Dialog.W.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorW</item>
+    </style>
+
+
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="android:navigationBarColor">@color/navigationBarColor</item>
         <item name="android:windowContentTransitions">true</item>

@@ -2,20 +2,48 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="cz.anty.purkynkamanager.icanteen.ICLunchOrderActivity">
+    tools:context="cz.anty.purkynkamanager.modules.icanteen.ICLunchOrderActivity">
 
     <item
-        android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_action_refresh"
+        android:icon="@drawable/ic_action_sort"
         android:orderInCategory="100"
-        android:title="@string/menu_item_text_refresh"
-        app:showAsAction="ifRoom" />
+        android:title="@string/menu_item_text_to_show"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <group android:checkableBehavior="all">
+
+                <item
+                    android:id="@+id/action_show_new"
+                    android:checked="true"
+                    android:orderInCategory="100"
+                    android:title="@string/menu_item_text_new_lunches"
+                    app:showAsAction="ifRoom" />
+
+                <item
+                    android:id="@+id/action_show_old"
+                    android:orderInCategory="100"
+                    android:title="@string/menu_item_text_old_lunches"
+                    app:showAsAction="ifRoom" />
+
+            </group>
+        </menu>
+
+    </item>
 
     <item
         android:id="@+id/action_clear_history"
         android:icon="@android:drawable/ic_menu_delete"
         android:orderInCategory="100"
         android:title="@string/menu_item_text_clear_history"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:orderInCategory="100"
+        android:title="@string/menu_item_text_refresh"
         app:showAsAction="never" />
 
 </menu>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="cz.anty.purkynkamanager.main.SendFeedbackActivity">
+
+    <TextView
+        android:id="@+id/text_view_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:text="@string/app_description_feedback"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/text_view_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_description"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/text_view_text_report_title"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/edit_text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_description"
+        android:layout_toEndOf="@+id/text_view_title"
+        android:layout_toRightOf="@+id/text_view_title"
+        android:ems="10"
+        android:inputType="text"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/text_view_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_text_title"
+        android:paddingBottom="5dp"
+        android:paddingTop="15dp"
+        android:text="@string/text_view_text_report_text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/edit_text_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/text_view_text"
+        android:layout_toLeftOf="@+id/image_button_send"
+        android:layout_toStartOf="@+id/image_button_send"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <ImageButton
+        android:id="@+id/image_button_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/edit_text_text"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/activity_title_send_feedback"
+        android:src="@drawable/ic_action_send" />
+
+</RelativeLayout>

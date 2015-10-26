@@ -7,11 +7,15 @@
 
     <string name="activity_title_login_icanteen">Login to iCanteen</string>
     <string name="activity_title_icanteen_settings">iCanteen Manager Settings</string>
+    <string name="widget_label_next_lunch">iCanteen next lunch widget</string>
 
     <string name="app_description_icanteen">ICanteen Manager is a tool that can manage and <b>ordering school lunches</b>.</string>
     <string name="app_description_icanteen_burza">Burza Browser allows you to <b>view</b> lunches on <b>Burza</b>.</string>
     <string name="app_description_icanteen_burza_watcher">Burza watcher can <b>control</b> at very short intervals <b>burza</b> and thus increases your likelihood to profit from the school lunch burza.</string>
     <string name="app_description_icanteen_lunch_order">Lunch order can <b>order lunches</b> for you. (<b>use czech language for better strings</b>)</string>
+
+    <string name="dialog_title_icanteen_widget_alert"><b>iCanteen Next Lunch Widget</b> available</string>
+    <string name="dialog_message_icanteen_widget_alert">Now you can add <b>iCanteen Next Lunch Widget</b> to your home screen.</string>
 
     <string name="check_box_text_notify_new_lunches">Notify when new lunches are available</string>
 
@@ -31,6 +35,9 @@
 
     <string name="menu_item_text_start_burza_checking">Start Burza watcher</string>
     <string name="menu_item_text_clear_history">Clear old lunches</string>
+    <string name="menu_item_text_to_show">Filter</string>
+    <string name="menu_item_text_new_lunches">New Lunches</string>
+    <string name="menu_item_text_old_lunches">Old Lunches</string>
 
     <string name="special_item_title_icanteen_new_lunches">New lunches are available</string>
 
@@ -43,4 +50,5 @@
     <string name="toast_text_coming_soon">Coming soon</string>
 
     <string name="text_nothing_ordered">Nothing ordered</string>
+    <string name="text_lunch">Lunch</string>
 </resources>

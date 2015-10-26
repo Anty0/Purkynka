@@ -52,6 +52,9 @@ public *;
 #    public static ** valueOf(java.lang.String);
 #}
 
+-keep class cz.anty.purkynkamanager.BuildConfig {
+    *;
+}
 -keep class org.acra.ReportingInteractionMode {
     *;
 }
@@ -60,4 +63,7 @@ public *;
 }
 -keep class org.acra.sender.HttpSender$Type {
     *;
+}
+-keep class org.acra.ReportField {
+	*;
 }

@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f51b5</color>
-    <color name="colorPrimaryDark">#233282</color>
-    <color name="navigationBarColor">#000050</color>
-    <color name="colorAccent">#11BBFF</color>
+    <color name="colorPrimary">#30a147</color>
+    <color name="colorPrimaryDark">#238232</color>
+    <color name="navigationBarColor">#005000</color>
+    <color name="colorAccent">#11ffbb</color>
+
+    <color name="colorPrimaryAS">#3f51b5</color>
+    <color name="colorPrimaryDarkAS">#233282</color>
+    <color name="navigationBarColorAS">#000050</color>
+    <color name="colorAccentAS">#11bbff</color>
+
+    <color name="colorPrimaryIC">#ed9629</color>
+    <color name="colorPrimaryDarkIC">#d7841d</color>
+    <color name="navigationBarColorIC">#503000</color>
+    <color name="colorAccentIC">#ffba65</color>
+
+    <color name="colorPrimaryT">#c66d00</color>
+    <color name="colorPrimaryDarkT">#b46e16</color>
+    <color name="navigationBarColorT">#301500</color>
+    <color name="colorAccentT">#b98039</color>
+
+    <color name="colorPrimaryW">#556555</color>
+    <color name="colorPrimaryDarkW">#334033</color>
+    <color name="navigationBarColorW">#151515</color>
+    <color name="colorAccentW">#cfc</color>
 </resources>

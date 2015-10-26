@@ -3,7 +3,11 @@
     <string name="app_name">Purkyňka</string>
     <string name="app_name_updater">Updater</string>
 
+    <string name="app_description_module_feedback">Bylo zaznamenáno neobvyklé chování aplikace, prosím napište nám zpětnou vazbu, pokud tento problém přetrvává.</string>
+    <string name="app_description_feedback">Pokud jste zaznamenali neobvyklé chování aplikace nebo nám chcete odeslat nějaké informace o tom, co bychom mohli změnit nebo vylepšit, napište nám zpětnou vazbu pomocí následujících řádků.</string>
+
     <string name="activity_title_removed_items">Odebrané položky</string>
+    <string name="activity_title_send_feedback">Odeslat zpětnou vazbu</string>
     <string name="activity_title_first_start_welcome">Vítejte</string>
     <string name="activity_title_first_start_terms">Podmínky používání aplikace</string>
     <string name="activity_title_first_start_change_log">ChangeLog</string>
@@ -12,12 +16,17 @@
     <string name="text_welcome">Vítejte v aplikaci Purkyňka, nyní vás provede jednoduchý průvodce prvním spuštěním a nabídne vám možnost přihlásit se a zprovoznit tak jednotlivé funkce aplikace.\n\n(<b>click here</b> for language change menu)</string>
     <string name="text_change_log">Nedaří se načíst ChangeLog, zkontrolujte své připojení k internetu.</string>
 
+    <string name="text_view_text_report_title">Název:</string>
+    <string name="text_view_text_report_text">Popis problému:</string>
+
     <string name="dialog_title_share">Sdílejte aplikaci</string>
     <string name="dialog_message_share">Prsím sdílej tuto aplikaci třeba na facebooku, ať má každý tu možnost, vyzkoušet si ji :)</string>
     <string name="dialog_message_update_alert">Pokud automatický aktualizovátor nefunguje, tak si stáhni a nainstaluj aktualizaci manuálně z oficiálních webových stránek aplikace.</string>
 
     <string name="toast_text_download_successful">Stahování úspěšně dokončeno</string>
     <string name="toast_text_download_failed">Chyba stahování</string>
+    <string name="toast_text_feedback_sent">Zpětná vazba úspěšně odeslána.</string>
+    <string name="toast_text_feedback_not_sent"><b>Nepodařilo se</b> odeslat zpětnou vazbu.\nZkontrolujte své internetové připojení.</string>
 
     <string name="notify_title_update_available"><b>Dostupná aktualizace</b></string>
     <string name="notify_text_update_old">Nainstalovaná verze: %1$s</string>
@@ -25,5 +34,5 @@
 
     <string name="wait_text_downloading_update">Stahuji aktualizaci</string>
 
-    <string name="text_extra_text_share">Používám aplikaci Purkyňka Manager a hodně mi zjednodušila život i ty si ji můžeš stáhnout na stránkách http://anty.crush-team.cz/</string>
+    <string name="text_extra_text_share">Používám aplikaci Purkyňka Manager a hodně mi zjednodušila život i ty si ji můžeš stáhnout na stránkách http://anty.codetopic.eu/</string>
 </resources>

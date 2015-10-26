@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name_sas">iSAS Manager</string>
+    <string name="app_name_sas">Prohlížeč iSAS</string>
 
     <string name="activity_title_sas_login">Přihlášení do iSAS</string>
-    <string name="activity_title_sas_settings">Nastavení iSAS Manageru</string>
+    <string name="activity_title_sas_settings">Nastavení pro Prohlížeč iSAS</string>
 
-    <string name="widget_label_sas_manage">Správce iSASu (poslední známky)</string>
+    <string name="widget_label_sas_manage">iSAS - poslední známky</string>
 
-    <string name="service_title_sas_manager">Služba kontroly známek pro iSAS Manager</string>
+    <string name="service_title_sas_manager">Služba kontroly známek pro Prohlížeč iSAS</string>
 
-    <string name="app_description_sas">iSAS Manager je jednoduchý prográmek pro <b>správu</b> vašich <b>známek</b>, umí <b>upozorňovat</b> na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
+    <string name="app_description_sas">Prohlížeč iSAS je jednoduchý prográmek pro <b>správu</b> vašich <b>známek</b>, umí <b>upozorňovat</b> na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
 
     <string name="exception_title_validate">Chyba při ověřování</string>
     <string name="exception_validate_wrong_login">Špatné JMÉNO nebo HESLO</string>
@@ -21,7 +21,7 @@
     <string name="exception_no_connection">Nepodařilo se obnovit známky</string>
 
     <string name="dialog_title_sas_widget_alert">iSAS <b>Widget</b></string>
-    <string name="dialog_message_sas_widget_alert">Nyní si můžete <b>přidat</b> <b>iSAS Widget</b> na svou domovskou obrazovku, budete tak mít své poslední známky <b>vždy po ruce</b>. :)</string>
+    <string name="dialog_message_sas_widget_alert">Nyní si můžete <b>přidat</b> <b>iSAS Widget</b> na svou domovskou obrazovku, budete tak mít své poslední známky <b>vždy po ruce</b>.</string>
 
     <string name="text_date">Datum</string>
     <string name="text_logo">logo</string>
