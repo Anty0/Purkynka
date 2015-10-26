@@ -199,7 +199,7 @@ public abstract class WidgetProvider extends AppWidgetProvider {
                 }
             }
 
-            contentRemoteViews.setEmptyView(R.id.list_view_marks, R.id.empty_view);
+            contentRemoteViews.setEmptyView(R.id.content_list_view, R.id.empty_view);
         } else {
             MultilineItem[] itemList = getListItems(context, appWidgetIds);
             if (itemList.length == 0)
