@@ -20,7 +20,6 @@ android {
             renderscriptDebuggable false
             renderscriptOptimLevel 10
             zipAlignEnabled true
-            shrinkResources true
         }
         debug {
             debuggable true
