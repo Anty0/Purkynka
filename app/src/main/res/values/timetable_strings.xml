@@ -40,9 +40,7 @@
     <string name="notify_text_teacher_is_not_here">%1$s is not in school</string>
 
     <string name="exception_title_connection">Connection exception</string>
-    <string name="exception_title_name">Name exception</string>
     <string name="exception_message_connection">Timetable cannot by loaded from internet.\nCheck your internet connection.</string>
-    <string name="exception_message_name">Class with this name doesn\'t exists.\nPlease check timetable name.</string>
 
     <string name="text_monday">MONDAY</string>
     <string name="text_tuesday">TUESDAY</string>

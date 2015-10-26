@@ -237,9 +237,10 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
 
         // build notification
         // the addAction re-use the same intent to keep the example short
+        int size = changedMarks.size();
         Notification n = new NotificationCompat.Builder(this)
-                .setContentTitle(String.format(changedMarks.size() > 1 ? getString(R.string.notify_title_new_marks)
-                        : getString(R.string.notify_title_new_mark), changedMarks.size()))
+                .setContentTitle(getResources().getQuantityString(R.plurals
+                        .notify_title_new_marks, size, size))
                 .setContentText(builder)
                 .setSmallIcon(R.mipmap.ic_launcher_sas)
                 .setContentIntent(pIntent)

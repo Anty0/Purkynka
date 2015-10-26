@@ -1,8 +1,6 @@
 package cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -63,12 +61,8 @@ public abstract class MultilineSpecialItem extends SpecialItemHideImpl {
             mImage.setVisibility(View.GONE);
         } else {
             mImage.setVisibility(View.VISIBLE);
-
-            Drawable image;
-            if (Build.VERSION.SDK_INT >= 21)
-                image = mContext.getDrawable(imageId);
-            else image = mContext.getResources().getDrawable(imageId);
-            mImage.setImageDrawable(image);
+            mImage.setImageDrawable(Utils
+                    .getDrawable(mContext, imageId));
         }
 
         updateTextView(mTitle, mText, getTitle());

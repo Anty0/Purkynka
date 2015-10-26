@@ -40,9 +40,7 @@
     <string name="notify_text_teacher_is_not_here">%1$s se nenachází v prostorách školy</string>
 
     <string name="exception_title_connection">Chyba připojení</string>
-    <string name="exception_title_name">Špatné jméno</string>
     <string name="exception_message_connection">Rozvrh nemůže být načten z internetu.\nZkontroluj své připojení.</string>
-    <string name="exception_message_name">Třída s tímto jménem neexistuje.\nProsím zkontrolujte jméno rozvrhu.</string>
 
     <string name="text_monday">PONDĚLÍ</string>
     <string name="text_tuesday">UTERÝ</string>

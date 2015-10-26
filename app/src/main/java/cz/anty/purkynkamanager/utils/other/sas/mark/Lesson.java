@@ -91,7 +91,8 @@ public class Lesson implements MultilineItem {
 
     @Override
     public CharSequence getText(Context context, int position) {
-        return String.format(context.getString(R.string.text_marks),
-                getMarks().length);
+        int len = getMarks().length;
+        return context.getResources().getQuantityString(R.plurals
+                .text_marks, len, len);
     }
 }

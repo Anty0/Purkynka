@@ -12,7 +12,6 @@
     <string name="exception_wifi_login_no_valid_wifi">Pro přihlášení musí být zařízení přpojeno k ISSWF1. Přesto pokračovat?</string>
 
     <string name="text_login_data_successfully_saved">Uživatelské <b>jméno</b> a <b>heslo</b> bylo úspěšně <b>uloženo</b></string>
-    <string name="text_login_data_successfully_validated">Uživatelské <b>jméno</b> a <b>heslo</b> bylo úspěšně <b>ověřeno</b></string>
 
     <string name="check_box_text_auto_login">Automaticky přihlašovat k ISSWF1</string>
     <string name="check_box_text_wait_login">Počkat 1.5s před pokusem o přihlášení (přihlášení může fungovat i bez tohoto nastavení, ale většina nových zařízení <b>vyžaduje</b> tuto možnost)</string>

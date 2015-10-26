@@ -12,7 +12,7 @@ import android.support.annotation.Nullable;
  */
 public abstract class BindImplService<B extends IBinder> extends Service {
 
-    public abstract B getBinder();
+    protected abstract B getBinder();
 
     @Nullable
     @Override

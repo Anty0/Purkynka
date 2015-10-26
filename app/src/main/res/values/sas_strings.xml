@@ -27,7 +27,10 @@
     <string name="text_logo">logo</string>
     <string name="text_from">From</string>
     <string name="text_free_list">Nothing to show</string>
-    <string name="text_marks">%1$d Marks</string>
+    <plurals name="text_marks">
+        <item quantity="one">%1$d Mark</item>
+        <item quantity="other">%1$d Marks</item>
+    </plurals>
     <string name="text_mark_with_weight">%1$s: %2$s with weight %3$d</string>
     <string name="text_value">Value</string>
     <string name="text_weight">Weight</string>
@@ -49,6 +52,8 @@
 
     <string name="special_item_title_bad_lesson_diameter">Bad diameter in %1$s (%2$s)</string>
 
-    <string name="notify_title_new_marks">%1$d new MARKS</string>
-    <string name="notify_title_new_mark">%1$d new MARK</string>
+    <plurals name="notify_title_new_marks">
+        <item quantity="one">%1$d new MARK</item>
+        <item quantity="other">%1$d new MARKS</item>
+    </plurals>
 </resources>

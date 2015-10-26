@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -176,9 +177,17 @@ public class Utils {
         view.setPadding(left, top, right, bottom);
     }
 
-    public static int getColor(Context context, @ColorRes int color) {
+    @SuppressWarnings("deprecation")
+    public static int getColor(Context context, @ColorRes int colorRes) {
         if (Build.VERSION.SDK_INT >= 23)
-            return context.getColor(color);
-        else return context.getResources().getColor(color);
+            return context.getColor(colorRes);
+        else return context.getResources().getColor(colorRes);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Drawable getDrawable(Context context, @DrawableRes int drawableRes) {
+        if (Build.VERSION.SDK_INT >= 21)
+            return context.getDrawable(drawableRes);
+        else return context.getResources().getDrawable(drawableRes);
     }
 }

@@ -27,7 +27,11 @@
     <string name="text_logo">logo</string>
     <string name="text_from">Z</string>
     <string name="text_free_list">Nic k zobrazení</string>
-    <string name="text_marks">%1$d Známek</string>
+    <plurals name="text_marks">
+        <item quantity="one">%1$d Známka</item>
+        <item quantity="few">%1$d Známky</item>
+        <item quantity="other">%1$d Známek</item>
+    </plurals>
     <string name="text_mark_with_weight">%1$s: %2$s s vahou %3$d</string>
     <string name="text_value">Známka</string>
     <string name="text_weight">Váha</string>
@@ -49,6 +53,9 @@
 
     <string name="special_item_title_bad_lesson_diameter">Špatný průměr v %1$s (%2$s)</string>
 
-    <string name="notify_title_new_marks">%1$d nové ZNÁMKY</string>
-    <string name="notify_title_new_mark">%1$d nová ZNÁMKA</string>
+    <plurals name="notify_title_new_mark">
+        <item quantity="one">%1$d nová Známka</item>
+        <item quantity="few">%1$d nové Známky</item>
+        <item quantity="other">%1$d nových Známek</item>
+    </plurals>
 </resources>
