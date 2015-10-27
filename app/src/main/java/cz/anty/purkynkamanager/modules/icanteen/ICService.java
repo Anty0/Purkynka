@@ -152,7 +152,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 mLunchesManager.apply();
                 mLunchesManager = null;
             }
-            ICTodayLunchWidget.callUpdate(this);
+            ICTodayLunchWidget.callUpdate(this, false);
             if (onBurzaChange != null)
                 onBurzaChange.run();
             if (onMonthChange != null)
@@ -203,7 +203,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 }
                 if (mLunchesManager != null)
                     mLunchesManager.apply();
-                ICTodayLunchWidget.callUpdate(this);
+                ICTodayLunchWidget.callUpdate(this, false);
                 if (onMonthChange != null)
                     onMonthChange.run();
                 return false;

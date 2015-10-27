@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.anty.purkynkamanager.R;
@@ -65,6 +66,10 @@ public abstract class WidgetProvider extends AppWidgetProvider {
 
     protected boolean showAsEmpty(Context context, int[] appWidgetIds) {
         return false;
+    }
+
+    protected int getTopVisibility(Context context, int[] appWidgetIds) {
+        return View.VISIBLE;
     }
 
     protected CharSequence getTitle(Context context, int[] appWidgetIds) {
@@ -155,6 +160,8 @@ public abstract class WidgetProvider extends AppWidgetProvider {
 
         baseRemoteViews.setInt(R.id.relative_layout_widget_main, "setBackgroundColor",
                 getTopColor(context, appWidgetIds));
+        baseRemoteViews.setViewVisibility(R.id.relative_layout_widget_main,
+                getTopVisibility(context, appWidgetIds));
         baseRemoteViews.removeAllViews(R.id.content_frame_layout);
         return baseRemoteViews;
     }

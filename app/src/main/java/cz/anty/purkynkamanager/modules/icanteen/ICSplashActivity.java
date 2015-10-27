@@ -18,7 +18,7 @@ public class ICSplashActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "ICSplashActivity";
 
-    static ServiceManager<ICService.ICBinder> serviceManager;
+    public static ServiceManager<ICService.ICBinder> serviceManager;
     private final OnceRunThread worker = new OnceRunThread();
 
     public static void initService(Context context, final OnceRunThread worker, final Runnable onComplete) {

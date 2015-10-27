@@ -199,6 +199,9 @@ public final class RecyclerInflater {
                         new SpecialSwipeRefreshLayout.CanChildScrollUpListener() {
                             @Override
                             public boolean canChildScrollUp() {
+                                RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+                                if (adapter == null || adapter.getItemCount() == 0) return false;
+
                                 View child = mRecyclerView.getChildAt(0);
                                 return mRecyclerView.getChildAdapterPosition(child) != 0
                                         || child.getTop() < mRecyclerView.getPaddingTop();

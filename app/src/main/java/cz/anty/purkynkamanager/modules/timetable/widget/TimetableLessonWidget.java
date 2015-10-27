@@ -49,6 +49,11 @@ public class TimetableLessonWidget extends WidgetProvider {
     }
 
     @Override
+    protected int getTopVisibility(Context context, int[] appWidgetIds) {
+        return View.GONE;
+    }
+
+    @Override
     protected CharSequence getTitle(Context context, int[] appWidgetIds) {
         CharSequence toReturn = context.getText(R.string.activity_title_timetable_manage);
         if (actualTimetable != null)
