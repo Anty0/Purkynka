@@ -96,6 +96,6 @@ public class SendFeedbackActivity extends AppCompatActivity {
                     });
                 }
             }
-        });
+        }, getText(R.string.wait_text_please_wait));
     }
 }

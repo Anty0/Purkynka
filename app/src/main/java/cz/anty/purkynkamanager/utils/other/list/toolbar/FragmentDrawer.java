@@ -51,8 +51,9 @@ public class FragmentDrawer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View result = RecyclerInflater.inflate(getContext(), container, false).setLayoutInflater
-                (inflater).setLayoutResourceId(R.layout.fragment_navigation_drawer).inflate()
+        View result = RecyclerInflater.inflate(getContext(), container, false)
+                .setLayoutInflater(inflater).setLayoutResourceId(R.layout
+                        .fragment_navigation_drawer).useSwipeRefresh(false).inflate()
                 .setAdapter(adapter).setItemTouchListener(new RecyclerItemClickListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {

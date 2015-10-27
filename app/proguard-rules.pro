@@ -36,6 +36,7 @@ public *;
 #public *;
 #}
 -keep class com.google.android.gms.** { *; }
+-keep class android.support.v7.widget.SearchView { public *; }
 #-dontwarn com.google.android.gms.**
 #-keep class org.arca.ErrorReporter { *; }
 #-dontwarn org.arca.ErrorReporter

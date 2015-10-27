@@ -42,7 +42,8 @@ class ICConnector {
     private static final String ORDER_URL_START = "http://stravovani.sspbrno.cz:8080/faces/secured/";
 
     private final Map<String, String> loginCookies;
-    private long lastLoad = 0;
+    private long lastRefresh = 0;
+    private long lastOrder = 0;
 
     ICConnector(String username, String password) throws IOException {
         this.loginCookies = login(0, null, username, password);
@@ -51,10 +52,6 @@ class ICConnector {
     private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {
         if (depth >= Constants.MAX_TRY) throw last;
         try {
-            long actual = System.currentTimeMillis();
-            if (actual - lastLoad < Constants.WAIT_TIME_IC_CONNECTION)
-                Utils.threadSleep(lastLoad + Constants.WAIT_TIME_IC_CONNECTION - actual);
-
             Map<String, String> cookies = Jsoup
                     .connect(LOGIN_URL)
                     .data(LOGIN_FIELD, username, PASS_FIELD, password, CHECKBOX_SAVE, CHECKBOX_SAVE_VALUE,
@@ -62,7 +59,9 @@ class ICConnector {
                     .method(Connection.Method.POST)
                     .execute().cookies();
 
-            lastLoad = System.currentTimeMillis();
+            long actual = System.currentTimeMillis();
+            lastRefresh = actual;
+            lastOrder = actual;
             return cookies;
         } catch (IOException e) {
             depth++;
@@ -80,13 +79,14 @@ class ICConnector {
 
     public synchronized void orderLunch(String urlAdd) throws IOException {
         long actual = System.currentTimeMillis();
-        if (actual - lastLoad < Constants.WAIT_TIME_IC_CONNECTION)
-            Utils.threadSleep(lastLoad + Constants.WAIT_TIME_IC_CONNECTION - actual);
+        long last = lastRefresh > lastOrder ? lastRefresh : lastOrder;
+        if (actual - last < Constants.WAIT_TIME_IC_CONNECTION)
+            Utils.threadSleep(last + Constants.WAIT_TIME_IC_CONNECTION - actual);
 
         Connection.Response response = Jsoup.connect(ORDER_URL_START + urlAdd.replace("&amp;", "&"))
                 .cookies(loginCookies).execute();
 
-        lastLoad = System.currentTimeMillis();
+        lastOrder = System.currentTimeMillis();
         Log.v(LOG_TAG, "orderLunch response: " + response.body());
         if (response.body().contains("\"error\":true"))
             throw new IOException("Server error received");
@@ -139,12 +139,15 @@ class ICConnector {
         if (depth >= Constants.MAX_TRY) throw last;
         try {
             long actual = System.currentTimeMillis();
-            if (actual - lastLoad < Constants.WAIT_TIME_IC_CONNECTION)
-                Utils.threadSleep(lastLoad + Constants.WAIT_TIME_IC_CONNECTION - actual);
+            if (actual - lastOrder < Constants.WAIT_TIME_IC_CONNECTION)
+                Utils.threadSleep(lastOrder + Constants.WAIT_TIME_IC_CONNECTION - actual);
 
-            return Jsoup
+            Document document = Jsoup
                     .connect(url)
                     .cookies(loginCookies).get();
+
+            lastRefresh = System.currentTimeMillis();
+            return document;
         } catch (IOException e) {
             depth++;
             return getPage(url, depth, e);

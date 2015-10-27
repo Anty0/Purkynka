@@ -94,8 +94,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 }
             }
             if (callRefresh) {
-                refreshBurza();
-                refreshMonth();
+                refreshBurza(true);
+                refreshMonth(true);
             }
         } else {
             mManager = null;
@@ -125,9 +125,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getBooleanExtra
-                (EXTRA_UPDATE_MONTH, false))
-            refreshMonth();
+        if (intent != null && intent.getBooleanExtra(EXTRA_UPDATE_MONTH, false))
+            refreshMonth(true);
         return START_NOT_STICKY;
     }
 
@@ -162,7 +161,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         super.onDestroy();
     }
 
-    private boolean refreshBurza() {
+    private boolean refreshBurza(boolean silent) {
         Log.d(LOG_TAG, "refreshBurza");
         try {
             if (mLunchesManager == null) return false;
@@ -177,20 +176,21 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             return true;
         } catch (Exception e) {
             Log.d(LOG_TAG, "refreshBurza", e);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ICService.this, R.string.toast_text_can_not_refresh_lunches,
-                            Toast.LENGTH_LONG).show();
-                }
-            });
+            if (!silent)
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ICService.this, R.string.toast_text_can_not_refresh_lunches,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
             return false;
         }
     }
 
-    private boolean refreshMonth() {
+    private boolean refreshMonth(boolean silent) {
         Log.d(LOG_TAG, "refreshMonth");
         try {
             if (mLunchesManager == null) return false;
@@ -211,13 +211,14 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             return true;
         } catch (Exception e) {
             Log.d(LOG_TAG, "refreshMonth", e);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ICService.this, R.string.toast_text_can_not_refresh_lunches,
-                            Toast.LENGTH_LONG).show();
-                }
-            });
+            if (!silent)
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ICService.this, R.string.toast_text_can_not_refresh_lunches,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
             return false;
@@ -372,7 +373,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    ICService.this.refreshBurza();
+                    ICService.this.refreshBurza(false);
                 }
             });
         }
@@ -381,7 +382,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    ICService.this.refreshMonth();
+                    ICService.this.refreshMonth(false);
                 }
             });
         }
@@ -391,8 +392,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 @Override
                 public void run() {
                     orderBurza(lunch);
-                    ICService.this.refreshBurza();
-                    ICService.this.refreshMonth();
+                    ICService.this.refreshBurza(false);
+                    ICService.this.refreshMonth(false);
                 }
             });
         }
@@ -402,7 +403,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 @Override
                 public void run() {
                     orderMonth(lunch);
-                    ICService.this.refreshMonth();
+                    ICService.this.refreshMonth(false);
                 }
             });
         }
@@ -412,7 +413,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 @Override
                 public void run() {
                     toBurzaMonth(lunch);
-                    ICService.this.refreshMonth();
+                    ICService.this.refreshMonth(false);
                 }
             });
         }

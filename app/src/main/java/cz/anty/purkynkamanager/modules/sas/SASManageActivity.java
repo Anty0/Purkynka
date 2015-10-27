@@ -139,14 +139,14 @@ public class SASManageActivity extends AppCompatActivity {
                     }
 
                     private void lessonOnClick(Lesson lesson) {
-                        Mark[] marks = lesson.getMarks();
+                        final Mark[] marks = lesson.getMarks();
 
                         View result = RecyclerInflater.inflate(SASManageActivity.this, null, false)
                                 .useSwipeRefresh(false).inflate().setAdapter(marks)
                                 .setItemTouchListener(new RecyclerItemClickListener.SimpleClickListener() {
                                     @Override
                                     public void onClick(View view, int position) {
-                                        detectClass(adapter.getItem(position));
+                                        detectClass(marks[position]);
                                     }
                                 }).getBaseView();
 
