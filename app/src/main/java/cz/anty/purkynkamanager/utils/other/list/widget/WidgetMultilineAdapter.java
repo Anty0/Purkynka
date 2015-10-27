@@ -28,14 +28,14 @@ public class WidgetMultilineAdapter implements RemoteViewsService.RemoteViewsFac
 
     public static final String EXTRA_MARKS_AS_STRING = "MARKS_STRING";
     public static final String EXTRA_MANS_AS_STRING = "MANS_STRING";
-
-    private final ArrayList<MultilineItem> listItemList = new ArrayList<>();
-    private final Context context;
+    private static final String LOG_TAG = "WidgetMultilineAdapter";
+    private final ArrayList<MultilineItem> mItems = new ArrayList<>();
+    private final Context mContext;
     //private int appWidgetId;
 
     public WidgetMultilineAdapter(Context context, Intent intent) {
-        Log.d("WidgetMultilineAdapter", "<init>");
-        this.context = context;
+        Log.d(LOG_TAG, "<init>");
+        mContext = context;
         /*appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);*/
 
@@ -59,48 +59,48 @@ public class WidgetMultilineAdapter implements RemoteViewsService.RemoteViewsFac
     }
 
     private void populateListItem(MultilineItem[] items) {
-        Log.d("WidgetMultilineAdapter", "populateListItem");
+        Log.d(LOG_TAG, "populateListItem");
         /*for (int i = 0; i < 10; i++) {
             LauncherActivity.ListItem listItem = new LauncherActivity.ListItem();
             listItem.heading = "Heading" + i;
             listItem.content = i
                     + " This is the content of the app widget listview.Nice content though";
-            listItemList.add(listItem);
+            mItems.add(listItem);
         }*/
-        listItemList.clear();
-        Collections.addAll(listItemList, items);
+        mItems.clear();
+        Collections.addAll(mItems, items);
     }
 
     @Override
     public void onCreate() {
-        Log.d("WidgetMultilineAdapter", "onCreate");
+        Log.d(LOG_TAG, "onCreate");
     }
 
     @Override
     public void onDataSetChanged() {
-        Log.d("WidgetMultilineAdapter", "onDataSetChanged");
+        Log.d(LOG_TAG, "onDataSetChanged");
     }
 
     @Override
     public void onDestroy() {
-        Log.d("WidgetMultilineAdapter", "onDestroy");
+        Log.d(LOG_TAG, "onDestroy");
     }
 
     @Override
     public int getCount() {
-        Log.d("WidgetMultilineAdapter", "getCount: " + listItemList.size());
-        return listItemList.size();
+        Log.d(LOG_TAG, "getCount: " + mItems.size());
+        return mItems.size();
     }
 
     @Override
     public long getItemId(int position) {
-        Log.d("WidgetMultilineAdapter", "getItemId: " + position);
+        Log.d(LOG_TAG, "getItemId: " + position);
         return position;
     }
 
     @Override
     public boolean hasStableIds() {
-        Log.d("WidgetMultilineAdapter", "hasStableIds: " + false);
+        Log.d(LOG_TAG, "hasStableIds: " + false);
         return false;
     }
 
@@ -111,24 +111,24 @@ public class WidgetMultilineAdapter implements RemoteViewsService.RemoteViewsFac
     */
     @Override
     public RemoteViews getViewAt(int position) {
-        Log.d("WidgetMultilineAdapter", "getViewAt: " + position);
+        Log.d(LOG_TAG, "getViewAt: " + position);
         final RemoteViews remoteView = new RemoteViews(
-                context.getPackageName(), R.layout.widget_list_item_multi_line_text);
-        MultilineItem multilineItem = listItemList.get(position);
-        remoteView.setTextViewText(R.id.widget_text_view_title, multilineItem.getTitle(context, position));
-        remoteView.setTextViewText(R.id.widget_text_view_text, multilineItem.getText(context, position));
+                mContext.getPackageName(), R.layout.widget_list_item_multi_line_text);
+        MultilineItem multilineItem = mItems.get(position);
+        remoteView.setTextViewText(R.id.widget_text_view_title, multilineItem.getTitle(mContext, position));
+        remoteView.setTextViewText(R.id.widget_text_view_text, multilineItem.getText(mContext, position));
         return remoteView;
     }
 
     @Override
     public RemoteViews getLoadingView() {
-        Log.d("WidgetMultilineAdapter", "getLoadingView: " + null);
+        Log.d(LOG_TAG, "getLoadingView: " + null);
         return null;
     }
 
     @Override
     public int getViewTypeCount() {
-        Log.d("WidgetMultilineAdapter", "getViewTypeCount: " + 0);
+        Log.d(LOG_TAG, "getViewTypeCount: " + 0);
         return 1;
     }
 }

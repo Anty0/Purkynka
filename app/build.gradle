@@ -7,8 +7,8 @@ android {
         applicationId "cz.anty.purkynkamanager"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 32
-        versionName '3.5.2'
+        versionCode 33
+        versionName '3.5.3'
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {

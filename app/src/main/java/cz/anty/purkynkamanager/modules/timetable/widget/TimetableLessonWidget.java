@@ -107,6 +107,11 @@ public class TimetableLessonWidget extends WidgetProvider {
     }
 
     @Override
+    protected void setRemoteAdapter(Context context, int[] appWidgetIds, RemoteViews remoteViews) {
+
+    }
+
+    @Override
     protected RemoteViews getDataContent(Context context, int[] appWidgetIds) {
         RemoteViews remoteViews = new RemoteViews(context
                 .getPackageName(), R.layout.widget_content_timetable_lesson);

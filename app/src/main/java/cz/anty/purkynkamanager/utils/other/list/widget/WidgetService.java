@@ -9,14 +9,16 @@ import cz.anty.purkynkamanager.utils.other.Log;
 @TargetApi(11)
 public class WidgetService extends RemoteViewsService {
 
+    private static final String LOG_TAG = "WidgetService";
+
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.d("WidgetService", "onGetViewFactory");
+        Log.d(LOG_TAG, "onGetViewFactory");
         /*int appWidgetId = intent.getIntExtra(
                 AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);*/
 
-        return (new WidgetMultilineAdapter(this.getApplicationContext(), intent));
+        return (new WidgetMultilineAdapter(getApplicationContext(), intent));
     }
 
 }

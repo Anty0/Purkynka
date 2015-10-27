@@ -126,7 +126,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getBooleanExtra(EXTRA_UPDATE_MONTH, false))
-            refreshMonth(true);
+            worker.startWorker(new Runnable() {
+                @Override
+                public void run() {
+                    ICService.this.refreshMonth(true);
+                }
+            });
         return START_NOT_STICKY;
     }
 
@@ -203,7 +208,6 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 }
                 if (mLunchesManager != null)
                     mLunchesManager.apply();
-                ICTodayLunchWidget.callUpdate(this, false);
                 if (onMonthChange != null)
                     onMonthChange.run();
                 return false;
@@ -222,6 +226,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             if (e instanceof WrongLoginDataException)
                 onWrongLoginData();
             return false;
+        } finally {
+            ICTodayLunchWidget.callUpdate(this, false);
         }
     }
 

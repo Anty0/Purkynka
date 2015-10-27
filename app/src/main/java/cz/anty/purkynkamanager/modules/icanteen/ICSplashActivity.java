@@ -3,6 +3,7 @@ package cz.anty.purkynkamanager.modules.icanteen;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ public class ICSplashActivity extends AppCompatActivity {
     public static ServiceManager<ICService.ICBinder> serviceManager;
     private final OnceRunThread worker = new OnceRunThread();
 
-    public static void initService(Context context, final OnceRunThread worker, final Runnable onComplete) {
+    public static void initService(Context context, final OnceRunThread worker, @Nullable final Runnable onComplete) {
         if (serviceManager == null || !serviceManager.isConnected()) {
             serviceManager = new ServiceManager<>(context, ICService.class);
             serviceManager.addBinderConnection(
@@ -39,7 +40,7 @@ public class ICSplashActivity extends AppCompatActivity {
                                         Log.d(LOG_TAG, "onBinderConnected", e);
                                     }
 
-                                    onComplete.run();
+                                    if (onComplete != null) onComplete.run();
                                 }
                             });
                         }
@@ -50,7 +51,7 @@ public class ICSplashActivity extends AppCompatActivity {
                         }
                     });
             serviceManager.connect();
-        } else onComplete.run();
+        } else if (onComplete != null) onComplete.run();
     }
 
     private void startDefaultActivity() {

@@ -4,17 +4,13 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Handler;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.modules.icanteen.ICService;
 import cz.anty.purkynkamanager.modules.icanteen.ICSplashActivity;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
-import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.LunchesManager;
@@ -80,52 +76,23 @@ public class ICTodayLunchWidget extends WidgetProvider {
     @Override
     protected boolean onStartLoading(final Context context, int[] appWidgetIds) {
         if (!showAsEmpty(context, appWidgetIds) &&
-                (ICSplashActivity.serviceManager == null ||
-                        !ICSplashActivity.serviceManager.isConnected())) {
-            Log.d(LOG_TAG, "onStartLoading initialize service");
-            ICSplashActivity.initService(context, ApplicationBase.WORKER, new Runnable() {
-                @Override
-                public void run() {
-                    new Handler(context.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callUpdate(context, false);
-                        }
-                    });
-                }
-            });
-            return false;
-        }
-
-        if (!showAsEmpty(context, appWidgetIds) &&
                 getLastIntent().getBooleanExtra(REQUEST_UPDATE, false)) {
             Log.d(LOG_TAG, "onStartLoading refreshing month");
-            ApplicationBase.WORKER.startWorker(new Runnable() {
-                @Override
-                public void run() {
-                    ICService.ICBinder binder = ICSplashActivity
-                            .serviceManager.getBinder();
-                    binder.refreshMonth();
-                    try {
-                        Thread.sleep(Constants.WAIT_TIME_ON_BIND);
-                        binder.waitToWorkerStop();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        Log.d(LOG_TAG, "onStartLoading", e);
-                    }
-
-                    new Handler(context.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callUpdate(context, false);
-                        }
-                    });
-                }
-            }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
+            if (ICSplashActivity.serviceManager == null ||
+                    !ICSplashActivity.serviceManager.isConnected()) {
+                ICSplashActivity.initService(context, ApplicationBase.WORKER, null);
+                return false;
+            }
+            ICSplashActivity.serviceManager.getBinder().refreshMonth();
             return false;
         }
 
         return true;
+    }
+
+    @Override
+    protected void setRemoteAdapter(Context context, int[] appWidgetIds, RemoteViews remoteViews) {
+
     }
 
     @Override

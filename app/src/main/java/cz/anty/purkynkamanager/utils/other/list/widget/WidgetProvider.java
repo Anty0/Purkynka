@@ -177,7 +177,23 @@ public abstract class WidgetProvider extends AppWidgetProvider {
         contentRemoteViews.addView(R.id.content_frame_layout,
                 getDataContent(context, appWidgetIds));
 
+        if (Build.VERSION.SDK_INT >= 11)
+            setRemoteAdapter(context, appWidgetIds, contentRemoteViews);
+
         return contentRemoteViews;
+    }
+
+    protected void setRemoteAdapter(Context context, int[] appWidgetIds, RemoteViews remoteViews) {
+        Intent widgetIntent = getListWidgetServiceIntent(context, appWidgetIds);
+        widgetIntent.setData(Uri.parse(widgetIntent.toUri(Intent.URI_INTENT_SCHEME)));
+
+        if (Build.VERSION.SDK_INT >= 14)
+            remoteViews.setRemoteAdapter(R.id.content_list_view, widgetIntent);
+        else {
+            for (int appWidgetId : appWidgetIds) {
+                remoteViews.setRemoteAdapter(appWidgetId, R.id.content_list_view, widgetIntent);
+            }
+        }
     }
 
     @SuppressLint("NewApi")
@@ -194,17 +210,6 @@ public abstract class WidgetProvider extends AppWidgetProvider {
         if (Build.VERSION.SDK_INT >= 11) {
             contentRemoteViews = new RemoteViews(context
                     .getPackageName(), R.layout.widget_content_new);
-
-            Intent widgetIntent = getListWidgetServiceIntent(context, appWidgetIds);
-            widgetIntent.setData(Uri.parse(widgetIntent.toUri(Intent.URI_INTENT_SCHEME)));
-
-            if (Build.VERSION.SDK_INT >= 14)
-                contentRemoteViews.setRemoteAdapter(R.id.content_list_view, widgetIntent);
-            else {
-                for (int appWidgetId : appWidgetIds) {
-                    contentRemoteViews.setRemoteAdapter(appWidgetId, R.id.content_list_view, widgetIntent);
-                }
-            }
 
             contentRemoteViews.setEmptyView(R.id.content_list_view, R.id.empty_view);
         } else {
