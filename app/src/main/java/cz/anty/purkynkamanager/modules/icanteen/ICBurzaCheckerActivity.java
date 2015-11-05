@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunch;
@@ -71,15 +72,15 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
 
                                 switch (monthLunches.length) {
                                     case 3:
-                                        lunch3CheckBox.setText(String.format("%1$s - %2$s",
+                                        lunch3CheckBox.setText(Utils.getFormattedText("%1$s - %2$s",
                                                 BurzaLunch.LunchNumber.LUNCH_3.toString(),
                                                 monthLunches[2].getName()));
                                     case 2:
-                                        lunch2CheckBox.setText(String.format("%1$s - %2$s",
+                                        lunch2CheckBox.setText(Utils.getFormattedText("%1$s - %2$s",
                                                 BurzaLunch.LunchNumber.LUNCH_2.toString(),
                                                 monthLunches[1].getName()));
                                     case 1:
-                                        lunch1CheckBox.setText(String.format("%1$s - %2$s",
+                                        lunch1CheckBox.setText(Utils.getFormattedText("%1$s - %2$s",
                                                 BurzaLunch.LunchNumber.LUNCH_1.toString(),
                                                 monthLunches[0].getName()));
                                 }

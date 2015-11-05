@@ -22,6 +22,7 @@
 
     <string name="dialog_title_sas_widget_alert"><b>iSAS Widget</b> available</string>
     <string name="dialog_message_sas_widget_alert">Now you can add <b>iSAS Widget</b> to your home screen.</string>
+    <string name="dialog_message_unsupported_device">Your device don\'t supports this function.</string>
 
     <string name="text_date">Date</string>
     <string name="text_logo">logo</string>
@@ -31,7 +32,7 @@
         <item quantity="one">%1$d Mark</item>
         <item quantity="other">%1$d Marks</item>
     </plurals>
-    <string name="text_mark_with_weight">%1$s: %2$s with weight %3$d</string>
+    <string name="text_mark_with_weight">%1$s: &lt;b>%2$s&lt;/b> with weight %3$d</string>
     <string name="text_value">Value</string>
     <string name="text_weight">Weight</string>
     <string name="text_type">Type</string>

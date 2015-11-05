@@ -12,9 +12,9 @@ import cz.anty.purkynkamanager.modules.icanteen.widget.ICTodayLunchWidget;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Utils;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.settings.ICSettingsActivity;
 
 public class ICSelectServiceActivity extends AppCompatActivity {
@@ -29,7 +29,8 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                 .getBoolean(Constants.SETTING_NAME_SHOW_DESCRIPTION, true);
 
         RecyclerInflater.inflateToActivity(this).useSwipeRefresh(false).inflate()
-                .setAdapter(new TextMultilineItem(getText(R.string.app_name_icanteen_lunch_order), showDescription
+                .setAdapter(new TextMultilineItem(getText(R.string.activity_title_pending_orders), null),
+                        new TextMultilineItem(getText(R.string.app_name_icanteen_lunch_order), showDescription
                                 ? getText(R.string.app_description_icanteen_lunch_order) : null),
                         new TextMultilineItem(getText(R.string.app_name_icanteen_burza_watcher), showDescription
                                 ? getText(R.string.app_description_icanteen_burza_watcher) : null),
@@ -40,12 +41,15 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                     public void onClick(View view, int position) {
                         switch (position) {
                             case 0:
-                                startActivity(new Intent(ICSelectServiceActivity.this, ICLunchOrderActivity.class));
+                                startActivity(new Intent(ICSelectServiceActivity.this, ICPendingOrdersActivity.class));
                                 break;
                             case 1:
-                                startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaCheckerActivity.class));
+                                startActivity(new Intent(ICSelectServiceActivity.this, ICLunchOrderActivity.class));
                                 break;
                             case 2:
+                                startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaCheckerActivity.class));
+                                break;
+                            case 3:
                                 startActivity(new Intent(ICSelectServiceActivity.this, ICBurzaActivity.class));
                                 break;
                         }

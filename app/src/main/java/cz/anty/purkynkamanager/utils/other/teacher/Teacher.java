@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.Locale;
 
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
 import proguard.annotation.KeepClassMembers;

@@ -3,7 +3,8 @@ package cz.anty.purkynkamanager.utils.other.timetable;
 import android.content.Context;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.Utils;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
 import proguard.annotation.KeepClassMembers;
@@ -65,10 +66,10 @@ public class Lesson implements MultilineItem {
     @Override
     public CharSequence getTitle(Context context, int position) {
         if (position == NO_POSITION)
-            return String.format(context.getString(R.string.list_item_text_lesson),
-                    0, getShortName(), getClassString()).substring(3);
+            return Utils.getFormattedText(context, R.string.list_item_text_lesson_no_position,
+                    getShortName(), getClassString());
 
-        return String.format(context.getString(R.string.list_item_text_lesson),
+        return Utils.getFormattedText(context, R.string.list_item_text_lesson,
                 position, getShortName(), getClassString());
     }
 

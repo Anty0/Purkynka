@@ -16,6 +16,7 @@ import cz.anty.purkynkamanager.modules.sas.SASSplashActivity;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.MultilineSpecialItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialModule;
@@ -203,8 +204,8 @@ public class SASSpecialModule extends SpecialModule {
                 diameter = Lesson.FORMAT
                         .format(mBadLesson.getDiameter());
             }
-            return String.format(getContext().getString(R.string
-                            .special_item_title_bad_lesson_diameter),
+            return Utils.getFormattedText(getContext(), R.string
+                            .special_item_title_bad_lesson_diameter,
                     name, diameter);
         }
 

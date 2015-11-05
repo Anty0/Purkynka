@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 
 /**
  * Created by anty on 9.8.15.

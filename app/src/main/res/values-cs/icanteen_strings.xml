@@ -7,6 +7,7 @@
 
     <string name="activity_title_login_icanteen">Přihlášení do iCanteen</string>
     <string name="activity_title_icanteen_settings">Nastavení pro Správce iCanteen</string>
+    <string name="activity_title_pending_orders">Čekající objednávky</string>
     <string name="widget_label_next_lunch">iCanteen - následující oběd</string>
 
     <string name="app_description_icanteen">Správce iCanteen je prográmek, který dokáže <b>spravovat a objednávat</b> školní obědy, také dokáže <b>hlídat burzu</b> a automaticky objednat oběd, jakmile bude dostupný.</string>
@@ -47,6 +48,11 @@
     <string name="toast_text_can_not_remove_lunch">Nelze odstranit oběd ze seznamu, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_can_not_refresh_lunches">Nelze obnovit obědy, prosím zkuste restartovat aplikaci</string>
 
-    <string name="text_nothing_ordered">Nic neobědnáno</string>
+    <string name="text_nothing_ordered">Nic neobjednáno</string>
     <string name="text_lunch">Oběd</string>
+    <string name="text_error">Došlo k chybě</string>
+    <string name="text_waiting">Čekám na další pokus</string>
+    <string name="text_completed">Dokončeno</string>
+    <string name="text_to_burza">Do Burzy</string>
+    <string name="text_from_burza">Z Burzy</string>
 </resources>

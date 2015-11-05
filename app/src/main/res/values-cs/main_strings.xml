@@ -39,6 +39,7 @@
     <string name="but_login">Přihlásit</string>
     <string name="but_ok">OK</string>
     <string name="but_order">Objednat</string>
+    <string name="but_order_from_burza">Obědnat z Burzy</string>
     <string name="but_continue">Pokračovat</string>
     <string name="but_save">Uložit</string>
     <string name="but_start">Start</string>
@@ -55,6 +56,7 @@
     <string name="but_rename">Přejmenovat</string>
     <string name="but_update">Aktualizovat</string>
     <string name="but_refresh">Obnovit</string>
+    <string name="but_restore">Obnovit výchozí</string>
     <string name="but_yes">Ano</string>
     <string name="but_no">Ne</string>
     <string name="but_skip">Přeskočit</string>
@@ -65,4 +67,6 @@
     <string name="but_later">Později</string>
     <string name="but_open">Otevřít</string>
     <string name="but_close">Zavřít</string>
+    <string name="but_show_change_log">Zobrazit ChangeLog</string>
+    <string name="but_back">Zpět</string>
 </resources>

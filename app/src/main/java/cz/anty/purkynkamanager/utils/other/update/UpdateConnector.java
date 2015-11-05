@@ -53,6 +53,8 @@ public class UpdateConnector {
         String toReturn = Jsoup.connect(URL_LATEST_VERSION_NAME)
                 .followRedirects(false).execute().body().replace("\n", "");
         Log.d(LOG_TAG, "getLatestVersionName versionName: " + toReturn);
+        if (toReturn.toLowerCase().contains("<html>"))
+            throw new IOException("Wrong page loaded");
         return toReturn;
     }
 
@@ -68,6 +70,8 @@ public class UpdateConnector {
                 + languageShortcut.toUpperCase(Locale.ENGLISH))
                 .followRedirects(false).execute().body().trim();
         Log.d(LOG_TAG, "getLatestTerms terms: " + toReturn);
+        if (toReturn.toLowerCase().contains("<html>"))
+            throw new IOException("Wrong page loaded");
         return toReturn;
     }
 
@@ -75,6 +79,8 @@ public class UpdateConnector {
         String toReturn = Jsoup.connect(URL_LATEST_CHANGE_LOG)
                 .followRedirects(false).execute().body().trim();
         Log.d(LOG_TAG, "getLatestChangeLog changeLog: " + toReturn);
+        if (toReturn.toLowerCase().contains("<html>"))
+            throw new IOException("Wrong page loaded");
         return toReturn;
     }
 

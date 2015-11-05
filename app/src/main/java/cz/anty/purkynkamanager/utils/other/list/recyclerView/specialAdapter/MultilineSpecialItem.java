@@ -3,6 +3,7 @@ package cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public abstract class MultilineSpecialItem extends SpecialItemHideImpl {
             mImage.setVisibility(View.GONE);
         } else {
             mImage.setVisibility(View.VISIBLE);
-            mImage.setImageDrawable(Utils
+            mImage.setImageDrawable(ContextCompat
                     .getDrawable(mContext, imageId));
         }
 

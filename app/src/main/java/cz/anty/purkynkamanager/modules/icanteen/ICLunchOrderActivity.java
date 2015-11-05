@@ -28,11 +28,11 @@ import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunch;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.service.ServiceManager;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
 
@@ -97,7 +97,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                         MonthLunch.BurzaState burzaState = monthLunch.getBurzaState();
                         if (burzaState != null) {
                             Button button = new AppCompatButton(ICLunchOrderActivity.this);
-                            button.setText(burzaState.toString());
+                            button.setText(burzaState.toCharSequence(ICLunchOrderActivity.this));
                             button.setTag(monthLunch);
 
                             buttons.add(button);
@@ -211,7 +211,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         if (refreshThread == null)
             refreshThread = new OnceRunThread(this);
 
-        adapter = new MultilineRecyclerAdapter<>(this);
+        adapter = new MultilineRecyclerAdapter<>();
         recyclerManager = RecyclerInflater.inflateToActivity(this).inflate()
                 .setAdapter(adapter).setItemTouchListener(onItemClickListener)
                 .setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -272,7 +272,9 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                 Calendar lunchTmpCalendar = Calendar.getInstance();
                 lunchTmpCalendar.setTimeInMillis(Long.MAX_VALUE);
                 for (int i = 0; i < data.length; i++) {
-                    lunchCalendar.setTime(((MonthLunchDay) data[i]).getDate());
+                    MultilineItem item = data[i];
+                    if (!(item instanceof MonthLunchDay)) continue;
+                    lunchCalendar.setTime(((MonthLunchDay) item).getDate());
                     int yearDiff = lunchCalendar.get(Calendar.YEAR) - actualCalendar.get(Calendar.YEAR);
                     int dayDiff = lunchCalendar.get(Calendar.DAY_OF_YEAR) - actualCalendar.get(Calendar.DAY_OF_YEAR);
                         /*Log.d(getClass().getSimpleName(), "update position: " + i

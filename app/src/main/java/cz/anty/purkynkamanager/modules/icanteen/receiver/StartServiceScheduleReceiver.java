@@ -11,6 +11,7 @@ import android.net.wifi.WifiManager;
 
 import java.util.Calendar;
 
+import cz.anty.purkynkamanager.modules.icanteen.ICSplashActivity;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
 
@@ -27,7 +28,9 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (AppDataManager.isICNotifyNewMonthLunches()
+        if ((AppDataManager.isICNotifyNewMonthLunches() || (ICSplashActivity.serviceManager != null
+                && ICSplashActivity.serviceManager.isConnected()
+                && ICSplashActivity.serviceManager.getBinder().isPendingOrders()))
                 && activeNetInfo != null && activeNetInfo.isConnected() &&
                 AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN) &&
                 (!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)

@@ -6,8 +6,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import cz.anty.purkynkamanager.R;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.attendance.AttendanceConnector;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
 import proguard.annotation.KeepClassMembers;
@@ -74,10 +75,11 @@ public class Man implements MultilineItem {
     public CharSequence getTitle(Context context, int position) {
         String classString = getClassString();
         IsInSchoolState schoolState = isInSchool();
-        return String.format((IsInSchoolState.UNAVAILABLE.equals(schoolState) ? "%1$s" :
-                (IsInSchoolState.IN_SCHOOL.equals(schoolState) ? context.getString(R.string.text_is_in_school)
-                        : context.getString(R.string.text_isnt_in_school))), getName() +
-                (classString.length() > 4 ? "" : " " + classString));
+        return Utils.getFormattedText((IsInSchoolState.UNAVAILABLE.equals(schoolState) ? "%1$s" :
+                        (IsInSchoolState.IN_SCHOOL.equals(schoolState)
+                                ? context.getString(R.string.text_is_in_school)
+                                : context.getString(R.string.text_isnt_in_school))),
+                getName() + (classString.length() > 4 ? "" : " " + classString));
     }
 
     @Override

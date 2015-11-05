@@ -26,13 +26,13 @@ public class Constants {
     public static final int WAIT_TIME_FIRST_REPEAT = 10;
     public static final long WAIT_TIME_TEACHERS_ATTENDANCE = 1000 * 60 * 15;
     public static final long WAIT_TIME_SAS_MARKS_REFRESH = 1000 * 60 * 5;
-    public static final long WAIT_TIME_WIFI_LOGIN = 1500;
+    public static final long WAIT_TIME_WIFI_LOGIN = 500;
     //
     public static final long REPEAT_TIME_UPDATE = 1000 * 60 * 60 * 5;
-    public static final long REPEAT_TIME_SAS_MARKS_UPDATE = 1000 * 60 * 15;
+    public static final long REPEAT_TIME_SAS_MARKS_UPDATE = 1000 * 60 * 60 * 12;
     //public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;
-    public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 5;
-    public static final long REPEAT_TIME_IC_LUNCHES_UPDATE = 1000 * 60 * 90;
+    public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 15;
+    public static final long REPEAT_TIME_IC_LUNCHES_UPDATE = 1000 * 60 * 60 * 24 * 5;
     //
     public static final int SPECIAL_ITEM_PRIORITY_NEW_UPDATE = 100;
     public static final int SPECIAL_ITEM_PRIORITY_SEND_FEEDBACK = 97;
@@ -104,6 +104,7 @@ public class Constants {
     public static final String SETTINGS_NAME_LUNCHES = "LunchesData";
     public static final String SETTING_NAME_LUNCHES_SAVE_VERSION = "LUNCHES_SAVE_VERSION";
     public static final String SETTING_NAME_MONTH_LUNCHES = "MONTH_LUNCHES";
+    public static final String SETTING_NAME_LUNCHES_ORDER_REQUESTS = "ORDER_REQUESTS";
     //
     public static final String SETTINGS_NAME_SAS = "SASLoginData";
     public static final String SETTING_NAME_LOGIN = "LOGIN";

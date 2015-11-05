@@ -30,11 +30,12 @@ import java.util.Calendar;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.modules.timetable.widget.TimetableLessonWidget;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.other.Utils;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.timetable.Lesson;
 import cz.anty.purkynkamanager.utils.other.timetable.Timetable;
 import cz.anty.purkynkamanager.utils.other.timetable.TimetableManager;
@@ -203,7 +204,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             final int day = getArguments().getInt(ARG_SECTION_NUMBER, 0);
             final Context context = container.getContext();
-            adapter = new MultilineRecyclerAdapter<>(getContext());
+            adapter = new MultilineRecyclerAdapter<>();
             View result = RecyclerInflater.inflate(context, container, false)
                     .useSwipeRefresh(false).inflate().setAdapter(adapter)
                     .setItemTouchListener(new RecyclerItemClickListener.SimpleClickListener() {
@@ -284,7 +285,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                             mainScrollView.addView(linearLayout);
 
                             new AlertDialog.Builder(context, R.style.AppTheme_Dialog_T)
-                                    .setTitle(String.format(context.getString(R.string.dialog_title_lesson),
+                                    .setTitle(Utils.getFormattedText(context, R.string.dialog_title_lesson,
                                             context.getString(Timetable.DAYS_STRINGS_IDS[day]), lessonIndex))
                                     .setIcon(R.mipmap.ic_launcher_t)
                                     .setView(mainScrollView)
@@ -319,8 +320,8 @@ public class TimetableManageActivity extends AppCompatActivity {
                     adapter.addItem(lesson);
                     continue;
                 }
-                adapter.addItem(new TextMultilineItem(String.format(context
-                        .getString(R.string.list_item_text_click_to_edit), i), null));
+                adapter.addItem(new TextMultilineItem(Utils.getFormattedText(context,
+                        R.string.list_item_text_click_to_edit, i), null));
             }
         }
     }

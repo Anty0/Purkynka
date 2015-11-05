@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cz.anty.purkynkamanager.utils.other.list.SpecialSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipe_refresh_layout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <FrameLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/empty_swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/base_empty_view" />
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/recycler_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        <cz.anty.purkynkamanager.utils.other.list.recyclerView.base.EmptyRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:scrollbars="vertical" />
 
-        <include
-            layout="@layout/base_empty_view"
-            android:visibility="gone" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-    </FrameLayout>
-
-</cz.anty.purkynkamanager.utils.other.list.SpecialSwipeRefreshLayout>
+</FrameLayout>

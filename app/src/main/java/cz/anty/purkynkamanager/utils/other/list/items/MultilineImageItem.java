@@ -1,4 +1,4 @@
-package cz.anty.purkynkamanager.utils.other.list.listView;
+package cz.anty.purkynkamanager.utils.other.list.items;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
@@ -8,7 +8,7 @@ import android.support.annotation.DrawableRes;
  *
  * @author anty
  */
-public interface MultilineImageItem {
+public interface MultilineImageItem extends MultilineItem {
 
     @DrawableRes
     int getImageResourceId(Context context, int position);

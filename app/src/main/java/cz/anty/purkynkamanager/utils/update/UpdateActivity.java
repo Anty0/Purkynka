@@ -17,7 +17,6 @@ import java.io.IOException;
 import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.main.MainActivity;
 import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.thread.ProgressReporter;
 import cz.anty.purkynkamanager.utils.other.update.UpdateConnector;
@@ -29,7 +28,7 @@ import cz.anty.purkynkamanager.utils.other.update.UpdateConnector;
  */
 public class UpdateActivity extends AppCompatActivity {
 
-    public static final String EXTRA_SKIP_DIALOG = "SKIP_DIALOG";
+    private static final String LOG_TAG = "UpdateActivity";
 
     private static Thread downloader;
     private static AppCompatActivity activity;
@@ -91,40 +90,14 @@ public class UpdateActivity extends AppCompatActivity {
         reporter.setMaxProgress(max);
         reporter.reportProgress(progress);
         if (downloader != null) return;
+        setVisible(false);
 
-        if (getIntent().getBooleanExtra(EXTRA_SKIP_DIALOG, false)) {
+        /*if (getIntent().getBooleanExtra(EXTRA_SKIP_DIALOG, false)) {
             downloadInstallUpdate();
             return;
-        }
+        }*/
 
-        new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                .setTitle(R.string.notify_title_update_available)
-                .setMessage(String.format(getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)
-                        + "\n" + String.format(getString(R.string.notify_text_update_new),
-                        UpdateReceiver.getLatestName(this))
-                        + "\n\n" + getString(R.string.dialog_message_update_alert))
-                .setPositiveButton(R.string.but_update, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        downloadInstallUpdate();
-                    }
-                }).setNegativeButton(R.string.but_exit,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .setIcon(R.mipmap.ic_launcher)
-                .setCancelable(false)
-                .setNeutralButton(R.string.but_skip, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        startActivity(new Intent(UpdateActivity.this, MainActivity.class));
-                    }
-                })
-                .show();
+        showDialog();
     }
 
     @Override
@@ -135,7 +108,51 @@ public class UpdateActivity extends AppCompatActivity {
                 && super.onKeyUp(keyCode, event);
     }
 
+    private void showDialog() {
+        new AlertDialog.Builder(this, R.style.AppTheme_Dialog)
+                .setTitle(R.string.notify_title_update_available)
+                .setMessage(Utils.getFormattedText(this, R.string
+                        .notify_text_update_old, BuildConfig.VERSION_NAME)
+                        + "\n" + Utils.getFormattedText(this, R.string.notify_text_update_new,
+                        UpdateReceiver.getLatestName(this))
+                        + "\n\n" + getString(R.string.dialog_message_update_alert))
+                .setPositiveButton(R.string.but_update,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                downloadInstallUpdate();
+                            }
+                        })
+                .setNegativeButton(R.string.but_cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                .setNeutralButton(R.string.but_show_change_log,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                showChangeLog();
+                            }
+                        })
+                .setIcon(R.mipmap.ic_launcher)
+                .setCancelable(false)
+                .show();
+    }
+
+    private void showChangeLog() {
+        Utils.generateChangeLogDialog(this, new Runnable() {
+            @Override
+            public void run() {
+                showDialog();
+            }
+        });
+    }
+
     private void downloadInstallUpdate() {
+        setVisible(true);
         downloader = ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
             public void run() {

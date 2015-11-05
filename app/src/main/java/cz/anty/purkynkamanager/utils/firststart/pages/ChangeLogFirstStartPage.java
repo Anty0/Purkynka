@@ -44,11 +44,11 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
         Context context = getContext();
         View view = LayoutInflater.from(context).inflate(R.layout
                 .activity_first_start_welcome_terms, rootView, false);
-        updateTerms(context, (TextView) view.findViewById(R.id.contentTextView));
+        updateChangeLog(context, (TextView) view.findViewById(R.id.contentTextView));
         return view;
     }
 
-    private void updateTerms(final Context context, final TextView contentTextView) {
+    private void updateChangeLog(final Context context, final TextView contentTextView) {
         contentTextView.setText(R.string.wait_text_please_wait);
         ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
@@ -57,8 +57,6 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
                 boolean error = false;
                 try {
                     changeLog = UpdateConnector.getLatestChangeLog();
-                    if (((String) changeLog).toLowerCase().contains("<html>"))
-                        throw new IOException("Wrong page loaded");
                 } catch (IOException e) {
                     Log.d(LOG_TAG, "updateTerms", e);
                     changeLog = context.getText(R.string.text_change_log);
@@ -76,7 +74,7 @@ public class ChangeLogFirstStartPage extends FirstStartPage {
                                     @Override
                                     public void onClick(View v) {
                                         contentTextView.setOnClickListener(null);
-                                        updateTerms(context, contentTextView);
+                                        updateChangeLog(context, contentTextView);
                                     }
                                 });
                     }

@@ -7,8 +7,8 @@ import android.widget.ProgressBar;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 
 /**
  * Created by anty on 29.9.15.
@@ -26,7 +26,7 @@ public class AutoLoadMultilineRecyclerAdapter extends MultilineRecyclerAdapter<M
     private boolean mAutoLoad = true;
 
     public AutoLoadMultilineRecyclerAdapter(Context context, @Nullable OnLoadNextPageListener onLoadNextListListener) {
-        super(context, R.layout.list_item_multi_line_loading);
+        super(R.layout.list_item_multi_line_loading);
         mLoadingItem = new TextMultilineItem(context.getText(R.string.wait_text_loading),
                 context.getText(R.string.wait_text_please_wait));
         mLoadingItem.setTag(LOADING_ITEM_TAG);

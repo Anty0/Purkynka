@@ -16,8 +16,8 @@ import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Man;
 import cz.anty.purkynkamanager.utils.other.attendance.man.TrackingMansManager;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
 
 public class TrackingActivity extends AppCompatActivity {
@@ -38,7 +38,7 @@ public class TrackingActivity extends AppCompatActivity {
             return;
         }
 
-        adapter = new MultilineRecyclerAdapter<>(this);
+        adapter = new MultilineRecyclerAdapter<>();
         recyclerManager = RecyclerInflater.inflateToActivity(this).inflate().setAdapter(adapter)
                 .setItemTouchListener(new RecyclerItemClickListener.SimpleClickListener() {
                     @Override

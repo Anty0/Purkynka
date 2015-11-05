@@ -14,7 +14,7 @@ import java.util.List;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.attendance.man.TrackingMansManager;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import cz.anty.purkynkamanager.utils.other.sas.mark.Mark;
 import cz.anty.purkynkamanager.utils.other.sas.mark.MarksManager;
 

@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 
 public class SettingsActivity extends AppCompatActivity {
 

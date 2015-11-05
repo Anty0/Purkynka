@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Constants;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 
 /**
  * Created by anty on 13.6.15.

@@ -4,6 +4,7 @@
     style="@style/CardView.Dark"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
     card_view:cardCornerRadius="3dp"
     card_view:cardUseCompatPadding="true"
     card_view:contentPadding="2dp">

@@ -5,6 +5,7 @@ import org.jsoup.select.Elements;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cz.anty.purkynkamanager.utils.other.Log;
@@ -50,6 +51,14 @@ public class Lunches {
             Elements lunchElements = element.children();
 
             List<MonthLunch> monthLunches = new ArrayList<>();
+            Date date;
+            try {
+                date = MonthLunchDay.DATE_PARSE_FORMAT.parse(lunchElements
+                        .get(0).attr("id").replace("day-", ""));
+            } catch (ParseException e) {
+                Log.d("Lunches", "parseMonthLunches", e);
+                continue;
+            }
             Elements lunchesElements = lunchElements.get(1).select("div.jidelnicekItem");//child(0).children();
             for (Element lunchElement : lunchesElements) {
                 String name = lunchElement.child(0).child(1).text().split("\n")[0].trim();
@@ -87,15 +96,11 @@ public class Lunches {
                         break;
                 }
 
-                monthLunches.add(new MonthLunch(name, orderUrlAdd, state, toBurzaUrlAdd, burzaState));
+                monthLunches.add(new MonthLunch(name, date, orderUrlAdd, state, toBurzaUrlAdd, burzaState));
             }
 
-            try {
-                lunchList.add(new MonthLunchDay(MonthLunchDay.DATE_PARSE_FORMAT.parse(lunchElements.get(0).attr("id").replace("day-", "")),
-                        monthLunches.toArray(new MonthLunch[monthLunches.size()])));
-            } catch (ParseException e) {
-                Log.d("Lunches", "parseMonthLunches", e);
-            }
+            lunchList.add(new MonthLunchDay(date, monthLunches
+                    .toArray(new MonthLunch[monthLunches.size()])));
         }
 
         return lunchList;

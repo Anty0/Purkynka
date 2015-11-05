@@ -1,4 +1,4 @@
-package cz.anty.purkynkamanager.utils.other.list.listView;
+package cz.anty.purkynkamanager.utils.other.list.items;
 
 import android.content.Context;
 
@@ -9,9 +9,13 @@ import android.content.Context;
  */
 public class TextMultilineItem implements MultilinePaddingItem {
 
-    private CharSequence title, text;
+    private CharSequence title = "", text = null;
     private boolean padding = true;
     private Object tag;
+
+    public TextMultilineItem() {
+
+    }
 
     public TextMultilineItem(CharSequence title, CharSequence text) {
         this.title = title;

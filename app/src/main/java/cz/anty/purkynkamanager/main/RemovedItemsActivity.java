@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialModuleManager;
 
 /**

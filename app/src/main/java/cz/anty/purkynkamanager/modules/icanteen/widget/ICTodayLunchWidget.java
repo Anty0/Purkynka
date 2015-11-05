@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -12,10 +13,9 @@ import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.modules.icanteen.ICSplashActivity;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.LunchesManager;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.widget.WidgetProvider;
 
 /**
@@ -54,12 +54,12 @@ public class ICTodayLunchWidget extends WidgetProvider {
 
     @Override
     protected int getTopColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.colorPrimaryIC);
+        return ContextCompat.getColor(context, R.color.colorPrimaryIC);
     }
 
     @Override
     protected int getBackgroundColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.navigationBarColorIC);
+        return ContextCompat.getColor(context, R.color.navigationBarColorIC);
     }
 
     @Override

@@ -7,16 +7,19 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
-import android.widget.Toast;
+
+import java.io.IOException;
 
 import cz.anty.purkynkamanager.ApplicationBase;
-import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.wifi.WifiLogin;
 
 public class WifiStateReceiver extends BroadcastReceiver {
+
+    private static final String LOG_TAG = "WifiStateReceiver";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -27,12 +30,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
         final WifiInfo wifiInfo = ((WifiManager) context
                 .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
         if (wifiInfo == null) return;
-        String wifiSSID = wifiInfo.getSSID();
+        final String wifiSSID = wifiInfo.getSSID();
         if (wifiSSID == null || !wifiSSID.contains(WifiLogin.WIFI_NAME)) return;
-
-        Toast.makeText(context, String.format(context.getString(R.string
-                        .toast_text_logging_to_wifi), wifiInfo.getSSID()),
-                Toast.LENGTH_LONG).show();
 
         ApplicationBase.WORKER.startWorker(new Runnable() {
             @Override
@@ -40,18 +39,13 @@ public class WifiStateReceiver extends BroadcastReceiver {
                 if (AppDataManager.isWifiWaitLogin())
                     Utils.threadSleep(Constants.WAIT_TIME_WIFI_LOGIN);
 
-                if (!WifiLogin.tryLogin(AppDataManager.getUsername(AppDataManager.Type.WIFI),
-                        AppDataManager.getPassword(AppDataManager.Type.WIFI)))
-                    return;
-
-                new Handler(context.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, String.format(context.getString(R.string
-                                        .toast_text_logged_in_wifi), wifiInfo.getSSID()),
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
+                try {
+                    WifiLogin.tryLogin(context, AppDataManager.getUsername(AppDataManager.Type.WIFI),
+                            AppDataManager.getPassword(AppDataManager.Type.WIFI),
+                            new Handler(context.getMainLooper()), wifiSSID, true);
+                } catch (IOException e) {
+                    Log.d(LOG_TAG, "onReceive", e);
+                }
             }
         }, Build.VERSION.SDK_INT >= 11 ? goAsync() : null);
 

@@ -1,7 +1,5 @@
 package cz.anty.purkynkamanager.utils.other.list.recyclerView;
 
-import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,36 +19,24 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter
 
     private static final String LOG_TAG = "RecyclerAdapter";
 
-    private final Context mContext;
-    private final Handler mHandler;
     private final int mLayoutResourceId;
-    private View mEmptyView = null;
 
-    public RecyclerAdapter(Context context, int layoutResourceId) {
-        super(context);
+    public RecyclerAdapter(int layoutResourceId) {
+        super();
         Log.d(LOG_TAG, "<init> layoutResourceId: " + layoutResourceId);
-        mContext = context;
-        mHandler = new Handler(mContext.getMainLooper());
         mLayoutResourceId = layoutResourceId;
-        updateEmptyView();
     }
 
-    public RecyclerAdapter(Context context, int layoutResourceId, Collection<? extends T> data) {
-        super(context, data);
+    public RecyclerAdapter(int layoutResourceId, Collection<? extends T> data) {
+        super(data);
         Log.d(LOG_TAG, "<init> layoutResourceId: " + layoutResourceId);
-        mContext = context;
-        mHandler = new Handler(mContext.getMainLooper());
         mLayoutResourceId = layoutResourceId;
-        updateEmptyView();
     }
 
-    public RecyclerAdapter(Context context, int layoutResourceId, T... data) {
-        super(context, data);
+    public RecyclerAdapter(int layoutResourceId, T... data) {
+        super(data);
         Log.d(LOG_TAG, "<init> layoutResourceId: " + layoutResourceId);
-        mContext = context;
-        mHandler = new Handler(mContext.getMainLooper());
         mLayoutResourceId = layoutResourceId;
-        updateEmptyView();
     }
 
     @Override
@@ -68,34 +54,6 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter
     public void onBindViewHolder(VH holder, int position) {
         Log.d(LOG_TAG, "onBindViewHolder");
         holder.onBindViewHolder(getItem(position), position);
-    }
-
-    @Override
-    protected void onDataSetChanged() {
-        updateEmptyView();
-        super.onDataSetChanged();
-    }
-
-    private void updateEmptyView() {
-        Log.d(LOG_TAG, "updateEmptyView");
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (mEmptyView != null)
-                    mEmptyView.setVisibility(getItemCount() == 0
-                            ? View.VISIBLE : View.GONE);
-            }
-        };
-        if (mContext != null)
-            if (mHandler.getLooper().getThread().equals(Thread.currentThread()))
-                runnable.run();
-            else mHandler.post(runnable);
-    }
-
-    public void setEmptyView(View emptyView) {
-        Log.d(LOG_TAG, "setEmptyView");
-        this.mEmptyView = emptyView;
-        updateEmptyView();
     }
 
     public static abstract class ItemViewHolder<I> extends RecyclerView.ViewHolder {

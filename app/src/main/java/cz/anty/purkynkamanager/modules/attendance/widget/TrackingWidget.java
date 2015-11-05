@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 
 import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.R;
@@ -13,9 +14,8 @@ import cz.anty.purkynkamanager.modules.attendance.TrackingActivity;
 import cz.anty.purkynkamanager.modules.attendance.receiver.TrackingReceiver;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.attendance.man.TrackingMansManager;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.widget.WidgetMultilineAdapter;
 import cz.anty.purkynkamanager.utils.other.list.widget.WidgetProvider;
 import cz.anty.purkynkamanager.utils.other.list.widget.WidgetService;
@@ -59,12 +59,12 @@ public class TrackingWidget extends WidgetProvider {
 
     @Override
     protected int getTopColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.colorPrimaryAS);
+        return ContextCompat.getColor(context, R.color.colorPrimaryAS);
     }
 
     @Override
     protected int getBackgroundColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.navigationBarColorAS);
+        return ContextCompat.getColor(context, R.color.navigationBarColorAS);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class TrackingWidget extends WidgetProvider {
 
     @Override
     protected boolean onStartLoading(final Context context, int[] appWidgetIds) {
-        if (getLastIntent().getBooleanExtra(EXTRA_REFRESH_MANS, true)) {
+        if (getLastIntent().getBooleanExtra(EXTRA_REFRESH_MANS, false)) {
             ApplicationBase.WORKER.startWorker(new Runnable() {
                 @Override
                 public void run() {

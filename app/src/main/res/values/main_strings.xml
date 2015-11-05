@@ -39,6 +39,7 @@
     <string name="but_login">Login</string>
     <string name="but_ok">OK</string>
     <string name="but_order">Order</string>
+    <string name="but_order_from_burza">Order from Burza</string>
     <string name="but_continue">Continue</string>
     <string name="but_save">Save</string>
     <string name="but_start">Start</string>
@@ -55,6 +56,7 @@
     <string name="but_rename">Rename</string>
     <string name="but_update">Update</string>
     <string name="but_refresh">Refresh</string>
+    <string name="but_restore">Restore</string>
     <string name="but_yes">Yes</string>
     <string name="but_no">No</string>
     <string name="but_skip">Skip</string>
@@ -65,4 +67,6 @@
     <string name="but_later">Later</string>
     <string name="but_open">Open</string>
     <string name="but_close">Close</string>
+    <string name="but_show_change_log">Show ChangeLog</string>
+    <string name="but_back">Back</string>
 </resources>

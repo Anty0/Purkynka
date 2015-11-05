@@ -7,7 +7,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.Utils;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
 import proguard.annotation.KeepClassMembers;
@@ -30,6 +31,7 @@ public class Mark implements MultilineItem {
     private final String shortLesson, longLesson, valueToShow, type, note, teacher;
     private final double value;
     private final int weight;
+    private double valueModification = 0d;
 
     Mark(Date date, String shortLesson, String longLesson, String valueToShow, double value, String type, int weight, String note, String teacher) {
         this.date = date == null ? new Date(System.currentTimeMillis()) : date;
@@ -60,6 +62,11 @@ public class Mark implements MultilineItem {
     }
 
     public String getValueToShow() {
+        return valueModification == 0d ? valueToShow :
+                String.valueOf((int) (value + valueModification));
+    }
+
+    public String getDefaultValueToShow() {
         return valueToShow;
     }
 
@@ -76,11 +83,23 @@ public class Mark implements MultilineItem {
     }
 
     public double getValue() {
+        return value + valueModification;
+    }
+
+    public double getDefaultValue() {
         return value;
     }
 
     public int getWeight() {
         return weight;
+    }
+
+    public double getValueModification() {
+        return valueModification;
+    }
+
+    public void setValueModification(double valueModification) {
+        this.valueModification = valueModification;
     }
 
     @Override
@@ -89,10 +108,11 @@ public class Mark implements MultilineItem {
                 && ((Mark) o).getDate().equals(getDate())
                 && ((Mark) o).getShortLesson().equals(getShortLesson())
                 && ((Mark) o).getLongLesson().equals(getLongLesson())
+                && ((Mark) o).getDefaultValueToShow().equals(getDefaultValueToShow())
                 && ((Mark) o).getType().equals(getType())
                 && ((Mark) o).getNote().equals(getNote())
                 && ((Mark) o).getTeacher().equals(getTeacher())
-                && ((Mark) o).getValue() == getValue()
+                && ((Mark) o).getDefaultValue() == getDefaultValue()
                 && ((Mark) o).getWeight() == getWeight();
     }
 
@@ -112,7 +132,7 @@ public class Mark implements MultilineItem {
 
     @Override
     public CharSequence getTitle(Context context, int position) {
-        return String.format(context.getString(R.string.text_mark_with_weight),
+        return Utils.getFormattedText(context, R.string.text_mark_with_weight,
                 getShortLesson(), getValueToShow(), getWeight());
     }
 

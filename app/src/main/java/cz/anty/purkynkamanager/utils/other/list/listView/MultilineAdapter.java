@@ -6,10 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Utils;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineImageItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilinePaddingItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineResourceItem;
 
 /**
  * Created by anty on 18.6.15.
@@ -72,6 +77,7 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
             convertView = inflater.inflate(layoutResourceId, parent, false);
             //convertView.setMinimumHeight(200);
             holder = new ItemDataHolder();
+            holder.imgIcon = (ImageView) convertView.findViewById(R.id.image_view);
             holder.text1 = (TextView) convertView.findViewById(R.id.text_view_title);
             holder.text2 = (TextView) convertView.findViewById(R.id.text_view_text);
             holder.layoutResourceId = layoutResourceId;
@@ -81,6 +87,13 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
         }
 
         holder = (ItemDataHolder) convertView.getTag();
+        if (holder.imgIcon != null) {
+            if (item instanceof MultilineImageItem) {
+                holder.imgIcon.setVisibility(View.VISIBLE);
+                holder.imgIcon.setImageResource(((MultilineImageItem) item)
+                        .getImageResourceId(context, position));
+            } else holder.imgIcon.setVisibility(View.GONE);
+        }
         holder.text1.setText(item.getTitle(context, position));
         CharSequence text = item.getText(context, position);
         if (text == null) {
@@ -101,7 +114,7 @@ public class MultilineAdapter<M extends MultilineItem> extends ArrayAdapter<M> {
     }
 
     static class ItemDataHolder {
-        //ImageView imgIcon;
+        ImageView imgIcon;
         TextView text1;
         TextView text2;
         //ImageView imgIcon2;

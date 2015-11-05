@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.Utils;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
 import proguard.annotation.KeepClassMembers;
@@ -86,7 +87,8 @@ public class Lesson implements MultilineItem {
 
     @Override
     public CharSequence getTitle(Context context, int position) {
-        return getShortName() + ": " + FORMAT.format(getDiameter());
+        return Utils.getFormattedText(getShortName() + ": <b>"
+                + FORMAT.format(getDiameter()) + "</b>");
     }
 
     @Override

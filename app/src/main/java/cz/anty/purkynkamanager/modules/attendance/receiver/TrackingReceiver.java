@@ -19,6 +19,7 @@ import cz.anty.purkynkamanager.modules.attendance.TrackingActivity;
 import cz.anty.purkynkamanager.modules.attendance.widget.TrackingWidget;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.attendance.AttendanceConnector;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Man;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Mans;
@@ -39,24 +40,24 @@ public class TrackingReceiver extends BroadcastReceiver {
                 List<Man> manList = Mans.parseMans(connector
                         .getSupElements(search, 1));
                 Man findMan = null;
-                int index;
-                for (index = 0; index < manList.size(); index++) {
+                for (int index = 0; index < manList.size(); index++) {
                     findMan = manList.get(index);
                     if (findMan.equals(man)) break;
                     else findMan = null;
                 }
 
                 if (findMan != null) {
+                    int index = mansManager.indexOf(man);
                     mansManager.remove(man)
-                            .add(findMan);
+                            .add(index, findMan);
 
                     if (man.isInSchool() != findMan.isInSchool()) {
                         Notification n = new NotificationCompat.Builder(context)
                                 .setContentTitle(findMan.getName() + " " + findMan.getClassString())
-                                .setContentText(String.format(Man.IsInSchoolState.IN_SCHOOL
-                                                .equals(findMan.isInSchool()) ?
-                                                context.getString(R.string.notify_text_tracked_is_in_school) :
-                                                context.getString(R.string.notify_text_tracked_is_in_not_school),
+                                .setContentText(Utils.getFormattedText(context,
+                                        Man.IsInSchoolState.IN_SCHOOL.equals(findMan.isInSchool()) ?
+                                                R.string.notify_text_tracked_is_in_school :
+                                                R.string.notify_text_tracked_is_in_not_school,
                                         findMan.getName()) + " (" + findMan.getLastEnterAsString() + ")")
                                 .setSmallIcon(R.mipmap.ic_launcher_a)
                                 .setContentIntent(PendingIntent.getActivity(context, 0,

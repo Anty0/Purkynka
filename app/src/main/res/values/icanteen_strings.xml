@@ -7,6 +7,7 @@
 
     <string name="activity_title_login_icanteen">Login to iCanteen</string>
     <string name="activity_title_icanteen_settings">iCanteen Manager Settings</string>
+    <string name="activity_title_pending_orders">Pending orders</string>
     <string name="widget_label_next_lunch">iCanteen next lunch widget</string>
 
     <string name="app_description_icanteen">ICanteen Manager is a tool that can manage and <b>ordering school lunches</b>.</string>
@@ -49,4 +50,9 @@
 
     <string name="text_nothing_ordered">Nothing ordered</string>
     <string name="text_lunch">Lunch</string>
+    <string name="text_error">Error</string>
+    <string name="text_waiting">Waiting</string>
+    <string name="text_completed">Completed</string>
+    <string name="text_to_burza">To Burza</string>
+    <string name="text_from_burza">From Burza</string>
 </resources>

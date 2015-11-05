@@ -12,6 +12,7 @@ import cz.anty.purkynkamanager.R;
  *
  * @author anty
  */
+@Deprecated
 public abstract class FirstStartPage {
 
     private final Context context;

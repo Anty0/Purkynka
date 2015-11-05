@@ -35,9 +35,9 @@ class ICConnector {
     private static final String TARGET_URL = "targetUrl";
     private static final String TARGET_URL_VALUE = "/faces/secured/main.jsp?terminal=false&amp;status=true&amp;printer=false&amp;keyboard=false";
 
-    private static final String BURZA_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/burza.jsp";//?terminal=false&keyboard=false&printer=false";
-    private static final String MAIN_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/main.jsp";//?terminal=false&keyboard=false&printer=false";
-    private static final String MONTH_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/month.jsp";//?terminal=false&keyboard=false&printer=false";
+    private static final String BURZA_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/burza.jsp?terminal=false&keyboard=false&printer=false";
+    private static final String MAIN_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/main.jsp?terminal=false&keyboard=false&printer=false";
+    private static final String MONTH_URL = "http://stravovani.sspbrno.cz:8080/faces/secured/month.jsp?terminal=false&keyboard=false&printer=false";
 
     private static final String ORDER_URL_START = "http://stravovani.sspbrno.cz:8080/faces/secured/";
 
@@ -56,6 +56,7 @@ class ICConnector {
                     .connect(LOGIN_URL)
                     .data(LOGIN_FIELD, username, PASS_FIELD, password, CHECKBOX_SAVE, CHECKBOX_SAVE_VALUE,
                             TERMINAL, TERMINAL_VALUE, TYPE, TYPE_VALUE, TARGET_URL, TARGET_URL_VALUE)
+                    .followRedirects(false)
                     .method(Connection.Method.POST)
                     .execute().cookies();
 
@@ -74,7 +75,9 @@ class ICConnector {
     }
 
     private synchronized boolean isLoggedIn(Document page) {
-        return page.select("div.login_menu").isEmpty();
+        return page.select("div.login_menu").isEmpty() &&
+                !page.select("div.topMenu").isEmpty() &&
+                page.location().contains("stravovani.sspbrno.cz");
     }
 
     public synchronized void orderLunch(String urlAdd) throws IOException {
@@ -144,6 +147,7 @@ class ICConnector {
 
             Document document = Jsoup
                     .connect(url)
+                    .followRedirects(false)
                     .cookies(loginCookies).get();
 
             lastRefresh = System.currentTimeMillis();

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,13 +14,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThreadWithSpinner;
 import cz.anty.purkynkamanager.utils.other.wifi.WifiLogin;
 import cz.anty.purkynkamanager.utils.settings.WifiSettingsActivity;
 
 public class WifiLoginActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = "WifiLoginActivity";
 
     private OnceRunThreadWithSpinner worker;
 
@@ -74,7 +80,8 @@ public class WifiLoginActivity extends AppCompatActivity {
     private void login(boolean force) {
         if (!force) {
             WifiInfo wifiInfo = ((WifiManager) getSystemService(WIFI_SERVICE)).getConnectionInfo();
-            if (!wifiInfo.getSSID().contains(WifiLogin.WIFI_NAME)) {
+            String wifiName = wifiInfo.getSSID();
+            if (wifiName == null || !wifiName.contains(WifiLogin.WIFI_NAME)) {
                 new AlertDialog.Builder(WifiLoginActivity.this, R.style.AppTheme_Dialog_W)
                         .setTitle(R.string.exception_title_wifi_login)
                         .setMessage(R.string.exception_wifi_login_no_valid_wifi)
@@ -96,11 +103,20 @@ public class WifiLoginActivity extends AppCompatActivity {
         worker.startWorker(new Runnable() {
             @Override
             public void run() {
-                if (WifiLogin.tryLogin(username, password)) {
+                boolean result;
+                try {
+                    result = WifiLogin.tryLogin(WifiLoginActivity.this, username, password,
+                            new Handler(getMainLooper()), null, false);
+                } catch (IOException e) {
+                    Log.d(LOG_TAG, "login", e);
+                    result = false;
+                }
+                if (result) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(WifiLoginActivity.this, R.string.toast_text_wifi_login_successful, Toast.LENGTH_LONG).show();
+                            Toast.makeText(WifiLoginActivity.this, R.string
+                                    .toast_text_wifi_login_successful, Toast.LENGTH_LONG).show();
                         }
                     });
                     return;

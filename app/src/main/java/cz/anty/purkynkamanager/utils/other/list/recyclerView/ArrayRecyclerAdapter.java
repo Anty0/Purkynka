@@ -1,6 +1,5 @@
 package cz.anty.purkynkamanager.utils.other.list.recyclerView;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -15,24 +14,20 @@ import java.util.Comparator;
  */
 public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    private final Context mContext;
     private final Object mLock = new Object();
-    private final ArrayList<Runnable> onDataChangeListeners = new ArrayList<>();
     private final ArrayList<T> mData = new ArrayList<>();
 
     private boolean mNotifyOnChange = true;
 
-    public ArrayRecyclerAdapter(Context context) {
-        mContext = context;
+    public ArrayRecyclerAdapter() {
+
     }
 
-    public ArrayRecyclerAdapter(Context context, Collection<? extends T> data) {
-        mContext = context;
+    public ArrayRecyclerAdapter(Collection<? extends T> data) {
         addAllItems(data);
     }
 
-    public ArrayRecyclerAdapter(Context context, T... data) {
-        mContext = context;
+    public ArrayRecyclerAdapter(T... data) {
         addAllItems(data);
     }
 
@@ -49,7 +44,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         if (mNotifyOnChange) {
             notifyItemInserted(index);
         }
-        onDataSetChanged();
     }
 
     /**
@@ -65,7 +59,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         if (mNotifyOnChange) {
             notifyItemRangeInserted(index, collection.size());
         }
-        onDataSetChanged();
     }
 
     /**
@@ -81,7 +74,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         if (mNotifyOnChange) {
             notifyItemRangeInserted(index, items.length);
         }
-        onDataSetChanged();
     }
 
     /**
@@ -97,7 +89,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         if (mNotifyOnChange) {
             notifyItemInserted(index);
         }
-        onDataSetChanged();
     }
 
     /**
@@ -112,13 +103,11 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
                 mData.remove(object);
             }
             notifyItemRemoved(index);
-            onDataSetChanged();
             return;
         }
         synchronized (mLock) {
             mData.remove(object);
         }
-        onDataSetChanged();
     }
 
     /**
@@ -132,7 +121,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         if (mNotifyOnChange) {
             notifyItemRangeRemoved(0, size);
         }
-        onDataSetChanged();
     }
 
     /**
@@ -149,26 +137,6 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
         if (mNotifyOnChange) {
             notifyItemRangeChanged(0, size);
         }
-        onDataSetChanged();
-    }
-
-    public void addOnDataSetChangedListener(Runnable listener) {
-        synchronized (onDataChangeListeners) {
-            onDataChangeListeners.add(listener);
-        }
-    }
-
-    public void removeOnDataSetChangedListener(Runnable listener) {
-        synchronized (onDataChangeListeners) {
-            onDataChangeListeners.remove(listener);
-        }
-    }
-
-    protected void onDataSetChanged() {
-        synchronized (onDataChangeListeners) {
-            for (Runnable listener : onDataChangeListeners)
-                listener.run();
-        }
     }
 
     public boolean isNotifyOnChange() {
@@ -178,7 +146,7 @@ public abstract class ArrayRecyclerAdapter<T, VH extends RecyclerView.ViewHolder
     /**
      * Control whether methods that change the list ({@link #addItem},
      * {@link #insertItem}, {@link #removeItem}, {@link #clearItems}) automatically call
-     * {@link #notifyDataSetChanged} and {@link #onDataSetChanged}.  If set to false, caller must
+     * {@link #notifyDataSetChanged}.  If set to false, caller must
      * manually call notifyDataSetChanged() to have the changes
      * reflected in the attached view.
      * <p/>

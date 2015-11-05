@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -13,7 +14,6 @@ import java.util.Calendar;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.modules.timetable.TimetableManageActivity;
 import cz.anty.purkynkamanager.modules.timetable.TimetableSelectActivity;
-import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.list.widget.WidgetProvider;
 import cz.anty.purkynkamanager.utils.other.timetable.Lesson;
 import cz.anty.purkynkamanager.utils.other.timetable.Timetable;
@@ -63,12 +63,12 @@ public class TimetableLessonWidget extends WidgetProvider {
 
     @Override
     protected int getTopColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.colorPrimaryT);
+        return ContextCompat.getColor(context, R.color.colorPrimaryT);
     }
 
     @Override
     protected int getBackgroundColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.navigationBarColorT);
+        return ContextCompat.getColor(context, R.color.navigationBarColorT);
     }
 
     @Override

@@ -23,11 +23,11 @@ import cz.anty.purkynkamanager.utils.other.attendance.AttendanceConnector;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Man;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Mans;
 import cz.anty.purkynkamanager.utils.other.attendance.man.TrackingMansManager;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.AutoLoadMultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
 import cz.anty.purkynkamanager.utils.settings.AttendanceSettingsActivity;
 

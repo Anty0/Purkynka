@@ -1,9 +1,12 @@
 package cz.anty.purkynkamanager.utils.other.icanteen.lunch.month;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
+import java.util.Date;
 import java.util.Locale;
 
+import cz.anty.purkynkamanager.R;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
 import proguard.annotation.KeepClassMembers;
@@ -21,13 +24,15 @@ import proguard.annotation.KeepName;
 public class MonthLunch {
 
     private final String name, orderUrlAdd, toBurzaUrlAdd;
+    private final Date date;
     private final BurzaState burzaState;
     private final State state;
     private boolean disabled = false;
 
-    public MonthLunch(String name, @Nullable String orderUrlAdd, State state,
+    public MonthLunch(String name, Date date, @Nullable String orderUrlAdd, State state,
                       @Nullable String toBurzaUrlAdd, @Nullable BurzaState burzaState) {
         this.name = name;
+        this.date = date;
         this.orderUrlAdd = orderUrlAdd;
         this.state = state;
         this.toBurzaUrlAdd = toBurzaUrlAdd;
@@ -36,6 +41,10 @@ public class MonthLunch {
 
     public String getName() {
         return name;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     public String getOrderUrlAdd() {
@@ -72,7 +81,8 @@ public class MonthLunch {
     public boolean equals(Object o) {
         return super.equals(o) || o instanceof MonthLunch
                 && ((MonthLunch) o).name.equals(name)
-                && ((MonthLunch) o).state.equals(state);
+                && ((MonthLunch) o).date.equals(date);
+        //&& ((MonthLunch) o).state.equals(state);
     }
 
     @Keep
@@ -94,6 +104,16 @@ public class MonthLunch {
     @KeepClassMemberNames
     public enum BurzaState {
         TO_BURZA, FROM_BURZA;
+
+        public CharSequence toCharSequence(Context context) {
+            switch (this) {
+                case TO_BURZA:
+                    return context.getText(R.string.text_to_burza);
+                case FROM_BURZA:
+                    return context.getText(R.string.text_from_burza);
+            }
+            return toString();
+        }
 
         @Override
         public String toString() {

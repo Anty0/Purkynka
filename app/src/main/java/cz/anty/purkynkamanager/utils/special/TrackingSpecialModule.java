@@ -17,7 +17,7 @@ import cz.anty.purkynkamanager.modules.attendance.receiver.TrackingReceiver;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Man;
 import cz.anty.purkynkamanager.utils.other.attendance.man.TrackingMansManager;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.MultilineSpecialItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialModule;

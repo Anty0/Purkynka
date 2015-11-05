@@ -22,6 +22,7 @@
     <string name="dialog_title_share">Share app</string>
     <string name="dialog_message_share">Please share this app to your friends :)</string>
     <string name="dialog_message_update_alert">If AppUpdater don\'t working for you, then download and install update manually from official application web page.</string>
+    <string name="dialog_message_can_not_accept_terms">Internet connection required for accept terms.</string>
 
     <string name="toast_text_download_successful">Download successful completed</string>
     <string name="toast_text_download_failed">Download failed</string>
@@ -34,5 +35,5 @@
 
     <string name="wait_text_downloading_update">Downloading update</string>
 
-    <string name="text_extra_text_share">I am using Purkynka Manager and much simplified my life and you can download it on http://anty.codetopic.eu/</string>
+    <string name="text_extra_text_share">I am using Purkynka Manager and much simplified my life and you can download it on https://www.facebook.com/aplikacepurkynka/</string>
 </resources>

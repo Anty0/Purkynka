@@ -1,23 +1,24 @@
-package cz.anty.purkynkamanager.utils.other.list.recyclerView;
+package cz.anty.purkynkamanager.utils.other.list.recyclerView.base;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.Utils;
-import cz.anty.purkynkamanager.utils.other.list.SpecialSwipeRefreshLayout;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.SpecialItemAnimator;
 
 /**
  * Created by anty on 16.10.15.
@@ -40,15 +41,22 @@ public final class RecyclerInflater {
     private static RecyclerManager setValues(Context context, View mainView,
                                              boolean useSwipeRefresh) {
         Log.d(LOG_TAG, "setValues");
-        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recyclerView);
+        SwipeRefreshLayout[] refreshLayouts = new SwipeRefreshLayout[]{
+                (SwipeRefreshLayout) mainView.findViewById(R.id.recycler_swipe_refresh_layout),
+                (SwipeRefreshLayout) mainView.findViewById(R.id.empty_swipe_refresh_layout)
+        };
+
+        EmptyRecyclerView recyclerView = (EmptyRecyclerView)
+                mainView.findViewById(R.id.recyclerView);
         //recyclerView.setHasFixedSize(true);
+        recyclerView.setFrame(refreshLayouts[0]);
+        recyclerView.setEmptyView(refreshLayouts[1]);
         recyclerView.setItemAnimator(new SpecialItemAnimator(false));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         /*recyclerView.addItemDecoration(new DividerItemDecoration(activity,
                 LinearLayoutManager.VERTICAL));*/
-        return new RecyclerManager(context, mainView, mainView.
-                findViewById(R.id.empty_view), recyclerView, (SpecialSwipeRefreshLayout)
-                mainView.findViewById(R.id.swipe_refresh_layout), useSwipeRefresh);
+        return new RecyclerManager(context, mainView,
+                recyclerView, refreshLayouts, useSwipeRefresh);
     }
 
     public interface Inflater {
@@ -65,9 +73,8 @@ public final class RecyclerInflater {
     public static class ActivityInflater implements Inflater {
 
         private final Activity mActivity;
-        private
         @LayoutRes
-        Integer mLayoutResourceId = DEFAULT_LAYOUT_ID;
+        private Integer mLayoutResourceId = DEFAULT_LAYOUT_ID;
         private boolean mUseSwipeRefresh = true;
 
         private ActivityInflater(Activity activity) {
@@ -100,9 +107,8 @@ public final class RecyclerInflater {
         private final boolean mAttachToRoot;
 
         private LayoutInflater mInflater = null;
-        private
         @LayoutRes
-        Integer mLayoutResourceId = DEFAULT_LAYOUT_ID;
+        private Integer mLayoutResourceId = DEFAULT_LAYOUT_ID;
         private boolean mUseSwipeRefresh = true;
 
         private ViewInflater(Context context, @Nullable ViewGroup parent, boolean attachToRoot) {
@@ -170,31 +176,29 @@ public final class RecyclerInflater {
         private final Context mContext;
         private final Handler mThreadHandler;
         private final View mMainView;
-        private final View mEmptyView;
         private final RecyclerView mRecyclerView;
-        private final SpecialSwipeRefreshLayout mSwipeRefreshLayout;
-        private final boolean mUseSwipeRefresh;
+        private final SwipeRefreshLayout[] mSwipeRefreshLayouts;
 
-        private RecyclerManager(Context context, View mainView, View emptyView, RecyclerView
-                recyclerView, SpecialSwipeRefreshLayout swipeRefreshLayout, boolean useSwipeRefresh) {
+        private RecyclerManager(Context context, View mainView, RecyclerView
+                recyclerView, SwipeRefreshLayout[] swipeRefreshLayouts, boolean useSwipeRefresh) {
             Log.d(LOG_TAG, "<init>");
             mContext = context;
             mThreadHandler = new Handler(context.getMainLooper());
             mMainView = mainView;
-            mEmptyView = emptyView;
             mRecyclerView = recyclerView;
-            mSwipeRefreshLayout = swipeRefreshLayout;
-            mUseSwipeRefresh = useSwipeRefresh;
+            mSwipeRefreshLayouts = swipeRefreshLayouts;
 
-            mSwipeRefreshLayout.setEnabled(mUseSwipeRefresh);
-            mSwipeRefreshLayout.setColorSchemeColors(
-                    Utils.getColor(context, R.color.colorPrimary),
-                    Utils.getColor(context, R.color.colorPrimaryAS),
-                    Utils.getColor(context, R.color.colorPrimaryIC),
-                    Utils.getColor(context, R.color.colorPrimaryT),
-                    Utils.getColor(context, R.color.colorPrimaryW)
-            );
-            if (mUseSwipeRefresh) {
+            for (SwipeRefreshLayout refreshLayout : mSwipeRefreshLayouts) {
+                refreshLayout.setEnabled(useSwipeRefresh);
+                refreshLayout.setColorSchemeColors(
+                        ContextCompat.getColor(context, R.color.colorPrimary),
+                        ContextCompat.getColor(context, R.color.colorPrimaryAS),
+                        ContextCompat.getColor(context, R.color.colorPrimaryIC),
+                        ContextCompat.getColor(context, R.color.colorPrimaryT),
+                        ContextCompat.getColor(context, R.color.colorPrimaryW)
+                );
+            }
+            /*if (mUseSwipeRefresh) {
                 mSwipeRefreshLayout.addCanChildScrollUpListener(
                         new SpecialSwipeRefreshLayout.CanChildScrollUpListener() {
                             @Override
@@ -211,7 +215,7 @@ public final class RecyclerInflater {
                             public void onExtraTouchEvent(MotionEvent ev) {
                                 mRecyclerView.onTouchEvent(ev);
                             }
-                        });
+                        });*/
                 /*mRecyclerView.addOnScrollListener(
                         new RecyclerView.OnScrollListener() {
                             @Override
@@ -247,7 +251,7 @@ public final class RecyclerInflater {
                         return gestureDetector.onTouchEvent(event);
                     }
                 });*/
-            }
+            //}
         }
 
         public Context getContext() {
@@ -260,22 +264,17 @@ public final class RecyclerInflater {
             return mMainView;
         }
 
-        public synchronized <T extends MultilineItem> RecyclerManager setAdapter(@LayoutRes int layoutResourceId, T... adapterData) {
-            return setAdapter(new MultilineRecyclerAdapter<>(mContext, layoutResourceId, adapterData));
+        public synchronized <T extends MultilineItem> RecyclerManager setAdapter
+                (@LayoutRes int layoutResourceId, T... adapterData) {
+            return setAdapter(new MultilineRecyclerAdapter<>(layoutResourceId, adapterData));
         }
 
         public synchronized <T extends MultilineItem> RecyclerManager setAdapter(T... adapterData) {
-            return setAdapter(new MultilineRecyclerAdapter<>(mContext, adapterData));
+            return setAdapter(new MultilineRecyclerAdapter<>(adapterData));
         }
 
         public synchronized RecyclerManager setAdapter(RecyclerView.Adapter adapter) {
             Log.d(LOG_TAG, "setAdapter");
-            /*if (mUseSwipeRefresh && adapter instanceof ArrayRecyclerAdapter)
-                ((ArrayRecyclerAdapter) adapter).addOnDataSetChangedListener(mUpdateSwipePost);*/
-
-            if (mEmptyView != null && adapter instanceof RecyclerAdapter)
-                ((RecyclerAdapter) adapter).setEmptyView(mEmptyView);
-
             mRecyclerView.setAdapter(adapter);
             return this;
         }
@@ -302,20 +301,24 @@ public final class RecyclerInflater {
         public synchronized RecyclerManager setOnRefreshListener
                 (SwipeRefreshLayout.OnRefreshListener listener) {
             Log.d(LOG_TAG, "setOnRefreshListener");
-            mSwipeRefreshLayout.setOnRefreshListener(listener);
+            for (SwipeRefreshLayout refreshLayout : mSwipeRefreshLayouts)
+                refreshLayout.setOnRefreshListener(listener);
             return this;
         }
 
         public synchronized RecyclerManager setRefreshing(final boolean refreshing) {
             Log.d(LOG_TAG, "setRefreshing " + refreshing);
-            if (mThreadHandler.getLooper().getThread().equals(Thread.currentThread()))
-                mSwipeRefreshLayout.setRefreshing(refreshing);
-            else mThreadHandler.post(new Runnable() {
+            final Runnable setRefreshing = new Runnable() {
                 @Override
                 public void run() {
-                    mSwipeRefreshLayout.setRefreshing(refreshing);
+                    for (SwipeRefreshLayout refreshLayout : mSwipeRefreshLayouts)
+                        refreshLayout.setRefreshing(refreshing);
                 }
-            });
+            };
+
+            if (mThreadHandler.getLooper().getThread().equals(Thread.currentThread()))
+                setRefreshing.run();
+            else mThreadHandler.post(setRefreshing);
             return this;
         }
     }

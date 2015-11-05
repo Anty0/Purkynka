@@ -9,6 +9,7 @@ import cz.anty.purkynkamanager.utils.other.FirstStartPage;
  *
  * @author anty
  */
+@Deprecated
 class PagesManager {
 
     private static final String SAVE_PAGE_KEY = "FIRST_START_PAGE";

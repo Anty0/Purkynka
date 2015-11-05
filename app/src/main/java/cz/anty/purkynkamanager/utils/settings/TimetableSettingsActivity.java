@@ -19,7 +19,7 @@ public class TimetableSettingsActivity extends AppCompatActivity {
 
         CheckBox teachersWarningsCheckBox = (CheckBox) findViewById(R.id.check_box_display_teachers_warnings);
         teachersWarningsCheckBox.setChecked(getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, MODE_PRIVATE)
-                        .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false));
+                .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, true));
         teachersWarningsCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

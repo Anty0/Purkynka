@@ -1,5 +1,6 @@
 package cz.anty.purkynkamanager.modules.sas;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import cz.anty.purkynkamanager.R;
@@ -20,12 +22,12 @@ import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.Utils;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.SpecialItemAnimator;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.sas.mark.Lesson;
 import cz.anty.purkynkamanager.utils.other.sas.mark.Mark;
 import cz.anty.purkynkamanager.utils.other.sas.mark.MarksManager;
@@ -118,7 +120,7 @@ public class SASManageActivity extends AppCompatActivity {
         if (refreshThread == null)
             refreshThread = new OnceRunThreadWithSpinner(this);
 
-        adapter = new MultilineRecyclerAdapter<>(this);
+        adapter = new MultilineRecyclerAdapter<>();
         adapter.setNotifyOnChange(false);
         recyclerManager = RecyclerInflater.inflateToActivity(this)
                 .setLayoutResourceId(R.layout.activity_sas_manage).inflate().setAdapter(adapter)
@@ -159,10 +161,11 @@ public class SASManageActivity extends AppCompatActivity {
                                 .show();
                     }
 
-                    private void markOnClick(Mark mark) {
+                    private void markOnClick(final Mark mark) {
                         String note = mark.getNote();
+                        final String title = "".equals(note) ? mark.getLongLesson() : note;
                         new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)
-                                .setTitle("".equals(note) ? mark.getLongLesson() : note)
+                                .setTitle(title)
                                 .setIcon(R.mipmap.ic_launcher_sas)
                                 .setMessage(getText(R.string.text_date) + ": " + mark.getDateAsString()
                                         + "\n" + getText(R.string.text_short_lesson_name) + ": " + mark.getShortLesson()
@@ -173,6 +176,64 @@ public class SASManageActivity extends AppCompatActivity {
                                         + "\n" + getText(R.string.text_note) + ": " + mark.getNote()
                                         + "\n" + getText(R.string.text_teacher) + ": " + mark.getTeacher())
                                 .setPositiveButton(R.string.but_ok, null)
+                                .setNeutralButton(R.string.but_edit,
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                                                    final NumberPicker picker = new NumberPicker(SASManageActivity.this);
+                                                    picker.setMaxValue(5);
+                                                    picker.setMinValue(0);
+                                                    picker.setValue((int) mark.getValue());
+
+                                                    new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)
+                                                            .setTitle(title)
+                                                            .setIcon(R.mipmap.ic_launcher_sas)
+                                                            .setView(picker)
+                                                            .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
+                                                                @SuppressLint("NewApi")
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    mark.setValueModification((double) picker.getValue() - mark.getDefaultValue());
+                                                                    if (binder != null)
+                                                                        binder.saveChanges(semester);
+                                                                    markOnClick(mark);
+                                                                }
+                                                            })
+                                                            .setNegativeButton(R.string.but_cancel, new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    markOnClick(mark);
+                                                                }
+                                                            })
+                                                            .setNeutralButton(R.string.but_restore, new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    mark.setValueModification(0d);
+                                                                    if (binder != null)
+                                                                        binder.saveChanges(semester);
+                                                                    markOnClick(mark);
+                                                                }
+                                                            })
+                                                            .setCancelable(false)
+                                                            .show();
+                                                    return;
+                                                }
+                                                new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)
+                                                        .setTitle(title)
+                                                        .setIcon(R.mipmap.ic_launcher_sas)
+                                                        .setMessage(R.string.dialog_message_unsupported_device)
+                                                        .setPositiveButton(R.string.but_ok,
+                                                                new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        markOnClick(mark);
+                                                                    }
+                                                                })
+                                                        .setCancelable(false)
+                                                        .show();
+                                            }
+                                        })
                                 .setCancelable(true)
                                 .show();
                     }
@@ -370,7 +431,7 @@ public class SASManageActivity extends AppCompatActivity {
     private void logInException() {
         Log.d(LOG_TAG, "logInException");
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog_AS)
-                .setTitle(String.format(getString(R.string.exception_title_login),
+                .setTitle(Utils.getFormattedText(this, R.string.exception_title_login,
                         AppDataManager.getUsername(AppDataManager.Type.SAS)))
                 .setMessage(R.string.exception_message_login)
                 .setPositiveButton(R.string.but_retry, new DialogInterface.OnClickListener() {

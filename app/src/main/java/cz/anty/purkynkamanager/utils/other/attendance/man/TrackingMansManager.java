@@ -102,6 +102,13 @@ public class TrackingMansManager {
         return this;
     }
 
+    public TrackingMansManager add(int index, Man man) {
+        synchronized (mans) {
+            mans.add(index, man);
+        }
+        return this;
+    }
+
     public boolean contains(Man man) {
         synchronized (mans) {
             return mans.contains(man);
@@ -134,8 +141,8 @@ public class TrackingMansManager {
             new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
                     .setTitle(man.getName())
                     .setIcon(R.mipmap.ic_launcher_a)
-                    .setMessage(String.format(context.getString(R.string
-                            .dialog_text_attendance_stop_tracking), man.getName()))
+                    .setMessage(Utils.getFormattedText(context, R.string
+                            .dialog_text_attendance_stop_tracking, man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -148,13 +155,14 @@ public class TrackingMansManager {
                     .show();
         } else {
             String name = man.getName();
-            if (name.contains("Kuchyňka") && name.contains("Jiří")) return;
+            if (name.contains("Kuchyňka") && name.contains("Jiří")
+                    || name.contains("Světlík") && name.contains("Vladimír")) return;
 
             new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
                     .setTitle(man.getName())
                     .setIcon(R.mipmap.ic_launcher_a)
-                    .setMessage(String.format(context.getString(R.string
-                            .dialog_text_attendance_tracking), man.getName()))
+                    .setMessage(Utils.getFormattedText(context, R.string
+                            .dialog_text_attendance_tracking, man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -162,7 +170,9 @@ public class TrackingMansManager {
                                 new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
                                         .setTitle(R.string.dialog_title_terms_warning)
                                         .setIcon(R.mipmap.ic_launcher_a)
-                                        .setMessage(String.format(context.getString(R.string.dialog_text_terms_attendance_tracking), man.getName()))
+                                        .setMessage(Utils.getFormattedText(context,
+                                                R.string.dialog_text_terms_attendance_tracking,
+                                                man.getName()))
                                         .setPositiveButton(R.string.but_accept, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

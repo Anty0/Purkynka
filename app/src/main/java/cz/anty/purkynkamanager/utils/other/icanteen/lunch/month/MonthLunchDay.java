@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
 import proguard.annotation.KeepClassMembers;

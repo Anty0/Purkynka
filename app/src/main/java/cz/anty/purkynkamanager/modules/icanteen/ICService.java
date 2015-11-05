@@ -3,6 +3,7 @@ package cz.anty.purkynkamanager.modules.icanteen;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
@@ -36,6 +37,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private static final String LOG_TAG = "ICService";
     private final ICBinder mBinder = new ICBinder();
     private final OnceRunThread worker = new OnceRunThread();
+    private final Object mManagerLock = new Object();
     private Handler mHandler;
     private ICManager mManager;
     private LunchesManager mLunchesManager;
@@ -71,35 +73,38 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
     private void initialize(boolean callRefresh) {
         Log.d(LOG_TAG, "initialize");
-        if (mManager != null && mManager.isConnected()) {
-            mManager.disconnect();
-        }
-
-        if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
-            mManager = new ICManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN),
-                    AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
-            try {
-                mManager.connect();
-                if (!mManager.isLoggedIn()) {
-                    throw new WrongLoginDataException();
-                }
-                cancelWrongLoginDataNotification();
-            } catch (IOException e) {
+        synchronized (mManagerLock) {
+            if (mManager != null && mManager.isConnected()) {
                 mManager.disconnect();
-                mManager = null;
-                if (e instanceof WrongLoginDataException) {
-                    onWrongLoginData();
-                    stopSelf();
-                    return;
+            }
+
+            if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
+                mManager = new ICManager(AppDataManager.getUsername(AppDataManager.Type.I_CANTEEN),
+                        AppDataManager.getPassword(AppDataManager.Type.I_CANTEEN));
+                try {
+                    mManager.connect();
+                    if (!mManager.isLoggedIn()) {
+                        throw new WrongLoginDataException();
+                    }
+                    cancelWrongLoginDataNotification();
+                } catch (IOException e) {
+                    mManager.disconnect();
+                    mManager = null;
+                    if (e instanceof WrongLoginDataException) {
+                        onWrongLoginData();
+                        stopSelf();
+                        return;
+                    }
                 }
+                if (callRefresh) {
+                    mLunchesManager.tryProcessOrders();
+                    refreshBurza(true);
+                    refreshMonth(true);
+                }
+            } else {
+                mManager = null;
+                stopSelf();
             }
-            if (callRefresh) {
-                refreshBurza(true);
-                refreshMonth(true);
-            }
-        } else {
-            mManager = null;
-            stopSelf();
         }
     }
 
@@ -129,6 +134,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
+                    if (mLunchesManager != null)
+                        mLunchesManager.tryProcessOrders();
                     ICService.this.refreshMonth(true);
                 }
             });
@@ -149,9 +156,11 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 Log.d(LOG_TAG, "onDestroy", e);
             }
 
-            if (mManager != null) {
-                mManager.disconnect();
-                mManager = null;
+            synchronized (mManagerLock) {
+                if (mManager != null) {
+                    mManager.disconnect();
+                    mManager = null;
+                }
             }
             if (mLunchesManager != null) {
                 mLunchesManager.apply();
@@ -169,10 +178,14 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean refreshBurza(boolean silent) {
         Log.d(LOG_TAG, "refreshBurza");
         try {
-            if (mLunchesManager == null) return false;
-            if (mManager == null) initialize(false);
-            BurzaLunch[] oldLunches = mLunchesManager.getBurzaLunches();
-            List<BurzaLunch> newLunches = mManager != null ? mManager.getBurza() : null;
+            if (mLunchesManager == null) throw new NullPointerException("mLunchesManager is null");
+            BurzaLunch[] oldLunches;
+            List<BurzaLunch> newLunches;
+            synchronized (mManagerLock) {
+                if (mManager == null) initialize(false);
+                oldLunches = mLunchesManager.getBurzaLunches();
+                newLunches = mManager != null ? mManager.getBurza() : null;
+            }
             mLunchesManager.setItems(newLunches != null ? newLunches.toArray(
                     new BurzaLunch[newLunches.size()]) : oldLunches);
             if (onBurzaChange != null && !Arrays
@@ -198,9 +211,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean refreshMonth(boolean silent) {
         Log.d(LOG_TAG, "refreshMonth");
         try {
-            if (mLunchesManager == null) return false;
-            if (mManager == null) initialize(false);
-            List<MonthLunchDay> newLunchDays = mManager != null ? mManager.getMonth() : null;
+            if (mLunchesManager == null) throw new NullPointerException("mLunchesManager is null");
+            List<MonthLunchDay> newLunchDays;
+            synchronized (mManagerLock) {
+                if (mManager == null) initialize(false);
+                newLunchDays = mManager != null ? mManager.getMonth() : null;
+            }
             if (newLunchDays != null) {
                 if (mLunchesManager.setItems(newLunchDays
                         .toArray(new MonthLunchDay[newLunchDays.size()]))) {
@@ -256,11 +272,13 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean orderBurza(BurzaLunch lunch) {
         Log.d(LOG_TAG, "orderBurza");
         try {
-            if (mLunchesManager == null) return false;
-            if (mManager == null) initialize(false);
-            if (mManager != null) {
-                mManager.orderBurzaLunch(lunch);
-                return true;
+            if (mLunchesManager == null) throw new NullPointerException("mLunchesManager is null");
+            synchronized (mManagerLock) {
+                if (mManager == null) initialize(false);
+                if (mManager != null) {
+                    mManager.orderBurzaLunch(lunch);
+                    return true;
+                }
             }
         } catch (Exception e) {
             Log.d(LOG_TAG, "orderBurza", e);
@@ -280,11 +298,13 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean orderMonth(MonthLunch lunch) {
         Log.d(LOG_TAG, "orderMonth");
         try {
-            if (mLunchesManager == null) return false;
-            if (mManager == null) initialize(true);
-            if (mManager != null) {
-                mManager.orderMonthLunch(lunch);
-                return true;
+            if (mLunchesManager == null) throw new NullPointerException("mLunchesManager is null");
+            synchronized (mManagerLock) {
+                if (mManager == null) initialize(true);
+                if (mManager != null) {
+                    mManager.orderMonthLunch(lunch);
+                    return true;
+                }
             }
         } catch (Exception e) {
             Log.d("ICService", "orderMonth", e);
@@ -304,11 +324,13 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     private boolean toBurzaMonth(MonthLunch lunch) {
         Log.d(LOG_TAG, "toBurzaMonth");
         try {
-            if (mLunchesManager == null) return false;
-            if (mManager == null) initialize(true);
-            if (mManager != null) {
-                mManager.toBurzaMonthLunch(lunch);
-                return true;
+            if (mLunchesManager == null) throw new NullPointerException("mLunchesManager is null");
+            synchronized (mManagerLock) {
+                if (mManager == null) initialize(true);
+                if (mManager != null) {
+                    mManager.toBurzaMonthLunch(lunch);
+                    return true;
+                }
             }
         } catch (Exception e) {
             Log.d(LOG_TAG, "toBurzaMonth", e);
@@ -337,6 +359,88 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             mLunchesManager.apply();
 
         return super.onUnbind(intent);
+    }
+
+    private static class MonthLunchOrderRequest
+            extends LunchesManager.SimpleLunchOrderRequest {
+        private final MonthLunch mMonthLunch;
+
+        MonthLunchOrderRequest(MonthLunch lunch) {
+            mMonthLunch = lunch;
+        }
+
+        @Override
+        public boolean doOrder() throws Throwable {
+            return ICSplashActivity.serviceManager != null &&
+                    ICSplashActivity.serviceManager.isConnected() &&
+                    ICSplashActivity.serviceManager.getBinder().doOrderLunch(mMonthLunch);
+        }
+
+        @Override
+        public CharSequence getTitle(Context context, int position) {
+            return context.getText(R.string.but_order) + " - " + MonthLunchDay
+                    .DATE_SHOW_FORMAT.format(mMonthLunch.getDate());
+        }
+
+        @Override
+        public CharSequence getText(Context context, int position) {
+            return super.getText(context, position) + " - " + mMonthLunch.getName();
+        }
+    }
+
+    private static class BurzaLunchOrderRequest
+            extends LunchesManager.SimpleLunchOrderRequest {
+        private final BurzaLunch mBurzaLunch;
+
+        BurzaLunchOrderRequest(BurzaLunch lunch) {
+            mBurzaLunch = lunch;
+        }
+
+        @Override
+        public boolean doOrder() throws Throwable {
+            return ICSplashActivity.serviceManager != null &&
+                    ICSplashActivity.serviceManager.isConnected() &&
+                    ICSplashActivity.serviceManager.getBinder().doOrderLunch(mBurzaLunch);
+        }
+
+        @Override
+        public CharSequence getTitle(Context context, int position) {
+            return context.getText(R.string.but_order_from_burza) + " - " + BurzaLunch
+                    .DATE_FORMAT.format(mBurzaLunch.getDate());
+        }
+
+        @Override
+        public CharSequence getText(Context context, int position) {
+            return super.getText(context, position) + " - " + mBurzaLunch.getName();
+        }
+    }
+
+    private static class MonthToBurzaLunchOrderRequest
+            extends LunchesManager.SimpleLunchOrderRequest {
+        private final MonthLunch mMonthLunch;
+
+        MonthToBurzaLunchOrderRequest(MonthLunch lunch) {
+            mMonthLunch = lunch;
+        }
+
+        @Override
+        public boolean doOrder() throws Throwable {
+            return ICSplashActivity.serviceManager != null &&
+                    ICSplashActivity.serviceManager.isConnected() &&
+                    ICSplashActivity.serviceManager.getBinder().doToBurzaMonthLunch(mMonthLunch);
+        }
+
+        @Override
+        public CharSequence getTitle(Context context, int position) {
+            return context.getText(R.string.text_to_burza) + "/" +
+                    context.getText(R.string.text_from_burza) + " - " +
+                    MonthLunchDay.DATE_SHOW_FORMAT.format(mMonthLunch.getDate());
+        }
+
+        @Override
+        public CharSequence getText(Context context, int position) {
+            return super.getText(context, position) + " - " + mMonthLunch.getName();
+        }
     }
 
     public class ICBinder extends Binder {
@@ -393,35 +497,82 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             });
         }
 
-        public Thread orderLunch(final BurzaLunch lunch) {
+        public Thread processOrders() {
+            if (mLunchesManager == null) {
+                Toast.makeText(ICService.this,
+                        R.string.toast_text_can_not_order_lunch,
+                        Toast.LENGTH_LONG).show();
+                return null;
+            }
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    orderBurza(lunch);
+                    if (mLunchesManager.getLunchOrderRequests()
+                            .length <= 0) return;
+                    mLunchesManager.tryProcessOrders();
+                    ICService.this.refreshMonth(false);
                     ICService.this.refreshBurza(false);
-                    ICService.this.refreshMonth(false);
                 }
             });
         }
 
-        public Thread orderLunch(final MonthLunch lunch) {
-            return worker.startWorker(new Runnable() {
-                @Override
-                public void run() {
-                    orderMonth(lunch);
-                    ICService.this.refreshMonth(false);
-                }
-            });
+        public LunchesManager.LunchOrderRequest[] getOrderRequests() {
+            if (mLunchesManager == null) return new LunchesManager.LunchOrderRequest[0];
+            return mLunchesManager.getLunchOrderRequests();
         }
 
-        public Thread toBurzaMonthLunch(final MonthLunch lunch) {
-            return worker.startWorker(new Runnable() {
-                @Override
-                public void run() {
-                    toBurzaMonth(lunch);
-                    ICService.this.refreshMonth(false);
-                }
-            });
+        public void removeOrderRequest(LunchesManager.LunchOrderRequest request) {
+            if (mLunchesManager != null)
+                mLunchesManager.removeLunchOrderRequest(request);
+        }
+
+        public void orderLunch(final BurzaLunch lunch) {
+            if (mLunchesManager == null) {
+                Toast.makeText(ICService.this,
+                        R.string.toast_text_can_not_order_lunch,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+            mLunchesManager.addLunchOrderRequest(new BurzaLunchOrderRequest(lunch));
+            processOrders();
+        }
+
+        public void orderLunch(final MonthLunch lunch) {
+            if (mLunchesManager == null) {
+                Toast.makeText(ICService.this,
+                        R.string.toast_text_can_not_order_lunch,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+            mLunchesManager.addLunchOrderRequest(new MonthLunchOrderRequest(lunch));
+            processOrders();
+        }
+
+        public void toBurzaMonthLunch(final MonthLunch lunch) {
+            if (mLunchesManager == null) {
+                Toast.makeText(ICService.this,
+                        R.string.toast_text_can_not_order_lunch,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+            mLunchesManager.addLunchOrderRequest(new MonthToBurzaLunchOrderRequest(lunch));
+            processOrders();
+        }
+
+        private boolean doOrderLunch(final BurzaLunch lunch) {
+            return orderBurza(lunch);
+        }
+
+        private boolean doOrderLunch(final MonthLunch lunch) {
+            return orderMonth(lunch);
+        }
+
+        private boolean doToBurzaMonthLunch(final MonthLunch lunch) {
+            return toBurzaMonth(lunch);
+        }
+
+        public boolean isPendingOrders() {
+            return mLunchesManager != null && mLunchesManager.isPendingOrders();
         }
 
         public void startBurzaChecker(@NonNull final BurzaLunchSelector selector) {

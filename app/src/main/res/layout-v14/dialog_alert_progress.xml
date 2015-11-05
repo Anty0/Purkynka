@@ -14,6 +14,7 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/alert_dialog_body"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
@@ -22,16 +23,18 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <ProgressBar
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
         android:id="@+id/progress"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="1dip"
         android:layout_marginEnd="10dip"
         android:layout_marginStart="10dip"
-        android:layout_marginTop="12dip" />
+        android:layout_marginTop="12dip"
+        android:indeterminate="true"
+        app:mpb_progressStyle="horizontal" />
 
     <TextView
         android:id="@+id/progress_percent"

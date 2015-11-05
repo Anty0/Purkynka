@@ -25,6 +25,7 @@ import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.SpecialItemAnimator;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThreadWithSpinner;
 
+@Deprecated
 public class FirstStartActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOG_TAG = "FirstStartActivity";

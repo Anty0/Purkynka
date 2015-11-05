@@ -2,13 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "cz.anty.purkynkamanager"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 33
-        versionName '3.5.3'
+        versionCode 34
+        versionName '3.6.0'
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
@@ -23,13 +25,13 @@ android {
             shrinkResources true
         }
         debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable true
             jniDebuggable false
             renderscriptDebuggable false
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            zipAlignEnabled true
             renderscriptOptimLevel 10
+            zipAlignEnabled true
             shrinkResources false
         }
     }
@@ -47,4 +49,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
     compile 'com.infstory:proguard-annotations:1.0.2'
+    compile 'me.zhanghai.android.materialprogressbar:library:1.1.4'
 }

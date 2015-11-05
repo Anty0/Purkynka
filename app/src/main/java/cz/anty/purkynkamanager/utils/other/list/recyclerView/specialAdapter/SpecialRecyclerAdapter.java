@@ -1,6 +1,5 @@
 package cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -23,16 +22,16 @@ public class SpecialRecyclerAdapter extends RecyclerAdapter<SpecialItem,
 
     private static final int LAYOUT_RESOURCE_ID = R.layout.special_item_layout;
 
-    public SpecialRecyclerAdapter(Context context) {
-        super(context, LAYOUT_RESOURCE_ID);
+    public SpecialRecyclerAdapter() {
+        super(LAYOUT_RESOURCE_ID);
     }
 
-    public SpecialRecyclerAdapter(Context context, Collection<? extends SpecialItem> data) {
-        super(context, LAYOUT_RESOURCE_ID, data);
+    public SpecialRecyclerAdapter(Collection<? extends SpecialItem> data) {
+        super(LAYOUT_RESOURCE_ID, data);
     }
 
-    public SpecialRecyclerAdapter(Context context, SpecialItem... data) {
-        super(context, LAYOUT_RESOURCE_ID, data);
+    public SpecialRecyclerAdapter(SpecialItem... data) {
+        super(LAYOUT_RESOURCE_ID, data);
     }
 
     @Override

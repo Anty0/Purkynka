@@ -10,6 +10,7 @@
 
     <string name="list_item_title_add_timetable">Add Timetable</string>
     <string name="list_item_text_click_to_edit">%1$d. Click to edit</string>
+    <string name="list_item_text_lesson_no_position">%2$s in %3$s</string>
     <string name="list_item_text_lesson">%1$d. %2$s in %3$s</string>
     <string name="list_item_text_no_actual_lesson">You are free now :)</string>
     <string name="list_item_text_no_next_lesson">No next lesson</string>

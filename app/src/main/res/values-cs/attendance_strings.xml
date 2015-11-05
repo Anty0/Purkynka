@@ -24,7 +24,7 @@
     <string name="dialog_text_attendance_stop_tracking">Opravdu si přejete odebrat \"%1$s\" ze sledovaných?</string>
     <string name="dialog_text_attendance_can_not_start_tracking">Pokud chcete začít někoho sledovat, musíte být (<b>z důvodů bezpečnosti</b>) nejprve <b>přihlášený</b> do Prohlížeče iSAS.</string>
     <string name="dialog_title_tracking_widget_alert"><b>Widget</b> Sledovaných lidí</string>
-    <string name="dialog_message_tracking_widget_alert">Nyní si můžete <b>přidat</b> <b>Widget Sledovaných lidí</b> na svou domovskou obrazovku, budete tak vždy vidět zda jsou sledovaní lidé ve škole, aniž byste museli chodit do aplikace. :)</string>
+    <string name="dialog_message_tracking_widget_alert">Nyní si můžete <b>přidat</b> <b>Widget Sledovaných lidí</b> na svou domovskou obrazovku, budete tak vždy vidět zda jsou sledovaní lidé ve škole, aniž byste museli chodit do aplikace.</string>
 
     <string name="notify_text_tracked_is_in_school">%1$s přišel do školy</string>
     <string name="notify_text_tracked_is_in_not_school">%1$s opustil školu</string>

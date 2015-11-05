@@ -25,11 +25,11 @@ import cz.anty.purkynkamanager.modules.timetable.receiver.TimetableScheduleRecei
 import cz.anty.purkynkamanager.modules.timetable.widget.TimetableLessonWidget;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.Utils;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.listView.MultilineAdapter;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThreadWithSpinner;
 import cz.anty.purkynkamanager.utils.other.timetable.Timetable;
 import cz.anty.purkynkamanager.utils.other.timetable.TimetableConnector;
@@ -56,7 +56,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
         if (timetableManager == null)
             timetableManager = new TimetableManager(this);
 
-        adapter = new MultilineRecyclerAdapter<>(this);
+        adapter = new MultilineRecyclerAdapter<>();
         RecyclerInflater.inflateToActivity(this).useSwipeRefresh(false).inflate().setAdapter(adapter)
                 .setItemTouchListener(new RecyclerItemClickListener.ClickListener() {
                     @Override

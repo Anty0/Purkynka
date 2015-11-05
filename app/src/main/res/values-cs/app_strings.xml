@@ -22,6 +22,7 @@
     <string name="dialog_title_share">Sdílejte aplikaci</string>
     <string name="dialog_message_share">Prsím sdílej tuto aplikaci třeba na facebooku, ať má každý tu možnost, vyzkoušet si ji :)</string>
     <string name="dialog_message_update_alert">Pokud automatický aktualizovátor nefunguje, tak si stáhni a nainstaluj aktualizaci manuálně z oficiálních webových stránek aplikace.</string>
+    <string name="dialog_message_can_not_accept_terms">Pro příjmutí podmínek používání aplikace je vyžadováno připojení k internetu.</string>
 
     <string name="toast_text_download_successful">Stahování úspěšně dokončeno</string>
     <string name="toast_text_download_failed">Chyba stahování</string>
@@ -34,5 +35,5 @@
 
     <string name="wait_text_downloading_update">Stahuji aktualizaci</string>
 
-    <string name="text_extra_text_share">Používám aplikaci Purkyňka Manager a hodně mi zjednodušila život i ty si ji můžeš stáhnout na stránkách http://anty.codetopic.eu/</string>
+    <string name="text_extra_text_share">Používám aplikaci Purkyňka Manager a hodně mi zjednodušila život i ty si ji můžeš stáhnout na stránkách https://www.facebook.com/aplikacepurkynka/</string>
 </resources>

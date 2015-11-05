@@ -14,11 +14,11 @@ import android.widget.Toast;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
-import cz.anty.purkynkamanager.utils.other.list.listView.TextMultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.service.ServiceManager;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
 
@@ -83,7 +83,7 @@ public class ICBurzaActivity extends AppCompatActivity {
         if (refreshThread == null)
             refreshThread = new OnceRunThread(this);
 
-        adapter = new MultilineRecyclerAdapter<>(this);
+        adapter = new MultilineRecyclerAdapter<>();
         recyclerManager = RecyclerInflater.inflateToActivity(this).inflate().setAdapter(adapter)
                 .setItemTouchListener(new RecyclerItemClickListener.SimpleClickListener() {
                     @Override

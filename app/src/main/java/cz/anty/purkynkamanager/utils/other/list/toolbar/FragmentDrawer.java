@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import cz.anty.purkynkamanager.R;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 
 /**
  * Created by anty on 30.9.15.
@@ -44,8 +44,8 @@ public class FragmentDrawer extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new MultilineRecyclerAdapter<>(getContext(),
-                R.layout.base_list_item_multi_line_text);
+        adapter = new MultilineRecyclerAdapter<>
+                (R.layout.base_list_item_multi_line_image_text);
     }
 
     @Override

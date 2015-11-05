@@ -172,8 +172,13 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
                 List<Mark> oldMarks = Arrays.asList(marks.get(semester));
                 List<Mark> changes = new ArrayList<>();
                 for (Mark mark : newMarks) {
-                    if (!oldMarks.contains(mark))
+                    int index = oldMarks.indexOf(mark);
+                    if (index == -1) {
                         changes.add(mark);
+                        continue;
+                    }
+                    mark.setValueModification(oldMarks
+                            .get(index).getValueModification());
                 }
                 //System.out.println("old: " + marks.get(semester).length + " new: " + newMarks.size());
                 marks.clear(semester);
@@ -208,7 +213,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         return updateWidget;
     }
 
-    private void onMarksChange(List<Mark> changedMarks) {
+    private void onMarksChange(@Nullable List<Mark> changedMarks) {
         Log.d("SASManagerService", "onMarksChange");
         if (onMarksChange != null)
             onMarksChange.run();
@@ -216,6 +221,8 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
 
         if (!AppDataManager.isSASMarksAutoUpdate())
             return;
+
+        if (changedMarks == null) return;
 
         StringBuilder builderBig = new StringBuilder();
         builderBig.append(changedMarks.get(0));
@@ -361,6 +368,11 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         public String getMarksAsString(MarksManager.Semester semester) throws InterruptedException {
             waitToWorkerStop();
             return marks.toString(semester);
+        }
+
+        public void saveChanges(MarksManager.Semester semester) {
+            marks.apply(semester);
+            onMarksChange(null);
         }
 
     }

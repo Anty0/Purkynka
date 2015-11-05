@@ -1,4 +1,4 @@
-package cz.anty.purkynkamanager.utils.other.list;
+package cz.anty.purkynkamanager.utils.other.list.recyclerView.base;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
  *
  * @author anty
  */
+@Deprecated
 public class SpecialSwipeRefreshLayout extends SwipeRefreshLayout {
 
     private static final String LOG_TAG = "SpecialSwipeRefreshLayout";

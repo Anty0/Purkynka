@@ -11,6 +11,7 @@ import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.MultilineSpecialItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialItem;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.specialAdapter.SpecialModule;
@@ -113,10 +114,10 @@ public class UpdateSpecialModule extends SpecialModule {
         protected CharSequence getText() {
             Context context = getContext();
             StringBuilder textData = new StringBuilder();
-            textData.append(String.format(context.getString(R.string
-                    .notify_text_update_old), BuildConfig.VERSION_NAME))
+            textData.append(Utils.getFormattedText(context, R.string
+                    .notify_text_update_old, BuildConfig.VERSION_NAME))
                     .append("\n")
-                    .append(String.format(context.getString(R.string.notify_text_update_new),
+                    .append(Utils.getFormattedText(context, R.string.notify_text_update_new,
                             UpdateReceiver.getLatestName(context)));
             if (isShowDescription())
                 textData.append("\n\n").append(context.getString(R.string
@@ -128,8 +129,7 @@ public class UpdateSpecialModule extends SpecialModule {
         @Override
         public void onClick() {
             Context context = getContext();
-            context.startActivity(new Intent(context, UpdateActivity.class)
-                    .putExtra(UpdateActivity.EXTRA_SKIP_DIALOG, isUpdateAvailable()));
+            context.startActivity(new Intent(context, UpdateActivity.class));
         }
 
         @Override

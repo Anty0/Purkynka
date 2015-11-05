@@ -17,6 +17,7 @@ import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.update.UpdateConnector;
 
 public class UpdateReceiver extends BroadcastReceiver {
@@ -44,10 +45,13 @@ public class UpdateReceiver extends BroadcastReceiver {
             notificationManager.notify(Constants.NOTIFICATION_ID_UPDATE,
                     new NotificationCompat.Builder(context)
                             .setContentTitle(context.getText(R.string.notify_title_update_available))
-                            .setContentText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)))
+                            .setContentText(Utils.getFormattedText(context, R.string
+                                    .notify_text_update_new, getLatestName(context)))
                             .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(String.format(context.getString(R.string.notify_text_update_new), getLatestName(context)) + "\n"
-                                            + String.format(context.getString(R.string.notify_text_update_old), BuildConfig.VERSION_NAME)))
+                                    .bigText(Utils.getFormattedText(context, R.string
+                                            .notify_text_update_new, getLatestName(context)) + "\n"
+                                            + Utils.getFormattedText(context, R.string
+                                            .notify_text_update_old, BuildConfig.VERSION_NAME)))
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentIntent(pendingIntent)
                             .setAutoCancel(false)

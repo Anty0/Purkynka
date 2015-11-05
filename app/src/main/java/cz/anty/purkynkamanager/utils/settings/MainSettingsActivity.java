@@ -55,7 +55,7 @@ public class MainSettingsActivity extends AppCompatActivity {
             }
         });
 
-        final CheckBox firstStart = (CheckBox) findViewById(R.id.check_box_first_start);
+        /*final CheckBox firstStart = (CheckBox) findViewById(R.id.check_box_first_start);
         firstStart.setChecked(preferences.getInt(Constants.SETTING_NAME_FIRST_START, -1) == -1);
         firstStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +69,13 @@ public class MainSettingsActivity extends AppCompatActivity {
                 startActivity(getBaseContext().getPackageManager()
                         .getLaunchIntentForPackage(getBaseContext().getPackageName())
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        });*/
+
+        findViewById(R.id.button_show_change_log).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.generateChangeLogDialog(MainSettingsActivity.this, null);
             }
         });
 

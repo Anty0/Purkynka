@@ -22,6 +22,7 @@
 
     <string name="dialog_title_sas_widget_alert">iSAS <b>Widget</b></string>
     <string name="dialog_message_sas_widget_alert">Nyní si můžete <b>přidat</b> <b>iSAS Widget</b> na svou domovskou obrazovku, budete tak mít své poslední známky <b>vždy po ruce</b>.</string>
+    <string name="dialog_message_unsupported_device">Vaše zařízení nepodporuje tuto funkci.</string>
 
     <string name="text_date">Datum</string>
     <string name="text_logo">logo</string>
@@ -32,7 +33,7 @@
         <item quantity="few">%1$d Známky</item>
         <item quantity="other">%1$d Známek</item>
     </plurals>
-    <string name="text_mark_with_weight">%1$s: %2$s s vahou %3$d</string>
+    <string name="text_mark_with_weight">%1$s: &lt;b>%2$s&lt;/b> s vahou %3$d</string>
     <string name="text_value">Známka</string>
     <string name="text_weight">Váha</string>
     <string name="text_type">Typ</string>
@@ -53,7 +54,7 @@
 
     <string name="special_item_title_bad_lesson_diameter">Špatný průměr v %1$s (%2$s)</string>
 
-    <plurals name="notify_title_new_mark">
+    <plurals name="notify_title_new_marks">
         <item quantity="one">%1$d nová Známka</item>
         <item quantity="few">%1$d nové Známky</item>
         <item quantity="other">%1$d nových Známek</item>

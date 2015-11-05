@@ -12,8 +12,8 @@ import java.util.Comparator;
 
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.SpecialItemAnimator;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.special.ICSpecialModule;
 import cz.anty.purkynkamanager.utils.special.SASSpecialModule;
 import cz.anty.purkynkamanager.utils.special.SFbSpecialModule;
@@ -51,7 +51,7 @@ public class SpecialModuleManager {
         mShowEnabled = showEnabled;
         mPreferences = context.getSharedPreferences
                 (Constants.SETTINGS_NAME_MODULES, Context.MODE_PRIVATE);
-        mAdapter = new SpecialRecyclerAdapter(context);
+        mAdapter = new SpecialRecyclerAdapter();
     }
 
     public static SpecialModuleManager getInstance(Context context, boolean showEnabled) {
@@ -199,6 +199,10 @@ public class SpecialModuleManager {
 
     public void refreshItems() {
         synchronized (mAdapter) {
+            SpecialItem firstItem = null;
+            if (!mAdapter.isEmpty())
+                firstItem = mAdapter.getItem(0);
+
             Log.d(LOG_TAG, "refreshItems");
             ArrayList<SpecialItem> items = mShowEnabled
                     ? getAllEnabledItems() : getAllDisabledItems();
@@ -258,6 +262,11 @@ public class SpecialModuleManager {
                     mAdapter.notifyItemMoved(from, to);
             }*/
             //mAdapter.notifyDataSetChanged();
+
+            if (firstItem != null && !mAdapter.isEmpty() &&
+                    !mAdapter.getItem(0).equals(firstItem)) {
+                mRecyclerManager.getRecyclerView().smoothScrollToPosition(0);
+            }
         }
     }
 }

@@ -13,13 +13,13 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.Utils;
-import cz.anty.purkynkamanager.utils.other.list.listView.MultilineItem;
+import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 
 /**
  * Created by anty on 23.10.15.
@@ -78,12 +78,12 @@ public abstract class WidgetProvider extends AppWidgetProvider {
 
     @ColorInt
     protected int getTopColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.colorPrimary);
+        return ContextCompat.getColor(context, R.color.colorPrimary);
     }
 
     @ColorInt
     protected int getBackgroundColor(Context context, int[] appWidgetIds) {
-        return Utils.getColor(context, R.color.navigationBarColor);
+        return ContextCompat.getColor(context, R.color.navigationBarColor);
     }
 
     protected PendingIntent getRefreshPendingIntent(Context context, int[] appWidgetIds) {

@@ -19,6 +19,7 @@ import cz.anty.purkynkamanager.modules.timetable.TimetableSelectActivity;
 import cz.anty.purkynkamanager.modules.timetable.widget.TimetableLessonWidget;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.attendance.AttendanceConnector;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Man;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Mans;
@@ -43,7 +44,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
         int lessonIndex = intent.getIntExtra(LESSON_INDEX, -1);
         if (day != -1 && lessonIndex != -1) {
             if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
-                    .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, false)) {
+                    .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, true)) {
                 testSupplementation(context, day, lessonIndex);
             }
             if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
@@ -73,13 +74,13 @@ public class AttendanceReceiver extends BroadcastReceiver {
                     .setContentIntent(PendingIntent.getActivity(context, 0,
                             new Intent(context, TimetableManageActivity.class).putExtra(
                                     TimetableManageActivity.EXTRA_TIMETABLE_NAME, timetable.getName()), 0))
-                    .setAutoCancel(true)
+                    .setAutoCancel(false)
                     .setDefaults(Notification.DEFAULT_VIBRATE)
-                            //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                     .build();
 
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
                     .notify(Constants.NOTIFICATION_ID_TIMETABLE_LESSON + i, n);
+            // TODO: 04.11.2015 better lesson notifications system
 
             if (i < 10) i++;
             else return;
@@ -132,10 +133,10 @@ public class AttendanceReceiver extends BroadcastReceiver {
                         }
                         if (man != null && Man.IsInSchoolState.NOT_IN_SCHOOL.equals(man.isInSchool())) {
                             Notification n = new NotificationCompat.Builder(context)
-                                    .setContentTitle(String.format(context.getString(R.string
-                                            .notify_title_substitution), lesson.getShortName()))
-                                    .setContentText(String.format(context.getString(R.string
-                                            .notify_text_teacher_is_not_here), man.getName()))
+                                    .setContentTitle(Utils.getFormattedText(context, R.string
+                                            .notify_title_substitution, lesson.getShortName()))
+                                    .setContentText(Utils.getFormattedText(context, R.string
+                                            .notify_text_teacher_is_not_here, man.getName()))
                                     .setSmallIcon(R.mipmap.ic_launcher_t)
                                     .setContentIntent(PendingIntent.getActivity(context, 0,
                                             new Intent(context, TimetableManageActivity.class).putExtra(
@@ -147,6 +148,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
 
                             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
                                     .notify(Constants.NOTIFICATION_ID_TEACHERS_ATTENDANCE + finalI, n);
+                            // TODO: 04.11.2015 auto hide notification on lesson end
 
                             context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE,
                                     Context.MODE_PRIVATE).edit().putLong(timetable.getName()

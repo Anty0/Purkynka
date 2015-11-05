@@ -79,9 +79,8 @@ public class TermsFirstStartPage extends FirstStartPage {
                 CharSequence terms;
                 boolean error = false;
                 try {
-                    terms = UpdateConnector.getLatestTerms(context.getString(R.string.language));
-                    if (((String) terms).toLowerCase().contains("<html>"))
-                        throw new IOException("Wrong page loaded");
+                    terms = UpdateConnector.getLatestTerms(context
+                            .getString(R.string.language));
                 } catch (IOException e) {
                     Log.d(LOG_TAG, "updateTerms", e);
                     terms = context.getText(R.string.text_terms);

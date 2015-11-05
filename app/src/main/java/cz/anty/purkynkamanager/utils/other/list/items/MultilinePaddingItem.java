@@ -1,4 +1,4 @@
-package cz.anty.purkynkamanager.utils.other.list.listView;
+package cz.anty.purkynkamanager.utils.other.list.items;
 
 import android.content.Context;
 
