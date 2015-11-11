@@ -1,5 +1,6 @@
 # Aplikace Purkyňka
 Android aplikace pro správu několika služeb na Střední průmyslové škole elektrotechnické a informačních technologií Brno.
+
 Např.:
  - Správce iSAS
  - Automatické přihlašování k Wi-Fi
