@@ -20,6 +20,7 @@ import cz.anty.purkynkamanager.utils.other.FirstStartPage;
  *
  * @author anty
  */
+@Deprecated
 public class ICFirstStartPage extends FirstStartPage {
 
     private final LinearLayout linearLayout;

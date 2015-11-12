@@ -9,7 +9,7 @@ import android.content.Intent;
  *
  * @author anty
  */
-class TimetableNotificationReceiver extends BroadcastReceiver {
+public class TimetableNotificationReceiver extends BroadcastReceiver {
 
     private static final String LOG_TAG = "TeacherAttendanceReceiver";
 

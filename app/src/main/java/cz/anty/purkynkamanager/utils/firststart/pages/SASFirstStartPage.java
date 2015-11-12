@@ -21,6 +21,7 @@ import cz.anty.purkynkamanager.utils.other.FirstStartPage;
  *
  * @author anty
  */
+@Deprecated
 public class SASFirstStartPage extends FirstStartPage {
 
     private final LinearLayout linearLayout;

@@ -18,6 +18,7 @@ import cz.anty.purkynkamanager.utils.other.Utils;
  *
  * @author anty
  */
+@Deprecated
 public class WelcomeFirstStartPage extends FirstStartPage {
 
     public WelcomeFirstStartPage(Context context) {

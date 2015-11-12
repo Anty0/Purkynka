@@ -28,6 +28,8 @@ public class Constants {
     public static final long WAIT_TIME_SAS_MARKS_REFRESH = 1000 * 60 * 5;
     public static final long WAIT_TIME_WIFI_LOGIN = 500;
     //
+    public static final int CONNECTION_TIMEOUT_SAS = 1000 * 20;
+    //
     public static final long REPEAT_TIME_UPDATE = 1000 * 60 * 60 * 5;
     public static final long REPEAT_TIME_SAS_MARKS_UPDATE = 1000 * 60 * 60 * 3;
     //public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;

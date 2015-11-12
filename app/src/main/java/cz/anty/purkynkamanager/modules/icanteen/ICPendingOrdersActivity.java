@@ -61,6 +61,8 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
                         processOrders();
                     }
                 });
+
+        update();
     }
 
     private void update() {

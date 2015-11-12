@@ -22,6 +22,7 @@ import cz.anty.purkynkamanager.utils.other.update.UpdateConnector;
  *
  * @author anty
  */
+@Deprecated
 public class TermsFirstStartPage extends FirstStartPage {
 
     private static final String LOG_TAG = "TermsFirstStartPage";

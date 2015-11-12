@@ -42,11 +42,12 @@ class SASConnector {
 
     private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {
         if (depth >= Constants.MAX_TRY) throw last;
-        Log.d(LOG_TAG, "login");// TODO: 11.11.2015 check if working (no 3 attempts)
+        Log.d(LOG_TAG, "login");
         try {
             return Jsoup
                     .connect(LOGIN_URL)
                     .data(LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
+                    .timeout(Constants.CONNECTION_TIMEOUT_SAS)
                     .method(Connection.Method.POST)
                     .validateTLSCertificates(false)
                     .execute().cookies();
@@ -82,6 +83,7 @@ class SASConnector {
                     .connect(MARKS_URL)
                     .followRedirects(false)
                     .data(SEMESTER, semester.getValue().toString(), SHORT_BY, SHORT_BY_DATE)
+                    .timeout(Constants.CONNECTION_TIMEOUT_SAS)
                     .method(Connection.Method.GET)
                     .validateTLSCertificates(false)
                     .cookies(loginCookies).get();

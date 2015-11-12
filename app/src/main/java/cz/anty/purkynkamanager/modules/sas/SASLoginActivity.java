@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -71,6 +72,7 @@ public class SASLoginActivity extends AppCompatActivity {
 
         ((EditText) findViewById(R.id.edit_username)).setText(AppDataManager.getUsername(AppDataManager.Type.SAS));
         ((EditText) findViewById(R.id.edit_password)).setText(AppDataManager.getPassword(AppDataManager.Type.SAS));
+        ((TextView) findViewById(R.id.text_view_saved_login_attempts)).setText("");// TODO: 12.11.2015 show here number of successful login attempts
 
         if (saveThread == null)
             saveThread = new OnceRunThreadWithSpinner(this);

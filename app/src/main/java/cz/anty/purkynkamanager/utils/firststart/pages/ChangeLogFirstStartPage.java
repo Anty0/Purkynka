@@ -20,6 +20,7 @@ import cz.anty.purkynkamanager.utils.other.update.UpdateConnector;
  *
  * @author anty
  */
+@Deprecated
 public class ChangeLogFirstStartPage extends FirstStartPage {
 
     private static final String LOG_TAG = "ChangeLogFirstStartPage";

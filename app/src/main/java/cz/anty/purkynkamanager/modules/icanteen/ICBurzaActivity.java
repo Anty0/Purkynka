@@ -181,6 +181,7 @@ public class ICBurzaActivity extends AppCompatActivity {
             update();
             return true;
         }
+        // TODO: 12.11.2015 add button show credit and add logic to show warning about no credit to order lunch
 
         return super.onOptionsItemSelected(item);
     }

@@ -191,6 +191,7 @@ public abstract class WidgetProvider extends AppWidgetProvider {
             remoteViews.setRemoteAdapter(R.id.content_list_view, widgetIntent);
         else {
             for (int appWidgetId : appWidgetIds) {
+                //noinspection deprecation
                 remoteViews.setRemoteAdapter(appWidgetId, R.id.content_list_view, widgetIntent);
             }
         }

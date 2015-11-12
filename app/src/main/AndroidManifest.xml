@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="cz.anty.purkynkamanager">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -13,7 +12,7 @@
     <!-- <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" /> -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-sdk tools:overrideLibrary="me.zhanghai.android.materialprogressbar" />
+    <!--<uses-sdk tools:overrideLibrary="me.zhanghai.android.materialprogressbar" />-->
 
     <application
         android:name=".ApplicationBase"
@@ -329,6 +328,12 @@
 
         <receiver
             android:name=".modules.timetable.receiver.TeacherAttendanceReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher_t"
+            android:theme="@style/AppTheme.T" />
+        <receiver
+            android:name=".modules.timetable.receiver.TimetableNotificationReceiver"
             android:enabled="true"
             android:exported="false"
             android:icon="@mipmap/ic_launcher_t"
