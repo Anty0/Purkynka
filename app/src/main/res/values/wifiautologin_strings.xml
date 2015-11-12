@@ -5,7 +5,7 @@
     <string name="activity_title_wifi_login">Login to Wi-Fi auto Login</string>
     <string name="activity_title_wifi_settings">Wi-Fi auto Login Settings</string>
 
-    <string name="app_description_wifi">Wi-Fi auto Login is simple tool which <b>automatically</b> logs in to the school <b>WIFI</b> so you have more time to surf.</string>
+    <string name="app_description_wifi">Wi-Fi auto Login is simple tool which <b>automatically</b> logs in to the school <b>WIFI</b>, so you have more time to surf.</string>
 
     <string name="exception_title_wifi_login">Cannot login</string>
     <string name="exception_wifi_login_wrong_login_or_wifi"><b>Wrong</b> login or password or you are still logged in or you are connected to wrong WIFI.</string>

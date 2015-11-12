@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.R;
+import cz.anty.purkynkamanager.modules.icanteen.ICService;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
@@ -24,12 +24,15 @@ import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
  */
 public class LunchesManager {
 
+    private static final String LOG_TAG = "LunchesManager";
     private static final int LUNCHES_SAVE_VERSION = 2;
 
     private final Context context;
     private final List<MonthLunchDay> mMonthLunches = new ArrayList<>();
     private final List<BurzaLunch> mBurzaLunches = new ArrayList<>();
-    private final List<LunchOrderRequest> mOrderRequests = new ArrayList<>();
+    private final List<ICService.BurzaLunchOrderRequest> mBurzaOrderRequests = new ArrayList<>();
+    private final List<ICService.MonthLunchOrderRequest> mMonthOrderRequests = new ArrayList<>();
+    private final List<ICService.MonthToBurzaLunchOrderRequest> mMonthToBurzaOrderRequests = new ArrayList<>();
 
     public LunchesManager(@NonNull Context context) {
         this.context = context;
@@ -37,51 +40,86 @@ public class LunchesManager {
     }
 
     private static String lunchesToString(MonthLunchDay... lunchDays) {
-        return new Gson().toJson(lunchDays);
+        return ApplicationBase.GSON.toJson(lunchDays);
     }
 
     public static MonthLunchDay[] parseLunches(String toParse) {
         if (toParse.equals("")) return new MonthLunchDay[0];
-        return new Gson().fromJson(toParse, MonthLunchDay[].class);
+        return ApplicationBase.GSON.fromJson(toParse, MonthLunchDay[].class);
     }
 
     private static String ordersToString(LunchOrderRequest... lunchOrders) {
-        return new Gson().toJson(lunchOrders);
+        return ApplicationBase.GSON.toJson(lunchOrders);
     }
 
-    public static LunchOrderRequest[] parseOrders(String toParse) {
-        if (toParse.equals("")) return new LunchOrderRequest[0];
-        return new Gson().fromJson(toParse, LunchOrderRequest[].class);
+    public static ICService.MonthLunchOrderRequest[] parseMonthOrders(String toParse) {
+        if (toParse.equals("")) return new ICService.MonthLunchOrderRequest[0];
+        return ApplicationBase.GSON.fromJson(toParse, ICService.MonthLunchOrderRequest[].class);
+    }
+
+    public static ICService.BurzaLunchOrderRequest[] parseBurzaOrders(String toParse) {
+        if (toParse.equals("")) return new ICService.BurzaLunchOrderRequest[0];
+        return ApplicationBase.GSON.fromJson(toParse, ICService.BurzaLunchOrderRequest[].class);
+    }
+
+    public static ICService.MonthToBurzaLunchOrderRequest[] parseMonthToBurzaOrders(String toParse) {
+        if (toParse.equals("")) return new ICService.MonthToBurzaLunchOrderRequest[0];
+        return ApplicationBase.GSON.fromJson(toParse, ICService.MonthToBurzaLunchOrderRequest[].class);
     }
 
     public synchronized void tryProcessOrders() {
-        LunchOrderRequest[] orderRequests = mOrderRequests
-                .toArray(new LunchOrderRequest[mOrderRequests.size()]);
-        for (LunchOrderRequest request : orderRequests) {
+        for (LunchOrderRequest request : getLunchOrderRequests()) {
             if (request.getState().equals(LunchOrderRequest.State.COMPLETED)
-                    || request.tryOrder()) mOrderRequests.remove(request);
+                    || request.tryOrder()) {
+                if (request instanceof ICService.BurzaLunchOrderRequest
+                        && mBurzaOrderRequests.contains(request))
+                    mBurzaOrderRequests.remove(request);
+                else if (request instanceof ICService.MonthLunchOrderRequest
+                        && mMonthOrderRequests.contains(request))
+                    mMonthOrderRequests.remove(request);
+                else if (request instanceof ICService.MonthToBurzaLunchOrderRequest
+                        && mMonthToBurzaOrderRequests.contains(request))
+                    mMonthToBurzaOrderRequests.remove(request);
+                else Log.d(LOG_TAG, "tryProcessOrders request is not in lists");
+            }
         }
     }
 
     public synchronized boolean isPendingOrders() {
-        return mOrderRequests.size() > 0;
+        return mBurzaOrderRequests.size() > 0 || mMonthOrderRequests.size() > 0
+                || mMonthToBurzaOrderRequests.size() > 0;
     }
 
-    public synchronized void addLunchOrderRequest(LunchOrderRequest request) {
-        mOrderRequests.add(request);
+    public synchronized void addLunchOrderRequest(ICService.MonthLunchOrderRequest request) {
+        mMonthOrderRequests.add(request);// TODO: 11.11.2015 apply on every change of requests
     }
 
-    public synchronized void removeLunchOrderRequest(LunchOrderRequest request) {
-        mOrderRequests.remove(request);
+    public synchronized void addLunchOrderRequest(ICService.BurzaLunchOrderRequest request) {
+        mBurzaOrderRequests.add(request);
     }
 
-    public synchronized LunchOrderRequest[] getLunchOrderRequests() {
-        return mOrderRequests.toArray(new LunchOrderRequest[mOrderRequests.size()]);
+    public synchronized void addLunchOrderRequest(ICService.MonthToBurzaLunchOrderRequest request) {
+        mMonthToBurzaOrderRequests.add(request);
     }
 
-    private synchronized void setLunchOrderRequests(LunchOrderRequest[] requests) {
-        mOrderRequests.clear();
-        Collections.addAll(mOrderRequests, requests);
+    public synchronized void removeLunchOrderRequest(ICService.MonthLunchOrderRequest request) {
+        mMonthOrderRequests.remove(request);
+    }
+
+    public synchronized void removeLunchOrderRequest(ICService.BurzaLunchOrderRequest request) {
+        mBurzaOrderRequests.remove(request);
+    }
+
+    public synchronized void removeLunchOrderRequest(ICService.MonthToBurzaLunchOrderRequest request) {
+        mMonthToBurzaOrderRequests.remove(request);
+    }
+
+    public synchronized List<LunchOrderRequest> getLunchOrderRequests() {
+        List<LunchOrderRequest> requests = new ArrayList<>();
+        requests.addAll(mBurzaOrderRequests);
+        requests.addAll(mMonthOrderRequests);
+        requests.addAll(mMonthToBurzaOrderRequests);
+        return requests;
     }
 
     public synchronized boolean setItems(MonthLunchDay[] lunchDays) {
@@ -166,16 +204,31 @@ public class LunchesManager {
         }
 
         String toParse = preferences.getString(Constants.SETTING_NAME_MONTH_LUNCHES, "");
-        String toParseOrders = preferences.getString(Constants.SETTING_NAME_LUNCHES_ORDER_REQUESTS, "");
+        String toParseMonthOrders = preferences.getString(Constants.SETTING_NAME_LUNCHES_MONTH_ORDER_REQUESTS, "");
+        String toParseBurzaOrders = preferences.getString(Constants.SETTING_NAME_LUNCHES_BURZA_ORDER_REQUESTS, "");
+        String toParseMonthToBurzaOrders = preferences.getString(Constants.SETTING_NAME_LUNCHES_MONTH_TO_BURZA_ORDER_REQUESTS, "");
 
         setItems(parseLunches(toParse));
-        setLunchOrderRequests(parseOrders(toParseOrders));
+        mMonthOrderRequests.clear();
+        Collections.addAll(mMonthOrderRequests, parseMonthOrders(toParseMonthOrders));
+        mBurzaOrderRequests.clear();
+        Collections.addAll(mBurzaOrderRequests, parseBurzaOrders(toParseBurzaOrders));
+        mMonthToBurzaOrderRequests.clear();
+        Collections.addAll(mMonthToBurzaOrderRequests, parseMonthToBurzaOrders(toParseMonthToBurzaOrders));
     }
 
     public synchronized void apply() {
         context.getSharedPreferences(Constants.SETTINGS_NAME_LUNCHES, Context.MODE_PRIVATE).edit()
                 .putString(Constants.SETTING_NAME_MONTH_LUNCHES, lunchesToString(getAllMonthLunches()))
-                .putString(Constants.SETTING_NAME_LUNCHES_ORDER_REQUESTS, ordersToString(getLunchOrderRequests()))
+                .putString(Constants.SETTING_NAME_LUNCHES_MONTH_ORDER_REQUESTS,
+                        ordersToString(mMonthOrderRequests.toArray(new ICService
+                                .MonthLunchOrderRequest[mMonthOrderRequests.size()])))
+                .putString(Constants.SETTING_NAME_LUNCHES_BURZA_ORDER_REQUESTS,
+                        ordersToString(mBurzaOrderRequests.toArray(new ICService
+                                .BurzaLunchOrderRequest[mBurzaOrderRequests.size()])))
+                .putString(Constants.SETTING_NAME_LUNCHES_MONTH_TO_BURZA_ORDER_REQUESTS,
+                        ordersToString(mMonthToBurzaOrderRequests.toArray(new ICService
+                                .MonthToBurzaLunchOrderRequest[mMonthToBurzaOrderRequests.size()])))
                 .apply();
     }
 

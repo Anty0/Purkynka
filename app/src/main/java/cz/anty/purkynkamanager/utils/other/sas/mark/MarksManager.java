@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.utils.other.Constants;
 
 /**
@@ -44,7 +43,7 @@ public class MarksManager {
     }
 
     private static String marksToString(Mark... marks) {
-        return new Gson().toJson(marks);
+        return ApplicationBase.GSON.toJson(marks);
         /*StringBuilder builder = new StringBuilder();
         if (marks.length > 0) {
             builder.append(markToString(marks[0]));
@@ -69,7 +68,7 @@ public class MarksManager {
 
     public static List<Mark> parseMarks(String toParse) {
         if (toParse.equals("")) return new ArrayList<>();
-        return Arrays.asList(new Gson().fromJson(toParse, Mark[].class));
+        return Arrays.asList(ApplicationBase.GSON.fromJson(toParse, Mark[].class));
 
         /*String[] marksData = toParse.split("\n");
         List<Mark> marks = new ArrayList<>();

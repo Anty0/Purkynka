@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.sas.mark.MarksManager;
 
 /**
@@ -17,6 +18,8 @@ import cz.anty.purkynkamanager.utils.other.sas.mark.MarksManager;
  * @author anty
  */
 class SASConnector {
+
+    private static final String LOG_TAG = "SASConnector";
 
     private static final String LOGIN_URL = "https://www.sspbrno.cz/ISAS/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
@@ -39,6 +42,7 @@ class SASConnector {
 
     private synchronized Map<String, String> login(int depth, IOException last, String username, String password) throws IOException {
         if (depth >= Constants.MAX_TRY) throw last;
+        Log.d(LOG_TAG, "login");// TODO: 11.11.2015 check if working (no 3 attempts)
         try {
             return Jsoup
                     .connect(LOGIN_URL)

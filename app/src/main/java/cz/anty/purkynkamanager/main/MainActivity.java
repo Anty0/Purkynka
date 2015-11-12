@@ -199,13 +199,13 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout)
                         findViewById(R.id.drawer_layout), mToolbar,
-                new TextMultilineImageItem(getText(R.string.app_name_sas), null, R.mipmap.ic_launcher_sas, false),
-                new TextMultilineImageItem(getText(R.string.app_name_wifi), null, R.mipmap.ic_launcher_wifi, false),
-                new TextMultilineImageItem(getText(R.string.app_name_icanteen), null, R.mipmap.ic_launcher_ic, false),
-                new TextMultilineImageItem(getText(R.string.app_name_timetable), null, R.mipmap.ic_launcher_t, false),
-                new TextMultilineImageItem(getText(R.string.app_name_attendance), null, R.mipmap.ic_launcher_a, false),
+                new TextMultilineImageItem(getText(R.string.app_name_sas), null, R.mipmap.ic_launcher_sas, true),
+                new TextMultilineImageItem(getText(R.string.app_name_wifi), null, R.mipmap.ic_launcher_wifi, true),
+                new TextMultilineImageItem(getText(R.string.app_name_icanteen), null, R.mipmap.ic_launcher_ic, true),
+                new TextMultilineImageItem(getText(R.string.app_name_timetable), null, R.mipmap.ic_launcher_t, true),
+                new TextMultilineImageItem(getText(R.string.app_name_attendance), null, R.mipmap.ic_launcher_a, true),
                 new TextMultilineItem("", null, false),
-                new TextMultilineImageItem(getText(R.string.activity_title_settings), null, R.drawable.ic_action_settings, false));
+                new TextMultilineImageItem(getText(R.string.activity_title_settings), null, R.drawable.ic_action_settings, true));
         drawerFragment.setDrawerListener(new RecyclerItemClickListener.ClickListener() {
             private final int[] descriptionIds = new int[]{
                     R.string.app_description_sas,

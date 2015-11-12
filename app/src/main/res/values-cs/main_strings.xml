@@ -17,7 +17,7 @@
     <string name="text_view_text_insert_login">Uživatelské jméno:</string>
     <string name="text_view_text_insert_password">Heslo:</string>
 
-    <string name="text_about">Aplikaci vytvořil Anty.\nWebové stránky aplikace:\nhttp://anty.codetopic.eu/purkynka/\n\nPokud máte nějaký problém můžete jej nahlásit na hlavní obrazovce použitím tlačítka \"Odeslat zpětnou vazbu\", nebo mě osobně v prostorách školy.</string>
+    <string name="text_about">Aplikaci vytvořil Anty.\nWebové stránky aplikace:\nhttp://anty.codetopic.eu/purkynka/\n\nPokud máte nějaký problém, můžete jej nahlásit na hlavní obrazovce použitím tlačítka \"Odeslat zpětnou vazbu\", nebo mě kontaktujte osobně v prostorách školy.</string>
     <string name="text_add">Přidat</string>
 
     <string name="dialog_title_select_language">Zvolte jazyk</string>

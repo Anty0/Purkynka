@@ -20,6 +20,8 @@ import cz.anty.purkynkamanager.utils.other.timetable.Timetable;
 
 public class TimetableScheduleReceiver extends BroadcastReceiver {
 
+    public static final String DAY = "DAY";
+    public static final String LESSON_INDEX = "LESSON_INDEX";
     private static final String LOG_TAG = "TimetableScheduleReceiver";
 
     @Override
@@ -27,7 +29,8 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
         Log.d(LOG_TAG, "onReceive");
         AlarmManager service = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
-        Intent defaultIntent = new Intent(context, AttendanceReceiver.class);
+        Intent defaultIntent = new Intent(context, TeacherAttendanceReceiver.class);
+        // TODO: 12.11.2015 move part of functionality from TeacherAttendanceReceiver to TimetableNotificationReceiver
         PendingIntent defaultPending = PendingIntent.getBroadcast(context, 0,
                 defaultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -66,8 +69,7 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
                     for (int i = 0; i < Timetable.MAX_LESSONS; i++) {
                         int requestedTime = Timetable.START_TIMES_HOURS[i] * 60 + Timetable.START_TIMES_MINUTES[i];
                         if (minuteTime < requestedTime - 10) {
-                            defaultIntent.putExtra(AttendanceReceiver.DAY, day - 2)
-                                    .putExtra(AttendanceReceiver.LESSON_INDEX, i);
+                            defaultIntent.putExtra(DAY, day - 2).putExtra(LESSON_INDEX, i);
                             calendar.set(Calendar.HOUR_OF_DAY, Timetable.START_TIMES_HOURS[i]);
                             calendar.set(Calendar.MINUTE, Timetable.START_TIMES_MINUTES[i] - 10);
                             calendar.set(Calendar.MILLISECOND, 0);

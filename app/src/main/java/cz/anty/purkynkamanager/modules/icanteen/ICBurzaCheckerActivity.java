@@ -146,10 +146,11 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
                             .stopBurzaChecker();
                 }
             }
-        });
+        });// TODO: 11.11.2015 add checker stopping support
 
         datePicker.init(datePicker.getYear(), datePicker.getMonth(),
                 datePicker.getDayOfMonth(), datePickerOnDateChangedListener);
+        // TODO: 11.11.2015 no calendar view
         datePickerOnDateChangedListener.onDateChanged(datePicker, datePicker
                 .getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 

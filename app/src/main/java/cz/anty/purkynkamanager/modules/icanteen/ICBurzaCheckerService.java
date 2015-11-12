@@ -29,6 +29,7 @@ public class ICBurzaCheckerService extends Service {
     private static final OnceRunThread worker = new OnceRunThread();
     private static Runnable onStateChangedListener = null;
     private static boolean running = false;
+    private static boolean stopping = false;
     private ICService.ICBinder binder = null;
     private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
             = new ServiceManager.BinderConnection<ICService.ICBinder>() {
@@ -50,11 +51,22 @@ public class ICBurzaCheckerService extends Service {
         onStateChangedListener = onStateChanged;
     }
 
+    public static boolean isStopping() {
+        return stopping;
+    }
+
+    private static void setStopping(boolean stopping) {
+        ICBurzaCheckerService.stopping = stopping;
+        if (onStateChangedListener != null)
+            onStateChangedListener.run();
+    }
+
     public static boolean isRunning() {
         return running;
     }
 
     private static void setRunning(boolean running) {
+        if (!running) stopping = false;
         ICBurzaCheckerService.running = running;
         if (onStateChangedListener != null)
             onStateChangedListener.run();
@@ -104,6 +116,7 @@ public class ICBurzaCheckerService extends Service {
                     break;
                 case BURZA_CHECKER_STATE_STOP:
                     if (worker.isWorkerRunning()) {
+                        setStopping(true);
                         worker.stopActualWorker();
                         break;
                     }
@@ -156,9 +169,6 @@ public class ICBurzaCheckerService extends Service {
             }
         }
 
-        setRunning(false);
-        stopForeground(true);
-
         boolean successfully = false;
         if (binder != null) {
             try {
@@ -184,6 +194,9 @@ public class ICBurzaCheckerService extends Service {
                 Thread.currentThread().interrupt();
             }
         }
+
+        setRunning(false);
+        stopForeground(true);
 
         if (!completed || successfully) stopSelf();
         else burzaChecker(selector);

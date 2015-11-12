@@ -41,12 +41,12 @@ public *;
 #-keep class org.arca.ErrorReporter { *; }
 #-dontwarn org.arca.ErrorReporter
 
--keep public class org.acra.ErrorReporter {
-	public void addCustomData(java.lang.String,java.lang.String);
-}
--keep public class org.acra.ErrorReporter {
-	public org.acra.ErrorReporter$ReportsSenderWorker handleSilentException(java.lang.Throwable);
-}
+#-keep public class org.acra.ErrorReporter {
+#	public void addCustomData(java.lang.String,java.lang.String);
+#}
+#-keep public class org.acra.ErrorReporter {
+#	public org.acra.ErrorReporter$ReportsSenderWorker handleSilentException(java.lang.Throwable);
+#}
 
 #-keepclassmembers enum * {
 #    public static **[] values();
@@ -56,15 +56,46 @@ public *;
 -keep class cz.anty.purkynkamanager.BuildConfig {
     *;
 }
+#-keep class org.acra.ReportingInteractionMode {
+#    *;
+#}
+#-keep class org.acra.sender.HttpSender$Method {
+#    *;
+#}
+#-keep class org.acra.sender.HttpSender$Type {
+#    *;
+#}
+#-keep class org.acra.ReportField {
+#	*;
+#}
+
+# keep this class so that logging will show 'ACRA' and not a obfuscated name like 'a'.
+# Note: if you are removing log messages elsewhere in this file then this isn't necessary
+-keep class org.acra.ACRA {
+    *;
+}
+
+# keep this around for some enums that ACRA needs
 -keep class org.acra.ReportingInteractionMode {
     *;
 }
--keep class org.acra.sender.HttpSender$Method {
+
+-keepnames class org.acra.sender.HttpSender$** {
     *;
 }
--keep class org.acra.sender.HttpSender$Type {
+
+-keepnames enum org.acra.ReportField {
     *;
 }
--keep class org.acra.ReportField {
-	*;
+
+# keep this otherwise it is removed by ProGuard
+-keep public class org.acra.ErrorReporter {
+    public void addCustomData(java.lang.String,java.lang.String);
+    public void putCustomData(java.lang.String,java.lang.String);
+    public void removeCustomData(java.lang.String);
+}
+
+# keep this otherwise it is removed by ProGuard
+-keep public class org.acra.ErrorReporter {
+    public void handleSilentException(java.lang.Throwable);
 }

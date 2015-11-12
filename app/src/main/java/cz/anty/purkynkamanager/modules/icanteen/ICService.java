@@ -13,6 +13,7 @@ import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -361,11 +362,11 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         return super.onUnbind(intent);
     }
 
-    private static class MonthLunchOrderRequest
+    public static class MonthLunchOrderRequest
             extends LunchesManager.SimpleLunchOrderRequest {
         private final MonthLunch mMonthLunch;
 
-        MonthLunchOrderRequest(MonthLunch lunch) {
+        private MonthLunchOrderRequest(MonthLunch lunch) {
             mMonthLunch = lunch;
         }
 
@@ -388,11 +389,11 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         }
     }
 
-    private static class BurzaLunchOrderRequest
+    public static class BurzaLunchOrderRequest
             extends LunchesManager.SimpleLunchOrderRequest {
         private final BurzaLunch mBurzaLunch;
 
-        BurzaLunchOrderRequest(BurzaLunch lunch) {
+        private BurzaLunchOrderRequest(BurzaLunch lunch) {
             mBurzaLunch = lunch;
         }
 
@@ -415,11 +416,11 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         }
     }
 
-    private static class MonthToBurzaLunchOrderRequest
+    public static class MonthToBurzaLunchOrderRequest
             extends LunchesManager.SimpleLunchOrderRequest {
         private final MonthLunch mMonthLunch;
 
-        MonthToBurzaLunchOrderRequest(MonthLunch lunch) {
+        private MonthToBurzaLunchOrderRequest(MonthLunch lunch) {
             mMonthLunch = lunch;
         }
 
@@ -508,7 +509,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 @Override
                 public void run() {
                     if (mLunchesManager.getLunchOrderRequests()
-                            .length <= 0) return;
+                            .isEmpty()) return;
                     mLunchesManager.tryProcessOrders();
                     ICService.this.refreshMonth(false);
                     ICService.this.refreshBurza(false);
@@ -516,12 +517,22 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             });
         }
 
-        public LunchesManager.LunchOrderRequest[] getOrderRequests() {
-            if (mLunchesManager == null) return new LunchesManager.LunchOrderRequest[0];
+        public List<LunchesManager.LunchOrderRequest> getOrderRequests() {
+            if (mLunchesManager == null) return new ArrayList<>();
             return mLunchesManager.getLunchOrderRequests();
         }
 
-        public void removeOrderRequest(LunchesManager.LunchOrderRequest request) {
+        public void removeOrderRequest(MonthLunchOrderRequest request) {
+            if (mLunchesManager != null)
+                mLunchesManager.removeLunchOrderRequest(request);
+        }
+
+        public void removeOrderRequest(BurzaLunchOrderRequest request) {
+            if (mLunchesManager != null)
+                mLunchesManager.removeLunchOrderRequest(request);
+        }
+
+        public void removeOrderRequest(MonthToBurzaLunchOrderRequest request) {
             if (mLunchesManager != null)
                 mLunchesManager.removeLunchOrderRequest(request);
         }

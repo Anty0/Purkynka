@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.utils.other.Constants;
 
 /**
@@ -47,7 +46,7 @@ public class TeachersManager {
 
         String data = preferences.getString(Constants.SETTING_NAME_TEACHERS, "");
         if (!data.equals(""))
-            teachers.addAll(Arrays.asList(new Gson().fromJson(data, Teacher[].class)));
+            teachers.addAll(Arrays.asList(ApplicationBase.GSON.fromJson(data, Teacher[].class)));
         /*String[] teachersData;
         teachersData = preferences.getString(Constants.SETTING_NAME_TEACHERS, "").split("\n");
         if (teachersData[0].equals("")) return;
@@ -70,7 +69,7 @@ public class TeachersManager {
             teachers = get();
         }
 
-        String data = new Gson().toJson(teachers);
+        String data = ApplicationBase.GSON.toJson(teachers);
         /*StringBuilder builder = new StringBuilder();
         if (teachers.length > 0) {
             builder.append(teacherToString(teachers[0]));

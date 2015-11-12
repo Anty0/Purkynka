@@ -183,7 +183,7 @@ public class SASManageActivity extends AppCompatActivity {
                                                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
                                                     final NumberPicker picker = new NumberPicker(SASManageActivity.this);
                                                     picker.setMaxValue(5);
-                                                    picker.setMinValue(0);
+                                                    picker.setMinValue(1);
                                                     picker.setValue((int) mark.getValue());
 
                                                     new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)

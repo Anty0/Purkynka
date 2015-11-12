@@ -29,19 +29,17 @@ import cz.anty.purkynkamanager.utils.other.timetable.Lesson;
 import cz.anty.purkynkamanager.utils.other.timetable.Timetable;
 import cz.anty.purkynkamanager.utils.other.timetable.TimetableManager;
 
-public class AttendanceReceiver extends BroadcastReceiver {
+public class TeacherAttendanceReceiver extends BroadcastReceiver {
 
-    public static final String DAY = "DAY";
-    public static final String LESSON_INDEX = "LESSON_INDEX";
-    private static final String LOG_TAG = "AttendanceReceiver";
+    private static final String LOG_TAG = "TeacherAttendanceReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LOG_TAG, "onReceive");
         TimetableLessonWidget.callUpdate(context);
 
-        int day = intent.getIntExtra(DAY, -1);
-        int lessonIndex = intent.getIntExtra(LESSON_INDEX, -1);
+        int day = intent.getIntExtra(TimetableScheduleReceiver.DAY, -1);
+        int lessonIndex = intent.getIntExtra(TimetableScheduleReceiver.LESSON_INDEX, -1);
         if (day != -1 && lessonIndex != -1) {
             if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
                     .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, true)) {
@@ -49,7 +47,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
             }
             if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
                     .getBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS, false)) {
-                showLessonNotification(context, day, lessonIndex);
+                showLessonNotification(context, day, lessonIndex);// TODO: 12.11.2015 move to TimetableNotificationReceiver
             }
         }
 
@@ -77,6 +75,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                     .setAutoCancel(false)
                     .setDefaults(Notification.DEFAULT_VIBRATE)
                     .build();
+            // TODO: 12.11.2015 add option to use ongoing notification
 
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
                     .notify(Constants.NOTIFICATION_ID_TIMETABLE_LESSON + i, n);
@@ -156,7 +155,7 @@ public class AttendanceReceiver extends BroadcastReceiver {
                                     .apply();
                         }
                     } catch (IOException | IndexOutOfBoundsException e) {
-                        Log.d("AttendanceReceiver", "testSupplementation", e);
+                        Log.d("TeacherAttendanceReceiver", "testSupplementation", e);
                     }
                 }
             }

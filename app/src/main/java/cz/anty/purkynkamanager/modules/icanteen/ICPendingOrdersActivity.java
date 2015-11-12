@@ -6,11 +6,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.List;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.LunchesManager;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
+import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
 
@@ -44,7 +48,13 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
 
         mAdapter = new MultilineRecyclerAdapter<>();
         mRecyclerManager = RecyclerInflater.inflateToActivity(this).inflate()
-                .setAdapter(mAdapter).setItemTouchListener(null)
+                .setAdapter(mAdapter).setItemTouchListener(
+                        new RecyclerItemClickListener.SimpleClickListener() {
+                            @Override
+                            public void onClick(View view, int position) {
+                                // TODO: 11.11.2015 dialog to remove pending order
+                            }
+                        })
                 .setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
@@ -63,7 +73,10 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
                     final LunchesManager.LunchOrderRequest[] requests;
                     if (binder != null) {
                         binder.waitToWorkerStop();
-                        requests = binder.getOrderRequests();
+                        List<LunchesManager.LunchOrderRequest>
+                                requestList = binder.getOrderRequests();
+                        requests = requestList.toArray(new LunchesManager
+                                .LunchOrderRequest[requestList.size()]);
                     } else requests = new LunchesManager.LunchOrderRequest[0];
                     runOnUiThread(new Runnable() {
                         @Override

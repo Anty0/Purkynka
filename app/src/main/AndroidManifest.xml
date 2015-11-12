@@ -107,6 +107,7 @@
             android:name=".utils.settings.AttendanceSettingsActivity"
             android:icon="@mipmap/ic_launcher_a"
             android:label="@string/activity_title_attendance_settings"
+            android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme.AS" />
 
         <receiver
@@ -327,7 +328,7 @@
             android:theme="@style/AppTheme.T" />
 
         <receiver
-            android:name=".modules.timetable.receiver.AttendanceReceiver"
+            android:name=".modules.timetable.receiver.TeacherAttendanceReceiver"
             android:enabled="true"
             android:exported="false"
             android:icon="@mipmap/ic_launcher_t"

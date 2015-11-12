@@ -2,11 +2,10 @@ package cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza;
 
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import java.util.Arrays;
 import java.util.Date;
 
+import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
@@ -36,7 +35,7 @@ public class BurzaLunchSelector {
     }
 
     public static BurzaLunchSelector parseBurzaLunchSelector(String toParse) {
-        return new Gson().fromJson(toParse, BurzaLunchSelector.class);
+        return ApplicationBase.GSON.fromJson(toParse, BurzaLunchSelector.class);
         /*String[] data = toParse.split(DATA_SPLIT_VALUE);
 
         BurzaLunch.LunchNumber[] lunchNumbers;
@@ -81,7 +80,7 @@ public class BurzaLunchSelector {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return ApplicationBase.GSON.toJson(this);
         /*StringBuilder builder = new StringBuilder();
         if (lunchNumbers.length > 0) {
             builder.append(lunchNumbers[0]);

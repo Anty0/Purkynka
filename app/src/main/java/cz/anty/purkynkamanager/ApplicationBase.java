@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.google.android.gms.analytics.Tracker;
+import com.google.gson.Gson;
 
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
@@ -30,6 +31,7 @@ import cz.anty.purkynkamanager.utils.other.update.UpdateConnector;
 )
 public class ApplicationBase extends Application {
 
+    public static final Gson GSON = new Gson();
     public static final OnceRunThread WORKER = new OnceRunThread();
 
     @Override

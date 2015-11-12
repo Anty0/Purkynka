@@ -106,8 +106,9 @@ public class UpdateConnector {
             c.setDoOutput(true);
             c.connect();
 
-            String PATH = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                    + File.separator;
+            String PATH = context.getExternalFilesDir(Environment
+                    .DIRECTORY_DOWNLOADS) + File.separator;
+            // TODO: 12.11.2015 save apk to app data if sd card is not available
             File file = new File(PATH);
             file.mkdirs();
             File outputFile = new File(file, filename);

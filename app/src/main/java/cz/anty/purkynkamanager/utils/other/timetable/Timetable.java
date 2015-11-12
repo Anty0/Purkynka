@@ -3,8 +3,7 @@ package cz.anty.purkynkamanager.utils.other.timetable;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-
+import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
@@ -68,7 +67,7 @@ public class Timetable implements MultilineItem {
 
         String data = preferences.getString(Constants.SETTING_NAME_ADD_TIMETABLE + key, "");
         if (!data.equals(""))
-            return new Timetable(context, key, new Gson().fromJson(data, Lesson[][].class));
+            return new Timetable(context, key, ApplicationBase.GSON.fromJson(data, Lesson[][].class));
         return new Timetable(context, key, new Lesson[DAYS_STRINGS_IDS.length][MAX_LESSONS]);
 
         /*String[] days = context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
@@ -155,7 +154,7 @@ public class Timetable implements MultilineItem {
     }
 
     private synchronized void apply() {
-        String data = new Gson().toJson(lessons);
+        String data = ApplicationBase.GSON.toJson(lessons);
 
         /*StringBuilder builder = new StringBuilder(dayToString(0).replace(PARSE_CONST_DAY, "??????"));
         for (int i = 1; i < lessons.length; i++) {

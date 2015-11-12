@@ -40,6 +40,7 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
             service.cancel(pending);
             service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                     cal.getTimeInMillis(), Constants.REPEAT_TIME_SAS_MARKS_UPDATE, pending);
+            // TODO: 12.11.2015 longer wait between two refreshes when user disconnect and connect to internet
 
             // service.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
             // REPEAT_TIME, pending);

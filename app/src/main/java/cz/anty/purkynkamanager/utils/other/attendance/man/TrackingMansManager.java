@@ -8,12 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.modules.attendance.widget.TrackingWidget;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
@@ -66,7 +65,7 @@ public class TrackingMansManager {
             if (context == null || context.getSharedPreferences(Constants
                     .SETTINGS_NAME_MAIN, Context.MODE_PRIVATE).getBoolean(Constants
                     .SETTING_NAME_ITEM_UNLOCKED_BONUS, false)) {
-                mans.addAll(Arrays.asList(new Gson()
+                mans.addAll(Arrays.asList(ApplicationBase.GSON
                         .fromJson(txtData, Man[].class)));
             }
             /*mans.clear();
@@ -220,7 +219,7 @@ public class TrackingMansManager {
     public String toString() {
         //StringBuilder data = new StringBuilder();
         synchronized (mans) {
-            return new Gson().toJson(mans.toArray(new Man[mans.size()]));
+            return ApplicationBase.GSON.toJson(mans.toArray(new Man[mans.size()]));
             /*if (!mans.isEmpty()) {
                 Man man2 = mans.get(0);
                 data.append(man2.getName().replace(MAN_SPLIT_VALUE, "?????"))

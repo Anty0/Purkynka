@@ -9,7 +9,7 @@
 
     <string name="service_title_sas_manager">Služba kontroly známek pro Prohlížeč iSAS</string>
 
-    <string name="app_description_sas">Prohlížeč iSAS je jednoduchý prográmek pro <b>správu</b> vašich <b>známek</b>, umí <b>upozorňovat</b> na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
+    <string name="app_description_sas">Prohlížeč iSAS je jednoduchý prográmek pro <b>správu</b> vašich <b>známek</b>.\nUmí <b>upozorňovat</b> na nové známky a nabízí kompletní možnosti prohlížení vašich známek.</string>
 
     <string name="exception_title_validate">Chyba při ověřování</string>
     <string name="exception_validate_wrong_login">Špatné JMÉNO nebo HESLO</string>
