@@ -16,9 +16,9 @@ import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.modules.timetable.TimetableManageActivity;
 import cz.anty.purkynkamanager.modules.timetable.TimetableSelectActivity;
-import cz.anty.purkynkamanager.modules.timetable.widget.TimetableLessonWidget;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.PostNotificationCanceler;
 import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.attendance.AttendanceConnector;
 import cz.anty.purkynkamanager.utils.other.attendance.man.Man;
@@ -36,55 +36,15 @@ public class TeacherAttendanceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LOG_TAG, "onReceive");
-        TimetableLessonWidget.callUpdate(context);
-
         int day = intent.getIntExtra(TimetableScheduleReceiver.DAY, -1);
         int lessonIndex = intent.getIntExtra(TimetableScheduleReceiver.LESSON_INDEX, -1);
-        if (day != -1 && lessonIndex != -1) {
-            if (context.getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE)
-                    .getBoolean(Constants.SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, true)) {
-                testSupplementation(context, day, lessonIndex);
-            }
-            if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
-                    .getBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS, false)) {
-                showLessonNotification(context, day, lessonIndex);// TODO: 12.11.2015 move to TimetableNotificationReceiver
-            }
+        if (day != -1 && lessonIndex != -1 && context.getSharedPreferences(Constants
+                .SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE).getBoolean(Constants
+                .SETTING_NAME_DISPLAY_TEACHERS_ATTENDANCE_WARNINGS, true)) {
+            testSupplementation(context, day, lessonIndex);
         }
 
         context.sendBroadcast(new Intent(context, TimetableScheduleReceiver.class));
-    }
-
-    private void showLessonNotification(Context context, int day, int lessonIndex) {
-        Log.d(LOG_TAG, "showLessonNotification day: " + day + " lessonIndex: " + lessonIndex);
-        if (TimetableSelectActivity.timetableManager == null)
-            TimetableSelectActivity.timetableManager = new TimetableManager(context);
-        Timetable[] timetables = TimetableSelectActivity.timetableManager.getTimetables();
-
-        int i = 0;
-        for (Timetable timetable : timetables) {
-            Lesson lesson = timetable.getLesson(day, lessonIndex);
-            if (lesson == null) continue;
-
-            Notification n = new NotificationCompat.Builder(context)
-                    .setContentTitle(lesson.getTitle(context, lessonIndex))
-                    .setContentText(lesson.getText(context, lessonIndex))
-                    .setSmallIcon(R.mipmap.ic_launcher_t)
-                    .setContentIntent(PendingIntent.getActivity(context, 0,
-                            new Intent(context, TimetableManageActivity.class).putExtra(
-                                    TimetableManageActivity.EXTRA_TIMETABLE_NAME, timetable.getName()), 0))
-                    .setAutoCancel(false)
-                    .setDefaults(Notification.DEFAULT_VIBRATE)
-                    .build();
-            // TODO: 12.11.2015 add option to use ongoing notification
-
-            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
-                    .notify(Constants.NOTIFICATION_ID_TIMETABLE_LESSON + i, n);
-            // TODO: 04.11.2015 better lesson notifications system
-
-            if (i < 10) i++;
-            else return;
-        }
-
     }
 
     private void testSupplementation(final Context context, final int day, final int lessonIndex) {
@@ -99,10 +59,6 @@ public class TeacherAttendanceReceiver extends BroadcastReceiver {
             public void run() {
                 for (int i = 0, timetablesLength = timetables.length; i < timetablesLength; i++) {
                     final Timetable timetable = timetables[i];
-                    if (context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE, Context.MODE_PRIVATE)
-                            .getLong(timetable.getName() + Constants.SETTING_NAME_ADD_LAST_NOTIFY, 0) +
-                            Constants.WAIT_TIME_TEACHERS_ATTENDANCE > System.currentTimeMillis())
-                        continue;
                     final Lesson lesson = timetable.getLesson(day, lessonIndex);
                     if (lesson == null) continue;
 
@@ -145,14 +101,12 @@ public class TeacherAttendanceReceiver extends BroadcastReceiver {
                                             //.addAction(R.mipmap.ic_launcher, "And more", pIntent)
                                     .build();
 
+                            int notificationId = Constants.NOTIFICATION_ID_TEACHERS_ATTENDANCE + finalI;
                             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
-                                    .notify(Constants.NOTIFICATION_ID_TEACHERS_ATTENDANCE + finalI, n);
-                            // TODO: 04.11.2015 auto hide notification on lesson end
+                                    .notify(notificationId, n);
 
-                            context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLE_ATTENDANCE,
-                                    Context.MODE_PRIVATE).edit().putLong(timetable.getName()
-                                    + Constants.SETTING_NAME_ADD_LAST_NOTIFY, System.currentTimeMillis())
-                                    .apply();
+                            PostNotificationCanceler.postNotificationCancel(context,
+                                    notificationId, Constants.WAIT_TIME_TEACHERS_ATTENDANCE);
                         }
                     } catch (IOException | IndexOutOfBoundsException e) {
                         Log.d("TeacherAttendanceReceiver", "testSupplementation", e);

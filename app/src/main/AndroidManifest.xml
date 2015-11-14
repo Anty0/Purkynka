@@ -414,6 +414,13 @@
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme" />
 
+        <receiver
+            android:name=".utils.other.PostNotificationCanceler"
+            android:enabled="true"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher"
+            android:theme="@style/AppTheme" />
+
         <service
             android:name=".utils.other.list.widget.WidgetService"
             android:enabled="true"

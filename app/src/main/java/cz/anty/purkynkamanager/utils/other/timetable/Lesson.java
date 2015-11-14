@@ -39,6 +39,19 @@ public class Lesson implements MultilineItem {
         return new Lesson(toParseData[0], toParseData[1], toParseData[2], toParseData[3]);
     }*/
 
+    public static String getTimeString(int position) {
+        int hours = Timetable.START_TIMES_HOURS[position];
+        int minutes = Timetable.START_TIMES_MINUTES[position];
+        int minutesAfter = minutes + 45;
+        int hoursAfter = hours;
+        if (minutesAfter > 60) {
+            minutesAfter -= 60;
+            hoursAfter += 1;
+        }
+        return hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + " - " +
+                hoursAfter + ":" + (minutesAfter < 10 ? "0" + minutesAfter : minutesAfter);
+    }
+
     public String getName() {
         return name;
     }
@@ -51,10 +64,6 @@ public class Lesson implements MultilineItem {
         return classString;
     }
 
-    public String getTeacher() {
-        return teacher;
-    }
-
     /*@Override
     public String toString() {
         return getName().replace(PARSE_CHARS, "?????") + PARSE_CHARS
@@ -62,6 +71,10 @@ public class Lesson implements MultilineItem {
                 + getClassString().replace(PARSE_CHARS, "?????") + PARSE_CHARS
                 + getTeacher().replace(PARSE_CHARS, "?????");
     }*/
+
+    public String getTeacher() {
+        return teacher;
+    }
 
     @Override
     public CharSequence getTitle(Context context, int position) {
@@ -78,9 +91,7 @@ public class Lesson implements MultilineItem {
         if (position == NO_POSITION)
             return getTeacher() + " " + getName();
 
-        int minutes = Timetable.START_TIMES_MINUTES[position];
-        return Timetable.START_TIMES_HOURS[position] +
-                ":" + (minutes < 10 ? "0" + minutes : minutes)
-                + " " + getTeacher() + " " + getName();
+        return getTimeString(position) + " " +
+                getTeacher() + " " + getName();
     }
 }

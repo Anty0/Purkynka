@@ -23,9 +23,9 @@ public class Timetable implements MultilineItem {
             "12:45", "13:40", "14:35", "15:30", "16:25"};*/
     //public static final SimpleDateFormat START_TIMES_FORMAT = new SimpleDateFormat("HH:mm", Locale.getDefault());
     public static final int[] START_TIMES_HOURS = new int[]{
-            7, 8, 8, 10, 10, 11, 12, 13, 14, 15, 16};
+            7, 8, 8, 10, 10, 11, 12, 13, 14, 15, 16, 17};
     public static final int[] START_TIMES_MINUTES = new int[]{
-            10, 0, 55, 0, 55, 50, 45, 40, 35, 30, 25};
+            10, 0, 55, 0, 55, 50, 45, 40, 35, 30, 25, 20};
     public static final int MAX_LESSONS = 11;
     private static final int TIMETABLE_SAVE_VERSION = 2;
     //private static final String PARSE_CONST_DAY = ":;TD;:";

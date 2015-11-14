@@ -24,7 +24,7 @@ public class Constants {
     public static final long WAIT_TIME_IC_CONNECTION = 1500;
     public static final long WAIT_TIME_ON_BIND = 100;
     public static final int WAIT_TIME_FIRST_REPEAT = 10;
-    public static final long WAIT_TIME_TEACHERS_ATTENDANCE = 1000 * 60 * 15;
+    public static final long WAIT_TIME_TEACHERS_ATTENDANCE = 1000 * 60 * 45;
     public static final long WAIT_TIME_SAS_MARKS_REFRESH = 1000 * 60 * 5;
     public static final long WAIT_TIME_WIFI_LOGIN = 500;
     //

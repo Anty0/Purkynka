@@ -73,14 +73,14 @@ public class LunchesManager {
                     || request.tryOrder()) {
                 if (request instanceof ICService.BurzaLunchOrderRequest
                         && mBurzaOrderRequests.contains(request))
-                    mBurzaOrderRequests.remove(request);
+                    removeLunchOrderRequest((ICService.BurzaLunchOrderRequest) request);
                 else if (request instanceof ICService.MonthLunchOrderRequest
                         && mMonthOrderRequests.contains(request))
-                    mMonthOrderRequests.remove(request);
+                    removeLunchOrderRequest((ICService.MonthLunchOrderRequest) request);
                 else if (request instanceof ICService.MonthToBurzaLunchOrderRequest
                         && mMonthToBurzaOrderRequests.contains(request))
-                    mMonthToBurzaOrderRequests.remove(request);
-                else Log.d(LOG_TAG, "tryProcessOrders request is not in lists");
+                    removeLunchOrderRequest((ICService.MonthToBurzaLunchOrderRequest) request);
+                else Log.d(LOG_TAG, "tryProcessOrders: request is not in lists");
             }
         }
     }
@@ -91,27 +91,33 @@ public class LunchesManager {
     }
 
     public synchronized void addLunchOrderRequest(ICService.MonthLunchOrderRequest request) {
-        mMonthOrderRequests.add(request);// TODO: 11.11.2015 apply on every change of requests
+        mMonthOrderRequests.add(request);
+        apply();
     }
 
     public synchronized void addLunchOrderRequest(ICService.BurzaLunchOrderRequest request) {
         mBurzaOrderRequests.add(request);
+        apply();
     }
 
     public synchronized void addLunchOrderRequest(ICService.MonthToBurzaLunchOrderRequest request) {
         mMonthToBurzaOrderRequests.add(request);
+        apply();
     }
 
     public synchronized void removeLunchOrderRequest(ICService.MonthLunchOrderRequest request) {
         mMonthOrderRequests.remove(request);
+        apply();
     }
 
     public synchronized void removeLunchOrderRequest(ICService.BurzaLunchOrderRequest request) {
         mBurzaOrderRequests.remove(request);
+        apply();
     }
 
     public synchronized void removeLunchOrderRequest(ICService.MonthToBurzaLunchOrderRequest request) {
         mMonthToBurzaOrderRequests.remove(request);
+        apply();
     }
 
     public synchronized List<LunchOrderRequest> getLunchOrderRequests() {

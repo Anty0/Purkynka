@@ -1,5 +1,6 @@
 package cz.anty.purkynkamanager.utils.settings;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,12 @@ public class TimetableSettingsActivity extends AppCompatActivity {
                 getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, MODE_PRIVATE).edit()
                         .putBoolean(Constants.SETTING_NAME_DISPLAY_LESSON_WARNINGS,
                                 ((CheckBox) v).isChecked()).apply();
+
+                NotificationManager notificationManager = (NotificationManager)
+                        getSystemService(NOTIFICATION_SERVICE);
+                for (int i = 0; i < 10; i++)
+                    notificationManager.cancel(Constants.NOTIFICATION_ID_TIMETABLE_LESSON + i);
+
                 sendBroadcast(new Intent(TimetableSettingsActivity.this, TimetableScheduleReceiver.class));
             }
         });
