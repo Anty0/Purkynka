@@ -138,6 +138,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     if (mLunchesManager != null)
                         mLunchesManager.tryProcessOrders();
                     ICService.this.refreshMonth(true);
+                    AppDataManager.setLastRefresh(AppDataManager.Type
+                            .I_CANTEEN, System.currentTimeMillis());
                 }
             });
         return START_NOT_STICKY;

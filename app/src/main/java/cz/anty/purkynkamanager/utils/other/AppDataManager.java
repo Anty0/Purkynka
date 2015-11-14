@@ -122,6 +122,19 @@ public class AppDataManager {
                 .apply();
     }
 
+    public static synchronized long getLastRefresh(Type type) {
+        Log.d("AppDataManager", "getLastRefresh");
+        return type.getSharedPreferences()
+                .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0);
+    }
+
+    public static synchronized void setLastRefresh(Type type, long toSet) {
+        Log.d("AppDataManager", "setLastRefresh toSet: " + toSet);
+        type.getSharedPreferences().edit()
+                .putLong(Constants.SETTING_NAME_LAST_REFRESH, toSet)
+                .apply();
+    }
+
     public static synchronized long getWifiSuccessfulLoginAttempts() {
         Log.d("AppDataManager", "isWifiSuccessfulLoginAttempts");
         return Type.WIFI.getSharedPreferences()

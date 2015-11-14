@@ -22,23 +22,28 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
         PendingIntent pending = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
+        service.cancel(pending);
         if (AppDataManager.isSASMarksAutoUpdate() && Utils.isNetworkAvailable(context) &&
                 AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
-            Calendar cal = Calendar.getInstance();
-            // start 30 seconds after boot completed
-            cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);
-            // fetch every 30 seconds
-            // InexactRepeating allows Android to optimize the energy consumption
-            service.cancel(pending);
-            service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    cal.getTimeInMillis(), Constants.REPEAT_TIME_SAS_MARKS_UPDATE, pending);
-            // TODO: 12.11.2015 longer wait between two refreshes when user disconnect and connect to internet
-            // TODO: 12.11.2015 refresh only between 6:00 and 17:00
+            Calendar calendar = Calendar.getInstance();
+            int hours = calendar.get(Calendar.HOUR_OF_DAY);
+            if (hours >= 6 && hours < 17) {
+                service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE)
+                                .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) + Constants
+                                .REPEAT_TIME_SAS_MARKS_UPDATE, Constants
+                                .REPEAT_TIME_SAS_MARKS_UPDATE, pending);
+            } else {
+                if (hours >= 6) calendar.add(Calendar.DAY_OF_WEEK, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 6);
+                calendar.set(Calendar.MINUTE, 5);
+                service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                        PendingIntent.getBroadcast(context, 0,
+                                new Intent(context, getClass()), 0));
+            }
 
             // service.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
             // REPEAT_TIME, pending);
-        } else {
-            service.cancel(pending);
         }
     }
 }

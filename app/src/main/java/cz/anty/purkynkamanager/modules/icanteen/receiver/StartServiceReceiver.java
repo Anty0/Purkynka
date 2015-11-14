@@ -14,9 +14,9 @@ public class StartServiceReceiver extends BroadcastReceiver {
         if (AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
             context.startService(new Intent(context, ICService.class)
                     .putExtra(ICService.EXTRA_UPDATE_MONTH, true));
-        } else {
-            context.sendBroadcast(new Intent(context,
-                    StartServiceScheduleReceiver.class));
+            return;
         }
+        context.sendBroadcast(new Intent(context,
+                StartServiceScheduleReceiver.class));
     }
 }
