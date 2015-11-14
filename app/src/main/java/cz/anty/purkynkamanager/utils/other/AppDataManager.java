@@ -122,6 +122,21 @@ public class AppDataManager {
                 .apply();
     }
 
+    public static synchronized long getWifiSuccessfulLoginAttempts() {
+        Log.d("AppDataManager", "isWifiSuccessfulLoginAttempts");
+        return Type.WIFI.getSharedPreferences()
+                .getLong(Constants.SETTING_NAME_SUCCESSFUL_LOGIN_ATTEMPTS, 0);
+    }
+
+    public static synchronized long addWifiSuccessfulLoginAttempt() {
+        Log.d("AppDataManager", "addWifiSuccessfulLoginAttempt");
+        long successfulLoginAttempts = getWifiSuccessfulLoginAttempts() + 1;
+        Type.WIFI.getSharedPreferences().edit()
+                .putLong(Constants.SETTING_NAME_SUCCESSFUL_LOGIN_ATTEMPTS,
+                        successfulLoginAttempts).apply();
+        return successfulLoginAttempts;
+    }
+
     public static synchronized boolean isSASMarksAutoUpdate() {
         Log.d("AppDataManager", "isSASMarksAutoUpdate");
         return Type.SAS.getSharedPreferences()

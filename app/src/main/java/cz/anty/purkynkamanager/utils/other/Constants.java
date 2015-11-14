@@ -119,6 +119,7 @@ public class Constants {
     public static final String SETTINGS_NAME_WIFI = "WIFILoginData";
     public static final String SETTING_NAME_WAIT_LOGIN = "WAIT_LOGIN";
     public static final String SETTING_NAME_AUTO_LOGIN = "AUTO_LOGIN";
+    public static final String SETTING_NAME_SUCCESSFUL_LOGIN_ATTEMPTS = "SUCCESSFUL_LOGIN_ATTEMPTS";
     //
     public static final String SETTINGS_NAME_I_CANTEEN = "iCanteenLoginData";
     public static final String SETTING_NAME_NEW_MONTH_LUNCHES = "NEW_MONTH_LUNCHES";

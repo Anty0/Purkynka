@@ -12,6 +12,7 @@
     <string name="exception_wifi_login_no_valid_wifi">For working login you must by <b>connected to ISSWF1</b>. Continue anyway?</string>
 
     <string name="text_login_data_successfully_saved"><b>Login</b> and <b>password</b> are successfully <b>saved</b></string>
+    <string name="text_successful_login_attempts">Successful login attempts: &lt;b>%1$d&lt;/b></string>
 
     <string name="check_box_text_auto_login">Auto login to ISSWF1</string>
     <string name="check_box_text_wait_login">Wait 1.5s before login try (it can work without this, but most of devices <b>requires</b> this option)</string>

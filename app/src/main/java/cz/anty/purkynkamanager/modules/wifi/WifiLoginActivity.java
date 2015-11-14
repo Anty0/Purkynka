@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThreadWithSpinner;
 import cz.anty.purkynkamanager.utils.other.wifi.WifiLogin;
 import cz.anty.purkynkamanager.utils.settings.WifiSettingsActivity;
@@ -43,6 +45,9 @@ public class WifiLoginActivity extends AppCompatActivity {
                 .setText(AppDataManager.getUsername(AppDataManager.Type.WIFI));
         ((EditText) findViewById(R.id.edit_password))
                 .setText(AppDataManager.getPassword(AppDataManager.Type.WIFI));
+        ((TextView) findViewById(R.id.text_view_saved_login_attempts))
+                .setText(Utils.getFormattedText(this, R.string.text_successful_login_attempts,
+                        AppDataManager.getWifiSuccessfulLoginAttempts()));
     }
 
     @Override

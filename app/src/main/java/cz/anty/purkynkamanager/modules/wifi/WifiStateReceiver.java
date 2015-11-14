@@ -40,9 +40,11 @@ public class WifiStateReceiver extends BroadcastReceiver {
                     Utils.threadSleep(Constants.WAIT_TIME_WIFI_LOGIN);
 
                 try {
-                    WifiLogin.tryLogin(context, AppDataManager.getUsername(AppDataManager.Type.WIFI),
+                    if (WifiLogin.tryLogin(context, AppDataManager.getUsername(AppDataManager.Type.WIFI),
                             AppDataManager.getPassword(AppDataManager.Type.WIFI),
-                            new Handler(context.getMainLooper()), wifiSSID, true);
+                            new Handler(context.getMainLooper()), wifiSSID, true)) {
+                        AppDataManager.addWifiSuccessfulLoginAttempt();
+                    }
                 } catch (IOException e) {
                     Log.d(LOG_TAG, "onReceive", e);
                 }
