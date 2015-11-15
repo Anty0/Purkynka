@@ -10,9 +10,9 @@
     <string name="activity_title_pending_orders">Čekající objednávky</string>
     <string name="widget_label_next_lunch">iCanteen - následující oběd</string>
 
-    <string name="app_description_icanteen">Správce iCanteen je prográmek, který dokáže <b>spravovat a objednávat</b> školní obědy. Také dokáže <b>hlídat burzu</b> a automaticky objednat oběd, jakmile bude dostupný.</string>
-    <string name="app_description_icanteen_burza">Prohlížeč Burzy umožňuje <b>prohlížet</b> obědovou <b>burzu</b> a také nabízí možnost si oběd z burzy objednat.</string>
-    <string name="app_description_icanteen_burza_watcher">Hlídač Burzy dokáže <b>kontrolovat</b> ve velmi krátkých intervalech <b>burzu</b> s obědy, a tak zvyšuje vaši pravděpodobnost na zisk oběda ze školní burzy.</string>
+    <string name="app_description_icanteen">Správce iCanteen je prográmek, který dokáže <b>spravovat a objednávat</b> školní obědy. Také dokáže <b>hlídat burzu</b> a automaticky objednat oběd, jakmile je dostupný.</string>
+    <string name="app_description_icanteen_burza">Prohlížeč Burzy umožňuje <b>prohlížet burzu</b> s obědy a také nabízí možnost si oběd z burzy objednat.</string>
+    <string name="app_description_icanteen_burza_watcher">Hlídač Burzy dokáže <b>kontrolovat</b> ve velmi krátkých intervalech <b>burzu</b> s obědy, a tak zvyšuje pravděpodobnost na zisk oběda.</string>
     <string name="app_description_icanteen_lunch_order">Objednávač obědů umožňuje <b>pohodlně</b> z mobilního telefonu <b>objednávat obědy</b>. Také je možné vložit do burzy obědy, které již nelze zrušit.</string>
 
     <string name="dialog_title_icanteen_widget_alert">iCanteen <b>Widget</b> - následující oběd</string>
@@ -20,8 +20,8 @@
 
     <string name="check_box_text_notify_new_lunches">Zobraz upozornění, když budou dostupné nové obědy k objednání</string>
 
-    <string name="notify_title_can_not_login">Nejde se přihlásit do iCanteen</string>
-    <string name="notify_text_can_not_login">Prosím zkuste se odhlásit a zase znovu přihlásit</string>
+    <string name="notify_title_can_not_login">Nelze se přihlásit do iCanteen</string>
+    <string name="notify_text_can_not_login">Prosím zkuste se odhlásit a znovu přihlásit</string>
     <string name="notify_title_burza_checker_running">Hlídač BURZY běží</string>
     <string name="notify_text_burza_checker_running">Klikněte pro zobrazení možností</string>
     <string name="notify_title_burza_checker_completed">Požadavek na objednávku <b>úspěšně</b> odeslán</string>
@@ -32,18 +32,18 @@
     <string name="notify_title_select_to_watch">Zvolte co hlídat</string>
     <string name="text_view_text_date_to_watch">Zvolte hlídané DATUM:</string>
     <string name="text_view_text_numbers_to_watch">Zvolte OBĚDY pro hlídání:</string>
-    <string name="text_view_text_you_still_have_got_lunch">Již máš oběd na tento den.</string>
+    <string name="text_view_text_you_still_have_got_lunch">Již máte oběd na tento den.</string>
 
     <string name="menu_item_text_clear_history">Odstranit staré obědy</string>
     <string name="menu_item_text_to_show">Filtry</string>
     <string name="menu_item_text_new_lunches">Nové Obědy</string>
     <string name="menu_item_text_old_lunches">Staré Obědy</string>
 
-    <string name="special_item_title_icanteen_new_lunches">Jsou dostupné nové obědy k obědnání.</string>
+    <string name="special_item_title_icanteen_new_lunches">Jsou dostupné nové obědy k objednání.</string>
 
     <string name="radio_button_text_no_lunch">Žádný oběd</string>
 
-    <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač BURZY, možná již běží, prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
+    <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač BURZY, možná již běží. Prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
     <string name="toast_text_can_not_order_lunch">Nelze objednat jídlo, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_can_not_remove_lunch">Nelze odstranit oběd ze seznamu, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_can_not_refresh_lunches">Nelze obnovit obědy, prosím zkuste restartovat aplikaci</string>

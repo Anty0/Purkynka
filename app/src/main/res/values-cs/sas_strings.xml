@@ -13,11 +13,11 @@
 
     <string name="exception_title_validate">Chyba při ověřování</string>
     <string name="exception_validate_wrong_login">Špatné JMÉNO nebo HESLO</string>
-    <string name="exception_validate_no_connection">Nedaří se připojit internetu</string>
+    <string name="exception_validate_no_connection">Nedaří se připojit k internetu</string>
     <string name="exception_title_sas_manager_binder_null">Došlo k chybě</string>
     <string name="exception_message_sas_manager_binder_null">zkuste kliknout na obnovit</string>
     <string name="exception_title_login">Nelze provést přihlášení jako %1$s</string>
-    <string name="exception_message_login">Uživatelské jméno, nebo heslo není v pořádku</string>
+    <string name="exception_message_login">Uživatelské jméno nebo heslo není v pořádku</string>
     <string name="exception_no_connection">Nepodařilo se obnovit známky</string>
 
     <string name="dialog_title_sas_widget_alert">iSAS <b>Widget</b></string>
@@ -50,7 +50,7 @@
 
     <string name="menu_item_text_sort">Řadit podle</string>
     <string name="menu_item_text_sort_date">Data</string>
-    <string name="menu_item_text_sort_lesson">Předmětů</string>
+    <string name="menu_item_text_sort_lesson">Předmětu</string>
 
     <string name="special_item_title_bad_lesson_diameter">Špatný průměr v %1$s (%2$s)</string>
 
