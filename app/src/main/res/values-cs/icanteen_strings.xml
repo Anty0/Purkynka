@@ -49,7 +49,7 @@
     <string name="toast_text_can_not_remove_lunch">Nelze odstranit oběd ze seznamu, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_can_not_refresh_lunches">Nelze obnovit obědy, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_can_not_order_lunch_no_internet">Nelze objednat jídlo, zkontrolujte připojení k internetu</string>
-    <string name="toast_text_can_not_refresh_lunches_no_internet">>Nelze obnovit obědy, zkontrolujte připojení k internetu</string>
+    <string name="toast_text_can_not_refresh_lunches_no_internet">Nelze obnovit obědy, zkontrolujte připojení k internetu</string>
 
     <string name="text_nothing_ordered">Nic neobjednáno</string>
     <string name="text_lunch">Oběd</string>
