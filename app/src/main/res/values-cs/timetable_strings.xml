@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name_timetable">Správce Rozvrhů (<b>BETA</b>)</string>
+    <string name="app_name_timetable">Správce Rozvrhů</string>
 
     <string name="activity_title_timetable_select">Vyberte Rozvrh hodin</string>
     <string name="activity_title_timetable_manage">Rozvrh hodin</string>

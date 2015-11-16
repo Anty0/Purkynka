@@ -14,6 +14,7 @@ import cz.anty.purkynkamanager.modules.icanteen.ICService;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
+import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunch;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 
@@ -25,7 +26,7 @@ import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 public class LunchesManager {
 
     private static final String LOG_TAG = "LunchesManager";
-    private static final int LUNCHES_SAVE_VERSION = 2;
+    private static final int LUNCHES_SAVE_VERSION = 3;
 
     private final Context context;
     private final List<MonthLunchDay> mMonthLunches = new ArrayList<>();
@@ -48,23 +49,59 @@ public class LunchesManager {
         return ApplicationBase.GSON.fromJson(toParse, MonthLunchDay[].class);
     }
 
-    private static String ordersToString(LunchOrderRequest... lunchOrders) {
-        return ApplicationBase.GSON.toJson(lunchOrders);
+    private static String ordersToString(ICService.MonthLunchOrderRequest... lunchOrders) {
+        MonthLunch[] lunches = new MonthLunch[lunchOrders.length];
+        for (int i = 0; i < lunchOrders.length; i++) {
+            lunches[i] = lunchOrders[i].getMonthLunch();
+        }
+        return ApplicationBase.GSON.toJson(lunches);
+    }
+
+    private static String ordersToString(ICService.BurzaLunchOrderRequest... lunchOrders) {
+        BurzaLunch[] lunches = new BurzaLunch[lunchOrders.length];
+        for (int i = 0; i < lunchOrders.length; i++) {
+            lunches[i] = lunchOrders[i].getBurzaLunch();
+        }
+        return ApplicationBase.GSON.toJson(lunches);
+    }
+
+    private static String ordersToString(ICService.MonthToBurzaLunchOrderRequest... lunchOrders) {
+        MonthLunch[] lunches = new MonthLunch[lunchOrders.length];
+        for (int i = 0; i < lunchOrders.length; i++) {
+            lunches[i] = lunchOrders[i].getMonthLunch();
+        }
+        return ApplicationBase.GSON.toJson(lunches);
     }
 
     public static ICService.MonthLunchOrderRequest[] parseMonthOrders(String toParse) {
         if (toParse.equals("")) return new ICService.MonthLunchOrderRequest[0];
-        return ApplicationBase.GSON.fromJson(toParse, ICService.MonthLunchOrderRequest[].class);
+        MonthLunch[] lunches = ApplicationBase.GSON.fromJson(toParse, MonthLunch[].class);
+        ICService.MonthLunchOrderRequest[] lunchOrders = new ICService.MonthLunchOrderRequest[lunches.length];
+        for (int i = 0; i < lunches.length; i++) {
+            lunchOrders[i] = new ICService.MonthLunchOrderRequest(lunches[i]);
+        }
+        return lunchOrders;
     }
 
     public static ICService.BurzaLunchOrderRequest[] parseBurzaOrders(String toParse) {
         if (toParse.equals("")) return new ICService.BurzaLunchOrderRequest[0];
-        return ApplicationBase.GSON.fromJson(toParse, ICService.BurzaLunchOrderRequest[].class);
+        BurzaLunch[] lunches = ApplicationBase.GSON.fromJson(toParse, BurzaLunch[].class);
+        ICService.BurzaLunchOrderRequest[] lunchOrders = new ICService.BurzaLunchOrderRequest[lunches.length];
+        for (int i = 0; i < lunches.length; i++) {
+            lunchOrders[i] = new ICService.BurzaLunchOrderRequest(lunches[i]);
+        }
+        return lunchOrders;
     }
 
     public static ICService.MonthToBurzaLunchOrderRequest[] parseMonthToBurzaOrders(String toParse) {
         if (toParse.equals("")) return new ICService.MonthToBurzaLunchOrderRequest[0];
-        return ApplicationBase.GSON.fromJson(toParse, ICService.MonthToBurzaLunchOrderRequest[].class);
+        MonthLunch[] lunches = ApplicationBase.GSON.fromJson(toParse, MonthLunch[].class);
+        ICService.MonthToBurzaLunchOrderRequest[] lunchOrders =
+                new ICService.MonthToBurzaLunchOrderRequest[lunches.length];
+        for (int i = 0; i < lunches.length; i++) {
+            lunchOrders[i] = new ICService.MonthToBurzaLunchOrderRequest(lunches[i]);
+        }
+        return lunchOrders;
     }
 
     public synchronized void tryProcessOrders() {

@@ -388,8 +388,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             extends LunchesManager.SimpleLunchOrderRequest {
         private final MonthLunch mMonthLunch;
 
-        private MonthLunchOrderRequest(MonthLunch lunch) {
+        public MonthLunchOrderRequest(MonthLunch lunch) {
             mMonthLunch = lunch;
+        }
+
+        public MonthLunch getMonthLunch() {
+            return mMonthLunch;
         }
 
         @Override
@@ -419,8 +423,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             extends LunchesManager.SimpleLunchOrderRequest {
         private final BurzaLunch mBurzaLunch;
 
-        private BurzaLunchOrderRequest(BurzaLunch lunch) {
+        public BurzaLunchOrderRequest(BurzaLunch lunch) {
             mBurzaLunch = lunch;
+        }
+
+        public BurzaLunch getBurzaLunch() {
+            return mBurzaLunch;
         }
 
         @Override
@@ -450,8 +458,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             extends LunchesManager.SimpleLunchOrderRequest {
         private final MonthLunch mMonthLunch;
 
-        private MonthToBurzaLunchOrderRequest(MonthLunch lunch) {
+        public MonthToBurzaLunchOrderRequest(MonthLunch lunch) {
             mMonthLunch = lunch;
+        }
+
+        public MonthLunch getMonthLunch() {
+            return mMonthLunch;
         }
 
         @Override
