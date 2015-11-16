@@ -3,8 +3,8 @@
     <string name="app_name">Purkyňka</string>
     <string name="app_name_updater">Updater</string>
 
-    <string name="app_description_module_feedback">Bylo zaznamenáno neobvyklé chování aplikace, prosím napište nám zpětnou vazbu, pokud tento problém přetrvává.</string>
-    <string name="app_description_feedback">Pokud jste zaznamenali neobvyklé chování aplikace, nebo nám chcete odeslat nějaké informace o tom, co bychom mohli změnit nebo vylepšit, napište nám zpětnou vazbu pomocí následujícího formuláře.</string>
+    <string name="app_description_module_feedback">Bylo zaznamenáno neobvyklé chování aplikace, prosím odešlete nám zpětnou vazbu, pokud tento problém přetrvává.</string>
+    <string name="app_description_feedback">Pokud jste zaznamenali neobvyklé chování aplikace, nebo nám chcete odeslat nějaké informace o tom, co bychom mohli změnit nebo vylepšit, odešlete nám zpětnou vazbu pomocí následujícího formuláře.</string>
 
     <string name="activity_title_removed_items">Odebrané položky</string>
     <string name="activity_title_send_feedback">Odeslat zpětnou vazbu</string>
@@ -12,7 +12,7 @@
     <string name="activity_title_first_start_terms">Podmínky používání aplikace</string>
     <string name="activity_title_first_start_change_log">ChangeLog</string>
 
-    <string name="text_terms">Nepodařilo se načíst podmínky použití (<b>klikněte zde</b> pro další pokus), zkontrolujte vaše připojení k internetu.\nPodmínky použití této aplikace si můžete také přečíst na stránkách aplikace (<b>http://anty.codetopic.eu/purkynka/</b>).\n\nKliknutím na tlačítko "Příjmout" příjmáte, že jste si podmínky použití přečetl a souhlasíte s nimi.</string>
+    <string name="text_terms">Nepodařilo se načíst podmínky použití (<b>klikněte zde</b> pro další pokus), zkontrolujte vaše připojení k internetu.\nPodmínky použití této aplikace si můžete také přečíst na stránkách aplikace (<b>http://anty.codetopic.eu/purkynka/</b>).\n\nKliknutím na tlačítko "Přijmout" přijímáte, že jste si podmínky použití přečetl a souhlasíte s nimi.</string>
     <string name="text_welcome">Vítejte v aplikaci Purkyňka, nyní vás provede jednoduchý průvodce prvním spuštěním a nabídne vám možnost přihlásit se a zprovoznit tak jednotlivé funkce aplikace.\n\n(<b>click here</b> for language change menu)</string>
     <string name="text_change_log">Nedaří se načíst ChangeLog, zkontrolujte své připojení k internetu.</string>
 
@@ -20,9 +20,9 @@
     <string name="text_view_text_report_text">Popis problému:</string>
 
     <string name="dialog_title_share">Sdílejte aplikaci</string>
-    <string name="dialog_message_share">Prosím sdílejte tuto aplikaci třeba na facebooku, ať má každý tu možnost, vyzkoušet si ji :)</string>
+    <string name="dialog_message_share">Prosím sdílejte tuto aplikaci třeba na Facebooku, ať má každý tu možnost vyzkoušet si ji :)</string>
     <string name="dialog_message_update_alert">V případě nefunkčnosti automatické aktualizace lze aktualizaci manuálně stáhnout a nainstalovat z webových stránek aplikace.</string>
-    <string name="dialog_message_can_not_accept_terms">Pro příjmutí podmínek používání aplikace je vyžadováno připojení k internetu.</string>
+    <string name="dialog_message_can_not_accept_terms">Pro přijmutí podmínek používání aplikace je vyžadováno připojení k internetu.</string>
 
     <string name="toast_text_download_successful">Stahování úspěšně dokončeno</string>
     <string name="toast_text_download_failed">Chyba stahování</string>

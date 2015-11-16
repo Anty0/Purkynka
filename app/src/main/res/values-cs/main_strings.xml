@@ -23,7 +23,7 @@
 
     <string name="dialog_title_select_language">Zvolte jazyk</string>
     <string name="dialog_title_bonus_unlocked"><b>Bonus odemčen</b>!</string>
-    <string name="dialog_text_bonus_unlocked">Byly vám zpřístupněny následující bonusové funkce:\n  Sledování lidé - (Můžete v prohlížeči docházky povolit sledování vybraných lidí.)</string>
+    <string name="dialog_text_bonus_unlocked">Byly vám zpřístupněny následující bonusové funkce:\n  Sledovaní lidé - (Můžete v prohlížeči docházky povolit sledování vybraných lidí.)</string>
 
     <string name="radio_button_text_czech">Čeština (Czech)</string>
     <string name="radio_button_text_english">Angličtina (English)</string>
@@ -42,7 +42,7 @@
     <string name="but_login">Přihlásit</string>
     <string name="but_ok">OK</string>
     <string name="but_order">Objednat</string>
-    <string name="but_order_from_burza">Obědnat z Burzy</string>
+    <string name="but_order_from_burza">Objednat z Burzy</string>
     <string name="but_continue">Pokračovat</string>
     <string name="but_save">Uložit</string>
     <string name="but_start">Start</string>

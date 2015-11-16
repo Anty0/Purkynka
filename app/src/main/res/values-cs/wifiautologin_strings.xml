@@ -5,10 +5,10 @@
     <string name="activity_title_wifi_login">Přihlašovat k Wi-Fi</string>
     <string name="activity_title_wifi_settings">Nastavení Přihlašování k Wi-Fi</string>
 
-    <string name="app_description_wifi">Automatické přihlašování k Wi-Fi je jednoduchý prográmek který vás <b>automaticky přihlásí</b> ke školní <b>WIFI</b>, takže budete mít více času na surfování.</string>
+    <string name="app_description_wifi">Automatické přihlašování k Wi-Fi je jednoduchý prográmek, který vás <b>automaticky přihlásí</b> ke školní <b>WIFI</b>, takže budete mít více času na surfování.</string>
 
     <string name="exception_title_wifi_login">Nelze provést přihlášení</string>
-    <string name="exception_wifi_login_wrong_login_or_wifi">Již jsi přihlášen, nebo jsi zadal špatné přihlašovací údaje, nebo je zařízení připojeno k nesprávné WIFI.</string>
+    <string name="exception_wifi_login_wrong_login_or_wifi">Již jste přihlášen, nebo jste zadal špatné přihlašovací údaje, nebo je zařízení připojeno k nesprávné WIFI.</string>
     <string name="exception_wifi_login_no_valid_wifi">Pro přihlášení musí být zařízení připojeno k ISSWF1. Přesto pokračovat?</string>
 
     <string name="text_login_data_successfully_saved">Uživatelské <b>jméno</b> a <b>heslo</b> bylo úspěšně <b>uloženo</b></string>
