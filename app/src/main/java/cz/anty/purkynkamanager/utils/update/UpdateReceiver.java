@@ -55,6 +55,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentIntent(pendingIntent)
                             .setAutoCancel(false)
+                            .setOnlyAlertOnce(true)
                             .setDefaults(Notification.DEFAULT_ALL)
                             .build());
         } else {

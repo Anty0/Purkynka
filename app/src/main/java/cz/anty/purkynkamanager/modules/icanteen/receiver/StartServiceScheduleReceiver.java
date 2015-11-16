@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import cz.anty.purkynkamanager.modules.icanteen.ICService;
 import cz.anty.purkynkamanager.modules.icanteen.ICSplashActivity;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
@@ -22,16 +23,18 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
         service.cancel(pending);
-        if ((AppDataManager.isICNotifyNewMonthLunches() || (ICSplashActivity.serviceManager != null
-                && ICSplashActivity.serviceManager.isConnected()
-                && ICSplashActivity.serviceManager.getBinder().isPendingOrders()))
-                && Utils.isNetworkAvailable(context) &&
-                AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
+        if (Utils.isNetworkAvailable(context)) {
+            if ((AppDataManager.isICNotifyNewMonthLunches() || (ICSplashActivity.serviceManager != null
+                    && ICSplashActivity.serviceManager.isConnected()
+                    && ICSplashActivity.serviceManager.getBinder().isPendingOrders()))
+                    && AppDataManager.isLoggedIn(AppDataManager.Type.I_CANTEEN)) {
 
-            service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    AppDataManager.getLastRefresh(AppDataManager.Type.I_CANTEEN) + Constants
-                            .REPEAT_TIME_IC_LUNCHES_UPDATE, Constants
-                            .REPEAT_TIME_IC_LUNCHES_UPDATE, pending);
+                service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        AppDataManager.getLastRefresh(AppDataManager.Type.I_CANTEEN) + Constants
+                                .REPEAT_TIME_IC_LUNCHES_UPDATE, Constants
+                                .REPEAT_TIME_IC_LUNCHES_UPDATE, pending);
+            } else context.startService(new Intent(context, ICService.class)
+                    .putExtra(ICService.EXTRA_UPDATE_MONTH, false));
         }
     }
 }

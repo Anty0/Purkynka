@@ -36,8 +36,27 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "ICBurzaCheckerActivity";
 
-    private LinearLayout startSettingsLayout;
-    private TextView wrongLunchTextView;
+    private LinearLayout startLayout, stopLayout;
+    private Button stopButton;
+    private final Runnable onStateChanged = new Runnable() {
+        @Override
+        public void run() {
+            final boolean running = ICBurzaCheckerService.isRunning();
+            final boolean stopping = ICBurzaCheckerService.isStopping();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    startLayout.setVisibility(running ? View.GONE : View.VISIBLE);
+                    stopLayout.setVisibility(running ? View.VISIBLE : View.GONE);
+                    messageTextView.setText(stopping ? R.string.wait_text_stopping
+                            : R.string.wait_text_running);
+                    stopButton.setEnabled(!stopping);
+                    invalidateOptionsMenu();
+                }
+            });
+        }
+    };
+    private TextView wrongLunchTextView, messageTextView;
     private DatePicker datePicker;
     private CheckBox lunch1CheckBox, lunch2CheckBox, lunch3CheckBox;
     private final DatePicker.OnDateChangedListener datePickerOnDateChangedListener =
@@ -100,21 +119,6 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
                     }
                 }
             };
-    private Button stopButton;
-    private final Runnable onStateChanged = new Runnable() {
-        @Override
-        public void run() {
-            final boolean running = ICBurzaCheckerService.isRunning();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    startSettingsLayout.setVisibility(running ? View.GONE : View.VISIBLE);
-                    stopButton.setVisibility(running ? View.VISIBLE : View.GONE);
-                    invalidateOptionsMenu();
-                }
-            });
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,14 +133,16 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_icanteen_burza_watcher);
 
-        startSettingsLayout = (LinearLayout) findViewById(R.id.linear_layout_burza_watcher_start_settings);
+        startLayout = (LinearLayout) findViewById(R.id.linear_layout_burza_watcher_start);
         wrongLunchTextView = (TextView) findViewById(R.id.text_view_wrong_lunch);
         datePicker = (DatePicker) findViewById(R.id.date_picker_burza_watcher);
         lunch1CheckBox = (CheckBox) findViewById(R.id.check_box_lunch_1);
         lunch2CheckBox = (CheckBox) findViewById(R.id.check_box_lunch_2);
         lunch3CheckBox = (CheckBox) findViewById(R.id.check_box_lunch_3);
-        stopButton = (Button) findViewById(R.id.button_stop);
 
+        stopLayout = (LinearLayout) findViewById(R.id.linear_layout_burza_watcher_stop);
+        messageTextView = (TextView) findViewById(R.id.message);
+        stopButton = (Button) findViewById(R.id.button_stop);
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,11 +152,10 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
                             .stopBurzaChecker();
                 }
             }
-        });// TODO: 11.11.2015 add checker stopping support
+        });
 
         datePicker.init(datePicker.getYear(), datePicker.getMonth(),
                 datePicker.getDayOfMonth(), datePickerOnDateChangedListener);
-        // TODO: 11.11.2015 no calendar view
         datePickerOnDateChangedListener.onDateChanged(datePicker, datePicker
                 .getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 

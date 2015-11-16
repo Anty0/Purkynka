@@ -357,22 +357,24 @@ public class SASManageActivity extends AppCompatActivity {
                 recyclerManager.setRefreshing(true);
                 MultilineItem[] data;
                 try {
-                    if (binder != null) {
-                        switch (marksShort) {
-                            case LESSONS:
-                                Log.d(LOG_TAG, "onUpdate: Loading lessons");
-                                if (fast) data = binder.getLessonsFast(semester);
-                                else data = binder.getLessons(semester);
-                                break;
-                            case DATE:
-                            default:
-                                Log.d(LOG_TAG, "onUpdate: Loading marks");
-                                if (fast) data = binder.getMarksFast(semester);
-                                else data = binder.getMarks(semester);
-                                break;
-                        }
-                    } else {
+                    if (binder == null)
                         throw new NullPointerException();
+
+                    switch (marksShort) {
+                        case LESSONS:
+                            Log.d(LOG_TAG, "onUpdate: Loading lessons");
+                            if (fast) {
+                                data = binder.getLessonsFast(semester);
+                                if (data.length == 0)
+                                    data = binder.getLessons(semester);
+                            } else data = binder.getLessons(semester);
+                            break;
+                        case DATE:
+                        default:
+                            Log.d(LOG_TAG, "onUpdate: Loading marks");
+                            if (fast) data = binder.getMarksFast(semester);
+                            else data = binder.getMarks(semester);
+                            break;
                     }
                 } catch (NullPointerException | InterruptedException e) {
                     Log.d(LOG_TAG, "onUpdate", e);

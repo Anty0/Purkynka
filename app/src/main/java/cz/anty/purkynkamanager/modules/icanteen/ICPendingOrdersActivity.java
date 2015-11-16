@@ -1,8 +1,10 @@
 package cz.anty.purkynkamanager.modules.icanteen;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,7 +54,24 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
                         new RecyclerItemClickListener.SimpleClickListener() {
                             @Override
                             public void onClick(View view, int position) {
-                                // TODO: 11.11.2015 dialog to remove pending order
+                                final LunchesManager.LunchOrderRequest item = mAdapter.getItem(position);
+                                new AlertDialog.Builder(ICPendingOrdersActivity.this, R.style.AppTheme_Dialog_IC)
+                                        .setTitle(item.getTitle(ICPendingOrdersActivity.this, -1))
+                                        .setMessage(R.string.dialog_message_icanteen_cancel_order)
+                                        .setPositiveButton(R.string.but_yes,
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        ICService.ICBinder binder = ICSplashActivity.serviceManager.getBinder();
+                                                        if (binder != null)
+                                                            binder.removeOrderRequest(item);
+                                                        update();
+                                                    }
+                                                })
+                                        .setNegativeButton(R.string.but_no, null)
+                                        .setIcon(R.mipmap.ic_launcher_ic)
+                                        .setCancelable(true)
+                                        .show();
                             }
                         })
                 .setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -107,7 +126,7 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_refresh, menu);
+        getMenuInflater().inflate(R.menu.menu_retry, menu);
         return true;
     }
 
@@ -118,7 +137,7 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_refresh) {
+        if (id == R.id.action_retry) {
             processOrders();
             return true;
         }

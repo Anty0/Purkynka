@@ -130,13 +130,15 @@ public class ICService extends BindImplService<ICService.ICBinder> {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getBooleanExtra(EXTRA_UPDATE_MONTH, false))
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+        if (intent != null)
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
                     if (mLunchesManager != null)
                         mLunchesManager.tryProcessOrders();
+
+                    if (!intent.getBooleanExtra(EXTRA_UPDATE_MONTH, false)) return;
                     ICService.this.refreshMonth(true);
                     AppDataManager.setLastRefresh(AppDataManager.Type
                             .I_CANTEEN, System.currentTimeMillis());
@@ -195,14 +197,16 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     .equals(oldLunches, mLunchesManager.getBurzaLunches()))
                 onBurzaChange.run();
             return true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Log.d(LOG_TAG, "refreshBurza", e);
             if (!silent)
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ICService.this, R.string.toast_text_can_not_refresh_lunches,
-                                Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                        Toast.makeText(ICService.this, e instanceof NullPointerException
+                                        ? R.string.toast_text_can_not_refresh_lunches
+                                        : R.string.toast_text_can_not_refresh_lunches_no_internet,
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             if (e instanceof WrongLoginDataException)
@@ -232,14 +236,16 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                 return false;
             }
             return true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Log.d(LOG_TAG, "refreshMonth", e);
             if (!silent)
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ICService.this, R.string.toast_text_can_not_refresh_lunches,
-                                Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                        Toast.makeText(ICService.this, e instanceof NullPointerException
+                                        ? R.string.toast_text_can_not_refresh_lunches
+                                        : R.string.toast_text_can_not_refresh_lunches_no_internet,
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             if (e instanceof WrongLoginDataException)
@@ -283,13 +289,15 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Log.d(LOG_TAG, "orderBurza", e);
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(ICService.this, R.string.toast_text_can_not_order_lunch,
-                            Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                    Toast.makeText(ICService.this, e instanceof NullPointerException
+                                    ? R.string.toast_text_can_not_order_lunch
+                                    : R.string.toast_text_can_not_order_lunch_no_internet,
+                            Toast.LENGTH_LONG).show();
                 }
             });
             if (e instanceof WrongLoginDataException)
@@ -309,13 +317,15 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Log.d("ICService", "orderMonth", e);
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(ICService.this, R.string.toast_text_can_not_order_lunch,
-                            Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                    Toast.makeText(ICService.this, e instanceof NullPointerException
+                                    ? R.string.toast_text_can_not_order_lunch
+                                    : R.string.toast_text_can_not_order_lunch_no_internet,
+                            Toast.LENGTH_LONG).show();
                 }
             });
             if (e instanceof WrongLoginDataException)
@@ -335,13 +345,15 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Log.d(LOG_TAG, "toBurzaMonth", e);
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(ICService.this, R.string.toast_text_can_not_order_lunch,
-                            Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                    Toast.makeText(ICService.this, e instanceof NullPointerException
+                                    ? R.string.toast_text_can_not_order_lunch
+                                    : R.string.toast_text_can_not_order_lunch_no_internet,
+                            Toast.LENGTH_LONG).show();
                 }
             });
             if (e instanceof WrongLoginDataException)
@@ -504,7 +516,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             if (mLunchesManager == null) {
                 Toast.makeText(ICService.this,
                         R.string.toast_text_can_not_order_lunch,
-                        Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                        Toast.LENGTH_LONG).show();
                 return null;
             }
             return worker.startWorker(new Runnable() {
@@ -522,6 +534,19 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         public List<LunchesManager.LunchOrderRequest> getOrderRequests() {
             if (mLunchesManager == null) return new ArrayList<>();
             return mLunchesManager.getLunchOrderRequests();
+        }
+
+        public void removeOrderRequest(LunchesManager.LunchOrderRequest request) {
+            if (mLunchesManager != null)
+                if (request instanceof MonthLunchOrderRequest)
+                    mLunchesManager.removeLunchOrderRequest
+                            ((MonthLunchOrderRequest) request);
+                else if (request instanceof BurzaLunchOrderRequest)
+                    mLunchesManager.removeLunchOrderRequest
+                            ((BurzaLunchOrderRequest) request);
+                else if (request instanceof MonthToBurzaLunchOrderRequest)
+                    mLunchesManager.removeLunchOrderRequest
+                            ((MonthToBurzaLunchOrderRequest) request);
         }
 
         public void removeOrderRequest(MonthLunchOrderRequest request) {
@@ -543,7 +568,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             if (mLunchesManager == null) {
                 Toast.makeText(ICService.this,
                         R.string.toast_text_can_not_order_lunch,
-                        Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                        Toast.LENGTH_LONG).show();
                 return;
             }
             mLunchesManager.addLunchOrderRequest(new BurzaLunchOrderRequest(lunch));
@@ -554,7 +579,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             if (mLunchesManager == null) {
                 Toast.makeText(ICService.this,
                         R.string.toast_text_can_not_order_lunch,
-                        Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                        Toast.LENGTH_LONG).show();
                 return;
             }
             mLunchesManager.addLunchOrderRequest(new MonthLunchOrderRequest(lunch));
@@ -565,7 +590,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             if (mLunchesManager == null) {
                 Toast.makeText(ICService.this,
                         R.string.toast_text_can_not_order_lunch,
-                        Toast.LENGTH_LONG).show();// TODO: 12.11.2015 better toast texts
+                        Toast.LENGTH_LONG).show();
                 return;
             }
             mLunchesManager.addLunchOrderRequest(new MonthToBurzaLunchOrderRequest(lunch));

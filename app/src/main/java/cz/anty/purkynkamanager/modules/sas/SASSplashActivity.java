@@ -19,6 +19,8 @@ public class SASSplashActivity extends AppCompatActivity {
     public static ServiceManager<SASManagerService.SASBinder> serviceManager;
     private final OnceRunThread worker = new OnceRunThread();
 
+    private boolean mRunning = true;
+
     public static void initService(Context context, final OnceRunThread worker, final Runnable onComplete) {
         if (serviceManager == null || !serviceManager.isConnected()) {
             serviceManager = new ServiceManager<>(context, SASManagerService.class);
@@ -78,14 +80,15 @@ public class SASSplashActivity extends AppCompatActivity {
         initService(this, worker, new Runnable() {
             @Override
             public void run() {
-                startDefaultActivity();
+                if (mRunning)
+                    startDefaultActivity();
             }
         });
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        serviceManager.connect();
+    protected void onDestroy() {
+        mRunning = false;
+        super.onDestroy();
     }
 }

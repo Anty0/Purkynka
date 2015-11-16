@@ -8,6 +8,7 @@
 
     <string name="menu_item_text_settings">Nastavení</string>
     <string name="menu_item_text_refresh">Obnovit</string>
+    <string name="menu_item_text_retry">Zkusit znovu</string>
     <string name="menu_item_text_log_out">Odhlásit se</string>
 
     <string name="list_item_text_installed_app_version">Nainstalovaná verze aplikace</string>
@@ -35,6 +36,8 @@
     <string name="wait_text_loading">Načítání…</string>
     <string name="wait_text_logging_in">Přihlašování…</string>
     <string name="wait_text_please_wait">Prosím čekejte…</string>
+    <string name="wait_text_running">Běží…</string>
+    <string name="wait_text_stopping">Zastavuje se…</string>
 
     <string name="but_login">Přihlásit</string>
     <string name="but_ok">OK</string>

@@ -244,6 +244,7 @@ public class LunchesManager {
     }
 
     public interface LunchOrderRequest extends MultilineItem {
+
         boolean tryOrder();
 
         State getState();

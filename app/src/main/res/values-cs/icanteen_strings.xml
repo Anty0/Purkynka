@@ -17,6 +17,7 @@
 
     <string name="dialog_title_icanteen_widget_alert">iCanteen <b>Widget</b> - následující oběd</string>
     <string name="dialog_message_icanteen_widget_alert">Nyní si můžete <b>přidat</b> <b>iCanteen Widget</b> na svou domovskou obrazovku, budete tak vždy vědět, co máte <b>dnes na oběd</b>.</string>
+    <string name="dialog_message_icanteen_cancel_order">Opravdu chcete zrušit tuto obědnávku?</string>
 
     <string name="check_box_text_notify_new_lunches">Zobraz upozornění, když budou dostupné nové obědy k objednání</string>
 
@@ -47,6 +48,8 @@
     <string name="toast_text_can_not_order_lunch">Nelze objednat jídlo, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_can_not_remove_lunch">Nelze odstranit oběd ze seznamu, prosím zkuste restartovat aplikaci</string>
     <string name="toast_text_can_not_refresh_lunches">Nelze obnovit obědy, prosím zkuste restartovat aplikaci</string>
+    <string name="toast_text_can_not_order_lunch_no_internet">Nelze objednat jídlo, zkontrolujte připojení k internetu</string>
+    <string name="toast_text_can_not_refresh_lunches_no_internet">>Nelze obnovit obědy, zkontrolujte připojení k internetu</string>
 
     <string name="text_nothing_ordered">Nic neobjednáno</string>
     <string name="text_lunch">Oběd</string>

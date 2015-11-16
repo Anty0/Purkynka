@@ -364,10 +364,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
             update();
             return true;
         }
-        /*if (id == R.id.action_start_burza) {
-            ICBurzaActivity.startBurzaChecker(this, binder);
-            return true;
-        }*/
+        // TODO: 12.11.2015 add button show credit and add logic to show warning about no credit to order lunch
 
         return super.onOptionsItemSelected(item);
     }

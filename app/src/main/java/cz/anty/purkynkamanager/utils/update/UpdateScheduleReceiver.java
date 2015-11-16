@@ -21,21 +21,18 @@ public class UpdateScheduleReceiver extends BroadcastReceiver {
         PendingIntent pending = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
+        service.cancel(pending);
         if (Utils.isNetworkAvailable(context)) {
             Calendar cal = Calendar.getInstance();
             // start 30 seconds after boot completed
             cal.add(Calendar.SECOND, Constants.WAIT_TIME_FIRST_REPEAT);
             // fetch every 30 seconds
             // InexactRepeating allows Android to optimize the energy consumption
-            service.cancel(pending);
             service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                     cal.getTimeInMillis(), Constants.REPEAT_TIME_UPDATE, pending);
 
             // service.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
             // REPEAT_TIME, pending);
-        } else {
-            service.cancel(pending);
-            context.sendBroadcast(i);
-        }
+        } else context.sendBroadcast(i);
     }
 }
