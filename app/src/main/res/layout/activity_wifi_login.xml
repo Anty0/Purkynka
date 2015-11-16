@@ -54,7 +54,7 @@
 
             <Button
                 android:id="@+id/but_login"
-                style="?attr/buttonBarStyle"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onClickLogin"
@@ -62,7 +62,7 @@
 
             <Button
                 android:id="@+id/but_save"
-                style="?attr/buttonBarStyle"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onClickSave"

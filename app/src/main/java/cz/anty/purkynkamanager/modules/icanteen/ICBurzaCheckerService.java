@@ -146,6 +146,9 @@ public class ICBurzaCheckerService extends Service {
                 .setSmallIcon(R.mipmap.ic_launcher_ic)
                 .setContentIntent(PendingIntent.getActivity(this, 0,
                         new Intent(this, ICBurzaCheckerActivity.class), 0))
+                .addAction(R.drawable.ic_action_close, getText(R.string.but_stop),
+                        PendingIntent.getService(this, 0, new Intent(this, getClass())
+                                .putExtra(EXTRA_BURZA_CHECKER_STATE, BURZA_CHECKER_STATE_STOP), 0))
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setDefaults(Notification.DEFAULT_VIBRATE)

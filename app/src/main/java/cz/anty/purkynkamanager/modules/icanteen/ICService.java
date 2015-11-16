@@ -31,6 +31,10 @@ import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunch;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.purkynkamanager.utils.other.service.BindImplService;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
+import proguard.annotation.Keep;
+import proguard.annotation.KeepClassMemberNames;
+import proguard.annotation.KeepClassMembers;
+import proguard.annotation.KeepName;
 
 public class ICService extends BindImplService<ICService.ICBinder> {
 
@@ -376,6 +380,10 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         return super.onUnbind(intent);
     }
 
+    @Keep
+    @KeepName
+    @KeepClassMembers
+    @KeepClassMemberNames
     public static class MonthLunchOrderRequest
             extends LunchesManager.SimpleLunchOrderRequest {
         private final MonthLunch mMonthLunch;
@@ -403,6 +411,10 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         }
     }
 
+    @Keep
+    @KeepName
+    @KeepClassMembers
+    @KeepClassMemberNames
     public static class BurzaLunchOrderRequest
             extends LunchesManager.SimpleLunchOrderRequest {
         private final BurzaLunch mBurzaLunch;
@@ -430,6 +442,10 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         }
     }
 
+    @Keep
+    @KeepName
+    @KeepClassMembers
+    @KeepClassMemberNames
     public static class MonthToBurzaLunchOrderRequest
             extends LunchesManager.SimpleLunchOrderRequest {
         private final MonthLunch mMonthLunch;
