@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,16 +56,15 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     final MonthLunchDay lunch = item instanceof MonthLunchDay ? (MonthLunchDay) item : null;
                     if (lunch == null) return;
 
-                    ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
+                    final LinearLayout linearLayout = new LinearLayout(ICLunchOrderActivity.this);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-                    //TODO WORK IN PROGRESS
-                    final TextView creditText = new TextView(ICLunchOrderActivity.this);
-                    creditText.setText("Kredit: 0 Kč");
-                    mainScrollView.addView(creditText);
+                    final ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
+                    mainScrollView.addView(linearLayout);
 
                     final RadioGroup radioGroup = new RadioGroup(ICLunchOrderActivity.this);
                     radioGroup.setOrientation(LinearLayout.VERTICAL);
-                    mainScrollView.addView(radioGroup);
+                    linearLayout.addView(radioGroup);
 
                     RadioButton radioButtonNoLunch = new AppCompatRadioButton(ICLunchOrderActivity.this);
                     radioButtonNoLunch.setTag(null);
@@ -115,6 +115,14 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                             && radioButtonNoLunch.getId() != toCheck)
                         radioButtonNoLunch.setEnabled(false);
                     radioGroup.check(toCheck);
+
+                    //TODO WORK IN PROGRESS
+                    final LinearLayout.LayoutParams creditTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    final TextView creditText = new TextView(ICLunchOrderActivity.this);
+                    creditText.setLayoutParams(creditTextParams);
+                    creditText.setGravity(Gravity.CENTER_HORIZONTAL);
+                    creditText.setText("Kredit: 0 Kč");
+                    linearLayout.addView(creditText);
 
                     AlertDialog.Builder dialogBuilder = new AlertDialog
                             .Builder(ICLunchOrderActivity.this, R.style.AppTheme_Dialog_IC)
