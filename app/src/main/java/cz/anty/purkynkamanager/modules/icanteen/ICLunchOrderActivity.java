@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -55,6 +56,11 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     if (lunch == null) return;
 
                     ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
+
+                    //TODO WORK IN PROGRESS
+                    final TextView creditText = new TextView(ICLunchOrderActivity.this);
+                    creditText.setText("Kredit: 0 Kč");
+                    mainScrollView.addView(creditText);
 
                     final RadioGroup radioGroup = new RadioGroup(ICLunchOrderActivity.this);
                     radioGroup.setOrientation(LinearLayout.VERTICAL);
