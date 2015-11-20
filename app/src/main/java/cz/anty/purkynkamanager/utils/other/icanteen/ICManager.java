@@ -20,6 +20,8 @@ import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 public class ICManager {
 
     private final String username, password;
+    private boolean creditLoaded = false;
+    private double credit;
     private ICConnector connector = null;
 
     public ICManager(String username, String password) {
@@ -81,6 +83,7 @@ public class ICManager {
             }
             throw e;
         }
+        refreshCredit(connector.getLastMonthPage().getAllElements());
         return Lunches.parseMonthLunches(elements);
     }
 
@@ -109,5 +112,14 @@ public class ICManager {
             throw e;
         }
         return Lunches.parseBurzaLunches(elements);
+    }
+
+    public double getCredit() { return credit; }
+    public boolean isCreditLoaded() { return creditLoaded; }
+
+    private synchronized void refreshCredit(Elements elements) {
+        System.out.println(elements.html());
+        credit = Double.parseDouble(elements.select("span#Kredit span").text());
+        creditLoaded = true;
     }
 }

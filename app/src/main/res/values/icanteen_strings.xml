@@ -43,7 +43,7 @@
     <string name="special_item_title_icanteen_new_lunches">New lunches are available</string>
 
     <string name="radio_button_text_no_lunch">No lunch</string>
-    <string name="text_credit"><b>Credit: %1$d Kč</b></string>
+    <string name="text_credit">Credit: %1$s Kč</string>
 
     <string name="toast_text_can_not_start_burza_checker">Can\'t start Burza watcher, maybe still running, please try stop it or restart application</string>
     <string name="toast_text_can_not_order_lunch">Can\'t order lunch, please try restart application</string>

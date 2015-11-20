@@ -42,6 +42,7 @@ class ICConnector {
     private static final String ORDER_URL_START = "http://stravovani.sspbrno.cz:8080/faces/secured/";
 
     private final Map<String, String> loginCookies;
+    private Document lastMonthPage;
     private long lastRefresh = 0;
     private long lastOrder = 0;
 
@@ -96,8 +97,8 @@ class ICConnector {
     }
 
     public synchronized Elements getMonthElements() throws IOException {
-        Document monthPage = getPage(MONTH_URL, 0, null);
-        if (!isLoggedIn(monthPage))
+        lastMonthPage = getPage(MONTH_URL, 0, null);
+        if (!isLoggedIn(lastMonthPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         //if (AppDataManager.isDebugMode(null))
@@ -107,7 +108,7 @@ class ICConnector {
         /*if (!isLoggedIn(monthPage))
             throw new WrongLoginDataException();*/
 
-        Elements toReturn = monthPage
+        Elements toReturn = lastMonthPage
                 .select("div#mainContext")
                 .select("table")
                 .select("form[name=objednatJidlo-]");
@@ -156,5 +157,9 @@ class ICConnector {
             depth++;
             return getPage(url, depth, e);
         }
+    }
+
+    public Document getLastMonthPage() {
+        return lastMonthPage;
     }
 }
