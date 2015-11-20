@@ -2,6 +2,7 @@ package cz.anty.purkynkamanager.modules.icanteen;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -116,13 +121,17 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                         radioButtonNoLunch.setEnabled(false);
                     radioGroup.check(toCheck);
 
-                    //TODO WORK IN PROGRESS
+                    //TODO WORK IN PROGRESS - FIX TEXT BOLD AND COLOR
                     final LinearLayout.LayoutParams creditTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    final TextView creditText = new TextView(ICLunchOrderActivity.this);
-                    creditText.setLayoutParams(creditTextParams);
-                    creditText.setGravity(Gravity.CENTER_HORIZONTAL);
-                    creditText.setText("Kredit: 0 Kč");
-                    linearLayout.addView(creditText);
+                    final TextView creditTextView = new TextView(ICLunchOrderActivity.this);
+                    final String creditText = "\n" + String.format(getString(R.string.text_credit), 0);
+                    creditTextView.setLayoutParams(creditTextParams);
+                    creditTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                    creditTextView.setTextSize(16f);
+                    Spannable spannable = new SpannableString(creditText);
+                    spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 8, creditText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    creditTextView.setText(spannable, TextView.BufferType.SPANNABLE);
+                    linearLayout.addView(creditTextView);
 
                     AlertDialog.Builder dialogBuilder = new AlertDialog
                             .Builder(ICLunchOrderActivity.this, R.style.AppTheme_Dialog_IC)
