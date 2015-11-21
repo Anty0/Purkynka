@@ -43,6 +43,7 @@
     <string name="special_item_title_icanteen_new_lunches">Jsou dostupné nové obědy k objednání.</string>
 
     <string name="radio_button_text_no_lunch">Žádný oběd</string>
+    <string name="text_credit">Kredit: %1$s Kč</string>
 
     <string name="toast_text_can_not_start_burza_checker">Nelze spustit Hlídač BURZY, možná již běží. Prosím zkuste jej nejprve ukončit nebo restartovat aplikaci</string>
     <string name="toast_text_can_not_order_lunch">Nelze objednat jídlo, prosím zkuste restartovat aplikaci</string>

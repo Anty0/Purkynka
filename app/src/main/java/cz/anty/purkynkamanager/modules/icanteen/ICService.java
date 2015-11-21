@@ -721,5 +721,30 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             if (mLunchesManager == null) return null;
             return mLunchesManager.getOldMonthLunches();
         }
+
+        public void loadCredit() {
+            mManager.loadCredit();
+        }
+
+        public double getCredit() {
+            return mManager.getCredit();
+        }
+
+        public String getCreditString() {
+            double credit = mManager.getCredit();
+            if (mManager.isCreditLoaded()) {
+                if (credit == (int) credit) {
+                    return String.valueOf((int) credit);
+                } else {
+                    return String.valueOf(credit);
+                }
+            } else {
+                return "?";
+            }
+        }
+
+        public boolean isCreditLoaded() {
+            return mManager.isCreditLoaded();
+        }
     }
 }
