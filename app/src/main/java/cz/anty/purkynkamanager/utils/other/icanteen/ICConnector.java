@@ -42,7 +42,7 @@ class ICConnector {
     private static final String ORDER_URL_START = "http://stravovani.sspbrno.cz:8080/faces/secured/";
 
     private final Map<String, String> loginCookies;
-    private Document lastMonthPage;
+    private Document lastPage;
     private long lastRefresh = 0;
     private long lastOrder = 0;
 
@@ -97,8 +97,8 @@ class ICConnector {
     }
 
     public synchronized Elements getMonthElements() throws IOException {
-        lastMonthPage = getPage(MONTH_URL, 0, null);
-        if (!isLoggedIn(lastMonthPage))
+        lastPage = getPage(MONTH_URL, 0, null);
+        if (!isLoggedIn(lastPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         //if (AppDataManager.isDebugMode(null))
@@ -108,7 +108,7 @@ class ICConnector {
         /*if (!isLoggedIn(monthPage))
             throw new WrongLoginDataException();*/
 
-        Elements toReturn = lastMonthPage
+        Elements toReturn = lastPage
                 .select("div#mainContext")
                 .select("table")
                 .select("form[name=objednatJidlo-]");
@@ -118,24 +118,33 @@ class ICConnector {
 
 
     public synchronized Elements getBurzaElements() throws IOException {
-        Document burzaPage = getPage(BURZA_URL, 0, null);
-        if (!isLoggedIn(burzaPage))
+        lastPage = getPage(BURZA_URL, 0, null);
+        if (!isLoggedIn(lastPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         //if (AppDataManager.isDebugMode(null))
         //System.out.println("ICConnector getBurzaElements startElements:\n" + burzaPage);
         //Log.v("ICConnector", "getBurzaElements startElements:\n" + burzaPage);
 
-        if (!isLoggedIn(burzaPage))
+        if (!isLoggedIn(lastPage))
             throw new WrongLoginDataException();
 
-        Elements toReturn = burzaPage
+        Elements toReturn = lastPage
                 .select("div#mainContext")
                 .select("table")
                 .select("tr");
         toReturn.remove(0);
         Log.v(LOG_TAG, "getBurzaElements finalElements: " + toReturn);
         return toReturn;
+    }
+
+
+    public synchronized Elements getAllElements() throws IOException {
+        lastPage = getPage(MONTH_URL, 0, null);
+        if (!isLoggedIn(lastPage))
+            throw new IllegalStateException("iCanteen Connector is not logged in");
+
+        return lastPage.getAllElements();
     }
 
 
@@ -159,7 +168,7 @@ class ICConnector {
         }
     }
 
-    public Document getLastMonthPage() {
-        return lastMonthPage;
+    public synchronized Document getLastPage() {
+        return lastPage;
     }
 }

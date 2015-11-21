@@ -122,14 +122,13 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                         radioButtonNoLunch.setEnabled(false);
                     radioGroup.check(toCheck);
 
-                    //TODO WORK IN PROGRESS
                     final LinearLayout.LayoutParams creditTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     final TextView creditTextView = new TextView(ICLunchOrderActivity.this);
                     final String creditText = "\n" + String.format(getString(R.string.text_credit), binder.getCreditString());
+                    final Spannable spannable = new SpannableString(creditText);
                     creditTextView.setLayoutParams(creditTextParams);
                     creditTextView.setGravity(Gravity.CENTER_HORIZONTAL);
                     creditTextView.setTextSize(16f);
-                    Spannable spannable = new SpannableString(creditText);
                     spannable.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 8, creditText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, creditText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

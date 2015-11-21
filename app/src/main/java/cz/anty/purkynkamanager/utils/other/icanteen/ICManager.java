@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.WrongLoginDataException;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.Lunches;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
@@ -83,7 +84,7 @@ public class ICManager {
             }
             throw e;
         }
-        refreshCredit(connector.getLastMonthPage().getAllElements());
+        parseCredit(connector.getLastPage().getAllElements());
         return Lunches.parseMonthLunches(elements);
     }
 
@@ -111,15 +112,28 @@ public class ICManager {
             }
             throw e;
         }
+        parseCredit(connector.getLastPage().getAllElements());
         return Lunches.parseBurzaLunches(elements);
     }
 
-    public double getCredit() { return credit; }
-    public boolean isCreditLoaded() { return creditLoaded; }
-
-    private synchronized void refreshCredit(Elements elements) {
-        System.out.println(elements.html());
+    private synchronized void parseCredit(Elements elements) {
         credit = Double.parseDouble(elements.select("span#Kredit span").text());
         creditLoaded = true;
+    }
+
+    public synchronized void loadCredit() {
+        try {
+            parseCredit(connector.getAllElements());
+        } catch (IOException e) {
+            Log.d("ICManager", "Failed to refresh credit", e);
+        }
+    }
+
+    public double getCredit() {
+        return credit;
+    }
+
+    public boolean isCreditLoaded() {
+        return creditLoaded;
     }
 }
