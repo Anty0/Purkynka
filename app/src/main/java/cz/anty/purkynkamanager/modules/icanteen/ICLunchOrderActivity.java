@@ -2,6 +2,8 @@ package cz.anty.purkynkamanager.modules.icanteen;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -54,11 +62,15 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     final MonthLunchDay lunch = item instanceof MonthLunchDay ? (MonthLunchDay) item : null;
                     if (lunch == null) return;
 
-                    ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
+                    final LinearLayout linearLayout = new LinearLayout(ICLunchOrderActivity.this);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+                    final ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
+                    mainScrollView.addView(linearLayout);
 
                     final RadioGroup radioGroup = new RadioGroup(ICLunchOrderActivity.this);
                     radioGroup.setOrientation(LinearLayout.VERTICAL);
-                    mainScrollView.addView(radioGroup);
+                    linearLayout.addView(radioGroup);
 
                     RadioButton radioButtonNoLunch = new AppCompatRadioButton(ICLunchOrderActivity.this);
                     radioButtonNoLunch.setTag(null);
@@ -109,6 +121,19 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                             && radioButtonNoLunch.getId() != toCheck)
                         radioButtonNoLunch.setEnabled(false);
                     radioGroup.check(toCheck);
+
+                    final LinearLayout.LayoutParams creditTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    final TextView creditTextView = new TextView(ICLunchOrderActivity.this);
+                    final String creditText = "\n" + String.format(getString(R.string.text_credit), binder.getCreditString());
+                    final Spannable spannable = new SpannableString(creditText);
+                    creditTextView.setLayoutParams(creditTextParams);
+                    creditTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                    creditTextView.setTextSize(16f);
+                    spannable.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 8, creditText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, creditText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    creditTextView.setText(spannable, TextView.BufferType.SPANNABLE);
+                    linearLayout.addView(creditTextView);
 
                     AlertDialog.Builder dialogBuilder = new AlertDialog
                             .Builder(ICLunchOrderActivity.this, R.style.AppTheme_Dialog_IC)

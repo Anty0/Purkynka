@@ -99,7 +99,8 @@ public class ICBurzaActivity extends AppCompatActivity {
                                 .setIcon(R.mipmap.ic_launcher_ic)
                                 .setMessage(lunch.getLunchNumber()
                                         + "\n" + BurzaLunch.DATE_FORMAT.format(lunch.getDate())
-                                        + "\n" + lunch.getName())
+                                        + "\n" + lunch.getName()
+                                        + "\n" + String.format(getString(R.string.text_credit), binder.getCreditString()))
                                 .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
