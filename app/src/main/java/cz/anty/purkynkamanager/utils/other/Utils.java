@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -262,9 +263,12 @@ public class Utils {
                 .getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getActiveNetworkInfo();
 
+        WifiInfo wifiInfo = ((WifiManager) context
+                .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+
         return activeNetInfo != null && activeNetInfo.isConnected()
                 && (!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
-                .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) || !((WifiManager) context
-                .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().equals("<unknown ssid>"));
+                .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) ||
+                (wifiInfo != null && !wifiInfo.getSSID().equals("<unknown ssid>")));
     }
 }

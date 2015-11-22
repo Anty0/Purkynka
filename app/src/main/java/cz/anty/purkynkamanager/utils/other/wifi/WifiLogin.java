@@ -89,7 +89,7 @@ public class WifiLogin {
                 }
                 return null;
             } catch (IOException e) {
-                if (exception != null) e.initCause(exception);
+                //if (exception != null) e.initCause(exception);
                 exception = e;
                 Log.d(LOG_TAG, "getLoginUrl", exception);
             }

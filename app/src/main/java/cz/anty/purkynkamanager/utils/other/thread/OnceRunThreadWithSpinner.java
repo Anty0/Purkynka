@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 
 import cz.anty.purkynkamanager.utils.other.AppCompatProgressDialog;
+import cz.anty.purkynkamanager.utils.other.Log;
 
 /**
  * Created by anty on 10.6.15.
@@ -15,6 +16,8 @@ import cz.anty.purkynkamanager.utils.other.AppCompatProgressDialog;
  * @author anty
  */
 public class OnceRunThreadWithSpinner extends OnceRunThread {
+
+    private static final String LOG_TAG = "OnceRunThreadWithSpinner";
 
     private final Activity activity;
     private final AppCompatProgressDialog progressDialog;
@@ -51,7 +54,8 @@ public class OnceRunThreadWithSpinner extends OnceRunThread {
             public void run() {
                 try {
                     start(thread, message);
-                } catch (InterruptedException ignored) {
+                } catch (InterruptedException e) {
+                    Log.d(LOG_TAG, "startWorker", e);
                 }
             }
         }, message + " Thread").start();

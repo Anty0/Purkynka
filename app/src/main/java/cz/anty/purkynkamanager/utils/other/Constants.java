@@ -34,7 +34,7 @@ public class Constants {
     public static final long REPEAT_TIME_SAS_MARKS_UPDATE = 1000 * 60 * 60 * 3;
     //public static final long REPEAT_TIME_TEACHERS_ATTENDANCE = 1000 * 60;
     public static final long REPEAT_TIME_TRACKING_ATTENDANCE = 1000 * 60 * 15;
-    public static final long REPEAT_TIME_IC_LUNCHES_UPDATE = 1000 * 60 * 60 * 24;
+    public static final long REPEAT_TIME_IC_LUNCHES_UPDATE = 1000 * 60 * 60 * 5;
     //
     public static final int SPECIAL_ITEM_PRIORITY_NEW_UPDATE = 100;
     public static final int SPECIAL_ITEM_PRIORITY_SEND_FEEDBACK = 97;

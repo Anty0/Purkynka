@@ -1,6 +1,9 @@
 package cz.anty.purkynkamanager.modules.icanteen;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -38,7 +41,8 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
 
     private LinearLayout startLayout, stopLayout;
     private Button stopButton;
-    private final Runnable onStateChanged = new Runnable() {
+    private boolean mRunning = false;
+    /*private final Runnable onStateChanged = new Runnable() {
         @Override
         public void run() {
             final boolean running = ICBurzaCheckerService.isRunning();
@@ -52,10 +56,12 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
                             : R.string.wait_text_running);
                     stopButton.setEnabled(!stopping);
                     invalidateOptionsMenu();
+                    datePickerOnDateChangedListener.onDateChanged(datePicker, datePicker
+                            .getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
                 }
             });
         }
-    };
+    };*/
     private TextView wrongLunchTextView, messageTextView;
     private DatePicker datePicker;
     private CheckBox lunch1CheckBox, lunch2CheckBox, lunch3CheckBox;
@@ -119,6 +125,24 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
                     }
                 }
             };
+    private BroadcastReceiver onStateChangedListener
+            = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final boolean running = intent.getBooleanExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE_IS_RUNNING, false);
+            final boolean stopping = intent.getBooleanExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE_IS_STOPPING, false);
+            mRunning = running;
+
+            startLayout.setVisibility(running ? View.GONE : View.VISIBLE);
+            stopLayout.setVisibility(running ? View.VISIBLE : View.GONE);
+            messageTextView.setText(stopping ? R.string.wait_text_stopping
+                    : R.string.wait_text_running);
+            stopButton.setEnabled(!stopping);
+            invalidateOptionsMenu();
+            datePickerOnDateChangedListener.onDateChanged(datePicker, datePicker
+                    .getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -159,14 +183,23 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
         datePickerOnDateChangedListener.onDateChanged(datePicker, datePicker
                 .getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
-        ICBurzaCheckerService.setOnStateChangedListener(onStateChanged);
-        onStateChanged.run();
+        registerReceiver(onStateChangedListener, new IntentFilter(ICBurzaCheckerService.ACTION_STATE_CHANGED));
+        startService(new Intent(this, ICBurzaCheckerService.class)
+                .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_UPDATE_STATE, true));
+        /*ICBurzaCheckerService.setOnStateChangedListener(onStateChanged);
+        onStateChanged.run();*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(onStateChangedListener);
+        super.onDestroy();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (ICBurzaCheckerService.isRunning()) return false;
+        if (mRunning) return false;
         getMenuInflater().inflate(R.menu.menu_burza_watcher, menu);
         return true;
     }

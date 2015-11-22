@@ -94,6 +94,7 @@ public class OnceRunThread {
             if (wakeLock != null)
                 wakeLock.acquire();
 
+            worker.setPriority(3);
             worker.start();
             worker.join();
 

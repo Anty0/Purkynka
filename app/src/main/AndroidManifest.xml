@@ -9,7 +9,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" /> -->
+    <!--<uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!--<uses-sdk tools:overrideLibrary="me.zhanghai.android.materialprogressbar" />-->
@@ -26,6 +26,7 @@
             android:name=".main.MainActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +38,7 @@
             android:name=".utils.update.UpdateActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/wait_text_downloading_update"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Dialog" />
 
         <receiver
@@ -61,29 +63,34 @@
             android:name=".main.RemovedItemsActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_removed_items"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".main.SendFeedbackActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_send_feedback"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity
+        <!--<activity
             android:name=".utils.firststart.FirstStartActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme" />
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme" />-->
         <activity
             android:name=".utils.settings.SettingsActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_settings"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".utils.settings.MainSettingsActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_main_settings"
+            android:launchMode="singleInstance"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme" />
 
@@ -92,7 +99,7 @@
             android:name=".modules.attendance.SearchActivity"
             android:icon="@mipmap/ic_launcher_a"
             android:label="@string/activity_title_attendance_search"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.AS">
             <meta-data
@@ -106,6 +113,7 @@
             android:name=".utils.settings.AttendanceSettingsActivity"
             android:icon="@mipmap/ic_launcher_a"
             android:label="@string/activity_title_attendance_settings"
+            android:launchMode="singleInstance"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme.AS" />
 
@@ -131,6 +139,7 @@
             android:name=".modules.attendance.TrackingActivity"
             android:icon="@mipmap/ic_launcher_a"
             android:label="@string/activity_title_tracking"
+            android:launchMode="singleInstance"
             android:parentActivityName=".modules.attendance.SearchActivity"
             android:theme="@style/AppTheme.AS" />
 
@@ -153,23 +162,27 @@
             android:name=".modules.icanteen.ICLoginActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/activity_title_login_icanteen"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".modules.icanteen.ICSplashActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".modules.icanteen.ICSelectServiceActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".utils.settings.ICSettingsActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/activity_title_icanteen_settings"
+            android:launchMode="singleInstance"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme.IC" />
 
@@ -179,18 +192,21 @@
             android:exported="false"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.IC" />
 
         <activity
             android:name=".modules.icanteen.ICBurzaActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_burza"
+            android:launchMode="singleInstance"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".modules.icanteen.ICBurzaCheckerActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_burza_watcher"
+            android:launchMode="singleInstance"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
             android:theme="@style/AppTheme.IC" />
 
@@ -200,6 +216,7 @@
             android:exported="false"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_burza_watcher"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.IC" />
 
         <receiver
@@ -237,12 +254,14 @@
             android:name=".modules.icanteen.ICLunchOrderActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/app_name_icanteen_lunch_order"
+            android:launchMode="singleInstance"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".modules.icanteen.ICPendingOrdersActivity"
             android:icon="@mipmap/ic_launcher_ic"
             android:label="@string/activity_title_pending_orders"
+            android:launchMode="singleInstance"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
             android:theme="@style/AppTheme.IC" />
 
@@ -252,23 +271,27 @@
             android:excludeFromRecents="true"
             android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/app_name_sas"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".modules.sas.SASLoginActivity"
             android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/activity_title_sas_login"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.AS" />
         <activity
             android:name=".modules.sas.SASManageActivity"
             android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/app_name_sas"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.AS" />
         <activity
             android:name=".utils.settings.SASManagerSettingsActivity"
             android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/activity_title_sas_settings"
+            android:launchMode="singleInstance"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme.AS" />
 
@@ -278,6 +301,7 @@
             android:exported="false"
             android:icon="@mipmap/ic_launcher_sas"
             android:label="@string/service_title_sas_manager"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.AS"> <!-- android:process=":SASManagerService" -->
         </service>
 
@@ -317,12 +341,14 @@
             android:name=".modules.timetable.TimetableSelectActivity"
             android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_select"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.T" />
         <activity
             android:name=".modules.timetable.TimetableManageActivity"
             android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_manage"
+            android:launchMode="singleInstance"
             android:parentActivityName=".modules.timetable.TimetableSelectActivity"
             android:theme="@style/AppTheme.T" />
 
@@ -367,6 +393,7 @@
             android:name=".modules.timetable.widget.TimetableLessonWidgetConfigureActivity"
             android:icon="@mipmap/ic_launcher_t"
             android:label="@string/activity_title_timetable_select"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Dialog">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -384,12 +411,14 @@
             android:name=".modules.wifi.WifiLoginActivity"
             android:icon="@mipmap/ic_launcher_wifi"
             android:label="@string/app_name_wifi"
+            android:launchMode="singleInstance"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.W" />
         <activity
             android:name=".utils.settings.WifiSettingsActivity"
             android:icon="@mipmap/ic_launcher_wifi"
             android:label="@string/activity_title_wifi_settings"
+            android:launchMode="singleInstance"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme.W" />
 
@@ -411,6 +440,7 @@
             android:name=".utils.settings.AboutActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_title_about"
+            android:launchMode="singleInstance"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme" />
 

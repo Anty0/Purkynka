@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.v7.app.NotificationCompat;
 
@@ -83,9 +82,7 @@ public class UpdateReceiver extends BroadcastReceiver {
             @Override
             public void run() {
                 try {
-                    if (!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
-                            .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) || !((WifiManager) context
-                            .getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID().equals("<unknown ssid>")) {
+                    if (Utils.isNetworkAvailable(context)) {
                         checkUpdate(context);
                     } else updateNotification(context);
                 } catch (IOException | NumberFormatException e) {

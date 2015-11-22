@@ -37,7 +37,7 @@ public class ICSplashActivity extends AppCompatActivity {
                                 public void run() {
                                     try {
                                         Thread.sleep(Constants.WAIT_TIME_ON_BIND);
-                                        binder.waitToWorkerStop();
+                                        //binder.waitToWorkerStop();
                                     } catch (InterruptedException e) {
                                         Log.d(LOG_TAG, "onBinderConnected", e);
                                     }

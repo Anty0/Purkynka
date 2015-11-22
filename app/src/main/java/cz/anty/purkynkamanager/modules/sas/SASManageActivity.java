@@ -91,11 +91,11 @@ public class SASManageActivity extends AppCompatActivity {
         @Override
         public void onBinderDisconnected() {
             Log.d(LOG_TAG, "onBinderDisconnected");
-            try {
+            /*try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
                 Log.d(LOG_TAG, "onBinderDisconnected", e);
-            }
+            }*/
             binder.setOnMarksChangeListener(null);
             binder.setOnStateChangedListener(null);
             binder = null;
@@ -372,8 +372,11 @@ public class SASManageActivity extends AppCompatActivity {
                         case DATE:
                         default:
                             Log.d(LOG_TAG, "onUpdate: Loading marks");
-                            if (fast) data = binder.getMarksFast(semester);
-                            else data = binder.getMarks(semester);
+                            if (fast) {
+                                data = binder.getMarksFast(semester);
+                                if (data.length == 0)
+                                    data = binder.getMarks(semester);
+                            } else data = binder.getMarks(semester);
                             break;
                     }
                 } catch (NullPointerException | InterruptedException e) {

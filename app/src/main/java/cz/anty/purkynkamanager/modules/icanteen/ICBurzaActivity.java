@@ -58,11 +58,11 @@ public class ICBurzaActivity extends AppCompatActivity {
         @Override
         public void onBinderDisconnected() {
             Log.d(LOG_TAG, "onBinderDisconnected");
-            try {
+            /*try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
                 Log.d(LOG_TAG, "onBinderDisconnected", e);
-            }
+            }*/
             binder.setOnBurzaChangeListener(null);
             binder = null;
 

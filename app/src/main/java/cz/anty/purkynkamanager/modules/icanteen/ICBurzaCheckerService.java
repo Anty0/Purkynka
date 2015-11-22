@@ -22,14 +22,21 @@ import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
 public class ICBurzaCheckerService extends Service {
 
     public static final String EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING = "BURZA_CHECKER_SELECTOR";
+    public static final String EXTRA_BURZA_CHECKER_UPDATE_STATE = "BURZA_CHECKER_STATE";
     public static final String EXTRA_BURZA_CHECKER_STATE = "BURZA_CHECKER_STATE";
-    public static final String BURZA_CHECKER_STATE_START = "START";
-    public static final String BURZA_CHECKER_STATE_STOP = "STOP";
+    public static final String BURZA_CHECKER_STATE_SET_START = "START";
+    public static final String BURZA_CHECKER_STATE_SET_STOP = "STOP";
+
+    public static final String ACTION_STATE_CHANGED = "cz.anty.purkynkamanager.modules.icanteen.ICBurzaCheckerService.STATE_CHANGED";
+    public static final String EXTRA_BURZA_CHECKER_STATE_IS_RUNNING = "RUNNING";
+    public static final String EXTRA_BURZA_CHECKER_STATE_IS_STOPPING = "STOPPING";
+    public static final String EXTRA_BURZA_CHECKER_LOG = "LOG";
     private static final String LOG_TAG = "ICBurzaCheckerService";
     private static final OnceRunThread worker = new OnceRunThread();
-    private static Runnable onStateChangedListener = null;
-    private static boolean running = false;
-    private static boolean stopping = false;
+    private boolean mRunning = false;
+    //private static Runnable onStateChangedListener = null;
+    private boolean mStopping = false;
+    private StringBuilder mLog = new StringBuilder();// TODO: 22.11.2015 use mLog to log burza checker work, show it in checker activity
     private ICService.ICBinder binder = null;
     private ServiceManager.BinderConnection<ICService.ICBinder> binderConnection
             = new ServiceManager.BinderConnection<ICService.ICBinder>() {
@@ -47,29 +54,37 @@ public class ICBurzaCheckerService extends Service {
         }
     };
 
-    public static void setOnStateChangedListener(Runnable onStateChanged) {
+    /*public static void setOnStateChangedListener(Runnable onStateChanged) {
         onStateChangedListener = onStateChanged;
-    }
+    }*/
 
-    public static boolean isStopping() {
+    /*public static boolean isStopping() {
         return stopping;
+    }*/
+
+    private void setStopping(boolean stopping) {
+        mStopping = stopping;
+        sendBroadcast(new Intent(ACTION_STATE_CHANGED)
+                .putExtra(EXTRA_BURZA_CHECKER_STATE_IS_RUNNING, mRunning)
+                .putExtra(EXTRA_BURZA_CHECKER_STATE_IS_STOPPING, mStopping)
+                .putExtra(EXTRA_BURZA_CHECKER_LOG, mLog.toString()));
+        /*if (onStateChangedListener != null)
+            onStateChangedListener.run();*/
     }
 
-    private static void setStopping(boolean stopping) {
-        ICBurzaCheckerService.stopping = stopping;
-        if (onStateChangedListener != null)
-            onStateChangedListener.run();
-    }
-
-    public static boolean isRunning() {
+    /*public static boolean isRunning() {
         return running;
-    }
+    }*/
 
-    private static void setRunning(boolean running) {
-        if (!running) stopping = false;
-        ICBurzaCheckerService.running = running;
-        if (onStateChangedListener != null)
-            onStateChangedListener.run();
+    private void setRunning(boolean running) {
+        if (!running) mStopping = false;
+        mRunning = running;
+        sendBroadcast(new Intent(ACTION_STATE_CHANGED)
+                .putExtra(EXTRA_BURZA_CHECKER_STATE_IS_RUNNING, mRunning)
+                .putExtra(EXTRA_BURZA_CHECKER_STATE_IS_STOPPING, mStopping)
+                .putExtra(EXTRA_BURZA_CHECKER_LOG, mLog.toString()));
+        /*if (onStateChangedListener != null)
+            onStateChangedListener.run();*/
     }
 
     @Override
@@ -92,9 +107,22 @@ public class ICBurzaCheckerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("BurzaCheckerService", "onStartCommand");
 
-        if (intent != null)
-            switch (intent.getStringExtra(EXTRA_BURZA_CHECKER_STATE)) {
-                case BURZA_CHECKER_STATE_START:
+        if (intent != null) {
+            if (intent.getBooleanExtra(EXTRA_BURZA_CHECKER_UPDATE_STATE, false))
+                sendBroadcast(new Intent(ACTION_STATE_CHANGED)
+                        .putExtra(EXTRA_BURZA_CHECKER_STATE_IS_RUNNING, mRunning)
+                        .putExtra(EXTRA_BURZA_CHECKER_STATE_IS_STOPPING, mStopping)
+                        .putExtra(EXTRA_BURZA_CHECKER_LOG, mLog.toString()));
+
+            String toState = intent.getStringExtra(EXTRA_BURZA_CHECKER_STATE);
+            if (toState == null) {
+                if (!worker.isWorkerRunning()) {
+                    ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                            .cancel(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA);
+                    stopSelf();
+                }
+            } else switch (toState) {
+                case BURZA_CHECKER_STATE_SET_START:
                     if (!worker.isWorkerRunning()) {
                         try {
                             final BurzaLunchSelector selector = BurzaLunchSelector
@@ -114,7 +142,7 @@ public class ICBurzaCheckerService extends Service {
                     }
                     Toast.makeText(this, R.string.toast_text_can_not_start_burza_checker, Toast.LENGTH_LONG).show();
                     break;
-                case BURZA_CHECKER_STATE_STOP:
+                case BURZA_CHECKER_STATE_SET_STOP:
                     if (worker.isWorkerRunning()) {
                         setStopping(true);
                         worker.stopActualWorker();
@@ -130,6 +158,7 @@ public class ICBurzaCheckerService extends Service {
                     }
                     break;
             }
+        }
 
         return START_STICKY;
     }
@@ -148,10 +177,10 @@ public class ICBurzaCheckerService extends Service {
                         new Intent(this, ICBurzaCheckerActivity.class), 0))
                 .addAction(R.drawable.ic_action_close, getText(R.string.but_stop),
                         PendingIntent.getService(this, 0, new Intent(this, getClass())
-                                .putExtra(EXTRA_BURZA_CHECKER_STATE, BURZA_CHECKER_STATE_STOP), 0))
+                                .putExtra(EXTRA_BURZA_CHECKER_STATE, BURZA_CHECKER_STATE_SET_STOP), 0))
                 .setAutoCancel(false)
                 .setOngoing(true)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
+                        //.setDefaults(Notification.DEFAULT_VIBRATE)
                 .build();
 
         startForeground(Constants.NOTIFICATION_ID_I_CANTEEN_BURZA, n);

@@ -78,7 +78,16 @@ public class TimetableScheduleReceiver extends BroadcastReceiver {
                                         .getBroadcast(context, 0, attendanceIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 
                             if (startNotificationReceiver) {
-                                if (i == 3) calendar.add(Calendar.MINUTE, -10);
+                                if (i == 3) {
+                                    calendar.add(Calendar.MINUTE, -10);
+                                    if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                                        calendar.add(Calendar.MINUTE, 10);
+                                        service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), PendingIntent
+                                                .getBroadcast(context, 0, new Intent(context, TimetableScheduleReceiver.class),
+                                                        PendingIntent.FLAG_CANCEL_CURRENT));
+                                        return;
+                                    }
+                                }
                                 service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), PendingIntent
                                         .getBroadcast(context, 0, timetableIntent, PendingIntent.FLAG_CANCEL_CURRENT));
                             }

@@ -187,11 +187,11 @@ public class ICLunchOrderActivity extends AppCompatActivity {
         @Override
         public void onBinderDisconnected() {
             Log.d("LunchOrderActivity", "onBinderDisconnected");
-            try {
+            /*try {
                 refreshThread.waitToWorkerStop();
             } catch (InterruptedException e) {
                 Log.d("LunchOrderActivity", "onBinderDisconnected", e);
-            }
+            }*/
             binder.setOnMonthChangeListener(null);
             binder = null;
         }

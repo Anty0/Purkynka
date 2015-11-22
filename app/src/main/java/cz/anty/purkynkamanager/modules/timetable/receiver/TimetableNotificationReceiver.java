@@ -66,8 +66,9 @@ public class TimetableNotificationReceiver extends BroadcastReceiver {
             CharSequence title, text;
 
             if (lesson == null) {
-                if (lessonIndex < Timetable.MAX_LESSONS - 1 &&
-                        timetable.getLesson(day, lessonIndex + 1) != null) {
+                if (lessonIndex < Timetable.MAX_LESSONS - 1 && lessonIndex > 0 &&
+                        timetable.getLesson(day, lessonIndex + 1) != null &&
+                        timetable.getLesson(day, lessonIndex - 1) != null) {
                     title = context.getText(R.string.list_item_text_no_actual_lesson);
                     text = Lesson.getTimeString(lessonIndex);
                 } else continue;

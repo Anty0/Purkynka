@@ -643,7 +643,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
         public void startBurzaChecker(@NonNull final BurzaLunchSelector selector) {
             startService(new Intent(ICService.this, ICBurzaCheckerService.class)
-                            .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE, ICBurzaCheckerService.BURZA_CHECKER_STATE_START)
+                            .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE, ICBurzaCheckerService.BURZA_CHECKER_STATE_SET_START)
                             .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_SELECTOR_AS_STRING, selector.toString())
             );
         }
@@ -651,7 +651,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         public void stopBurzaChecker() {
             startService(new Intent(ICService.this, ICBurzaCheckerService.class)
                     .putExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE,
-                            ICBurzaCheckerService.BURZA_CHECKER_STATE_STOP));
+                            ICBurzaCheckerService.BURZA_CHECKER_STATE_SET_STOP));
         }
 
         public BurzaLunch[] getBurza(Thread refreshTread) throws InterruptedException {

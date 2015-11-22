@@ -208,13 +208,13 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                                                             multilineItem.getTag().toString());
                                                                             TimetableConnector.tryLoadTimetable(timetable);
                                                                         }
-                                                                    } catch (IllegalArgumentException | IOException e) {
+                                                                    } catch (final Exception e) {
                                                                         Log.d(LOG_TAG, "initialize", e);
 
+                                                                        final boolean connection = !(e instanceof IllegalArgumentException);
                                                                         runOnUiThread(new Runnable() {
                                                                             @Override
                                                                             public void run() {
-                                                                                boolean connection = e instanceof IOException;
                                                                                 new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                                                                         .setTitle(connection ? R.string.exception_title_connection
                                                                                                 : R.string.dialog_title_timetable_still_exists)
