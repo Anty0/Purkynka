@@ -3,7 +3,6 @@ package cz.anty.purkynkamanager.modules.icanteen;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
@@ -24,17 +23,17 @@ import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.WrongLoginDataException;
 import cz.anty.purkynkamanager.utils.other.icanteen.ICManager;
+import cz.anty.purkynkamanager.utils.other.icanteen.lunch.BurzaLunchOrderRequest;
+import cz.anty.purkynkamanager.utils.other.icanteen.lunch.LunchOrderRequest;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.LunchesManager;
+import cz.anty.purkynkamanager.utils.other.icanteen.lunch.MonthLunchOrderRequest;
+import cz.anty.purkynkamanager.utils.other.icanteen.lunch.MonthToBurzaLunchOrderRequest;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunchSelector;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunch;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.purkynkamanager.utils.other.service.BindImplService;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThread;
-import proguard.annotation.Keep;
-import proguard.annotation.KeepClassMemberNames;
-import proguard.annotation.KeepClassMembers;
-import proguard.annotation.KeepName;
 
 public class ICService extends BindImplService<ICService.ICBinder> {
 
@@ -380,112 +379,6 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         return super.onUnbind(intent);
     }
 
-    @Keep
-    @KeepName
-    @KeepClassMembers
-    @KeepClassMemberNames
-    public static class MonthLunchOrderRequest
-            extends LunchesManager.SimpleLunchOrderRequest {
-        private final MonthLunch mMonthLunch;
-
-        public MonthLunchOrderRequest(MonthLunch lunch) {
-            mMonthLunch = lunch;
-        }
-
-        public MonthLunch getMonthLunch() {
-            return mMonthLunch;
-        }
-
-        @Override
-        public boolean doOrder() throws Throwable {
-            return ICSplashActivity.serviceManager != null &&
-                    ICSplashActivity.serviceManager.isConnected() &&
-                    ICSplashActivity.serviceManager.getBinder().doOrderLunch(mMonthLunch);
-        }
-
-        @Override
-        public CharSequence getTitle(Context context, int position) {
-            return context.getText(R.string.but_order) + " - " + MonthLunchDay
-                    .DATE_SHOW_FORMAT.format(mMonthLunch.getDate());
-        }
-
-        @Override
-        public CharSequence getText(Context context, int position) {
-            return super.getText(context, position) + " - " + mMonthLunch.getName();
-        }
-    }
-
-    @Keep
-    @KeepName
-    @KeepClassMembers
-    @KeepClassMemberNames
-    public static class BurzaLunchOrderRequest
-            extends LunchesManager.SimpleLunchOrderRequest {
-        private final BurzaLunch mBurzaLunch;
-
-        public BurzaLunchOrderRequest(BurzaLunch lunch) {
-            mBurzaLunch = lunch;
-        }
-
-        public BurzaLunch getBurzaLunch() {
-            return mBurzaLunch;
-        }
-
-        @Override
-        public boolean doOrder() throws Throwable {
-            return ICSplashActivity.serviceManager != null &&
-                    ICSplashActivity.serviceManager.isConnected() &&
-                    ICSplashActivity.serviceManager.getBinder().doOrderLunch(mBurzaLunch);
-        }
-
-        @Override
-        public CharSequence getTitle(Context context, int position) {
-            return context.getText(R.string.but_order_from_burza) + " - " + BurzaLunch
-                    .DATE_FORMAT.format(mBurzaLunch.getDate());
-        }
-
-        @Override
-        public CharSequence getText(Context context, int position) {
-            return super.getText(context, position) + " - " + mBurzaLunch.getName();
-        }
-    }
-
-    @Keep
-    @KeepName
-    @KeepClassMembers
-    @KeepClassMemberNames
-    public static class MonthToBurzaLunchOrderRequest
-            extends LunchesManager.SimpleLunchOrderRequest {
-        private final MonthLunch mMonthLunch;
-
-        public MonthToBurzaLunchOrderRequest(MonthLunch lunch) {
-            mMonthLunch = lunch;
-        }
-
-        public MonthLunch getMonthLunch() {
-            return mMonthLunch;
-        }
-
-        @Override
-        public boolean doOrder() throws Throwable {
-            return ICSplashActivity.serviceManager != null &&
-                    ICSplashActivity.serviceManager.isConnected() &&
-                    ICSplashActivity.serviceManager.getBinder().doToBurzaMonthLunch(mMonthLunch);
-        }
-
-        @Override
-        public CharSequence getTitle(Context context, int position) {
-            return context.getText(R.string.text_to_burza) + "/" +
-                    context.getText(R.string.text_from_burza) + " - " +
-                    MonthLunchDay.DATE_SHOW_FORMAT.format(mMonthLunch.getDate());
-        }
-
-        @Override
-        public CharSequence getText(Context context, int position) {
-            return super.getText(context, position) + " - " + mMonthLunch.getName();
-        }
-    }
-
     public class ICBinder extends Binder {
 
         public boolean isWorkerRunning() {
@@ -559,12 +452,12 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             });
         }
 
-        public List<LunchesManager.LunchOrderRequest> getOrderRequests() {
+        public List<LunchOrderRequest> getOrderRequests() {
             if (mLunchesManager == null) return new ArrayList<>();
             return mLunchesManager.getLunchOrderRequests();
         }
 
-        public void removeOrderRequest(LunchesManager.LunchOrderRequest request) {
+        public void removeOrderRequest(LunchOrderRequest request) {
             if (mLunchesManager != null)
                 if (request instanceof MonthLunchOrderRequest)
                     mLunchesManager.removeLunchOrderRequest
@@ -625,15 +518,24 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             processOrders();
         }
 
-        private boolean doOrderLunch(final BurzaLunch lunch) {
+        /**
+         * @hide
+         */
+        public boolean doOrderLunch(final BurzaLunch lunch) {
             return orderBurza(lunch);
         }
 
-        private boolean doOrderLunch(final MonthLunch lunch) {
+        /**
+         * @hide
+         */
+        public boolean doOrderLunch(final MonthLunch lunch) {
             return orderMonth(lunch);
         }
 
-        private boolean doToBurzaMonthLunch(final MonthLunch lunch) {
+        /**
+         * @hide
+         */
+        public boolean doToBurzaMonthLunch(final MonthLunch lunch) {
             return toBurzaMonth(lunch);
         }
 
@@ -722,17 +624,13 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             return mLunchesManager.getOldMonthLunches();
         }
 
-        public void loadCredit() {
-            mManager.loadCredit();
-        }
-
         public double getCredit() {
             return mManager.getCredit();
         }
 
         public String getCreditString() {
-            double credit = mManager.getCredit();
-            if (mManager.isCreditLoaded()) {
+            if (mManager != null) {
+                double credit = mManager.getCredit();
                 if (credit == (int) credit) {
                     return String.valueOf((int) credit);
                 } else {
@@ -741,10 +639,6 @@ public class ICService extends BindImplService<ICService.ICBinder> {
             } else {
                 return "?";
             }
-        }
-
-        public boolean isCreditLoaded() {
-            return mManager.isCreditLoaded();
         }
     }
 }

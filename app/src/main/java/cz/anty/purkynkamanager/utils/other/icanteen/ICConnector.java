@@ -3,6 +3,7 @@ package cz.anty.purkynkamanager.utils.other.icanteen;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -11,7 +12,6 @@ import java.util.Map;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.Utils;
-import cz.anty.purkynkamanager.utils.other.WrongLoginDataException;
 
 /**
  * Created by anty on 17.8.15.
@@ -42,7 +42,7 @@ class ICConnector {
     private static final String ORDER_URL_START = "http://stravovani.sspbrno.cz:8080/faces/secured/";
 
     private final Map<String, String> loginCookies;
-    private Document lastPage;
+    private double credit = 0d;
     private long lastRefresh = 0;
     private long lastOrder = 0;
 
@@ -66,6 +66,7 @@ class ICConnector {
             lastOrder = actual;
             return cookies;
         } catch (IOException e) {
+            Log.v(LOG_TAG, "login depth: " + depth, e);
             depth++;
             return login(depth, e, username, password);
         }
@@ -97,8 +98,8 @@ class ICConnector {
     }
 
     public synchronized Elements getMonthElements() throws IOException {
-        lastPage = getPage(MONTH_URL, 0, null);
-        if (!isLoggedIn(lastPage))
+        Document monthPage = getPage(MONTH_URL, 0, null);
+        if (!isLoggedIn(monthPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         //if (AppDataManager.isDebugMode(null))
@@ -108,7 +109,7 @@ class ICConnector {
         /*if (!isLoggedIn(monthPage))
             throw new WrongLoginDataException();*/
 
-        Elements toReturn = lastPage
+        Elements toReturn = monthPage
                 .select("div#mainContext")
                 .select("table")
                 .select("form[name=objednatJidlo-]");
@@ -118,18 +119,15 @@ class ICConnector {
 
 
     public synchronized Elements getBurzaElements() throws IOException {
-        lastPage = getPage(BURZA_URL, 0, null);
-        if (!isLoggedIn(lastPage))
+        Document burzaPage = getPage(BURZA_URL, 0, null);
+        if (!isLoggedIn(burzaPage))
             throw new IllegalStateException("iCanteen Connector is not logged in");
 
         //if (AppDataManager.isDebugMode(null))
         //System.out.println("ICConnector getBurzaElements startElements:\n" + burzaPage);
         //Log.v("ICConnector", "getBurzaElements startElements:\n" + burzaPage);
 
-        if (!isLoggedIn(lastPage))
-            throw new WrongLoginDataException();
-
-        Elements toReturn = lastPage
+        Elements toReturn = burzaPage
                 .select("div#mainContext")
                 .select("table")
                 .select("tr");
@@ -138,15 +136,17 @@ class ICConnector {
         return toReturn;
     }
 
-
-    public synchronized Elements getAllElements() throws IOException {
-        lastPage = getPage(MONTH_URL, 0, null);
-        if (!isLoggedIn(lastPage))
-            throw new IllegalStateException("iCanteen Connector is not logged in");
-
-        return lastPage.getAllElements();
+    private synchronized void updateCredit(Element elements) {
+        try {
+            credit = Double.parseDouble(elements.select("span#Kredit span").text());
+        } catch (Throwable t) {
+            Log.v(LOG_TAG, "updateCredit", t);
+        }
     }
 
+    public double getCredit() {
+        return credit;
+    }
 
     private synchronized Document getPage(String url, int depth, IOException last) throws IOException {
         if (depth >= Constants.MAX_TRY) throw last;
@@ -160,15 +160,14 @@ class ICConnector {
                     .followRedirects(false)
                     .cookies(loginCookies).get();
 
+            updateCredit(document);
+
             lastRefresh = System.currentTimeMillis();
             return document;
         } catch (IOException e) {
+            Log.v(LOG_TAG, "getPage depth: " + depth, e);
             depth++;
             return getPage(url, depth, e);
         }
-    }
-
-    public synchronized Document getLastPage() {
-        return lastPage;
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
-import cz.anty.purkynkamanager.utils.other.icanteen.lunch.LunchesManager;
+import cz.anty.purkynkamanager.utils.other.icanteen.lunch.LunchOrderRequest;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.MultilineRecyclerAdapter;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.RecyclerItemClickListener;
 import cz.anty.purkynkamanager.utils.other.list.recyclerView.base.RecyclerInflater;
@@ -29,8 +29,7 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "ICPendingOrdersActivity";
 
-    private MultilineRecyclerAdapter<LunchesManager
-            .LunchOrderRequest> mAdapter;
+    private MultilineRecyclerAdapter<LunchOrderRequest> mAdapter;
     private RecyclerInflater.RecyclerManager mRecyclerManager;
     private OnceRunThread refreshThread;
 
@@ -54,7 +53,7 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
                         new RecyclerItemClickListener.SimpleClickListener() {
                             @Override
                             public void onClick(View view, int position) {
-                                final LunchesManager.LunchOrderRequest item = mAdapter.getItem(position);
+                                final LunchOrderRequest item = mAdapter.getItem(position);
                                 new AlertDialog.Builder(ICPendingOrdersActivity.this, R.style.AppTheme_Dialog_IC)
                                         .setTitle(item.getTitle(ICPendingOrdersActivity.this, -1))
                                         .setMessage(R.string.dialog_message_icanteen_cancel_order)
@@ -91,14 +90,12 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
                 try {
                     mRecyclerManager.setRefreshing(true);
                     ICService.ICBinder binder = ICSplashActivity.serviceManager.getBinder();
-                    final LunchesManager.LunchOrderRequest[] requests;
+                    final LunchOrderRequest[] requests;
                     if (binder != null) {
                         binder.waitToWorkerStop();
-                        List<LunchesManager.LunchOrderRequest>
-                                requestList = binder.getOrderRequests();
-                        requests = requestList.toArray(new LunchesManager
-                                .LunchOrderRequest[requestList.size()]);
-                    } else requests = new LunchesManager.LunchOrderRequest[0];
+                        List<LunchOrderRequest> requestList = binder.getOrderRequests();
+                        requests = requestList.toArray(new LunchOrderRequest[requestList.size()]);
+                    } else requests = new LunchOrderRequest[0];
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 import cz.anty.purkynkamanager.utils.other.Constants;
-import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.WrongLoginDataException;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.Lunches;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
@@ -21,8 +20,6 @@ import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 public class ICManager {
 
     private final String username, password;
-    private boolean creditLoaded = false;
-    private double credit;
     private ICConnector connector = null;
 
     public ICManager(String username, String password) {
@@ -84,7 +81,6 @@ public class ICManager {
             }
             throw e;
         }
-        parseCredit(connector.getLastPage().getAllElements());
         return Lunches.parseMonthLunches(elements);
     }
 
@@ -112,28 +108,11 @@ public class ICManager {
             }
             throw e;
         }
-        parseCredit(connector.getLastPage().getAllElements());
         return Lunches.parseBurzaLunches(elements);
     }
 
-    private synchronized void parseCredit(Elements elements) {
-        credit = Double.parseDouble(elements.select("span#Kredit span").text());
-        creditLoaded = true;
-    }
-
-    public synchronized void loadCredit() {
-        try {
-            parseCredit(connector.getAllElements());
-        } catch (IOException e) {
-            Log.d("ICManager", "Failed to refresh credit", e);
-        }
-    }
-
     public double getCredit() {
-        return credit;
-    }
-
-    public boolean isCreditLoaded() {
-        return creditLoaded;
+        if (!isConnected()) throw new IllegalStateException("Manager is disconnected");
+        return connector.getCredit();
     }
 }

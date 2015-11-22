@@ -173,7 +173,7 @@ public class TimetableLessonWidget extends WidgetProvider {
                         Lesson nextLesson = timetable.getNextLesson(day - 2, i);
 
                         if (actualLesson != null &&
-                                minuteTime < requestedTime - 60) {
+                                minuteTime < requestedTime - 55) {
                             nextLesson = actualLesson;
                             actualLesson = null;
                         }

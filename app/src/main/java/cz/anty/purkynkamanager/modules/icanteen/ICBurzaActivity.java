@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
 import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 import cz.anty.purkynkamanager.utils.other.list.items.TextMultilineItem;
@@ -100,7 +101,8 @@ public class ICBurzaActivity extends AppCompatActivity {
                                 .setMessage(lunch.getLunchNumber()
                                         + "\n" + BurzaLunch.DATE_FORMAT.format(lunch.getDate())
                                         + "\n" + lunch.getName()
-                                        + "\n" + String.format(getString(R.string.text_credit), binder.getCreditString()))
+                                        + "\n" + Utils.getFormattedText(ICBurzaActivity.this,
+                                        R.string.text_credit, binder.getCreditString()))
                                 .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

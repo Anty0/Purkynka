@@ -54,7 +54,9 @@ public class TeachersManager {
             teachers.add(parseTeacher(string));
         }*/
 
-        if (preferences.getLong(Constants.SETTING_NAME_LAST_REFRESH, lastRefresh) - lastRefresh > 1000 * 60 * 60 * 24) {
+        if (preferences.getLong(Constants.SETTING_NAME_LAST_REFRESH, lastRefresh)
+                - lastRefresh > Constants.VALIDATION_TIMEOUT_TEACHERS_MANAGER
+                || teachers.isEmpty()) {
             refresh();
         }
     }

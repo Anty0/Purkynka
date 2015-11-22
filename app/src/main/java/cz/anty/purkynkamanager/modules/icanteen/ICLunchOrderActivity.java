@@ -34,6 +34,7 @@ import java.util.List;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Log;
+import cz.anty.purkynkamanager.utils.other.Utils;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunch;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
@@ -62,15 +63,11 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     final MonthLunchDay lunch = item instanceof MonthLunchDay ? (MonthLunchDay) item : null;
                     if (lunch == null) return;
 
-                    final LinearLayout linearLayout = new LinearLayout(ICLunchOrderActivity.this);
-                    linearLayout.setOrientation(LinearLayout.VERTICAL);
-
                     final ScrollView mainScrollView = new ScrollView(ICLunchOrderActivity.this);
-                    mainScrollView.addView(linearLayout);
 
                     final RadioGroup radioGroup = new RadioGroup(ICLunchOrderActivity.this);
                     radioGroup.setOrientation(LinearLayout.VERTICAL);
-                    linearLayout.addView(radioGroup);
+                    mainScrollView.addView(radioGroup);
 
                     RadioButton radioButtonNoLunch = new AppCompatRadioButton(ICLunchOrderActivity.this);
                     radioButtonNoLunch.setTag(null);
@@ -122,18 +119,22 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                         radioButtonNoLunch.setEnabled(false);
                     radioGroup.check(toCheck);
 
-                    final LinearLayout.LayoutParams creditTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    final CharSequence creditText = Utils.getFormattedText(ICLunchOrderActivity
+                            .this, R.string.text_credit, binder.getCreditString());
+
                     final TextView creditTextView = new TextView(ICLunchOrderActivity.this);
-                    final String creditText = "\n" + String.format(getString(R.string.text_credit), binder.getCreditString());
-                    final Spannable spannable = new SpannableString(creditText);
-                    creditTextView.setLayoutParams(creditTextParams);
+                    creditTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout
+                            .LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     creditTextView.setGravity(Gravity.CENTER_HORIZONTAL);
                     creditTextView.setTextSize(16f);
+                    Utils.setPadding(creditTextView, 0, 10, 0, 0);
+
+                    final Spannable spannable = new SpannableString(creditText);
                     spannable.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannable.setSpan(new ForegroundColorSpan(Color.GREEN), 8, creditText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, creditText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     creditTextView.setText(spannable, TextView.BufferType.SPANNABLE);
-                    linearLayout.addView(creditTextView);
+                    radioGroup.addView(creditTextView);
 
                     AlertDialog.Builder dialogBuilder = new AlertDialog
                             .Builder(ICLunchOrderActivity.this, R.style.AppTheme_Dialog_IC)
