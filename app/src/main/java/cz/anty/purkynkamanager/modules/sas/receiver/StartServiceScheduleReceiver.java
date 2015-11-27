@@ -27,14 +27,20 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
                 AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
             Calendar calendar = Calendar.getInstance();
             int hours = calendar.get(Calendar.HOUR_OF_DAY);
-            if (hours >= 6 && hours < 17) {
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
+            if (hours >= 6 && hours < 17 && day != Calendar.SATURDAY && day != Calendar.SUNDAY) {
                 service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                         context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE)
                                 .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) + Constants
                                 .REPEAT_TIME_SAS_MARKS_UPDATE, Constants
                                 .REPEAT_TIME_SAS_MARKS_UPDATE, pending);
             } else {
-                if (hours >= 6) calendar.add(Calendar.DAY_OF_WEEK, 1);
+                if (hours >= 6 || day == Calendar.SATURDAY || day == Calendar.SUNDAY)
+                    do {
+                        calendar.add(Calendar.DAY_OF_WEEK, 1);
+                        day = calendar.get(Calendar.DAY_OF_WEEK);
+                    } while (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
+
                 calendar.set(Calendar.HOUR_OF_DAY, 6);
                 calendar.set(Calendar.MINUTE, 5);
                 service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
