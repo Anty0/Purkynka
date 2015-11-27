@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
 
 /**
@@ -27,6 +28,7 @@ public class Timetable implements MultilineItem {
     public static final int[] START_TIMES_MINUTES = new int[]{
             10, 0, 55, 0, 55, 50, 45, 40, 35, 30, 25, 20};
     public static final int MAX_LESSONS = 11;
+    private static final String LOG_TAG = "Timetable";
     private static final int TIMETABLE_SAVE_VERSION = 2;
     //private static final String PARSE_CONST_DAY = ":;TD;:";
     //private static final String PARSE_CONST_OBJECT = ":;TO;:";
@@ -67,7 +69,11 @@ public class Timetable implements MultilineItem {
 
         String data = preferences.getString(Constants.SETTING_NAME_ADD_TIMETABLE + key, "");
         if (!data.equals(""))
-            return new Timetable(context, key, ApplicationBase.GSON.fromJson(data, Lesson[][].class));
+            try {
+                return new Timetable(context, key, ApplicationBase.GSON.fromJson(data, Lesson[][].class));
+            } catch (Throwable t) {
+                Log.d(LOG_TAG, "loadTimetable", t);
+            }
         return new Timetable(context, key, new Lesson[DAYS_STRINGS_IDS.length][MAX_LESSONS]);
 
         /*String[] days = context.getSharedPreferences(Constants.SETTINGS_NAME_TIMETABLES, Context.MODE_PRIVATE)
@@ -154,7 +160,13 @@ public class Timetable implements MultilineItem {
     }
 
     private synchronized void apply() {
-        String data = ApplicationBase.GSON.toJson(lessons);
+        String data;
+        try {
+            data = ApplicationBase.GSON.toJson(lessons);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "", t);
+            data = "";
+        }
 
         /*StringBuilder builder = new StringBuilder(dayToString(0).replace(PARSE_CONST_DAY, "??????"));
         for (int i = 1; i < lessons.length; i++) {

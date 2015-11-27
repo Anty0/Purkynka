@@ -17,6 +17,7 @@ import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.modules.attendance.widget.TrackingWidget;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.Utils;
 
 /**
@@ -65,8 +66,12 @@ public class TrackingMansManager {
             if (context == null || context.getSharedPreferences(Constants
                     .SETTINGS_NAME_MAIN, Context.MODE_PRIVATE).getBoolean(Constants
                     .SETTING_NAME_ITEM_UNLOCKED_BONUS, false)) {
-                mans.addAll(Arrays.asList(ApplicationBase.GSON
-                        .fromJson(txtData, Man[].class)));
+                try {
+                    mans.addAll(Arrays.asList(ApplicationBase.GSON
+                            .fromJson(txtData, Man[].class)));
+                } catch (Throwable t) {
+                    Log.d(LOG_TAG, "reload", t);
+                }
             }
             /*mans.clear();
             for (String manData : data) {
@@ -219,7 +224,12 @@ public class TrackingMansManager {
     public String toString() {
         //StringBuilder data = new StringBuilder();
         synchronized (mans) {
-            return ApplicationBase.GSON.toJson(mans.toArray(new Man[mans.size()]));
+            try {
+                return ApplicationBase.GSON.toJson(mans.toArray(new Man[mans.size()]));
+            } catch (Throwable t) {
+                Log.d(LOG_TAG, "toString", t);
+                return "";
+            }
             /*if (!mans.isEmpty()) {
                 Man man2 = mans.get(0);
                 data.append(man2.getName().replace(MAN_SPLIT_VALUE, "?????"))

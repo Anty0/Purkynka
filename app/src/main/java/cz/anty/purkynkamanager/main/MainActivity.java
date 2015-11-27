@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private static SpecialModuleManager moduleManager;
     private OnceRunThread worker;
     private Toolbar mToolbar;
+    private boolean mAcceptedTerms = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (savedInstanceState == null) {
+        if (!mAcceptedTerms) {
             final SharedPreferences preferences = getSharedPreferences
                     (Constants.SETTINGS_NAME_MAIN, MODE_PRIVATE);
             final int actualCode = preferences.getInt(Constants.SETTING_NAME_LATEST_TERMS_CODE, -1);
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 preferences.edit()
                                                                         .putInt(Constants.SETTING_NAME_LATEST_TERMS_CODE,
                                                                                 latestCode2).apply();
+                                                                mAcceptedTerms = true;
                                                             }
                                                         });
                                                     }

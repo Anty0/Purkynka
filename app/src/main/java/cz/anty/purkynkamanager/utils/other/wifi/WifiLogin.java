@@ -89,7 +89,8 @@ public class WifiLogin {
                 }
                 return null;
             } catch (IOException e) {
-                //if (exception != null) e.initCause(exception);
+                if (e.getCause() == null && exception != null)
+                    e.initCause(exception);
                 exception = e;
                 Log.d(LOG_TAG, "getLoginUrl", exception);
             }
@@ -109,7 +110,8 @@ public class WifiLogin {
                         .execute();
                 return;
             } catch (IOException e) {
-                if (exception != null) e.initCause(exception);
+                if (e.getCause() == null && exception != null)
+                    e.initCause(exception);
                 exception = e;
                 Log.d(LOG_TAG, "sendLoginRequest", exception);
             }

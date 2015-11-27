@@ -11,6 +11,7 @@ import java.util.List;
 
 import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
 
 /**
  * Created by anty on 22.6.15.
@@ -19,6 +20,7 @@ import cz.anty.purkynkamanager.utils.other.Constants;
  */
 public class TeachersManager {
 
+    private static final String LOG_TAG = "TeachersManager";
     private static final int TEACHERS_SAVE_VERSION = 2;
     //private static final String SPLIT_VALUE = ":;TE;:";
 
@@ -46,7 +48,11 @@ public class TeachersManager {
 
         String data = preferences.getString(Constants.SETTING_NAME_TEACHERS, "");
         if (!data.equals(""))
-            teachers.addAll(Arrays.asList(ApplicationBase.GSON.fromJson(data, Teacher[].class)));
+            try {
+                teachers.addAll(Arrays.asList(ApplicationBase.GSON.fromJson(data, Teacher[].class)));
+            } catch (Throwable t) {
+                Log.d(LOG_TAG, "load", t);
+            }
         /*String[] teachersData;
         teachersData = preferences.getString(Constants.SETTING_NAME_TEACHERS, "").split("\n");
         if (teachersData[0].equals("")) return;
@@ -68,10 +74,17 @@ public class TeachersManager {
             teachers = teacherList.toArray(new Teacher[teacherList.size()]);
             lastRefresh = System.currentTimeMillis();
         } catch (IOException e) {
+            Log.d(LOG_TAG, "refresh", e);
             teachers = get();
         }
 
-        String data = ApplicationBase.GSON.toJson(teachers);
+        String data;
+        try {
+            data = ApplicationBase.GSON.toJson(teachers);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "refresh", t);
+            data = "";
+        }
         /*StringBuilder builder = new StringBuilder();
         if (teachers.length > 0) {
             builder.append(teacherToString(teachers[0]));

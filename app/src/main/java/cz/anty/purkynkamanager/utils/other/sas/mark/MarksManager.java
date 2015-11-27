@@ -12,6 +12,7 @@ import java.util.List;
 
 import cz.anty.purkynkamanager.ApplicationBase;
 import cz.anty.purkynkamanager.utils.other.Constants;
+import cz.anty.purkynkamanager.utils.other.Log;
 
 /**
  * Created by anty on 10.6.15.
@@ -20,6 +21,7 @@ import cz.anty.purkynkamanager.utils.other.Constants;
  */
 public class MarksManager {
 
+    private static final String LOG_TAG = "MarksManager";
     private static final int MARKS_SAVE_VERSION = 6;
     //private static final String SPLIT_VALUE = ":;M;:";
 
@@ -43,7 +45,12 @@ public class MarksManager {
     }
 
     private static String marksToString(Mark... marks) {
-        return ApplicationBase.GSON.toJson(marks);
+        try {
+            return ApplicationBase.GSON.toJson(marks);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "marksToString", t);
+            return "";
+        }
         /*StringBuilder builder = new StringBuilder();
         if (marks.length > 0) {
             builder.append(markToString(marks[0]));
@@ -68,7 +75,12 @@ public class MarksManager {
 
     public static List<Mark> parseMarks(String toParse) {
         if (toParse.equals("")) return new ArrayList<>();
-        return Arrays.asList(ApplicationBase.GSON.fromJson(toParse, Mark[].class));
+        try {
+            return Arrays.asList(ApplicationBase.GSON.fromJson(toParse, Mark[].class));
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "parseMarks", t);
+            return new ArrayList<>();
+        }
 
         /*String[] marksData = toParse.split("\n");
         List<Mark> marks = new ArrayList<>();

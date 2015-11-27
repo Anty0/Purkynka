@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import cz.anty.purkynkamanager.ApplicationBase;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.month.MonthLunchDay;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMemberNames;
@@ -23,6 +24,7 @@ import proguard.annotation.KeepName;
 @KeepClassMemberNames
 public class BurzaLunchSelector {
 
+    private static final String LOG_TAG = "BurzaLunchSelector";
     //private static final String LUNCH_SPLIT_VALUE = "/";
     //private static final String DATA_SPLIT_VALUE = "\n";
 
@@ -35,7 +37,13 @@ public class BurzaLunchSelector {
     }
 
     public static BurzaLunchSelector parseBurzaLunchSelector(String toParse) {
-        return ApplicationBase.GSON.fromJson(toParse, BurzaLunchSelector.class);
+        if (toParse == null || "".equals(toParse)) return null;
+        try {
+            return ApplicationBase.GSON.fromJson(toParse, BurzaLunchSelector.class);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "", t);
+            return null;
+        }
         /*String[] data = toParse.split(DATA_SPLIT_VALUE);
 
         BurzaLunch.LunchNumber[] lunchNumbers;
@@ -80,7 +88,12 @@ public class BurzaLunchSelector {
 
     @Override
     public String toString() {
-        return ApplicationBase.GSON.toJson(this);
+        try {
+            return ApplicationBase.GSON.toJson(this);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "", t);
+            return "";
+        }
         /*StringBuilder builder = new StringBuilder();
         if (lunchNumbers.length > 0) {
             builder.append(lunchNumbers[0]);

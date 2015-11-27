@@ -38,12 +38,22 @@ public class LunchesManager {
     }
 
     private static String lunchesToString(MonthLunchDay... lunchDays) {
-        return ApplicationBase.GSON.toJson(lunchDays);
+        try {
+            return ApplicationBase.GSON.toJson(lunchDays);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "lunchesToString", t);
+            return "";
+        }
     }
 
     public static MonthLunchDay[] parseLunches(String toParse) {
         if (toParse.equals("")) return new MonthLunchDay[0];
-        return ApplicationBase.GSON.fromJson(toParse, MonthLunchDay[].class);
+        try {
+            return ApplicationBase.GSON.fromJson(toParse, MonthLunchDay[].class);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "lunchesToString", t);
+            return new MonthLunchDay[0];
+        }
     }
 
     private static String ordersToString(MonthLunchOrderRequest... lunchOrders) {
@@ -51,7 +61,12 @@ public class LunchesManager {
         for (int i = 0; i < lunchOrders.length; i++) {
             lunches[i] = lunchOrders[i].getMonthLunch();
         }
-        return ApplicationBase.GSON.toJson(lunches);
+        try {
+            return ApplicationBase.GSON.toJson(lunches);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "ordersToString", t);
+            return "";
+        }
     }
 
     private static String ordersToString(BurzaLunchOrderRequest... lunchOrders) {
@@ -59,7 +74,13 @@ public class LunchesManager {
         for (int i = 0; i < lunchOrders.length; i++) {
             lunches[i] = lunchOrders[i].getBurzaLunch();
         }
-        return ApplicationBase.GSON.toJson(lunches);
+
+        try {
+            return ApplicationBase.GSON.toJson(lunches);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "ordersToString", t);
+            return "";
+        }
     }
 
     private static String ordersToString(MonthToBurzaLunchOrderRequest... lunchOrders) {
@@ -67,12 +88,23 @@ public class LunchesManager {
         for (int i = 0; i < lunchOrders.length; i++) {
             lunches[i] = lunchOrders[i].getMonthLunch();
         }
-        return ApplicationBase.GSON.toJson(lunches);
+        try {
+            return ApplicationBase.GSON.toJson(lunches);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "ordersToString", t);
+            return "";
+        }
     }
 
     public static MonthLunchOrderRequest[] parseMonthOrders(String toParse) {
         if (toParse.equals("")) return new MonthLunchOrderRequest[0];
-        MonthLunch[] lunches = ApplicationBase.GSON.fromJson(toParse, MonthLunch[].class);
+        MonthLunch[] lunches;
+        try {
+            lunches = ApplicationBase.GSON.fromJson(toParse, MonthLunch[].class);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "ordersToString", t);
+            lunches = new MonthLunch[0];
+        }
         MonthLunchOrderRequest[] lunchOrders = new MonthLunchOrderRequest[lunches.length];
         for (int i = 0; i < lunches.length; i++) {
             lunchOrders[i] = new MonthLunchOrderRequest(lunches[i]);
@@ -82,7 +114,13 @@ public class LunchesManager {
 
     public static BurzaLunchOrderRequest[] parseBurzaOrders(String toParse) {
         if (toParse.equals("")) return new BurzaLunchOrderRequest[0];
-        BurzaLunch[] lunches = ApplicationBase.GSON.fromJson(toParse, BurzaLunch[].class);
+        BurzaLunch[] lunches;
+        try {
+            lunches = ApplicationBase.GSON.fromJson(toParse, BurzaLunch[].class);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "ordersToString", t);
+            lunches = new BurzaLunch[0];
+        }
         BurzaLunchOrderRequest[] lunchOrders = new BurzaLunchOrderRequest[lunches.length];
         for (int i = 0; i < lunches.length; i++) {
             lunchOrders[i] = new BurzaLunchOrderRequest(lunches[i]);
@@ -92,7 +130,13 @@ public class LunchesManager {
 
     public static MonthToBurzaLunchOrderRequest[] parseMonthToBurzaOrders(String toParse) {
         if (toParse.equals("")) return new MonthToBurzaLunchOrderRequest[0];
-        MonthLunch[] lunches = ApplicationBase.GSON.fromJson(toParse, MonthLunch[].class);
+        MonthLunch[] lunches;
+        try {
+            lunches = ApplicationBase.GSON.fromJson(toParse, MonthLunch[].class);
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "ordersToString", t);
+            lunches = new MonthLunch[0];
+        }
         MonthToBurzaLunchOrderRequest[] lunchOrders = new
                 MonthToBurzaLunchOrderRequest[lunches.length];
         for (int i = 0; i < lunches.length; i++) {

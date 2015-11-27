@@ -21,13 +21,13 @@ class SASConnector {
 
     private static final String LOG_TAG = "SASConnector";
 
-    private static final String LOGIN_URL = "https://www.sspbrno.cz/ISAS/prihlasit.php";
+    private static final String LOGIN_URL = "https://www.sspbrno.cz/MYSAS/prihlasit.php";//"https://www.sspbrno.cz/ISAS/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
     private static final String PASS_FIELD = "login-isas-password";
     private static final String SUBMIT = "login-isas-send";
     private static final String SUBMIT_VALUE = "isas-send";
 
-    private static final String MARKS_URL = "https://www.sspbrno.cz/ISAS/prubezna-klasifikace.php";
+    private static final String MARKS_URL = "https://www.sspbrno.cz/MYSAS/prubezna-klasifikace.php";//"https://www.sspbrno.cz/ISAS/prubezna-klasifikace.php";
     private static final String SEMESTER = "pololeti";
     private static final String SHORT_BY = "zobraz";
     private static final String SHORT_BY_DATE = "datum";
