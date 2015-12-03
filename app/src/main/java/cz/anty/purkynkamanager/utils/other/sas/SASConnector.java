@@ -21,13 +21,13 @@ class SASConnector {
 
     private static final String LOG_TAG = "SASConnector";
 
-    private static final String LOGIN_URL = "https://www.sspbrno.cz/MYSAS/prihlasit.php";//"https://www.sspbrno.cz/ISAS/prihlasit.php";
+    private static final String LOGIN_URL = "http://isas.sspbrno.cz/prihlasit.php";//"https://www.sspbrno.cz/MYSAS/prihlasit.php";//"https://www.sspbrno.cz/ISAS/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
     private static final String PASS_FIELD = "login-isas-password";
     private static final String SUBMIT = "login-isas-send";
     private static final String SUBMIT_VALUE = "isas-send";
 
-    private static final String MARKS_URL = "https://www.sspbrno.cz/MYSAS/prubezna-klasifikace.php";//"https://www.sspbrno.cz/ISAS/prubezna-klasifikace.php";
+    private static final String MARKS_URL = "http://isas.sspbrno.cz/prubezna-klasifikace.php";//"https://www.sspbrno.cz/MYSAS/prubezna-klasifikace.php";//"https://www.sspbrno.cz/ISAS/prubezna-klasifikace.php";
     private static final String SEMESTER = "pololeti";
     private static final String SHORT_BY = "zobraz";
     private static final String SHORT_BY_DATE = "datum";
@@ -46,7 +46,9 @@ class SASConnector {
         try {
             return Jsoup
                     .connect(LOGIN_URL)
+                    .userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:42.0) Gecko/20100101 Firefox/42.0")
                     .data(LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
+                    .followRedirects(false)
                     .timeout(Constants.CONNECTION_TIMEOUT_SAS)
                     .method(Connection.Method.POST)
                     .validateTLSCertificates(false)
@@ -81,8 +83,9 @@ class SASConnector {
         try {
             return Jsoup
                     .connect(MARKS_URL)
-                    .followRedirects(false)
+                    .userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:42.0) Gecko/20100101 Firefox/42.0")
                     .data(SEMESTER, semester.getValue().toString(), SHORT_BY, SHORT_BY_DATE)
+                    .followRedirects(false)
                     .timeout(Constants.CONNECTION_TIMEOUT_SAS)
                     .method(Connection.Method.GET)
                     .validateTLSCertificates(false)
