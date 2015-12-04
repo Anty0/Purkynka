@@ -15,8 +15,8 @@ android {
         applicationId "cz.anty.purkynkamanager"
         minSdkVersion 10//15
         targetSdkVersion 23
-        versionCode 38
-        versionName '3.6.8'
+        versionCode 39
+        versionName '3.6.9'
 //        renderscriptTargetApi 23
 //        renderscriptSupportModeEnabled true
         useLibrary 'org.apache.http.legacy'
