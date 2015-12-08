@@ -125,8 +125,7 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
                     }
                 }
             };
-    private BroadcastReceiver onStateChangedListener
-            = new BroadcastReceiver() {
+    private final BroadcastReceiver onStateChangedListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final boolean running = intent.getBooleanExtra(ICBurzaCheckerService.EXTRA_BURZA_CHECKER_STATE_IS_RUNNING, false);
@@ -192,7 +191,11 @@ public class ICBurzaCheckerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(onStateChangedListener);
+        try {
+            unregisterReceiver(onStateChangedListener);
+        } catch (IllegalArgumentException e) {
+            Log.d(LOG_TAG, "onDestroy", e);
+        }
         super.onDestroy();
     }
 

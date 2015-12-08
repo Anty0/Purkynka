@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.anty.purkynkamanager.ApplicationBase;
+import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.icanteen.lunch.burza.BurzaLunch;
@@ -217,6 +218,9 @@ public class LunchesManager {
         Calendar nextWeekCal = Calendar.getInstance();
         nextWeekCal.add(Calendar.DAY_OF_WEEK, 7);
         long nextWeekMilis = nextWeekCal.getTimeInMillis();
+        nextWeekCal.setTimeInMillis(AppDataManager.getLastRefresh(AppDataManager.Type.I_CANTEEN));
+        nextWeekCal.add(Calendar.DAY_OF_WEEK, 7);
+        long lastRefreshMilis = nextWeekCal.getTimeInMillis();
         boolean newLunches = false;
         MonthLunchDay[] listLunchDays = mMonthLunches
                 .toArray(new MonthLunchDay[mMonthLunches.size()]);
@@ -234,7 +238,8 @@ public class LunchesManager {
             if (!inserted) {
                 mMonthLunches.add(lunchDay);
             }
-            if (lunchDay.getDate().getTime() < nextWeekMilis
+            long lunchTime = lunchDay.getDate().getTime();
+            if (lunchTime < nextWeekMilis && lunchTime > lastRefreshMilis
                     && lunchDay.getOrderedLunch() == null) {
                 newLunches = true;
             }

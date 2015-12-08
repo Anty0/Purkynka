@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.anty.purkynkamanager.BuildConfig;
+
 /**
  * Created by anty on 11.6.15.
  *
@@ -217,26 +219,35 @@ public class AppDataManager {
 
     public static synchronized boolean isDebugMode() {
         return Type.DEBUG.getSharedPreferences()
-                .getBoolean(Constants.SETTING_NAME_DEBUG_MODE, false);
+                .getBoolean(Constants.SETTING_NAME_DEBUG_MODE, false)
+                || Type.MAIN.getSharedPreferences().getInt(Constants
+                .SETTING_NAME_LATEST_EXCEPTION_CODE, -1)
+                == BuildConfig.VERSION_CODE;
     }
 
     public static synchronized void setDebugMode(boolean toSet) {
         Type.DEBUG.getSharedPreferences().edit()
                 .putBoolean(Constants.SETTING_NAME_DEBUG_MODE, toSet)
                 .apply();
+        if (!toSet) {
+            Type.MAIN.getSharedPreferences().edit().putInt(Constants
+                    .SETTING_NAME_LATEST_EXCEPTION_CODE, -1)
+                    .apply();
+        }
         Log.setDebug(toSet);
     }
 
     public enum Type {
-        SAS, WIFI, I_CANTEEN, DEBUG;
+        SAS, WIFI, I_CANTEEN, DEBUG, MAIN;
 
-        private static SharedPreferences SAS_PREFS, WIFI_PREFS, I_CANTEEN_PREFS, DEBUG_PREFS;
+        private static SharedPreferences SAS_PREFS, WIFI_PREFS, I_CANTEEN_PREFS, DEBUG_PREFS, MAIN_PREFS;
 
         static void init(Context context) {
             SAS_PREFS = context.getSharedPreferences(SAS.toString(), Context.MODE_PRIVATE);
             WIFI_PREFS = context.getSharedPreferences(WIFI.toString(), Context.MODE_PRIVATE);
             I_CANTEEN_PREFS = context.getSharedPreferences(I_CANTEEN.toString(), Context.MODE_PRIVATE);
             DEBUG_PREFS = context.getSharedPreferences(DEBUG.toString(), Context.MODE_PRIVATE);
+            MAIN_PREFS = context.getSharedPreferences(MAIN.toString(), Context.MODE_PRIVATE);
             Log.setDebug(isDebugMode());
         }
 
@@ -249,6 +260,8 @@ public class AppDataManager {
 
         SharedPreferences getSharedPreferences() {
             switch (this) {
+                case MAIN:
+                    return MAIN_PREFS;
                 case DEBUG:
                     return DEBUG_PREFS;
                 case I_CANTEEN:
@@ -264,6 +277,8 @@ public class AppDataManager {
         @Override
         public String toString() {
             switch (this) {
+                case MAIN:
+                    return Constants.SETTINGS_NAME_MAIN;
                 case DEBUG:
                     return Constants.SETTINGS_NAME_DEBUG;
                 case I_CANTEEN:

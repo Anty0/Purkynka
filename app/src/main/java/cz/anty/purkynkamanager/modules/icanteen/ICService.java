@@ -143,8 +143,6 @@ public class ICService extends BindImplService<ICService.ICBinder> {
 
                     if (!intent.getBooleanExtra(EXTRA_UPDATE_MONTH, false)) return;
                     ICService.this.refreshMonth(true);
-                    AppDataManager.setLastRefresh(AppDataManager.Type
-                            .I_CANTEEN, System.currentTimeMillis());
                 }
             });
         return START_NOT_STICKY;
@@ -238,6 +236,8 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     onMonthChange.run();
                 return false;
             }
+            AppDataManager.setLastRefresh(AppDataManager.Type
+                    .I_CANTEEN, System.currentTimeMillis());
             return true;
         } catch (final Exception e) {
             Log.d(LOG_TAG, "refreshMonth", e);
