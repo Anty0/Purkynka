@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import java.util.Calendar;
+import java.util.Random;
 
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
@@ -25,6 +26,7 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
         service.cancel(pending);
         if (AppDataManager.isSASMarksAutoUpdate() && Utils.isNetworkAvailable(context) &&
                 AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
+            Random random = new Random();
             Calendar calendar = Calendar.getInstance();
             int hours = calendar.get(Calendar.HOUR_OF_DAY);
             int day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -32,8 +34,8 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
                 service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                         context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE)
                                 .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) + Constants
-                                .REPEAT_TIME_SAS_MARKS_UPDATE, Constants
-                                .REPEAT_TIME_SAS_MARKS_UPDATE, pending);
+                                .REPEAT_TIME_SAS_MARKS_UPDATE, (long) ((float) Constants
+                                .REPEAT_TIME_SAS_MARKS_UPDATE * ((float) (random.nextInt(3) - 1) / 10f)), pending);
             } else {
                 if (hours >= 6 || day == Calendar.SATURDAY || day == Calendar.SUNDAY)
                     do {
@@ -42,7 +44,7 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
                     } while (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
 
                 calendar.set(Calendar.HOUR_OF_DAY, 6);
-                calendar.set(Calendar.MINUTE, 5);
+                calendar.set(Calendar.MINUTE, random.nextInt(50) + 5);
                 service.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         PendingIntent.getBroadcast(context, 0,
                                 new Intent(context, getClass()), 0));

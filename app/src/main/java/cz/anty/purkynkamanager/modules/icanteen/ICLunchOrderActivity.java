@@ -120,7 +120,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     radioGroup.check(toCheck);
 
                     final CharSequence creditText = Utils.getFormattedText(ICLunchOrderActivity
-                            .this, R.string.text_credit, binder.getCreditString());
+                            .this, R.string.text_credit, binder == null ? "?" : binder.getCreditString());
 
                     final TextView creditTextView = new TextView(ICLunchOrderActivity.this);
                     creditTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout

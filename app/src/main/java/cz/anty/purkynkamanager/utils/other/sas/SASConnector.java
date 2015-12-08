@@ -21,15 +21,13 @@ class SASConnector {
 
     private static final String LOG_TAG = "SASConnector";
     private static final String SCHOOL_URL = "http://www.sspbrno.cz/";
-    //private static final String MAIN_URL = "http://isas.sspbrno.cz/";
+    private static final String DEFAULT_MAIN_URL = "http://isas.sspbrno.cz";
     private static final String LOGIN_URL_ADD = "/prihlasit.php";
-    //private static final String LOGIN_URL = MAIN_URL + "prihlasit.php";//"https://www.sspbrno.cz/MYSAS/prihlasit.php";//"https://www.sspbrno.cz/ISAS/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
     private static final String PASS_FIELD = "login-isas-password";
     private static final String SUBMIT = "login-isas-send";
     private static final String SUBMIT_VALUE = "isas-send";
     private static final String MARKS_URL_ADD = "/prubezna-klasifikace.php";
-    //private static final String MARKS_URL = MAIN_URL + "prubezna-klasifikace.php";//"https://www.sspbrno.cz/MYSAS/prubezna-klasifikace.php";//"https://www.sspbrno.cz/ISAS/prubezna-klasifikace.php";
     private static final String SEMESTER = "pololeti";
     private static final String SHORT_BY = "zobraz";
     private static final String SHORT_BY_DATE = "datum";
@@ -39,10 +37,19 @@ class SASConnector {
     private final Map<String, String> loginCookies;
 
     SASConnector(String username, String password) throws IOException {
-        MAIN_URL = Jsoup
-                .connect(SCHOOL_URL)
-                .followRedirects(false)
-                .get().select("#table1").select("a").get(0).attr("href");
+        String mainUrl;
+        try {
+            mainUrl = Jsoup
+                    .connect(SCHOOL_URL)
+                    .followRedirects(false)
+                    .get().select("#table1")
+                    .select("a").get(0).attr("href");
+        } catch (Throwable t) {
+            Log.d(LOG_TAG, "<init>", t);
+            mainUrl = DEFAULT_MAIN_URL;
+        }
+        MAIN_URL = mainUrl;
+
         this.loginCookies = login(0, null, username, password);
     }
 

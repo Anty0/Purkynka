@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.anty.purkynkamanager.R;
+import cz.anty.purkynkamanager.modules.sas.receiver.StartServiceScheduleReceiver;
 import cz.anty.purkynkamanager.modules.sas.widget.SASManageWidget;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
@@ -145,6 +146,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
                     if (refreshMarks(updateMarks, false, updateWidget)) {
                         SASManageWidget.callUpdate(SASManagerService.this, marks.toString());
                     }
+                    sendBroadcast(new Intent(SASManagerService.this, StartServiceScheduleReceiver.class));
                 }
             });
         }

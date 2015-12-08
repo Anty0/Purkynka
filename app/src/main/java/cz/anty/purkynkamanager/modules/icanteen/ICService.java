@@ -263,20 +263,25 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         AppDataManager.setICNewMonthLunches(true);
 
         if (AppDataManager.isICNotifyNewMonthLunches()) {
-            PendingIntent pIntent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, ICSplashActivity.class), 0);
+            new Handler(getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    PendingIntent pIntent = PendingIntent.getActivity(ICService.this, 0,
+                            new Intent(ICService.this, ICSplashActivity.class), 0);
 
-            Notification n = new NotificationCompat.Builder(this)
-                    .setContentTitle(getText(R.string.notify_title_new_lunches))
-                    .setContentText(getText(R.string.notify_text_new_lunches))
-                    .setSmallIcon(R.mipmap.ic_launcher_ic)
-                    .setContentIntent(pIntent)
-                    .setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .build();
+                    Notification n = new NotificationCompat.Builder(ICService.this)
+                            .setContentTitle(getText(R.string.notify_title_new_lunches))
+                            .setContentText(getText(R.string.notify_text_new_lunches))
+                            .setSmallIcon(R.mipmap.ic_launcher_ic)
+                            .setContentIntent(pIntent)
+                            .setAutoCancel(true)
+                            .setDefaults(Notification.DEFAULT_ALL)
+                            .build();
 
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                    .notify(Constants.NOTIFICATION_ID_I_CANTEEN_MONTH, n);
+                    ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                            .notify(Constants.NOTIFICATION_ID_I_CANTEEN_MONTH, n);
+                }
+            });
         }
     }
 

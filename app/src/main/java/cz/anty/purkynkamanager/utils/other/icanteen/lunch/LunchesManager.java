@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -213,6 +214,9 @@ public class LunchesManager {
             lunchDay.disable();
         }
 
+        Calendar nextWeekCal = Calendar.getInstance();
+        nextWeekCal.add(Calendar.DAY_OF_WEEK, 7);
+        long nextWeekMilis = nextWeekCal.getTimeInMillis();
         boolean newLunches = false;
         MonthLunchDay[] listLunchDays = mMonthLunches
                 .toArray(new MonthLunchDay[mMonthLunches.size()]);
@@ -229,6 +233,9 @@ public class LunchesManager {
             }
             if (!inserted) {
                 mMonthLunches.add(lunchDay);
+            }
+            if (lunchDay.getDate().getTime() < nextWeekMilis
+                    && lunchDay.getOrderedLunch() == null) {
                 newLunches = true;
             }
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Purkyňka</string>
-    <string name="app_name_updater">Updater</string>
+    <string name="app_name_updater">Kontrola aktualizací</string>
 
     <string name="app_description_module_feedback">Bylo zaznamenáno neobvyklé chování aplikace, prosím odešlete nám zpětnou vazbu, pokud tento problém přetrvává.</string>
     <string name="app_description_feedback">Pokud jste zaznamenali neobvyklé chování aplikace, nebo nám chcete odeslat nějaké informace o tom, co bychom mohli změnit nebo vylepšit, odešlete nám zpětnou vazbu pomocí následujícího formuláře.</string>
