@@ -1,22 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            storeFile file('/home/anty/AndroidStudioProjects/PurkynkaManager/AntyKeys.jks')
-            keyAlias 'sasmanagerkey'
-            keyPassword 'anty134679'
-            storePassword 'anty134679'
-        }
-    }
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "cz.anty.purkynkamanager"
         minSdkVersion 10//15
         targetSdkVersion 23
-        versionCode 40
-        versionName '3.6.9'
+        versionCode 41
+        versionName '3.7.0'
 //        renderscriptTargetApi 23
 //        renderscriptSupportModeEnabled true
         useLibrary 'org.apache.http.legacy'
