@@ -20,7 +20,7 @@ import cz.anty.purkynkamanager.utils.other.sas.mark.MarksManager;
 class SASConnector {
 
     private static final String LOG_TAG = "SASConnector";
-    private static final String SCHOOL_URL = "http://www.sspbrno.cz/";
+    private static final String SCHOOL_URL = "http://www.sspbrno.cz";
     private static final String DEFAULT_MAIN_URL = "http://isas.sspbrno.cz";
     private static final String LOGIN_URL_ADD = "/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
