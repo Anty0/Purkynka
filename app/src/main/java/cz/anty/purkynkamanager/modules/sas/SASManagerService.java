@@ -108,7 +108,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
             sasManager = new SASManager(AppDataManager.getUsername(AppDataManager.Type.SAS),
                     AppDataManager.getPassword(AppDataManager.Type.SAS));
-            refreshMarks(false, true, false);
+            refreshMarks(false, true, false, true);
             //setState(State.CONNECTED);
         } else {
             sasManager = null;
@@ -143,7 +143,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
             worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    if (refreshMarks(updateMarks, false, updateWidget)) {
+                    if (refreshMarks(updateMarks, false, updateWidget, true)) {
                         SASManageWidget.callUpdate(SASManagerService.this, marks.toString());
                     }
                     sendBroadcast(new Intent(SASManagerService.this, StartServiceScheduleReceiver.class));
@@ -153,9 +153,9 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         return START_NOT_STICKY;
     }
 
-    private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget) {
+    private boolean refreshMarks(boolean force, boolean deepRefresh, boolean updateWidget, boolean background) {
         Log.d("SASManagerService", "refreshMarks: force=" + force +
-                " deep=" + deepRefresh + " updateWidget=" + updateWidget);
+                " deep=" + deepRefresh + " updateWidget=" + updateWidget + " background=" + background);
         if (sasManager == null) return updateWidget;
         if (!force && System.currentTimeMillis() - getSharedPreferences(Constants.SETTINGS_NAME_MARKS, MODE_PRIVATE)
                 .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) < Constants.WAIT_TIME_SAS_MARKS_REFRESH) {
@@ -164,7 +164,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
         }
         try {
             if (!sasManager.isConnected()) {
-                sasManager.connect();
+                sasManager.connect(!background);
                 //setState(State.CONNECTED);
                 setState(State.LOGGED_IN);
             }
@@ -344,7 +344,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
             return worker.startWorker(new Runnable() {
                 @Override
                 public void run() {
-                    refreshMarks(true, true, false);
+                    refreshMarks(true, true, false, false);
                 }
             });
         }

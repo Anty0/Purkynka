@@ -40,8 +40,8 @@ class SASConnector {
     private final Map<String, String> loginCookies;
     private final boolean forced;
 
-    SASConnector(String username, String password, boolean forced) throws IOException {
-        this.forced = forced;
+    SASConnector(String username, String password, boolean forceMode) throws IOException {
+        this.forced = forceMode;
         String mainUrl;
         try {
             mainUrl = Jsoup
@@ -113,6 +113,10 @@ class SASConnector {
             depth++;
             return getMarksPage(depth, e, semester);
         }
+    }
+
+    public boolean isInForceMode() {
+        return forced;
     }
 
     private String getUserAgent() {

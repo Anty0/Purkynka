@@ -27,16 +27,21 @@ public class SASManager {
     }
 
     public static void validate(String username, String password) throws IOException {
-        if (!new SASConnector(username, password).isLoggedIn())
+        if (!new SASConnector(username, password, true).isLoggedIn())
             throw new WrongLoginDataException();
     }
 
-    public synchronized void connect() throws IOException {
-        if (!isConnected()) connector = new SASConnector(username, password);
+    public synchronized void connect(boolean forceMode) throws IOException {
+        if (!isConnected()) connector = new SASConnector(username, password, forceMode);
     }
 
-    public synchronized void disconnect() {
-        if (isConnected()) connector = null;
+    public synchronized boolean disconnect() {
+        if (isConnected()) {
+            boolean toReturn = connector.isInForceMode();
+            connector = null;
+            return toReturn;
+        }
+        return false;
     }
 
     public synchronized boolean isConnected() {
@@ -59,8 +64,7 @@ public class SASManager {
             marksElements = connector.getMarksElements(semester);
         } catch (Exception e) {
             if (e instanceof IllegalStateException) {
-                disconnect();
-                connect();
+                connect(disconnect());
                 depth++;
                 return getMarks(semester, depth);
             }
