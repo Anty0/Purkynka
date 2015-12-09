@@ -31,10 +31,14 @@ public class StartServiceScheduleReceiver extends BroadcastReceiver {
             int hours = calendar.get(Calendar.HOUR_OF_DAY);
             int day = calendar.get(Calendar.DAY_OF_WEEK);
             if (hours >= 6 && hours < 17 && day != Calendar.SATURDAY && day != Calendar.SUNDAY) {
-                service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                        context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE)
-                                .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) + Constants
-                                .REPEAT_TIME_SAS_MARKS_UPDATE, (long) ((float) Constants
+                long startTime = context.getSharedPreferences(Constants.SETTINGS_NAME_MARKS, Context.MODE_PRIVATE)
+                        .getLong(Constants.SETTING_NAME_LAST_REFRESH, 0) + Constants
+                        .REPEAT_TIME_SAS_MARKS_UPDATE;
+                long actualTime = System.currentTimeMillis();
+                if (startTime < actualTime)
+                    startTime = actualTime + Constants.REPEAT_TIME_SAS_MARKS_UPDATE;
+
+                service.setInexactRepeating(AlarmManager.RTC_WAKEUP, startTime, (long) ((float) Constants
                                 .REPEAT_TIME_SAS_MARKS_UPDATE * ((float) (random.nextInt(3) - 1) / 10f)), pending);
             } else {
                 if (hours >= 6 || day == Calendar.SATURDAY || day == Calendar.SUNDAY)

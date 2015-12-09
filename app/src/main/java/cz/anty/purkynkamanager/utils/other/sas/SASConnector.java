@@ -1,5 +1,7 @@
 package cz.anty.purkynkamanager.utils.other.sas;
 
+import android.os.Build;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,6 +10,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.Map;
 
+import cz.anty.purkynkamanager.BuildConfig;
 import cz.anty.purkynkamanager.utils.other.Constants;
 import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.sas.mark.MarksManager;
@@ -35,12 +38,15 @@ class SASConnector {
     //private static final String SHORT_BY_LESSONS = "predmety";
     //private static final String SHORT_BY_SCORE = "hodnoceni";
     private final Map<String, String> loginCookies;
+    private final boolean forced;
 
-    SASConnector(String username, String password) throws IOException {
+    SASConnector(String username, String password, boolean forced) throws IOException {
+        this.forced = forced;
         String mainUrl;
         try {
             mainUrl = Jsoup
                     .connect(SCHOOL_URL)
+                    .userAgent(getUserAgent())
                     .followRedirects(false)
                     .get().select("#table1")
                     .select("a").get(0).attr("href");
@@ -59,12 +65,12 @@ class SASConnector {
         try {
             return Jsoup
                     .connect(MAIN_URL + LOGIN_URL_ADD)
-                            //.userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:42.0) Gecko/20100101 Firefox/42.0")
+                    .userAgent(getUserAgent())
                     .data(LOGIN_FIELD, username, PASS_FIELD, password, SUBMIT, SUBMIT_VALUE)
                     .followRedirects(false)
                     .timeout(Constants.CONNECTION_TIMEOUT_SAS)
                     .method(Connection.Method.POST)
-                    .validateTLSCertificates(false)
+                            //.validateTLSCertificates(false)
                     .execute().cookies();
         } catch (IOException e) {
             depth++;
@@ -96,16 +102,21 @@ class SASConnector {
         try {
             return Jsoup
                     .connect(MAIN_URL + MARKS_URL_ADD)
-                            //.userAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:42.0) Gecko/20100101 Firefox/42.0")
+                    .userAgent(getUserAgent())
                     .data(SEMESTER, semester.getValue().toString(), SHORT_BY, SHORT_BY_DATE)
                     .followRedirects(false)
                     .timeout(Constants.CONNECTION_TIMEOUT_SAS)
                     .method(Connection.Method.GET)
-                    .validateTLSCertificates(false)
+                            //.validateTLSCertificates(false)
                     .cookies(loginCookies).get();
         } catch (IOException e) {
             depth++;
             return getMarksPage(depth, e, semester);
         }
+    }
+
+    private String getUserAgent() {
+        return "Purkynka/" + BuildConfig.VERSION_NAME + " (Android " + Build.VERSION.RELEASE + "; Linux; rv:"
+                + BuildConfig.VERSION_CODE + "; forced:" + forced + " cz-cs) Gecko/20100101 Firefox/42.0";
     }
 }
