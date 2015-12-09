@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(LOG_TAG, "onCreate", e);
                         latestCode = null;
                     }
-                    if (actualCode == -1 || actualCode != latestCode) {
+                    if (actualCode == -1 || (latestCode != null && actualCode != latestCode)) {
                         CharSequence terms;
                         try {
                             terms = UpdateConnector.getLatestTerms

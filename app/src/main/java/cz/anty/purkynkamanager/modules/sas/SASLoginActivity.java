@@ -9,18 +9,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import java.io.IOException;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
+import cz.anty.purkynkamanager.utils.other.Log;
 import cz.anty.purkynkamanager.utils.other.WrongLoginDataException;
 import cz.anty.purkynkamanager.utils.other.sas.SASManager;
 import cz.anty.purkynkamanager.utils.other.thread.OnceRunThreadWithSpinner;
 import cz.anty.purkynkamanager.utils.settings.SASManagerSettingsActivity;
 
 public class SASLoginActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = "SASLoginActivity";
 
     //public static SASManager sasManager = null;
     private OnceRunThreadWithSpinner saveThread;
@@ -48,13 +52,17 @@ public class SASLoginActivity extends AppCompatActivity {
     }
 
     private static void validateException(Context context, CharSequence message) {
-        new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
-                .setTitle(R.string.exception_title_validate)
-                .setMessage(message)
-                .setPositiveButton(R.string.but_ok, null)
-                .setIcon(R.mipmap.ic_launcher_sas)
-                .setCancelable(true)
-                .show();
+        try {
+            new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
+                    .setTitle(R.string.exception_title_validate)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.but_ok, null)
+                    .setIcon(R.mipmap.ic_launcher_sas)
+                    .setCancelable(true)
+                    .show();
+        } catch (WindowManager.BadTokenException e) {
+            Log.d(LOG_TAG, "validateException", e);
+        }
     }
 
     @Override
