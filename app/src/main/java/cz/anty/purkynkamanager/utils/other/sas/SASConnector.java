@@ -23,8 +23,8 @@ import cz.anty.purkynkamanager.utils.other.sas.mark.MarksManager;
 class SASConnector {
 
     private static final String LOG_TAG = "SASConnector";
-    private static final String SCHOOL_URL = "http://www.sspbrno.cz";
-    private static final String DEFAULT_MAIN_URL = "http://isas.sspbrno.cz";
+    //private static final String SCHOOL_URL = "http://www.sspbrno.cz";
+    private static final String DEFAULT_MAIN_URL = "https://isas.sspbrno.cz";
     private static final String LOGIN_URL_ADD = "/prihlasit.php";
     private static final String LOGIN_FIELD = "login-isas-username";
     private static final String PASS_FIELD = "login-isas-password";
@@ -42,7 +42,7 @@ class SASConnector {
 
     SASConnector(String username, String password, boolean forceMode) throws IOException {
         this.forced = forceMode;
-        String mainUrl;
+        /*String mainUrl;
         try {
             mainUrl = Jsoup
                     .connect(SCHOOL_URL)
@@ -53,8 +53,8 @@ class SASConnector {
         } catch (Throwable t) {
             Log.d(LOG_TAG, "<init>", t);
             mainUrl = DEFAULT_MAIN_URL;
-        }
-        MAIN_URL = mainUrl;
+        }*/
+        MAIN_URL = DEFAULT_MAIN_URL;//mainUrl;
 
         this.loginCookies = login(0, null, username, password);
     }

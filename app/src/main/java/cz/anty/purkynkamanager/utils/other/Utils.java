@@ -269,6 +269,6 @@ public class Utils {
         return activeNetInfo != null && activeNetInfo.isConnected()
                 && (!context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
                 .getBoolean(Constants.SETTING_NAME_USE_ONLY_WIFI, false) ||
-                (wifiInfo != null && !wifiInfo.getSSID().equals("<unknown ssid>")));
+                (wifiInfo != null && wifiInfo.getSSID() != null && !"<unknown ssid>".equals(wifiInfo.getSSID())));
     }
 }
