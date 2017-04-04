@@ -139,7 +139,7 @@ public class ICLunchOrderActivity extends AppCompatActivity {
                     AlertDialog.Builder dialogBuilder = new AlertDialog
                             .Builder(ICLunchOrderActivity.this, R.style.AppTheme_Dialog_IC)
                             .setTitle(lunch.getTitle(ICLunchOrderActivity.this, MultilineItem.NO_POSITION))
-                            .setIcon(R.mipmap.ic_launcher_ic)
+                            .setIcon(R.mipmap.ic_launcher_ic_no_border)
                             .setView(mainScrollView)
                             .setPositiveButton(R.string.but_order, new DialogInterface.OnClickListener() {
                                 @Override

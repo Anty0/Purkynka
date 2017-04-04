@@ -70,7 +70,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                         final Timetable timetable = adapter.getItem(position);
                         new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                 .setTitle(timetable.getName())
-                                .setIcon(R.mipmap.ic_launcher_t)
+                                .setIcon(R.mipmap.ic_launcher_t_no_border)
                                 .setMessage(R.string.dialog_message_what_to_do)
                                 .setPositiveButton(R.string.but_rename, new DialogInterface.OnClickListener() {
                                     @Override
@@ -80,7 +80,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
                                         new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                                 .setTitle(getText(R.string.but_rename) + ": " + timetable.getName())
-                                                .setIcon(R.mipmap.ic_launcher_t)
+                                                .setIcon(R.mipmap.ic_launcher_t_no_border)
                                                 .setMessage(R.string.dialog_message_insert_timetable_name)
                                                 .setView(input)
                                                 .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
@@ -143,7 +143,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(this, R.style.AppTheme_Dialog_T)
                 .setTitle(R.string.dialog_title_new_timetable)
-                .setIcon(R.mipmap.ic_launcher_t)
+                .setIcon(R.mipmap.ic_launcher_t_no_border)
                 .setView(mainScrollView)
                 .setPositiveButton(R.string.but_next, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -161,7 +161,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                             public void run() {
                                                 new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                                         .setTitle(R.string.exception_title_connection)
-                                                        .setIcon(R.mipmap.ic_launcher_t)
+                                                        .setIcon(R.mipmap.ic_launcher_t_no_border)
                                                         .setMessage(R.string.exception_message_connection)
                                                         .setPositiveButton(R.string.but_ok, null)
                                                         .setCancelable(true)
@@ -190,7 +190,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
                                             new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                                     .setTitle(R.string.dialog_title_new_timetable)
-                                                    .setIcon(R.mipmap.ic_launcher_t)
+                                                    .setIcon(R.mipmap.ic_launcher_t_no_border)
                                                     .setMessage(R.string.dialog_message_select_your_class_name)
                                                     .setView(spinner)
                                                     .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
@@ -218,7 +218,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                                                 new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                                                                         .setTitle(connection ? R.string.exception_title_connection
                                                                                                 : R.string.dialog_title_timetable_still_exists)
-                                                                                        .setIcon(R.mipmap.ic_launcher_t)
+                                                                                        .setIcon(R.mipmap.ic_launcher_t_no_border)
                                                                                         .setMessage(connection ? R.string.exception_message_connection
                                                                                                 : R.string.dialog_message_timetable_still_exists)
                                                                                         .setPositiveButton(R.string.but_ok, null)
@@ -252,7 +252,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
 
                         new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                 .setTitle(R.string.dialog_title_new_timetable)
-                                .setIcon(R.mipmap.ic_launcher_t)
+                                .setIcon(R.mipmap.ic_launcher_t_no_border)
                                 .setMessage(R.string.dialog_message_insert_timetable_name)
                                 .setView(input)
                                 .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
@@ -271,7 +271,7 @@ public class TimetableSelectActivity extends AppCompatActivity {
                                                         public void run() {
                                                             new AlertDialog.Builder(TimetableSelectActivity.this, R.style.AppTheme_Dialog_T)
                                                                     .setTitle(R.string.dialog_title_timetable_still_exists)
-                                                                    .setIcon(R.mipmap.ic_launcher_t)
+                                                                    .setIcon(R.mipmap.ic_launcher_t_no_border)
                                                                     .setMessage(R.string.dialog_message_timetable_still_exists)
                                                                     .setPositiveButton(R.string.but_ok, null)
                                                                     .setCancelable(true)

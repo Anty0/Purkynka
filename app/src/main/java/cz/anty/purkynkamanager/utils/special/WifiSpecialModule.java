@@ -88,7 +88,7 @@ public class WifiSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_wifi;
+            return R.mipmap.ic_launcher_wifi_no_border;
         }
 
         @Nullable

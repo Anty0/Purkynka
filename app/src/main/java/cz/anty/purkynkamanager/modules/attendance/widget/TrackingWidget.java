@@ -59,12 +59,12 @@ public class TrackingWidget extends WidgetProvider {
 
     @Override
     protected int getTopColor(Context context, int[] appWidgetIds) {
-        return ContextCompat.getColor(context, R.color.colorPrimaryAS);
+        return ContextCompat.getColor(context, R.color.colorPrimaryA);
     }
 
     @Override
     protected int getBackgroundColor(Context context, int[] appWidgetIds) {
-        return ContextCompat.getColor(context, R.color.navigationBarColorAS);
+        return ContextCompat.getColor(context, R.color.navigationBarColorA);
     }
 
     @Override

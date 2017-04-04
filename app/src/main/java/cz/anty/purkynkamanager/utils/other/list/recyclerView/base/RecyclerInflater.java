@@ -192,7 +192,8 @@ public final class RecyclerInflater {
                 refreshLayout.setEnabled(useSwipeRefresh);
                 refreshLayout.setColorSchemeColors(
                         ContextCompat.getColor(context, R.color.colorPrimary),
-                        ContextCompat.getColor(context, R.color.colorPrimaryAS),
+                        ContextCompat.getColor(context, R.color.colorPrimaryS),
+                        ContextCompat.getColor(context, R.color.colorPrimaryA),
                         ContextCompat.getColor(context, R.color.colorPrimaryIC),
                         ContextCompat.getColor(context, R.color.colorPrimaryT),
                         ContextCompat.getColor(context, R.color.colorPrimaryW)

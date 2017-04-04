@@ -1,16 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "cz.anty.purkynkamanager"
-        minSdkVersion 10//15
-        targetSdkVersion 23
-        versionCode 46
-        versionName '3.7.3'
-//        renderscriptTargetApi 23
-//        renderscriptSupportModeEnabled true
+        minSdkVersion 10
+        targetSdkVersion 25
+        versionCode 48
+        versionName '4.0.0'
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
@@ -41,13 +39,13 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
     //    compile 'com.android.support:design:23.1.1' //TODO use it for FloatingActionButton in Burza Checker Activity
-    compile 'org.jsoup:jsoup:1.8.3'
-    compile 'ch.acra:acra:4.7.0'
-    compile 'com.google.code.gson:gson:2.5'
+    compile 'org.jsoup:jsoup:1.10.2'
+    compile 'ch.acra:acra:4.9.2'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
     compile 'com.infstory:proguard-annotations:1.0.2'
     //    compile 'me.zhanghai.android.materialprogressbar:library:1.1.4'

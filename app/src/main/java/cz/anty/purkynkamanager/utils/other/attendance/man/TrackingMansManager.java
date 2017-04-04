@@ -142,9 +142,9 @@ public class TrackingMansManager {
         if (context == null) return;
 
         if (contains(man)) {
-            new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
+            new AlertDialog.Builder(context, R.style.AppTheme_Dialog_A)
                     .setTitle(man.getName())
-                    .setIcon(R.mipmap.ic_launcher_a)
+                    .setIcon(R.mipmap.ic_launcher_a_no_border)
                     .setMessage(Utils.getFormattedText(context, R.string
                             .dialog_text_attendance_stop_tracking, man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
@@ -162,18 +162,18 @@ public class TrackingMansManager {
             if (name.contains("Kuchyňka") && name.contains("Jiří")
                     || name.contains("Světlík") && name.contains("Vladimír")) return;
 
-            new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
+            new AlertDialog.Builder(context, R.style.AppTheme_Dialog_A)
                     .setTitle(man.getName())
-                    .setIcon(R.mipmap.ic_launcher_a)
+                    .setIcon(R.mipmap.ic_launcher_a_no_border)
                     .setMessage(Utils.getFormattedText(context, R.string
                             .dialog_text_attendance_tracking, man.getName()))
                     .setPositiveButton(R.string.but_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (AppDataManager.isLoggedIn(AppDataManager.Type.SAS)) {
-                                new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
+                                new AlertDialog.Builder(context, R.style.AppTheme_Dialog_A)
                                         .setTitle(R.string.dialog_title_terms_warning)
-                                        .setIcon(R.mipmap.ic_launcher_a)
+                                        .setIcon(R.mipmap.ic_launcher_a_no_border)
                                         .setMessage(Utils.getFormattedText(context,
                                                 R.string.dialog_text_terms_attendance_tracking,
                                                 man.getName()))
@@ -186,10 +186,10 @@ public class TrackingMansManager {
                                                         .getSharedPreferences(Constants.SETTINGS_NAME_ATTENDANCE, Context.MODE_PRIVATE);
                                                 if (preferences.getBoolean(Constants.SETTING_NAME_FIRST_START, true)) {
                                                     Utils.generateFirstStartDialog(context, new Intent(),
-                                                            TrackingWidget.class, R.style.AppTheme_Dialog_AS,
+                                                            TrackingWidget.class, R.style.AppTheme_Dialog_A,
                                                             context.getText(R.string.dialog_title_tracking_widget_alert),
                                                             context.getText(R.string.dialog_message_tracking_widget_alert),
-                                                            R.mipmap.ic_launcher_a, new Runnable() {
+                                                            R.mipmap.ic_launcher_a_no_border, new Runnable() {
                                                                 @Override
                                                                 public void run() {
                                                                     preferences.edit()
@@ -204,9 +204,9 @@ public class TrackingMansManager {
                                         .setCancelable(true)
                                         .show();
                             } else {
-                                new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
+                                new AlertDialog.Builder(context, R.style.AppTheme_Dialog_A)
                                         .setTitle(R.string.dialog_title_terms_warning)
-                                        .setIcon(R.mipmap.ic_launcher_a)
+                                        .setIcon(R.mipmap.ic_launcher_a_no_border)
                                         .setMessage(R.string.dialog_text_attendance_can_not_start_tracking)
                                         .setPositiveButton(R.string.but_cancel, null)
                                         .setCancelable(true)

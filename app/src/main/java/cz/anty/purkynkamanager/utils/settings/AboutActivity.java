@@ -41,7 +41,7 @@ public class AboutActivity extends AppCompatActivity {
                             if (!preferences.getBoolean(Constants.SETTING_NAME_ITEM_UNLOCKED_BONUS, false)) {
                                 new AlertDialog.Builder(AboutActivity.this, R.style.AppTheme_Dialog)
                                         .setTitle(R.string.dialog_title_bonus_unlocked)
-                                        .setIcon(R.mipmap.ic_launcher_t)
+                                        .setIcon(R.mipmap.ic_launcher_t_no_border)
                                         .setMessage(R.string.dialog_text_bonus_unlocked)
                                         .setPositiveButton(R.string.but_accept,
                                                 new DialogInterface.OnClickListener() {

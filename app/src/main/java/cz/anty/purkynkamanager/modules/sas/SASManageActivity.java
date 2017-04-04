@@ -152,9 +152,9 @@ public class SASManageActivity extends AppCompatActivity {
                                     }
                                 }).getBaseView();
 
-                        new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)
+                        new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_S)
                                 .setTitle(lesson.getFullName())
-                                .setIcon(R.mipmap.ic_launcher_sas)
+                                .setIcon(R.mipmap.ic_launcher_sas_no_border)
                                 .setView(result)
                                 .setPositiveButton(R.string.but_ok, null)
                                 .setCancelable(true)
@@ -164,9 +164,9 @@ public class SASManageActivity extends AppCompatActivity {
                     private void markOnClick(final Mark mark) {
                         String note = mark.getNote();
                         final String title = "".equals(note) ? mark.getLongLesson() : note;
-                        new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)
+                        new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_S)
                                 .setTitle(title)
-                                .setIcon(R.mipmap.ic_launcher_sas)
+                                .setIcon(R.mipmap.ic_launcher_sas_no_border)
                                 .setMessage(getText(R.string.text_date) + ": " + mark.getDateAsString()
                                         + "\n" + getText(R.string.text_short_lesson_name) + ": " + mark.getShortLesson()
                                         + "\n" + getText(R.string.text_long_lesson_name) + ": " + mark.getLongLesson()
@@ -186,9 +186,9 @@ public class SASManageActivity extends AppCompatActivity {
                                                     picker.setMinValue(1);
                                                     picker.setValue((int) mark.getValue());
 
-                                                    new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)
+                                                    new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_S)
                                                             .setTitle(title)
-                                                            .setIcon(R.mipmap.ic_launcher_sas)
+                                                            .setIcon(R.mipmap.ic_launcher_sas_no_border)
                                                             .setView(picker)
                                                             .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {
                                                                 @SuppressLint("NewApi")
@@ -219,9 +219,9 @@ public class SASManageActivity extends AppCompatActivity {
                                                             .show();
                                                     return;
                                                 }
-                                                new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_AS)
+                                                new AlertDialog.Builder(SASManageActivity.this, R.style.AppTheme_Dialog_S)
                                                         .setTitle(title)
-                                                        .setIcon(R.mipmap.ic_launcher_sas)
+                                                        .setIcon(R.mipmap.ic_launcher_sas_no_border)
                                                         .setMessage(R.string.dialog_message_unsupported_device)
                                                         .setPositiveButton(R.string.but_ok,
                                                                 new DialogInterface.OnClickListener() {
@@ -254,10 +254,10 @@ public class SASManageActivity extends AppCompatActivity {
 
         if (AppDataManager.isFirstStart(AppDataManager.Type.SAS))
             Utils.generateFirstStartDialog(SASManageActivity.this, new Intent(),
-                    SASManageWidget.class, R.style.AppTheme_Dialog_AS,
+                    SASManageWidget.class, R.style.AppTheme_Dialog_S,
                     getText(R.string.dialog_title_sas_widget_alert),
                     getText(R.string.dialog_message_sas_widget_alert),
-                    R.mipmap.ic_launcher_sas, new Runnable() {
+                    R.mipmap.ic_launcher_sas_no_border, new Runnable() {
                         @Override
                         public void run() {
                             AppDataManager.setFirstStart(AppDataManager.Type.SAS, false);
@@ -435,7 +435,7 @@ public class SASManageActivity extends AppCompatActivity {
 
     private void logInException() {
         Log.d(LOG_TAG, "logInException");
-        new AlertDialog.Builder(this, R.style.AppTheme_Dialog_AS)
+        new AlertDialog.Builder(this, R.style.AppTheme_Dialog_S)
                 .setTitle(Utils.getFormattedText(this, R.string.exception_title_login,
                         AppDataManager.getUsername(AppDataManager.Type.SAS)))
                 .setMessage(R.string.exception_message_login)
@@ -481,7 +481,7 @@ public class SASManageActivity extends AppCompatActivity {
                                 finish();
                             }
                         })
-                .setIcon(R.mipmap.ic_launcher_sas)
+                .setIcon(R.mipmap.ic_launcher_sas_no_border)
                 .setCancelable(false)
                 .show();
     }

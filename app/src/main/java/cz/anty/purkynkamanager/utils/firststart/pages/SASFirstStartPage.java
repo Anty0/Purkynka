@@ -57,7 +57,7 @@ public class SASFirstStartPage extends FirstStartPage {
 
     @Override
     public int getTheme() {
-        return R.style.AppTheme_AS;
+        return R.style.AppTheme_S;
     }
 
     @Override

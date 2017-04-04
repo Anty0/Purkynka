@@ -92,7 +92,7 @@ public class TeacherAttendanceReceiver extends BroadcastReceiver {
                                             .notify_title_substitution, lesson.getShortName()))
                                     .setContentText(Utils.getFormattedText(context, R.string
                                             .notify_text_teacher_is_not_here, man.getName()))
-                                    .setSmallIcon(R.mipmap.ic_launcher_t)
+                                    .setSmallIcon(R.mipmap.ic_launcher_t_no_border)
                                     .setContentIntent(PendingIntent.getActivity(context, 0,
                                             new Intent(context, TimetableManageActivity.class).putExtra(
                                                     TimetableManageActivity.EXTRA_TIMETABLE_NAME, timetable.getName()), 0))

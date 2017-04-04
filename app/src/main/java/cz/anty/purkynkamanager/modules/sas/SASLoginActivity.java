@@ -53,11 +53,11 @@ public class SASLoginActivity extends AppCompatActivity {
 
     private static void validateException(Context context, CharSequence message) {
         try {
-            new AlertDialog.Builder(context, R.style.AppTheme_Dialog_AS)
+            new AlertDialog.Builder(context, R.style.AppTheme_Dialog_S)
                     .setTitle(R.string.exception_title_validate)
                     .setMessage(message)
                     .setPositiveButton(R.string.but_ok, null)
-                    .setIcon(R.mipmap.ic_launcher_sas)
+                    .setIcon(R.mipmap.ic_launcher_sas_no_border)
                     .setCancelable(true)
                     .show();
         } catch (WindowManager.BadTokenException e) {

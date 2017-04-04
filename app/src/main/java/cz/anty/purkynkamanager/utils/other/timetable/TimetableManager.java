@@ -47,7 +47,7 @@ public class TimetableManager {
                             TimetableLessonWidget.class, R.style.AppTheme_Dialog_T,
                             context.getText(R.string.dialog_title_timetable_widget_alert),
                             context.getText(R.string.dialog_message_timetable_widget_alert),
-                            R.mipmap.ic_launcher_t, new Runnable() {
+                            R.mipmap.ic_launcher_t_no_border, new Runnable() {
                                 @Override
                                 public void run() {
                                     preferences.edit()

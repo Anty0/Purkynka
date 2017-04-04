@@ -109,7 +109,7 @@ public class TrackingSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_a;
+            return R.mipmap.ic_launcher_a_no_border;
         }
 
         @Nullable

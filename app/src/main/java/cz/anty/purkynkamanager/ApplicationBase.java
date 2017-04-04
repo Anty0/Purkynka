@@ -7,9 +7,9 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 
 import org.acra.ACRA;
-import org.acra.ACRAConfiguration;
 import org.acra.ReportField;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.config.ConfigurationBuilder;
 
 import cz.anty.purkynkamanager.utils.other.AppDataManager;
 import cz.anty.purkynkamanager.utils.other.Constants;
@@ -52,10 +52,8 @@ public class ApplicationBase extends Application {
             }
         });
 
-        ACRAConfiguration configuration = new ACRAConfiguration(
-                getClass().getAnnotation(ReportsCrashes.class));
-        configuration.setCustomReportContent(ReportField.values());
-        ACRA.init(this, configuration);
+        ACRA.init(this, new ConfigurationBuilder(this)
+                .setCustomReportContent(ReportField.values()));
 
         AnalyticsTrackers.initialize(this);
         Tracker tracker = AnalyticsTrackers.getInstance()

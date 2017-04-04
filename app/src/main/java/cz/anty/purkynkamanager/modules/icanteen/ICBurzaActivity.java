@@ -97,7 +97,7 @@ public class ICBurzaActivity extends AppCompatActivity {
 
                         new AlertDialog.Builder(ICBurzaActivity.this, R.style.AppTheme_Dialog_IC)
                                 .setTitle(lunch.getName())
-                                .setIcon(R.mipmap.ic_launcher_ic)
+                                .setIcon(R.mipmap.ic_launcher_ic_no_border)
                                 .setMessage(lunch.getLunchNumber()
                                         + "\n" + BurzaLunch.DATE_FORMAT.format(lunch.getDate())
                                         + "\n" + lunch.getName()

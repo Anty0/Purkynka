@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                                                                                                     finish();
                                                                                                 }
                                                                                             })
-                                                                                    .setIcon(R.mipmap.ic_launcher)
+                                                                                    .setIcon(R.mipmap.ic_launcher_no_border)
                                                                                     .setCancelable(false)
                                                                                     .show();
                                                                         }
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                                                         finish();
                                                     }
                                                 })
-                                        .setIcon(R.mipmap.ic_launcher)
+                                        .setIcon(R.mipmap.ic_launcher_no_border)
                                         .setCancelable(false)
                                         .show();
                             }

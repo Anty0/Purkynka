@@ -84,7 +84,8 @@ public class WifiLoginActivity extends AppCompatActivity {
 
     private void login(boolean force) {
         if (!force) {
-            WifiInfo wifiInfo = ((WifiManager) getSystemService(WIFI_SERVICE)).getConnectionInfo();
+            WifiInfo wifiInfo = ((WifiManager) getApplicationContext()
+                    .getSystemService(WIFI_SERVICE)).getConnectionInfo();
             String wifiName = wifiInfo.getSSID();
             if (wifiName == null || !wifiName.contains(WifiLogin.WIFI_NAME)) {
                 new AlertDialog.Builder(WifiLoginActivity.this, R.style.AppTheme_Dialog_W)
@@ -97,7 +98,7 @@ public class WifiLoginActivity extends AppCompatActivity {
                             }
                         })
                         .setNegativeButton(R.string.but_cancel, null)
-                        .setIcon(R.mipmap.ic_launcher_wifi)
+                        .setIcon(R.mipmap.ic_launcher_wifi_no_border)
                         .setCancelable(true)
                         .show();
                 return;
@@ -133,7 +134,7 @@ public class WifiLoginActivity extends AppCompatActivity {
                                 .setTitle(R.string.exception_title_wifi_login)
                                 .setMessage(R.string.exception_wifi_login_wrong_login_or_wifi)
                                 .setPositiveButton(R.string.but_ok, null)
-                                .setIcon(R.mipmap.ic_launcher_wifi)
+                                .setIcon(R.mipmap.ic_launcher_wifi_no_border)
                                 .setCancelable(true)
                                 .show();
                     }

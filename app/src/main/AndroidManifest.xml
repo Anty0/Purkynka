@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".utils.update.UpdateActivity"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:label="@string/wait_text_downloading_update"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Dialog" />
@@ -43,7 +43,7 @@
             android:name=".utils.update.UpdateScheduleReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -54,19 +54,19 @@
             android:name=".utils.update.UpdateReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:theme="@style/AppTheme" />
 
         <activity
             android:name=".main.RemovedItemsActivity"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:label="@string/activity_title_removed_items"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".main.SendFeedbackActivity"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:label="@string/activity_title_send_feedback"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
@@ -81,25 +81,25 @@
         -->
         <activity
             android:name=".utils.settings.SettingsActivity"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:label="@string/activity_title_settings"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".utils.settings.MainSettingsActivity"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:label="@string/activity_title_main_settings"
             android:launchMode="singleTask"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".modules.attendance.SearchActivity"
-            android:icon="@mipmap/ic_launcher_a"
+            android:icon="@mipmap/ic_launcher_a_no_border"
             android:label="@string/activity_title_attendance_search"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
-            android:theme="@style/AppTheme.AS">
+            android:theme="@style/AppTheme.A">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -110,24 +110,24 @@
         </activity>
         <activity
             android:name=".utils.settings.AttendanceSettingsActivity"
-            android:icon="@mipmap/ic_launcher_a"
+            android:icon="@mipmap/ic_launcher_a_no_border"
             android:label="@string/activity_title_attendance_settings"
             android:launchMode="singleTask"
             android:parentActivityName=".utils.settings.SettingsActivity"
-            android:theme="@style/AppTheme.AS" />
+            android:theme="@style/AppTheme.A" />
 
         <receiver
             android:name=".modules.attendance.receiver.TrackingReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_a"
-            android:theme="@style/AppTheme.AS" />
+            android:icon="@mipmap/ic_launcher_a_no_border"
+            android:theme="@style/AppTheme.A" />
         <receiver
             android:name=".modules.attendance.receiver.TrackingScheduleReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_a"
-            android:theme="@style/AppTheme.AS">
+            android:icon="@mipmap/ic_launcher_a_no_border"
+            android:theme="@style/AppTheme.A">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -136,17 +136,17 @@
 
         <activity
             android:name=".modules.attendance.TrackingActivity"
-            android:icon="@mipmap/ic_launcher_a"
+            android:icon="@mipmap/ic_launcher_a_no_border"
             android:label="@string/activity_title_tracking"
             android:launchMode="singleTask"
             android:parentActivityName=".modules.attendance.SearchActivity"
-            android:theme="@style/AppTheme.AS" />
+            android:theme="@style/AppTheme.A" />
 
         <receiver
             android:name=".modules.attendance.widget.TrackingWidget"
-            android:icon="@mipmap/ic_launcher_a"
+            android:icon="@mipmap/ic_launcher_a_no_border"
             android:label="@string/widget_label_tracking"
-            android:theme="@style/AppTheme.AS">
+            android:theme="@style/AppTheme.A">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -158,27 +158,27 @@
 
         <activity
             android:name=".modules.icanteen.ICLoginActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/activity_title_login_icanteen"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".modules.icanteen.ICSplashActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/app_name_icanteen"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".modules.icanteen.ICSelectServiceActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/app_name_icanteen"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".utils.settings.ICSettingsActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/activity_title_icanteen_settings"
             android:launchMode="singleTask"
             android:parentActivityName=".utils.settings.SettingsActivity"
@@ -188,21 +188,21 @@
             android:name=".modules.icanteen.ICService"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/app_name_icanteen"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.IC" />
 
         <activity
             android:name=".modules.icanteen.ICBurzaActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/app_name_icanteen_burza"
             android:launchMode="singleTask"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".modules.icanteen.ICBurzaCheckerActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/app_name_icanteen_burza_watcher"
             android:launchMode="singleTask"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
@@ -212,7 +212,7 @@
             android:name=".modules.icanteen.ICBurzaCheckerService"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/app_name_icanteen_burza_watcher"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.IC" />
@@ -221,13 +221,13 @@
             android:name=".modules.icanteen.receiver.StartServiceReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:theme="@style/AppTheme.IC" />
         <receiver
             android:name=".modules.icanteen.receiver.StartServiceScheduleReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:theme="@style/AppTheme.IC">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -236,7 +236,7 @@
         </receiver>
         <receiver
             android:name=".modules.icanteen.widget.ICTodayLunchWidget"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/widget_label_next_lunch"
             android:theme="@style/AppTheme.IC">
             <intent-filter>
@@ -250,14 +250,14 @@
 
         <activity
             android:name=".modules.icanteen.ICLunchOrderActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/app_name_icanteen_lunch_order"
             android:launchMode="singleTask"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
             android:theme="@style/AppTheme.IC" />
         <activity
             android:name=".modules.icanteen.ICPendingOrdersActivity"
-            android:icon="@mipmap/ic_launcher_ic"
+            android:icon="@mipmap/ic_launcher_ic_no_border"
             android:label="@string/activity_title_pending_orders"
             android:launchMode="singleTask"
             android:parentActivityName=".modules.icanteen.ICSelectServiceActivity"
@@ -265,54 +265,54 @@
         <activity
             android:name=".modules.sas.SASSplashActivity"
             android:excludeFromRecents="true"
-            android:icon="@mipmap/ic_launcher_sas"
+            android:icon="@mipmap/ic_launcher_sas_no_border"
             android:label="@string/app_name_sas"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".modules.sas.SASLoginActivity"
-            android:icon="@mipmap/ic_launcher_sas"
+            android:icon="@mipmap/ic_launcher_sas_no_border"
             android:label="@string/activity_title_sas_login"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
-            android:theme="@style/AppTheme.AS" />
+            android:theme="@style/AppTheme.S" />
         <activity
             android:name=".modules.sas.SASManageActivity"
-            android:icon="@mipmap/ic_launcher_sas"
+            android:icon="@mipmap/ic_launcher_sas_no_border"
             android:label="@string/app_name_sas"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
-            android:theme="@style/AppTheme.AS" />
+            android:theme="@style/AppTheme.S" />
         <activity
             android:name=".utils.settings.SASManagerSettingsActivity"
-            android:icon="@mipmap/ic_launcher_sas"
+            android:icon="@mipmap/ic_launcher_sas_no_border"
             android:label="@string/activity_title_sas_settings"
             android:launchMode="singleTask"
             android:parentActivityName=".utils.settings.SettingsActivity"
-            android:theme="@style/AppTheme.AS" />
+            android:theme="@style/AppTheme.S" />
 
         <service
             android:name=".modules.sas.SASManagerService"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_sas"
+            android:icon="@mipmap/ic_launcher_sas_no_border"
             android:label="@string/service_title_sas_manager"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.AS"> <!-- android:process=":SASManagerService" -->
+            android:theme="@style/AppTheme.S"> <!-- android:process=":SASManagerService" -->
         </service>
 
         <receiver
             android:name=".modules.sas.receiver.StartServiceReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_sas"
-            android:theme="@style/AppTheme.AS" />
+            android:icon="@mipmap/ic_launcher_sas_no_border"
+            android:theme="@style/AppTheme.S" />
         <receiver
             android:name=".modules.sas.receiver.StartServiceScheduleReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_sas"
-            android:theme="@style/AppTheme.AS">
+            android:icon="@mipmap/ic_launcher_sas_no_border"
+            android:theme="@style/AppTheme.S">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -320,9 +320,9 @@
         </receiver>
         <receiver
             android:name=".modules.sas.widget.SASManageWidget"
-            android:icon="@mipmap/ic_launcher_sas"
+            android:icon="@mipmap/ic_launcher_sas_no_border"
             android:label="@string/widget_label_sas_manage"
-            android:theme="@style/AppTheme.AS">
+            android:theme="@style/AppTheme.S">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -334,14 +334,14 @@
 
         <activity
             android:name=".modules.timetable.TimetableSelectActivity"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:label="@string/activity_title_timetable_select"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.T" />
         <activity
             android:name=".modules.timetable.TimetableManageActivity"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:label="@string/activity_title_timetable_manage"
             android:launchMode="singleTask"
             android:parentActivityName=".modules.timetable.TimetableSelectActivity"
@@ -351,19 +351,19 @@
             android:name=".modules.timetable.receiver.TeacherAttendanceReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:theme="@style/AppTheme.T" />
         <receiver
             android:name=".modules.timetable.receiver.TimetableNotificationReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:theme="@style/AppTheme.T" />
         <receiver
             android:name=".modules.timetable.receiver.TimetableScheduleReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:theme="@style/AppTheme.T">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -372,7 +372,7 @@
         </receiver>
         <receiver
             android:name=".modules.timetable.widget.TimetableLessonWidget"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:label="@string/activity_title_timetable_manage"
             android:theme="@style/AppTheme.T">
             <intent-filter>
@@ -386,7 +386,7 @@
 
         <activity
             android:name=".modules.timetable.widget.TimetableLessonWidgetConfigureActivity"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:label="@string/activity_title_timetable_select"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Dialog">
@@ -396,20 +396,20 @@
         </activity>
         <activity
             android:name=".utils.settings.TimetableSettingsActivity"
-            android:icon="@mipmap/ic_launcher_t"
+            android:icon="@mipmap/ic_launcher_t_no_border"
             android:label="@string/activity_title_timetable_settings"
             android:parentActivityName=".utils.settings.SettingsActivity"
             android:theme="@style/AppTheme.T" />
         <activity
             android:name=".modules.wifi.WifiLoginActivity"
-            android:icon="@mipmap/ic_launcher_wifi"
+            android:icon="@mipmap/ic_launcher_wifi_no_border"
             android:label="@string/app_name_wifi"
             android:launchMode="singleTask"
             android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.W" />
         <activity
             android:name=".utils.settings.WifiSettingsActivity"
-            android:icon="@mipmap/ic_launcher_wifi"
+            android:icon="@mipmap/ic_launcher_wifi_no_border"
             android:label="@string/activity_title_wifi_settings"
             android:launchMode="singleTask"
             android:parentActivityName=".utils.settings.SettingsActivity"
@@ -419,7 +419,7 @@
             android:name=".modules.wifi.WifiStateReceiver"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher_wifi"
+            android:icon="@mipmap/ic_launcher_wifi_no_border"
             android:theme="@style/AppTheme.W">
             <intent-filter>
 
@@ -430,7 +430,7 @@
 
         <activity
             android:name=".utils.settings.AboutActivity"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:label="@string/activity_title_about"
             android:launchMode="singleTask"
             android:parentActivityName=".utils.settings.SettingsActivity"
@@ -440,14 +440,14 @@
             android:name=".utils.other.PostNotificationCanceler"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:theme="@style/AppTheme" />
 
         <service
             android:name=".utils.other.list.widget.WidgetService"
             android:enabled="true"
             android:exported="false"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_launcher_no_border"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:theme="@style/AppTheme" />
 

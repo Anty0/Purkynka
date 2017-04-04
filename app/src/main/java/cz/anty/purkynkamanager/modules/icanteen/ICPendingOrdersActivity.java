@@ -68,7 +68,7 @@ public class ICPendingOrdersActivity extends AppCompatActivity {
                                                     }
                                                 })
                                         .setNegativeButton(R.string.but_no, null)
-                                        .setIcon(R.mipmap.ic_launcher_ic)
+                                        .setIcon(R.mipmap.ic_launcher_ic_no_border)
                                         .setCancelable(true)
                                         .show();
                             }

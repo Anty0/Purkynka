@@ -100,7 +100,7 @@ public class UpdateSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher;
+            return R.mipmap.ic_launcher_no_border;
         }
 
         @Nullable

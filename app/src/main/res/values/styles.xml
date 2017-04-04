@@ -1,6 +1,10 @@
 <resources>
 
-    <style name="AppTheme.AS" parent="AppTheme.AS.Base">
+    <style name="AppTheme.S" parent="AppTheme.S.Base">
+
+    </style>
+
+    <style name="AppTheme.A" parent="AppTheme.A.Base">
 
     </style>
 
@@ -16,10 +20,16 @@
 
     </style>
 
-    <style name="AppTheme.AS.Base" parent="AppTheme">
-        <item name="colorPrimary">@color/colorPrimaryAS</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkAS</item>
-        <item name="colorAccent">@color/colorAccentAS</item>
+    <style name="AppTheme.S.Base" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryS</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkS</item>
+        <item name="colorAccent">@color/colorAccentS</item>
+    </style>
+
+    <style name="AppTheme.A.Base" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimaryA</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkA</item>
+        <item name="colorAccent">@color/colorAccentA</item>
     </style>
 
     <style name="AppTheme.IC.Base" parent="AppTheme">
@@ -41,7 +51,11 @@
     </style>
 
 
-    <style name="AppTheme.Dialog.AS" parent="AppTheme.Dialog.AS.Base">
+    <style name="AppTheme.Dialog.S" parent="AppTheme.Dialog.S.Base">
+
+    </style>
+
+    <style name="AppTheme.Dialog.A" parent="AppTheme.Dialog.A.Base">
 
     </style>
 
@@ -57,10 +71,16 @@
 
     </style>
 
-    <style name="AppTheme.Dialog.AS.Base" parent="AppTheme.Dialog">
-        <item name="colorPrimary">@color/colorPrimaryAS</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkAS</item>
-        <item name="colorAccent">@color/colorAccentAS</item>
+    <style name="AppTheme.Dialog.S.Base" parent="AppTheme.Dialog">
+        <item name="colorPrimary">@color/colorPrimaryS</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkS</item>
+        <item name="colorAccent">@color/colorAccentS</item>
+    </style>
+
+    <style name="AppTheme.Dialog.A.Base" parent="AppTheme.Dialog">
+        <item name="colorPrimary">@color/colorPrimaryA</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkA</item>
+        <item name="colorAccent">@color/colorAccentA</item>
     </style>
 
     <style name="AppTheme.Dialog.IC.Base" parent="AppTheme.Dialog">

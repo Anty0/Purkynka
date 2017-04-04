@@ -61,7 +61,7 @@ public class ICSelectServiceActivity extends AppCompatActivity {
                     ICTodayLunchWidget.class, R.style.AppTheme_Dialog_IC,
                     getText(R.string.dialog_title_icanteen_widget_alert),
                     getText(R.string.dialog_message_icanteen_widget_alert),
-                    R.mipmap.ic_launcher_ic, new Runnable() {
+                    R.mipmap.ic_launcher_ic_no_border, new Runnable() {
                         @Override
                         public void run() {
                             AppDataManager.setFirstStart(AppDataManager.Type.I_CANTEEN, false);

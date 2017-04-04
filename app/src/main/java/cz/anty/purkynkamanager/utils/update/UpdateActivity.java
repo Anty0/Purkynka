@@ -137,7 +137,7 @@ public class UpdateActivity extends AppCompatActivity {
                                 showChangeLog();
                             }
                         })
-                .setIcon(R.mipmap.ic_launcher)
+                .setIcon(R.mipmap.ic_launcher_no_border)
                 .setCancelable(false)
                 .show();
     }

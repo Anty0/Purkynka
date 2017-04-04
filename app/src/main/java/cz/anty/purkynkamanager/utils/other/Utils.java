@@ -70,7 +70,7 @@ public class Utils {
                                                                 onExit.run();
                                                             }
                                                         })
-                                        .setIcon(R.mipmap.ic_launcher)
+                                        .setIcon(R.mipmap.ic_launcher_no_border)
                                         .setCancelable(false)
                                         .show();
                             }
@@ -111,13 +111,14 @@ public class Utils {
                         if (onChange != null) onChange.run();
                     }
                 })
-                .setIcon(R.mipmap.ic_launcher)
+                .setIcon(R.mipmap.ic_launcher_no_border)
                 .setCancelable(false)
                 .setNeutralButton(R.string.but_cancel, null)
                 .show();
     }
 
     private static void setLocale(Context context, String lang) {
+        context = context.getApplicationContext();
         Locale myLocale = new Locale(lang);
         Resources res = context.getResources();
         Configuration conf = res.getConfiguration();
@@ -130,6 +131,7 @@ public class Utils {
     }
 
     public static void restoreLocale(Context context) {
+        context = context.getApplicationContext();
         String lang = context.getSharedPreferences(Constants.SETTINGS_NAME_MAIN, Context.MODE_PRIVATE)
                 .getString(Constants.SETTING_NAME_LANGUAGE, null);
         if (lang != null) {

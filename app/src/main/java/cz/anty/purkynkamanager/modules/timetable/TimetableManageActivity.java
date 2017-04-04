@@ -217,7 +217,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                             } else {
                                 new AlertDialog.Builder(context, R.style.AppTheme_Dialog_T)
                                         .setTitle(R.string.dialog_title_lesson_info)
-                                        .setIcon(R.mipmap.ic_launcher_t)
+                                        .setIcon(R.mipmap.ic_launcher_t_no_border)
                                         .setMessage(context.getText(R.string.dialog_message_lesson_name) + ": " + lesson.getName() + "\n" +
                                                 context.getText(R.string.dialog_message_short_lesson_name) + ": " + lesson.getShortName() + "\n" +
                                                 context.getText(R.string.dialog_message_class) + ": " + lesson.getClassString() + "\n" +
@@ -287,7 +287,7 @@ public class TimetableManageActivity extends AppCompatActivity {
                             new AlertDialog.Builder(context, R.style.AppTheme_Dialog_T)
                                     .setTitle(Utils.getFormattedText(context, R.string.dialog_title_lesson,
                                             context.getString(Timetable.DAYS_STRINGS_IDS[day]), lessonIndex))
-                                    .setIcon(R.mipmap.ic_launcher_t)
+                                    .setIcon(R.mipmap.ic_launcher_t_no_border)
                                     .setView(mainScrollView)
                                     .setCancelable(true)
                                     .setPositiveButton(R.string.but_ok, new DialogInterface.OnClickListener() {

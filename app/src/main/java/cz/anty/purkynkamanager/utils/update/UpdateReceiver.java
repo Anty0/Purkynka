@@ -51,7 +51,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                                             .notify_text_update_new, getLatestName(context)) + "\n"
                                             + Utils.getFormattedText(context, R.string
                                             .notify_text_update_old, BuildConfig.VERSION_NAME)))
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.mipmap.ic_launcher_no_border)
                             .setContentIntent(pendingIntent)
                             .setAutoCancel(false)
                             .setOnlyAlertOnce(true)

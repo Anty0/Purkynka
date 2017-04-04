@@ -59,7 +59,7 @@ public class TrackingReceiver extends BroadcastReceiver {
                                                 R.string.notify_text_tracked_is_in_school :
                                                 R.string.notify_text_tracked_is_in_not_school,
                                         findMan.getName()) + " (" + findMan.getLastEnterAsString() + ")")
-                                .setSmallIcon(R.mipmap.ic_launcher_a)
+                                .setSmallIcon(R.mipmap.ic_launcher_a_no_border)
                                 .setContentIntent(PendingIntent.getActivity(context, 0,
                                         new Intent(context, TrackingActivity.class), 0))
                                 .setAutoCancel(true)

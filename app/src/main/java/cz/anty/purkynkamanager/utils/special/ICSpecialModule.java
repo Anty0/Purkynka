@@ -102,7 +102,7 @@ public class ICSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_ic;
+            return R.mipmap.ic_launcher_ic_no_border;
         }
 
         @Nullable
@@ -145,7 +145,7 @@ public class ICSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_ic;
+            return R.mipmap.ic_launcher_ic_no_border;
         }
 
         @Nullable
@@ -194,7 +194,7 @@ public class ICSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_ic;
+            return R.mipmap.ic_launcher_ic_no_border;
         }
 
         @Nullable

@@ -61,12 +61,12 @@ public class SASManageWidget extends WidgetProvider {
 
     @Override
     protected int getTopColor(Context context, int[] appWidgetIds) {
-        return ContextCompat.getColor(context, R.color.colorPrimaryAS);
+        return ContextCompat.getColor(context, R.color.colorPrimaryS);
     }
 
     @Override
     protected int getBackgroundColor(Context context, int[] appWidgetIds) {
-        return ContextCompat.getColor(context, R.color.navigationBarColorAS);
+        return ContextCompat.getColor(context, R.color.navigationBarColorS);
     }
 
     @Override

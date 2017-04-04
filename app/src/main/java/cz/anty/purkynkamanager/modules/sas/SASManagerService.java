@@ -251,7 +251,7 @@ public class SASManagerService extends BindImplService<SASManagerService.SASBind
                 .setContentTitle(getResources().getQuantityString(R.plurals
                         .notify_title_new_marks, size, size))
                 .setContentText(builder)
-                .setSmallIcon(R.mipmap.ic_launcher_sas)
+                .setSmallIcon(R.mipmap.ic_launcher_sas_no_border)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)

@@ -116,7 +116,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
         Notification n = new NotificationCompat.Builder(this)
                 .setContentTitle(getText(R.string.notify_title_can_not_login))
                 .setContentText(getText(R.string.notify_text_can_not_login))
-                .setSmallIcon(R.mipmap.ic_launcher_ic)
+                .setSmallIcon(R.mipmap.ic_launcher_ic_no_border)
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .build();
@@ -272,7 +272,7 @@ public class ICService extends BindImplService<ICService.ICBinder> {
                     Notification n = new NotificationCompat.Builder(ICService.this)
                             .setContentTitle(getText(R.string.notify_title_new_lunches))
                             .setContentText(getText(R.string.notify_text_new_lunches))
-                            .setSmallIcon(R.mipmap.ic_launcher_ic)
+                            .setSmallIcon(R.mipmap.ic_launcher_ic_no_border)
                             .setContentIntent(pIntent)
                             .setAutoCancel(true)
                             .setDefaults(Notification.DEFAULT_ALL)

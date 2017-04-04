@@ -1,8 +1,5 @@
 package cz.anty.purkynkamanager.utils.other.list.toolbar;
 
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.utils.other.list.items.MultilineItem;
@@ -67,8 +63,8 @@ public class FragmentDrawer extends Fragment {
                     }
                 }).getBaseView();
 
-        ColorFilter filter = new LightingColorFilter(Color.TRANSPARENT, Color.WHITE);
-        ((ImageView) result.findViewById(R.id.image_view)).setColorFilter(filter);
+        //ColorFilter filter = new LightingColorFilter(Color.TRANSPARENT, Color.TRANSPARENT);
+        //((ImageView) result.findViewById(R.id.image_view)).setColorFilter(filter);
         return result;
     }
 

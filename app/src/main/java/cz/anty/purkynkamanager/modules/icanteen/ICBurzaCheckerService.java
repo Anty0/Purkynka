@@ -172,7 +172,7 @@ public class ICBurzaCheckerService extends Service {
         Notification n = new NotificationCompat.Builder(this)
                 .setContentTitle(getText(R.string.notify_title_burza_checker_running))
                 .setContentText(getText(R.string.notify_text_burza_checker_running))
-                .setSmallIcon(R.mipmap.ic_launcher_ic)
+                .setSmallIcon(R.mipmap.ic_launcher_ic_no_border)
                 .setContentIntent(PendingIntent.getActivity(this, 0,
                         new Intent(this, ICBurzaCheckerActivity.class), 0))
                 .addAction(R.drawable.ic_action_close, getText(R.string.but_stop),
@@ -188,14 +188,16 @@ public class ICBurzaCheckerService extends Service {
 
         boolean completed = false;
         while (!Thread.interrupted() && binder != null) {
-            try {
-                for (BurzaLunch lunch : binder.getBurza(binder.refreshBurza()))
+            try { // TODO: enable burza checker
+                for (BurzaLunch lunch : new BurzaLunch[0]) { // binder.getBurza(binder.refreshBurza())
                     if (selector.isSelected(lunch)) {
                         binder.orderLunch(lunch);
                         completed = true;
                         Thread.currentThread().interrupt();
                         break;
                     }
+                    Thread.sleep(500);
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -210,7 +212,7 @@ public class ICBurzaCheckerService extends Service {
                         Notification n1 = new NotificationCompat.Builder(this)
                                 .setContentTitle(getText(R.string.notify_title_burza_checker_completed))
                                 .setContentText(getText(R.string.notify_text_burza_checker_completed))
-                                .setSmallIcon(R.mipmap.ic_launcher_ic)
+                                .setSmallIcon(R.mipmap.ic_launcher_ic_no_border)
                                 .setContentIntent(PendingIntent.getActivity(this, 0,
                                         new Intent(this, ICLunchOrderActivity.class), 0))
                                 .setAutoCancel(true)

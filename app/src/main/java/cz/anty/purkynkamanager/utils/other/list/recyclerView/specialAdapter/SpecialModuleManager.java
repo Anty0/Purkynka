@@ -263,6 +263,8 @@ public class SpecialModuleManager {
             }*/
             //mAdapter.notifyDataSetChanged();
 
+            mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
+
             if (firstItem != null && !mAdapter.isEmpty() &&
                     !mAdapter.getItem(0).equals(firstItem)) {
                 mRecyclerManager.getRecyclerView().smoothScrollToPosition(0);

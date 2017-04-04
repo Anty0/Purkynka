@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.AS" parent="AppTheme.AS.Base">
-        <item name="android:navigationBarColor">@color/navigationBarColorAS</item>
+    <style name="AppTheme.S" parent="AppTheme.S.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorS</item>
+    </style>
+
+    <style name="AppTheme.A" parent="AppTheme.A.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorA</item>
     </style>
 
     <style name="AppTheme.IC" parent="AppTheme.IC.Base">
@@ -18,8 +22,12 @@
     </style>
 
 
-    <style name="AppTheme.Dialog.AS" parent="AppTheme.Dialog.AS.Base">
-        <item name="android:navigationBarColor">@color/navigationBarColorAS</item>
+    <style name="AppTheme.Dialog.S" parent="AppTheme.Dialog.S.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorS</item>
+    </style>
+
+    <style name="AppTheme.Dialog.A" parent="AppTheme.Dialog.A.Base">
+        <item name="android:navigationBarColor">@color/navigationBarColorA</item>
     </style>
 
     <style name="AppTheme.Dialog.IC" parent="AppTheme.Dialog.IC.Base">

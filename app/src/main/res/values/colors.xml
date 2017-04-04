@@ -5,15 +5,20 @@
     <color name="navigationBarColor">#005000</color>
     <color name="colorAccent">#11ffbb</color>
 
-    <color name="colorPrimaryAS">#3f51b5</color>
-    <color name="colorPrimaryDarkAS">#233282</color>
-    <color name="navigationBarColorAS">#000050</color>
-    <color name="colorAccentAS">#11bbff</color>
+    <color name="colorPrimaryS">#5f51b5</color>
+    <color name="colorPrimaryDarkS">#453282</color>
+    <color name="navigationBarColorS">#300050</color>
+    <color name="colorAccentS">#a1bbff</color>
 
-    <color name="colorPrimaryIC">#ed9629</color>
-    <color name="colorPrimaryDarkIC">#d7841d</color>
-    <color name="navigationBarColorIC">#503000</color>
-    <color name="colorAccentIC">#ffba65</color>
+    <color name="colorPrimaryA">#3f51b5</color>
+    <color name="colorPrimaryDarkA">#233282</color>
+    <color name="navigationBarColorA">#000050</color>
+    <color name="colorAccentA">#11bbff</color>
+
+    <color name="colorPrimaryIC">#ed5629</color>
+    <color name="colorPrimaryDarkIC">#d7441d</color>
+    <color name="navigationBarColorIC">#501000</color>
+    <color name="colorAccentIC">#ff8a65</color>
 
     <color name="colorPrimaryT">#c66d00</color>
     <color name="colorPrimaryDarkT">#b46e16</color>

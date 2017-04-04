@@ -78,7 +78,7 @@ public class TimetableNotificationReceiver extends BroadcastReceiver {
             }
 
             Notification n = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher_t)
+                    .setSmallIcon(R.mipmap.ic_launcher_t_no_border)
                     .setContentTitle(title)
                     .setContentText(text)
                     .setContentIntent(PendingIntent.getActivity(context, 0,

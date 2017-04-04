@@ -128,7 +128,7 @@ public class SASSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_sas;
+            return R.mipmap.ic_launcher_sas_no_border;
         }
 
         @Nullable

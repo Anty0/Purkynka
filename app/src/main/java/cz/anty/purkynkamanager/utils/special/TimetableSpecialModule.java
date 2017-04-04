@@ -151,7 +151,7 @@ public class TimetableSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_t;
+            return R.mipmap.ic_launcher_t_no_border;
         }
 
         @Nullable
@@ -276,7 +276,7 @@ public class TimetableSpecialModule extends SpecialModule {
         @Nullable
         @Override
         protected Integer getImageId() {
-            return R.mipmap.ic_launcher_t;
+            return R.mipmap.ic_launcher_t_no_border;
         }
 
         @Nullable
