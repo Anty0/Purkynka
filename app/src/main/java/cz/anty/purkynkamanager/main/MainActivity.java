@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +17,7 @@ import android.view.View;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.anty.purkynkamanager.R;
 import cz.anty.purkynkamanager.modules.attendance.SearchActivity;
@@ -160,6 +163,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+
+        if (savedInstanceState == null) {
+            Intent launchIntent = getPackageManager()
+                    .getLaunchIntentForPackage("cz.anty.purkynka");
+
+            if (launchIntent != null) {
+                startActivity(launchIntent);
+                finish();
+            }
         }
 
         init();

@@ -28,7 +28,7 @@ public class UpdateConnector {
     private static final String LOG_TAG = "UpdateConnector";
 
     //private static final String DEFAULT_URL = "http://anty.crush-team.cz/purkynkamanager/";
-    private static final String DEFAULT_URL = "http://anty.codetopic.eu/purkynka/";
+    private static final String DEFAULT_URL = "https://anty.codetopic.eu/purkynka/api/v0/";
 
     public static final String URL_REPORT = DEFAULT_URL + "report.php";
     private static final String URL_FEEDBACK = DEFAULT_URL + "feedback.php";
@@ -44,14 +44,15 @@ public class UpdateConnector {
 
     public static Integer getLatestVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(URL_LATEST_VERSION_CODE)
-                .followRedirects(false).execute().body().trim());
+                .followRedirects(false).ignoreContentType(true).execute().body().trim());
         Log.d(LOG_TAG, "getLatestVersionCode versionCode: " + toReturn);
         return toReturn;
     }
 
     public static String getLatestVersionName() throws IOException {
         String toReturn = Jsoup.connect(URL_LATEST_VERSION_NAME)
-                .followRedirects(false).execute().body().replace("\n", "");
+                .followRedirects(false).ignoreContentType(true)
+                .execute().body().replace("\n", "");
         Log.d(LOG_TAG, "getLatestVersionName versionName: " + toReturn);
         if (toReturn.toLowerCase().contains("<html>"))
             throw new IOException("Wrong page loaded");
@@ -60,7 +61,7 @@ public class UpdateConnector {
 
     public static Integer getLatestTermsVersionCode() throws IOException, NumberFormatException {
         Integer toReturn = Integer.parseInt(Jsoup.connect(URL_LATEST_TERMS_VERSION_CODE)
-                .followRedirects(false).execute().body().trim());
+                .followRedirects(false).ignoreContentType(true).execute().body().trim());
         Log.d(LOG_TAG, "getLatestTermsVersionCode versionCode: " + toReturn);
         return toReturn;
     }
@@ -68,7 +69,7 @@ public class UpdateConnector {
     public static String getLatestTerms(String languageShortcut) throws IOException {
         String toReturn = Jsoup.connect(URL_LATEST_TERMS
                 + languageShortcut.toUpperCase(Locale.ENGLISH))
-                .followRedirects(false).execute().body().trim();
+                .followRedirects(false).ignoreContentType(true).execute().body().trim();
         Log.d(LOG_TAG, "getLatestTerms terms: " + toReturn);
         if (toReturn.toLowerCase().contains("<html>"))
             throw new IOException("Wrong page loaded");
@@ -77,7 +78,7 @@ public class UpdateConnector {
 
     public static String getLatestChangeLog() throws IOException {
         String toReturn = Jsoup.connect(URL_LATEST_CHANGE_LOG)
-                .followRedirects(false).execute().body().trim();
+                .followRedirects(false).ignoreContentType(true).execute().body().trim();
         Log.d(LOG_TAG, "getLatestChangeLog changeLog: " + toReturn);
         if (toReturn.toLowerCase().contains("<html>"))
             throw new IOException("Wrong page loaded");
@@ -88,6 +89,7 @@ public class UpdateConnector {
         Log.d(LOG_TAG, "sendFeedback title: " + title + " text: " + text);
         Jsoup.connect(URL_FEEDBACK)
                 .followRedirects(false)
+                .ignoreContentType(true)
                 .method(Connection.Method.POST)
                 .data("APP_VERSION_NAME", BuildConfig.VERSION_NAME,
                         "APP_VERSION_CODE", String.valueOf(BuildConfig
@@ -103,7 +105,7 @@ public class UpdateConnector {
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             c.setRequestMethod("GET");
             c.setInstanceFollowRedirects(false);
-            c.setDoOutput(true);
+            c.setRequestProperty("Accept", "*/*");
             c.connect();
 
             String PATH = context.getExternalFilesDir(Environment
